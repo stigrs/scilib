@@ -21,7 +21,7 @@ using Matrix_view =
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_right>;
 
-// Dense owing matrix class using mdspan for views.
+// Dense matrix class with row-major storage order and using mdspan for views.
 template <class T>
 class Matrix {
 public:

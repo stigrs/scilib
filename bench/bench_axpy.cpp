@@ -4,7 +4,7 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/scilib.h>
+#include <scilib/mdarray.h>
 #include <armadillo>
 #include <chrono>
 #include <iostream>

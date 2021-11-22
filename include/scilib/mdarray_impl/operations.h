@@ -13,6 +13,8 @@
 #endif
 
 #include <scilib/mdarray_impl/vector.h>
+#include <scilib/mdarray_impl/matrix.h>
+#include <scilib/linalg.h>
 #include <algorithm>
 #include <iostream>
 
@@ -298,25 +300,16 @@ std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
 // Matrix-matrix product:
 
 template <typename T>
-void matrix_matrix_product(const Matrix<T>& a,
-                           const Matrix<T>& b,
-                           Matrix<T>& res)
+inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 {
-    constexpr std::size_t n = a.extent(0);
-    constexpr std::size_t m = a.extent(1);
-    constexpr std::size_t p = b.extent(1);
+    const std::size_t n = a.extent(0);
+    const std::size_t m = a.extent(1);
+    const std::size_t p = b.extent(1);
     assert(m == b.extent(0));
 
-    res.resize(n, p);
-
-    for (std::size_t i = 0; i < n; ++i) {
-        for (std::size_t j = 0; j < p; ++j) {
-            res(i, j) = T{0};
-            for (std::size_t k = 0; k < m; ++k) {
-                res(i, j) += a(i, k) * b(k, j);
-            }
-        }
-    }
+    Matrix<T> res(n, p);
+    matrix_matrix_product(a.view(), b.view(), res.view());
+    return res;
 }
 
 } // namespace Scilib

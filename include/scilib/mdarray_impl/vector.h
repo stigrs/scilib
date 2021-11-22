@@ -18,7 +18,7 @@ namespace stdex = std::experimental;
 template <typename T>
 using Vector_view = stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>>;
 
-// Dense owing vector class using mdspan for views.
+// Dense vector class using mdspan for views.
 template <class T>
 class Vector {
 public:
