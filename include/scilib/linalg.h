@@ -7,4 +7,7 @@
 #pragma once
 
 #include <scilib/mdarray.h>
+#include <scilib/linalg_impl/axpy.h>
+#include <scilib/linalg_impl/scale.h>
+#include <scilib/linalg_impl/swap_elements.h>
 #include <scilib/linalg_impl/matrix_product.h>

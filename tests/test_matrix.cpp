@@ -128,3 +128,22 @@ TEST(TestMatrix, TestAddMatrix)
         EXPECT_EQ(ai, 5);
     }
 }
+
+TEST(TestMatrix, TestRow)
+{
+    // clang-format off
+    std::vector<int> aa = {1, 2, 3, 
+                           4, 5, 6};
+    // clang-format on
+    Sci::Matrix<int> ma(aa, 2, 3);
+
+    const auto r0 = ma.row(0);
+    const auto r1 = ma.row(1);
+
+    for (std::size_t i = 0; i < r0.size(); ++i) {
+        EXPECT_EQ(r0(i), i + 1);
+    }
+    for (std::size_t i = 0; i < r1.size(); ++i) {
+        EXPECT_EQ(r1(i), i + 4);
+    }
+}

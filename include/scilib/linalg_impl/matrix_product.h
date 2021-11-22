@@ -79,4 +79,18 @@ inline void matrix_matrix_product(const Matrix_view<std::complex<double>>& a,
 }
 #endif
 
+template <typename T>
+inline Matrix<T> matrix_matrix_product(const Matrix_view<T>& a,
+                                       const Matrix_view<T>& b)
+{
+    const std::size_t n = a.extent(0);
+    const std::size_t m = a.extent(1);
+    const std::size_t p = b.extent(1);
+    assert(m == b.extent(0));
+
+    Matrix<T> res(n, p);
+    matrix_matrix_product(a, b, res.view());
+    return res;
+}
+
 } // namespace Scilib

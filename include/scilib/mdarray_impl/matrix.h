@@ -132,6 +132,26 @@ public:
         return span.extent(dim);
     }
 
+    auto row(size_type i) noexcept
+    {
+        return stdex::submdspan(span, i, stdex::full_extent);
+    }
+
+    const auto row(size_type i) const noexcept
+    {
+        return stdex::submdspan(span, i, stdex::full_extent);
+    }
+
+    auto column(size_type j) noexcept
+    {
+        return stdex::submdspan(span, stdex::full_extent, j);
+    }
+
+    const auto column(size_type j) const noexcept
+    {
+        return stdex::submdspan(span, stdex::full_extent, j);
+    }
+
     void resize(size_type nr, size_type nc)
     {
         elems = std::vector<T>(nr * nc);
@@ -215,18 +235,6 @@ public:
     }
 
     Matrix& operator-=(const Matrix& m) noexcept
-    {
-        assert(size() == m.size());
-        return apply(m, [](T& a, const T& b) { a -= b; });
-    }
-
-    Matrix& operator+=(const Matrix_view& m) noexcept
-    {
-        assert(size() == m.size());
-        return apply(m, [](T& a, const T& b) { a += b; });
-    }
-
-    Matrix& operator-=(const Matrix_view& m) noexcept
     {
         assert(size() == m.size());
         return apply(m, [](T& a, const T& b) { a -= b; });
