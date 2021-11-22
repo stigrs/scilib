@@ -4,18 +4,18 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <numlib/numlib.h>
+#include <scilib/scilib.h>
 #include <gtest/gtest.h>
 
 TEST(TestVector, TestSize)
 {
-    Numlib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     EXPECT_EQ(v.size(), 5);
 }
 
 TEST(TestVector, TestElementAccesss)
 {
-    Numlib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
         EXPECT_EQ(v(i), i);
@@ -24,7 +24,7 @@ TEST(TestVector, TestElementAccesss)
 
 TEST(TestVector, TestView)
 {
-    Numlib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
     }
@@ -34,12 +34,12 @@ TEST(TestVector, TestView)
 
 TEST(TestVector, TestCopy)
 {
-    Numlib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
     }
 
-    Numlib::Vector<int> a(v);
+    Sci::Vector<int> a(v);
     a(0) = 10;
     EXPECT_EQ(v(0), 0);
     EXPECT_EQ(a(0), 10);
@@ -48,12 +48,12 @@ TEST(TestVector, TestCopy)
 
 TEST(TestVector, TestCopySpan)
 {
-    Numlib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
     }
 
-    Numlib::Vector<int> a(v.view());
+    Sci::Vector<int> a(v.view());
     a(0) = 10;
     EXPECT_EQ(v(0), 0);
     EXPECT_EQ(a(0), 10);
@@ -63,7 +63,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::vector<int> v(5, 1);
-    Numlib::Vector<int> a = v;
+    Sci::Vector<int> a = v;
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));
@@ -72,15 +72,15 @@ TEST(TestVector, TestCopyVector)
 
 TEST(TestVector, TestResize)
 {
-    Numlib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     v.resize(10);
     EXPECT_EQ(v.size(), 10);
 }
 
 TEST(TestVector, TestSwap)
 {
-    Numlib::Vector<int> a(5);
-    Numlib::Vector<int> b(10);
+    Sci::Vector<int> a(5);
+    Sci::Vector<int> b(10);
 
     std::swap(a, b);
     EXPECT_EQ(a.size(), 10);
@@ -89,14 +89,14 @@ TEST(TestVector, TestSwap)
 
 TEST(TestVector, TestEmpty)
 {
-    Numlib::Vector<int> a;
+    Sci::Vector<int> a;
     EXPECT_TRUE(a.empty());
 }
 
 TEST(TestVector, TestInitializer)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Numlib::Vector<int> a(v);
+    Sci::Vector<int> a(v);
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -106,7 +106,7 @@ TEST(TestVector, TestInitializer)
 
 TEST(TestVector, TestSetValue)
 {
-    Numlib::Vector<int> v(5, 2);
+    Sci::Vector<int> v(5, 2);
     v = 4;
     for (const auto& vi : v) {
         EXPECT_EQ(vi, 4);
@@ -115,7 +115,7 @@ TEST(TestVector, TestSetValue)
 
 TEST(TestVector, TestAddValue)
 {
-    Numlib::Vector<int> v(5, 2);
+    Sci::Vector<int> v(5, 2);
     v += 4;
     for (const auto& vi : v) {
         EXPECT_EQ(vi, 6);
@@ -124,8 +124,8 @@ TEST(TestVector, TestAddValue)
 
 TEST(TestVector, TestAddVector)
 {
-    Numlib::Vector<int> a(5, 1);
-    Numlib::Vector<int> b(5, 1);
+    Sci::Vector<int> a(5, 1);
+    Sci::Vector<int> b(5, 1);
     a += b;
     for (const auto& ai : a) {
         EXPECT_EQ(ai, 2);
@@ -137,14 +137,14 @@ TEST(TestVector, TestAddVector)
 
 TEST(TestVector, TestAequalB)
 {
-    Numlib::Vector<int> a(5, 1);
-    Numlib::Vector<int> b(5, 1);
+    Sci::Vector<int> a(5, 1);
+    Sci::Vector<int> b(5, 1);
     EXPECT_TRUE(a == b);
 }
 
 TEST(TestVector, TestAnotequalB)
 {
-    Numlib::Vector<int> a(5, 1);
-    Numlib::Vector<int> b(4, 2);
+    Sci::Vector<int> a(5, 1);
+    Sci::Vector<int> b(4, 2);
     EXPECT_TRUE(a != b);
 }

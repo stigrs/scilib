@@ -4,7 +4,7 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <numlib/numlib.h>
+#include <scilib/scilib.h>
 #include <armadillo>
 #include <chrono>
 #include <iostream>
@@ -14,14 +14,14 @@ typedef std::chrono::duration<double, std::milli> Timer;
 
 void print(int n,
            const Timer& t_arma,
-           const Timer& t_numlib,
+           const Timer& t_scilib,
            const Timer& t_val)
 {
     std::cout << "Vector addition:\n"
               << "----------------\n"
               << "size =        " << n << '\n'
-              << "numlib/arma = " << t_numlib.count() / t_arma.count() << "\n"
-              << "numlib/val =  " << t_numlib.count() / t_val.count() << "\n\n";
+              << "scilib/arma = " << t_scilib.count() / t_arma.count() << "\n"
+              << "scilib/val =  " << t_scilib.count() / t_val.count() << "\n\n";
 }
 
 void benchmark(int n)
@@ -37,8 +37,8 @@ void benchmark(int n)
     auto t2 = std::chrono::high_resolution_clock::now();
     Timer t_arma = t2 - t1;
 
-    Numlib::Vector<double> va(n);
-    Numlib::Vector<double> vb(n);
+    Sci::Vector<double> va(n);
+    Sci::Vector<double> vb(n);
 
     va = 1.0;
     vb = 1.0;
@@ -48,7 +48,7 @@ void benchmark(int n)
         vb = 2.0 * va + vb;
     }
     t2 = std::chrono::high_resolution_clock::now();
-    Timer t_numlib = t2 - t1;
+    Timer t_scilib = t2 - t1;
 
     va = 1.0;
     vb = 1.0;
@@ -62,7 +62,7 @@ void benchmark(int n)
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_val = t2 - t1;
 
-    print(n, t_arma, t_numlib, t_val);
+    print(n, t_arma, t_scilib, t_val);
 }
 
 int main()
