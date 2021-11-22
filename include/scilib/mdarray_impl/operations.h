@@ -202,7 +202,7 @@ inline Matrix<T> operator-(const Matrix<T>& m)
 }
 
 template <typename T>
-inline Vector<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
+inline Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
 {
     assert(a.rows() == b.rows());
     assert(a.cols() == b.cols());

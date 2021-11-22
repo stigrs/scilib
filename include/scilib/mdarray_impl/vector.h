@@ -195,6 +195,18 @@ public:
         return apply(v, [](T& a, const T& b) { a -= b; });
     }
 
+    Vector& operator+=(const Vector_view& v) noexcept
+    {
+        assert(size() == v.size());
+        return apply(v, [](T& a, const T& b) { a += b; });
+    }
+
+    Vector& operator-=(const Vector_view& v) noexcept
+    {
+        assert(size() == v.size());
+        return apply(v, [](T& a, const T& b) { a -= b; });
+    }
+
 private:
     std::vector<T> elems;
     Vector_view<T> span;

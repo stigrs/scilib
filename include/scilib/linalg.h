@@ -7,4 +7,4 @@
 #pragma once
 
 #include <scilib/mdarray.h>
-#include <scilib/linalg_impl/blas3_matrix_product.h>
+#include <scilib/linalg_impl/matrix_product.h>

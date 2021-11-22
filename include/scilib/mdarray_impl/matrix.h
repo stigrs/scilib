@@ -220,6 +220,18 @@ public:
         return apply(m, [](T& a, const T& b) { a -= b; });
     }
 
+    Matrix& operator+=(const Matrix_view& m) noexcept
+    {
+        assert(size() == m.size());
+        return apply(m, [](T& a, const T& b) { a += b; });
+    }
+
+    Matrix& operator-=(const Matrix_view& m) noexcept
+    {
+        assert(size() == m.size());
+        return apply(m, [](T& a, const T& b) { a -= b; });
+    }
+
 private:
     std::vector<T> elems;
     Matrix_view<T> span;
