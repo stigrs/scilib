@@ -22,6 +22,14 @@ using Matrix_view =
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_right>;
 
+#if 0
+template <typename T>
+using Submatrix_view = stdex::submdspan<
+    T,
+    stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
+    stdex::layout_right>;
+#endif
+
 // Dense matrix class with row-major storage order and using mdspan for views.
 template <class T>
 class Matrix {

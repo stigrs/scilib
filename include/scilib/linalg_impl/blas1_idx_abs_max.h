@@ -14,26 +14,20 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline T abs_sum(const Vector_view<T>& x)
+inline std::size_t idx_abs_max(const Vector_view<T>& v)
 {
-    T result = 0;
-    for (std::size_t i = 0; i < x.size(); ++i) {
-        result += std::abs(x(i));
-    }
-    return result;
-}
+    using magn_type = decltype(std::abs(v(0)));
 
-#if 0
-template <typename T>
-inline T abs_sum(const Subvector_view<T>& x)
-{
-    T result = 0;
-    for (std::size_t i = 0; i < x.size(); ++i) {
-        result += std::abs(x(i));
+    std::size_t max_idx = 0;
+    magn_type max_val = std::abs(v(0));
+    for (std::size_t i = 0; i < v.size(); ++i) {
+        if (max_val < std::abs(v(i))) {
+            max_val = std::abs(v(i));
+            max_idx = i;
+        }
     }
-    return result;
+    return max_idx;
 }
-#endif
 
 } // namespace Linalg
 } // namespace Scilib

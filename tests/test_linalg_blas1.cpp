@@ -34,9 +34,36 @@ TEST(TestLinalgBlas1, TestDot)
     EXPECT_EQ(Sci::Linalg::dot_product(a, b), 3);
 }
 
+TEST(TestLinalgBlas1, TestIdxAbsMax)
+{
+    Sci::Vector<int> v = {1, 3, -5, 2};
+    EXPECT_EQ(Sci::Linalg::idx_abs_max(v.view()), 2);
+}
+
+TEST(TestLinalgBlas1, TestIdxAbsMin)
+{
+    Sci::Vector<int> v = {1, 3, -5, 2};
+    EXPECT_EQ(Sci::Linalg::idx_abs_min(v.view()), 0);
+}
+
 TEST(TestLinalgBlas1, TestNorm2)
 {
     Sci::Vector<double> v = {1.0, 2.0, 3.0};
     auto ans = Sci::Linalg::norm2(v.view());
+    EXPECT_EQ(ans * ans, 14.0);
+}
+
+TEST(TestMatrix, TestNorm2Row)
+{
+    // clang-format off
+    std::vector<double> aa = {1, 2, 3, 
+                              4, 5, 6};
+    // clang-format on
+    Sci::Matrix<double> ma(aa, 2, 3);
+
+    auto r0 = ma.row(0);
+    auto r1 = ma.row(1);
+
+    auto ans = Sci::Linalg::norm2(ma.row(0));
     EXPECT_EQ(ans * ans, 14.0);
 }

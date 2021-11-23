@@ -9,6 +9,8 @@
 #include <scilib/mdarray.h>
 #include <scilib/linalg_impl/blas1_axpy.h>
 #include <scilib/linalg_impl/blas1_dot_product.h>
+#include <scilib/linalg_impl/blas1_idx_abs_max.h>
+#include <scilib/linalg_impl/blas1_idx_abs_min.h>
 #include <scilib/linalg_impl/blas1_scale.h>
 #include <scilib/linalg_impl/blas1_swap_elements.h>
 #include <scilib/linalg_impl/blas1_vector_abs_sum.h>

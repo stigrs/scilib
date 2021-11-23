@@ -8,7 +8,6 @@
 
 #include <scilib/mdarray.h>
 #include <cassert>
-#include <algorithm>
 
 namespace Scilib {
 namespace Linalg {
