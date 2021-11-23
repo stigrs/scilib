@@ -11,4 +11,5 @@
 #include <scilib/mdarray_impl/matrix.h>
 #include <scilib/mdarray_impl/operations.h>
 
+namespace stdex = std::experimental;
 namespace Sci = Scilib;

@@ -19,10 +19,9 @@ namespace stdex = std::experimental;
 template <typename T>
 using Vector_view = stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>>;
 
-#if 0
 template <typename T>
-using Subvector_view = stdex::submdspan<T, stdex::extents<stdex::dynamic_extent>>;
-#endif
+using Subvector_view = stdex::
+    mdspan<T, stdex::extents<stdex::dynamic_extent>, stdex::layout_stride>;
 
 // Dense vector class using mdspan for views.
 template <class T>
@@ -65,14 +64,18 @@ public:
         }
     }
 
-    Vector& operator=(const Vector& v)
+    Vector(const Subvector_view<T>& v)
+        : elems(v.size()), span(elems.data(), elems.size())
     {
-        elems = std::vector<T>(v.size());
-        span = Vector_view<T>(elems.data(), elems.size());
-
         for (size_type i = 0; i < size(); ++i) {
             elems[i] = v(i);
         }
+    }
+
+    Vector& operator=(const Vector& v)
+    {
+        elems = std::vector<T>(v.begin(), v.end());
+        span = Vector_view<T>(elems.data(), elems.size());
         return *this;
     }
 
@@ -91,6 +94,17 @@ public:
     }
 
     Vector& operator=(const Vector_view<T>& v)
+    {
+        elems.resize(v.size());
+        span = Vector_view<T>(elems.data(), elems.size());
+
+        for (size_type i = 0; i < size(); ++i) {
+            elems[i] = v(i);
+        }
+        return *this;
+    }
+
+    Vector& operator=(const Subvector_view<T>& v)
     {
         elems.resize(v.size());
         span = Vector_view<T>(elems.data(), elems.size());

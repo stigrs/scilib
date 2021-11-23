@@ -39,6 +39,7 @@ set(PROGRAMS
     test_vector
     test_matrix
     test_linalg_blas1
+    test_linalg_blas2
     test_linalg_blas3
 )
 

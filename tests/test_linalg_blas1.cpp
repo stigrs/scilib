@@ -60,10 +60,6 @@ TEST(TestMatrix, TestNorm2Row)
                               4, 5, 6};
     // clang-format on
     Sci::Matrix<double> ma(aa, 2, 3);
-
-    auto r0 = ma.row(0);
-    auto r1 = ma.row(1);
-
     auto ans = Sci::Linalg::norm2(ma.row(0));
     EXPECT_EQ(ans * ans, 14.0);
 }

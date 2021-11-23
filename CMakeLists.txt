@@ -26,7 +26,7 @@ endif()
 
 option(BUILD_TESTS "Build tests." ON)
 option(BUILD_BENCH "Build benchmarks." ON)
-option(BUILD_EXAMPLES "Build examples." OFF)
+option(BUILD_EXAMPLES "Build examples." ON)
 
 # Set default MSVC compiler options to avoid D9025 error.
 if(MSVC)
@@ -105,6 +105,6 @@ if(BUILD_BENCH)
 	add_subdirectory(bench)
 endif()
 
-#if(BUILD_EXAMPLES) 
-#    add_subdirectory(examples)
-#endif()
+if(BUILD_EXAMPLES) 
+    add_subdirectory(examples)
+endif()

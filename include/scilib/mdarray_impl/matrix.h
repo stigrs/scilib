@@ -22,13 +22,11 @@ using Matrix_view =
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_right>;
 
-#if 0
 template <typename T>
-using Submatrix_view = stdex::submdspan<
-    T,
-    stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-    stdex::layout_right>;
-#endif
+using Submatrix_view =
+    stdex::mdspan<T,
+                  stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
+                  stdex::layout_stride>;
 
 // Dense matrix class with row-major storage order and using mdspan for views.
 template <class T>
@@ -79,7 +77,17 @@ public:
     {
         for (size_type i = 0; i < rows(); ++i) {
             for (size_type j = 0; j < cols(); ++j) {
-                elems[i * m.stride(0) + j * m.stride(1)] = m(i, j);
+                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
+            }
+        }
+    }
+
+    Matrix(const Submatrix_view<T>& m)
+        : elems(m.size()), span(elems.data(), m.extent(0), m.extent(1))
+    {
+        for (size_type i = 0; i < rows(); ++i) {
+            for (size_type j = 0; j < cols(); ++j) {
+                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
     }
@@ -105,6 +113,19 @@ public:
         for (size_type i = 0; i < rows(); ++i) {
             for (size_type j = 0; j < cols(); ++j) {
                 elems[i * m.stride(0) + j * m.stride(1)] = m(i, j);
+            }
+        }
+        return *this;
+    }
+
+    Matrix& operator=(const Submatrix_view<T>& m)
+    {
+        elems.resize(m.size());
+        span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
+
+        for (size_type i = 0; i < rows(); ++i) {
+            for (size_type j = 0; j < cols(); ++j) {
+                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
         return *this;

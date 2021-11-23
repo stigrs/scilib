@@ -17,6 +17,7 @@
 #include <scilib/linalg.h>
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 
 namespace Scilib {
 
@@ -122,37 +123,6 @@ inline Vector<T> operator%(const Vector<T>& v, const T& scalar)
 {
     Vector<T> res = v;
     return res %= scalar;
-}
-
-template <typename T>
-std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
-{
-    ostrm << v.size() << '\n' << "{ ";
-    for (std::size_t i = 0; i < v.size(); ++i) {
-        ostrm << std::setw(9) << v(i) << " ";
-        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
-            ostrm << "\n  ";
-        }
-    }
-    ostrm << '}';
-    return ostrm;
-}
-
-template <typename T>
-std::istream& operator>>(std::istream& istrm, Vector<T>& v)
-{
-    std::size_t n;
-    istrm >> n;
-    std::vector<T> tmp(n);
-
-    char ch;
-    istrm >> ch; // {
-    for (std::size_t i = 0; i < n; ++i) {
-        istrm >> tmp[i];
-    }
-    istrm >> ch; // }
-    v = Vector<T>(tmp);
-    return istrm;
 }
 
 //------------------------------------------------------------------------------
@@ -261,15 +231,123 @@ inline Matrix<T> operator%(const Matrix<T>& m, const T& scalar)
     return res %= scalar;
 }
 
+//------------------------------------------------------------------------------
+// Matrix-matrix product:
+
+template <typename T>
+inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
+{
+    return Sci::Linalg::matrix_matrix_product(a.view(), b.view());
+}
+
+//------------------------------------------------------------------------------
+// Matrix-vector product:
+
+template <typename T>
+inline Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
+{
+    return Sci::Linalg::matrix_vector_product(a.view(), x.view());
+}
+
+//------------------------------------------------------------------------------
+// Stream methods:
+
+template <typename T>
+void print(std::ostream& ostrm, const Vector_view<T>& v)
+{
+    ostrm << v.size() << '\n' << '{';
+    for (std::size_t i = 0; i < v.size(); ++i) {
+        ostrm << std::setw(9) << v(i) << " ";
+        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
+            ostrm << "\n  ";
+        }
+    }
+    ostrm << '}';
+}
+
+template <typename T>
+void print(std::ostream& ostrm, const Subvector_view<T>& v)
+{
+    ostrm << v.size() << '\n' << '{';
+    for (std::size_t i = 0; i < v.size(); ++i) {
+        ostrm << std::setw(9) << v(i) << " ";
+        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
+            ostrm << "\n  ";
+        }
+    }
+    ostrm << '}';
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
+{
+    ostrm << v.size() << '\n' << '{';
+    for (std::size_t i = 0; i < v.size(); ++i) {
+        ostrm << std::setw(9) << v(i) << " ";
+        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
+            ostrm << "\n  ";
+        }
+    }
+    ostrm << '}';
+    return ostrm;
+}
+
+template <typename T>
+std::istream& operator>>(std::istream& istrm, Vector<T>& v)
+{
+    std::size_t n;
+    istrm >> n;
+    std::vector<T> tmp(n);
+
+    char ch;
+    istrm >> ch; // {
+    for (std::size_t i = 0; i < n; ++i) {
+        istrm >> tmp[i];
+    }
+    istrm >> ch; // }
+    v = Vector<T>(tmp);
+    return istrm;
+}
+
+template <typename T>
+void print(std::ostream& ostrm, const Matrix_view<T>& m)
+{
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    for (std::size_t i = 0; i < m.extent(0); ++i) {
+        for (std::size_t j = 0; j < m.extent(1); ++j) {
+            ostrm << std::setw(9) << m(i, j) << " ";
+        }
+        if (i != (m.extent(0) - 1)) {
+            ostrm << "\n ";
+        }
+    }
+    ostrm << '}';
+}
+
+template <typename T>
+void print(std::ostream& ostrm, const Submatrix_view<T>& m)
+{
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    for (std::size_t i = 0; i < m.extent(0); ++i) {
+        for (std::size_t j = 0; j < m.extent(1); ++j) {
+            ostrm << std::setw(9) << m(i, j) << " ";
+        }
+        if (i != (m.extent(0) - 1)) {
+            ostrm << "\n ";
+        }
+    }
+    ostrm << '}';
+}
+
 template <typename T>
 std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
 {
-    ostrm << m.rows() << " x " << m.cols() << '\n' << "{ ";
-    for (std::size_t i = 0; i < m.rows(); ++i) {
-        for (std::size_t j = 0; j < m.cols(); ++j) {
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    for (std::size_t i = 0; i < m.extent(0); ++i) {
+        for (std::size_t j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
         }
-        if (i != (m.rows() - 1)) {
+        if (i != (m.extent(0) - 1)) {
             ostrm << "\n ";
         }
     }
@@ -294,15 +372,6 @@ std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
     istrm >> ch; // }
     m = Matrix<T>(tmp, nr, nc);
     return istrm;
-}
-
-//------------------------------------------------------------------------------
-// Matrix-matrix product:
-
-template <typename T>
-inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
-{
-    return Sci::Linalg::matrix_matrix_product(a.view(), b.view());
 }
 
 } // namespace Scilib
