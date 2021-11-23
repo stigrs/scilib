@@ -156,10 +156,17 @@ public:
 
     auto rows() const noexcept { return span.extent(0); }
     auto cols() const noexcept { return span.extent(1); }
+
     auto extent(size_type dim) const noexcept
     {
         assert(dim == 0 || dim == 1);
         return span.extent(dim);
+    }
+
+    auto stride(size_type dim) const noexcept
+    {
+        assert(dim == 0 || dim == 1);
+        return span.stride(dim);
     }
 
     auto row(size_type i) noexcept

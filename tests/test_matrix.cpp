@@ -147,3 +147,24 @@ TEST(TestMatrix, TestRow)
         EXPECT_EQ(r1(i), i + 4);
     }
 }
+
+TEST(TestMatrix, TestDiag)
+{
+    // clang-format off
+    std::vector<int> data = {
+        1,  2,  3, 
+        4,  5,  6, 
+        7,  8,  9
+    };
+    std::vector<int> ans_data = {
+        0,  2,  3, 
+        4,  0,  6, 
+        7,  8,  0
+    };
+    // clang-format on
+    Sci::Matrix<int> ans(ans_data, 3, 3);
+    Sci::Matrix<int> m(data, 3, 3);
+    auto d = Sci::diag(m.view());
+    d = 0;
+    EXPECT_EQ(m, ans);
+}

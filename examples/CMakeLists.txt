@@ -15,6 +15,7 @@ endif()
 set(
     PROGRAMS 
     submatrix_views 
+    matrix_diag
 )
 
 foreach(program ${PROGRAMS})
