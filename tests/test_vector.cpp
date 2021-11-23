@@ -68,6 +68,10 @@ TEST(TestVector, TestCopyVector)
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));
     }
+    a *= 2;
+    for (std::size_t i = 0; i < v.size(); ++i) {
+        EXPECT_NE(v[i], a(i));
+    }
 }
 
 TEST(TestVector, TestResize)

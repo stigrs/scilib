@@ -8,6 +8,7 @@
 
 #include <experimental/mdspan>
 #include <vector>
+#include <initializer_list>
 #include <utility>
 #include <cassert>
 

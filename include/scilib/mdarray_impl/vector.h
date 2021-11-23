@@ -8,6 +8,7 @@
 
 #include <experimental/mdspan>
 #include <vector>
+#include <initializer_list>
 #include <utility>
 #include <cassert>
 
@@ -46,6 +47,11 @@ public:
     {
     }
 
+    Vector(const std::initializer_list<T>& il)
+        : elems(il.begin(), il.end()), span(elems.data(), elems.size())
+    {
+    }
+
     Vector(const Vector_view<T>& v)
         : elems(v.size()), span(elems.data(), elems.size())
     {
@@ -69,10 +75,13 @@ public:
     {
         elems = v;
         span = Vector_view<T>(elems.data(), elems.size());
+        return *this;
+    }
 
-        for (size_type i = 0; i < size(); ++i) {
-            elems[i] = v[i];
-        }
+    Vector& operator=(const std::initializer_list<T>& il)
+    {
+        elems = il;
+        span = Vector_view<T>(elems.data(), elems.size());
         return *this;
     }
 

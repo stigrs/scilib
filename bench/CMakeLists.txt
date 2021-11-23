@@ -19,7 +19,7 @@ endif()
 set(
     PROGRAMS 
     bench_axpy 
-    #bench_dot 
+    bench_dot 
     #bench_eigs
     #bench_mm_mul
     #bench_mv_mul

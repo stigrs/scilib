@@ -123,9 +123,9 @@ TEST(TestMatrix, TestAddMatrix)
 {
     Sci::Matrix<int> a(5, 3, 1);
     Sci::Matrix<int> b(5, 3, 4);
-    a += b;
-    for (const auto& ai : a) {
-        EXPECT_EQ(ai, 5);
+    Sci::Matrix<int> c = a + b;
+    for (const auto& ci : c) {
+        EXPECT_EQ(ci, 5);
     }
 }
 
