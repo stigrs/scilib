@@ -8,25 +8,20 @@
 
 #include <scilib/mdarray.h>
 #include <cassert>
+#include <cmath>
 
 namespace Scilib {
+namespace Linalg {
 
 template <typename T>
-inline T dot_product(const Vector_view<T>& x, const Vector_view<T>& y)
+inline T abs_sum(const Vector_view<T>& x)
 {
-    assert(x.size() == y.size());
-
     T result = 0;
     for (std::size_t i = 0; i < x.size(); ++i) {
-        result += x(i) * y(i);
+        result += std::abs(x(i));
     }
     return result;
 }
 
-template <typename T>
-inline T dot_product(const Vector<T>& x, const Vector<T>& y)
-{
-    return dot_product(x.view(), y.view());
-}
-
+} // namespace Linalg
 } // namespace Scilib

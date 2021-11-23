@@ -11,6 +11,7 @@
 #include <utility>
 
 namespace Scilib {
+namespace Linalg {
 
 template <typename T>
 void swap_elements(Vector_view<T>& a, Vector_view<T>& b)
@@ -33,4 +34,5 @@ void swap_elements(Matrix_view<T>& a, Matrix_view<T>& b)
     }
 }
 
+} // namespace Linalg
 } // namespace Scilib

@@ -10,6 +10,7 @@
 #include <cassert>
 
 namespace Scilib {
+namespace Linalg {
 
 template <typename T>
 void scale(Vector_view<T>& v, const T& scalar)
@@ -29,4 +30,5 @@ void scale(Matrix_view<T>& m, const T& scalar)
     }
 }
 
+} // namespace Linalg
 } // namespace Scilib

@@ -46,7 +46,7 @@ void benchmark(int n)
     t1 = std::chrono::high_resolution_clock::now();
     double num;
     for (int it = 0; it < 10; ++it) {
-        num = Sci::dot_product(na.view(), nb.view());
+        num = Sci::Linalg::dot_product(na.view(), nb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;

@@ -11,6 +11,7 @@
 #include <algorithm>
 
 namespace Scilib {
+namespace Linalg {
 
 template <typename T>
 inline void axpy(const T& scalar, const Vector_view<T>& x, Vector_view<T>& y)
@@ -27,4 +28,5 @@ inline void axpy(const T& scalar, const Vector<T>& x, Vector<T>& y)
     axpy(scalar, x.view(), y.view());
 }
 
+} // namespace Linalg
 } // namespace Scilib

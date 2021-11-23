@@ -18,6 +18,7 @@
 #include <complex>
 
 namespace Scilib {
+namespace Linalg {
 
 template <typename T>
 void matrix_matrix_product(const Matrix_view<T>& a,
@@ -93,4 +94,5 @@ inline Matrix<T> matrix_matrix_product(const Matrix_view<T>& a,
     return res;
 }
 
+} // namespace Linalg
 } // namespace Scilib

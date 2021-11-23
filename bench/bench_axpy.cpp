@@ -58,7 +58,7 @@ void benchmark(int n)
 
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10; ++it) {
-        Sci::axpy(2.0, va.view(), vb.view());
+        Sci::Linalg::axpy(2.0, va.view(), vb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_axpy = t2 - t1;

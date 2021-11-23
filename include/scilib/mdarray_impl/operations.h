@@ -302,7 +302,7 @@ std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
 template <typename T>
 inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 {
-    return matrix_matrix_product(a.view(), b.view());
+    return Sci::Linalg::matrix_matrix_product(a.view(), b.view());
 }
 
 } // namespace Scilib
