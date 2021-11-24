@@ -25,10 +25,12 @@ public:
 
     diag() = delete;
 
-    //diag(Matrix_view<T> m) : span(m.data(), {{m.extent(0)}, {m.stride(0) + size_type{1}}})
-    diag(Matrix_view<T> m) : span{m.data(), {stdex::dextents<1>{m.extent(0)}, std::array<std::size_t, 1>{m.stride(0) + 1}}}
+    diag(Matrix_view<T> m)
+        : span{m.data(),
+               {stdex::dextents<1>{m.extent(0)},
+                std::array<std::size_t, 1>{m.stride(0) + 1}}}
     {
-        assert(m.extent(0) == m.extent(1));
+        static_assert(m.static_extent(0) == m.static_extent(1));
     }
 
     diag& operator=(const Vector_view<T> v)

@@ -12,14 +12,11 @@ else()
     endif()
 endif()
 
-# Enforce C++20 standard.
 # Option to override which C++ standard to use
 set(MDSPAN_CXX_STANDARD DETECT CACHE STRING "Override the default CXX_STANDARD to compile with.")
 set_property(CACHE MDSPAN_CXX_STANDARD PROPERTY STRINGS DETECT 14 17 20)
 
 option(MDSPAN_ENABLE_CONCEPTS "Try to enable concepts support by giving extra flags." On)
-
-################################################################################
 
 # Decide on the standard to use
 if(MDSPAN_CXX_STANDARD STREQUAL "17")
