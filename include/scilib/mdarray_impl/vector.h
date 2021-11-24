@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <scilib/mdarray_impl/type_aliases.h>
 #include <experimental/mdspan>
 #include <vector>
 #include <initializer_list>
@@ -13,15 +14,6 @@
 #include <cassert>
 
 namespace Scilib {
-
-namespace stdex = std::experimental;
-
-template <typename T>
-using Vector_view = stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>>;
-
-template <typename T>
-using Subvector_view = stdex::
-    mdspan<T, stdex::extents<stdex::dynamic_extent>, stdex::layout_stride>;
 
 // Dense vector class using mdspan for views.
 template <class T>
@@ -129,8 +121,8 @@ public:
     T* data() noexcept { return elems.data(); }
     const T* data() const noexcept { return elems.data(); }
 
-    auto& view() noexcept { return span; }
-    const auto& view() const noexcept { return span; }
+    auto view() noexcept { return span; }
+    const auto view() const noexcept { return span; }
 
     bool empty() const noexcept { return elems.empty(); }
     auto size() const noexcept { return span.size(); }

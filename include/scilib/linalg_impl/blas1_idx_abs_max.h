@@ -14,7 +14,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline std::size_t idx_abs_max(const Vector_view<T>& v)
+inline std::size_t idx_abs_max(const Vector_view<T> v)
 {
     using magn_type = decltype(std::abs(v(0)));
 

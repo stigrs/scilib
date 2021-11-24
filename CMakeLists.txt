@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(Scilib C CXX)
+project(Scilib CXX)
 
 # Set installation directory.
 if (WIN32)
@@ -31,7 +31,6 @@ option(BUILD_EXAMPLES "Build examples." ON)
 # Set default MSVC compiler options to avoid D9025 error.
 if(MSVC)
     set(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS")
-    set(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS")
 endif()
 
 # Set release compiler options.
@@ -41,13 +40,8 @@ endif()
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow")
 endif()
-if (CMAKE_C_COMPILER_ID MATCHES "Clang")
-    # disable aggresive optimizations for lsoda.c
-    set(CMAKE_C_FLAGS_RELEASE "-Wall -O1")
-endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /std:c++20 /W4 /WX /wd4100 /GR /EHsc /MT /O2")
-    set(CMAKE_C_FLAGS_RELEASE "/DNDEBUG /W3 /MT /O2")
+    set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /W4 /WX /wd4100 /GR /EHsc /MT /O2")
 endif()
 
 # Set debugging compiler options.
@@ -58,8 +52,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow")
 endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_DEBUG "/std:c++20 /EHsc /W4 /WX /wd4100 /MT /GR /Zi /Od")
-    set(CMAKE_C_FLAGS_DEBUG "/W3 /MT /GR /Zi /Od")
+    set(CMAKE_CXX_FLAGS_DEBUG "/EHsc /W4 /WX /wd4100 /MT /GR /Zi /Od")
 endif()
 
 # BLAS and LAPACKE are required.

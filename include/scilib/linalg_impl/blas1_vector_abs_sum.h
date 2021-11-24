@@ -14,7 +14,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline T abs_sum(const Vector_view<T>& x)
+inline T abs_sum(const Vector_view<T> x)
 {
     T result = 0;
     for (std::size_t i = 0; i < x.size(); ++i) {
@@ -22,18 +22,6 @@ inline T abs_sum(const Vector_view<T>& x)
     }
     return result;
 }
-
-#if 0
-template <typename T>
-inline T abs_sum(const Subvector_view<T>& x)
-{
-    T result = 0;
-    for (std::size_t i = 0; i < x.size(); ++i) {
-        result += std::abs(x(i));
-    }
-    return result;
-}
-#endif
 
 } // namespace Linalg
 } // namespace Scilib

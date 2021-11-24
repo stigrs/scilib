@@ -13,7 +13,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline void axpy(const T& scalar, const Vector_view<T>& x, Vector_view<T>& y)
+inline void axpy(const T& scalar, const Vector_view<T> x, Vector_view<T> y)
 {
     assert(x.size() == y.size());
     for (std::size_t i = 0; i < y.size(); ++i) {

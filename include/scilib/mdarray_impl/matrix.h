@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <scilib/mdarray_impl/type_aliases.h>
 #include <experimental/mdspan>
 #include <vector>
 #include <initializer_list>
@@ -13,20 +14,7 @@
 #include <cassert>
 
 namespace Scilib {
-
 namespace stdex = std::experimental;
-
-template <typename T>
-using Matrix_view =
-    stdex::mdspan<T,
-                  stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-                  stdex::layout_right>;
-
-template <typename T>
-using Submatrix_view =
-    stdex::mdspan<T,
-                  stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-                  stdex::layout_stride>;
 
 // Dense matrix class with row-major storage order and using mdspan for views.
 template <class T>
@@ -148,8 +136,8 @@ public:
     T* data() noexcept { return elems.data(); }
     const T* data() const noexcept { return elems.data(); }
 
-    auto& view() noexcept { return span; }
-    const auto& view() const noexcept { return span; }
+    auto view() noexcept { return span; }
+    const auto view() const noexcept { return span; }
 
     bool empty() const noexcept { return elems.empty(); }
     auto size() const noexcept { return span.size(); }

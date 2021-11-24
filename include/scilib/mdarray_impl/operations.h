@@ -14,6 +14,8 @@
 
 #include <scilib/mdarray_impl/vector.h>
 #include <scilib/mdarray_impl/matrix.h>
+#include <scilib/mdarray_impl/matrix_diag.h>
+#include <scilib/mdarray_impl/type_aliases.h>
 #include <scilib/linalg.h>
 #include <algorithm>
 #include <iostream>
@@ -247,6 +249,25 @@ template <typename T>
 inline Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
 {
     return Sci::Linalg::matrix_vector_product(a.view(), x.view());
+}
+
+//------------------------------------------------------------------------------
+// Apply operations:
+
+template <class T, class F>
+void apply(Vector_view<T> v, F f)
+{
+    for (std::size_t i = 0; i < v.extent(0); ++i) {
+        f(v(i));
+    }
+}
+
+template <class T, class F>
+void apply(Subvector_view<T> v, F f)
+{
+    for (std::size_t i = 0; i < v.extent(0); ++i) {
+        f(v(i));
+    }
 }
 
 //------------------------------------------------------------------------------

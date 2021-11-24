@@ -22,6 +22,6 @@ int main()
     std::cout << "matrix:\n" << m << '\n';
 
     auto d = Sci::diag(m.view());
-    d = 0;
+    Sci::apply(d.view(), [&](int& a) { a = 10; });
     std::cout << "matrix:\n" << m << '\n';
 }
