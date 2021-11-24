@@ -20,10 +20,9 @@ set(
     bench_axpy 
     bench_dot 
     #bench_eigs
-    #bench_mm_mul
-    #bench_mv_mul
-    #bench_norm
-    #bench_transpose
+    bench_matrix_product
+    bench_matrix_vector_product
+    bench_transpose
 )
 
 foreach(program ${PROGRAMS})

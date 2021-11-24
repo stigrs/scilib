@@ -20,7 +20,7 @@
 namespace Scilib {
 namespace Linalg {
 
-inline double norm2(const Vector_view<double> x)
+inline double norm2(Vector_view<double> x)
 {
     const Index n = narrow_cast<Index>(x.size());
     const Index incx = narrow_cast<Index>(x.stride(0));

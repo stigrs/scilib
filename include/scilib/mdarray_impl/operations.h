@@ -270,6 +270,26 @@ void apply(Subvector_view<T> v, F f)
     }
 }
 
+template <class T, class F>
+void apply(Matrix_view<T> m, F f)
+{
+    for (std::size_t i = 0; i < m.extent(0); ++i) {
+        for (std::size_t j = 0; j < m.extent(1); ++j) {
+            f(m(i, j));
+        }
+    }
+}
+
+template <class T, class F>
+void apply(Submatrix_view<T> m, F f)
+{
+    for (std::size_t i = 0; i < m.extent(0); ++i) {
+        for (std::size_t j = 0; j < m.extent(1); ++j) {
+            f(m(i, j));
+        }
+    }
+}
+
 //------------------------------------------------------------------------------
 // Stream methods:
 

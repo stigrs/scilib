@@ -48,6 +48,8 @@ void benchmark(int n)
 
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10; ++it) {
+        // Sci::Linalg::scale(va.view(), 2.0);
+        // Sci::Linalg::add(va.view(), vb.view(), vb.view());
         vb = 2.0 * va + vb;
     }
     t2 = std::chrono::high_resolution_clock::now();

@@ -49,10 +49,15 @@ public:
 
     ~diag() = default;
 
-    auto& operator()(std::size_t i) noexcept { return span(i); }
-    const auto& operator()(std::size_t i) const noexcept { return span(i); }
+    constexpr auto& operator()(std::size_t i) noexcept { return span(i); }
+    constexpr auto& operator()(std::size_t i) const noexcept { return span(i); }
 
     std::size_t size() const noexcept { return span.size(); }
+
+    std::size_t extent(std::size_t dim = 0) const noexcept
+    {
+        return span.extent(dim);
+    }
 
     T* data() noexcept { return span.data(); }
     const T* data() const noexcept { return span.data(); }

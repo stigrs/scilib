@@ -109,8 +109,8 @@ public:
 
     ~Vector() = default;
 
-    auto& operator()(size_type i) noexcept { return span(i); }
-    const auto& operator()(size_type i) const noexcept { return span(i); }
+    constexpr auto& operator()(size_type i) noexcept { return span(i); }
+    constexpr auto& operator()(size_type i) const noexcept { return span(i); }
 
     iterator begin() noexcept { return elems.begin(); }
     iterator end() noexcept { return elems.end(); }

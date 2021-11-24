@@ -63,8 +63,8 @@ public:
     Matrix(const Matrix_view<T>& m)
         : elems(m.size()), span(elems.data(), m.extent(0), m.extent(1))
     {
-        for (size_type i = 0; i < rows(); ++i) {
-            for (size_type j = 0; j < cols(); ++j) {
+        for (size_type i = 0; i < m.extent(0); ++i) {
+            for (size_type j = 0; j < m.extent(1); ++j) {
                 elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
@@ -73,8 +73,8 @@ public:
     Matrix(const Submatrix_view<T>& m)
         : elems(m.size()), span(elems.data(), m.extent(0), m.extent(1))
     {
-        for (size_type i = 0; i < rows(); ++i) {
-            for (size_type j = 0; j < cols(); ++j) {
+        for (size_type i = 0; i < m.extent(0); ++i) {
+            for (size_type j = 0; j < m.extent(1); ++j) {
                 elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
@@ -85,9 +85,9 @@ public:
         elems = std::vector<T>(m.size());
         span = Matrix_view<T>(elems.data(), m.rows(), m.cols());
 
-        for (size_type i = 0; i < rows(); ++i) {
-            for (size_type j = 0; j < cols(); ++j) {
-                elems[i * m.stride(0) + j * m.stride(1)] = m(i, j);
+        for (size_type i = 0; i < m.extent(0); ++i) {
+            for (size_type j = 0; j < m.extent(1); ++j) {
+                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
         return *this;
@@ -98,9 +98,9 @@ public:
         elems.resize(m.size());
         span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
 
-        for (size_type i = 0; i < rows(); ++i) {
-            for (size_type j = 0; j < cols(); ++j) {
-                elems[i * m.stride(0) + j * m.stride(1)] = m(i, j);
+        for (size_type i = 0; i < m.extent(0); ++i) {
+            for (size_type j = 0; j < m.extent(1); ++j) {
+                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
         return *this;
@@ -111,8 +111,8 @@ public:
         elems.resize(m.size());
         span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
 
-        for (size_type i = 0; i < rows(); ++i) {
-            for (size_type j = 0; j < cols(); ++j) {
+        for (size_type i = 0; i < m.extent(0); ++i) {
+            for (size_type j = 0; j < m.extent(1); ++j) {
                 elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
             }
         }
@@ -121,8 +121,12 @@ public:
 
     ~Matrix() = default;
 
-    auto& operator()(size_type i, size_type j) noexcept { return span(i, j); }
-    const auto& operator()(size_type i, size_type j) const noexcept
+    constexpr auto& operator()(size_type i, size_type j) noexcept
+    {
+        return span(i, j);
+    }
+
+    constexpr auto& operator()(size_type i, size_type j) const noexcept
     {
         return span(i, j);
     }

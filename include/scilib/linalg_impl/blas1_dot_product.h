@@ -13,7 +13,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline T dot_product(const Vector_view<T> x, const Vector_view<T> y)
+inline T dot_product(Vector_view<T> x, Vector_view<T> y)
 {
     assert(x.size() == y.size());
 

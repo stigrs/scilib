@@ -6,21 +6,16 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
-#include <cassert>
-#include <cmath>
+#include <scilib/mdarray_impl/type_aliases.h>
 
 namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline T abs_sum(Vector_view<T> x)
+Submatrix_view<T> transposed(Matrix_view<T> m)
 {
-    T result = 0;
-    for (std::size_t i = 0; i < x.size(); ++i) {
-        result += std::abs(x(i));
-    }
-    return result;
+    return Submatrix_view<T>(
+        m.data(), {{m.extent(1), m.extent(0)}, {m.stride(1), m.stride(0)}});
 }
 
 } // namespace Linalg

@@ -13,18 +13,15 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-inline void axpy(const T& scalar, Vector_view<T> x, Vector_view<T> y)
+inline void add(Vector_view<T> x, Vector_view<T> y, Vector_view<T> z)
 {
-    assert(x.size() == y.size());
-    for (std::size_t i = 0; i < y.size(); ++i) {
-        y(i) = scalar * x(i) + y(i);
-    }
-}
+    static_assert(x.static_extent(0) == z.static_extent(0));
+    static_assert(y.static_extent(0) == z.static_extent(0));
+    static_assert(x.static_extent(0) == y.static_extent(0));
 
-template <typename T>
-inline void axpy(const T& scalar, const Vector<T>& x, Vector<T>& y)
-{
-    axpy(scalar, x.view(), y.view());
+    for (std::size_t i = 0; i < z.extent(0); ++i) {
+        z(i) = x(i) + y(i);
+    }
 }
 
 } // namespace Linalg

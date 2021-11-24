@@ -21,9 +21,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-void matrix_vector_product(const Matrix_view<T> a,
-                           const Vector_view<T> x,
-                           Vector_view<T> y)
+void matrix_vector_product(Matrix_view<T> a, Vector_view<T> x, Vector_view<T> y)
 {
     assert(x.size() == a.extent(1));
     for (std::size_t i = 0; i < a.extent(0); ++i) {
@@ -34,8 +32,8 @@ void matrix_vector_product(const Matrix_view<T> a,
     }
 }
 
-inline void matrix_vector_product(const Matrix_view<double> a,
-                                  const Vector_view<double> x,
+inline void matrix_vector_product(Matrix_view<double> a,
+                                  Vector_view<double> x,
                                   Vector_view<double> y)
 {
     constexpr double alpha = 1.0;
@@ -55,8 +53,8 @@ inline void matrix_vector_product(const Matrix_view<double> a,
 }
 
 #ifdef USE_MKL
-inline void matrix_vector_product(const Matrix_view<std::complex<double>> a,
-                                  const Vector_view<std::complex<double>> x,
+inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
+                                  Vector_view<std::complex<double>> x,
                                   Vector_view<std::complex<double>> y)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
@@ -77,8 +75,7 @@ inline void matrix_vector_product(const Matrix_view<std::complex<double>> a,
 #endif
 
 template <typename T>
-inline Vector<T> matrix_vector_product(const Matrix_view<T> a,
-                                       const Vector_view<T> x)
+inline Vector<T> matrix_vector_product(Matrix_view<T> a, Vector_view<T> x)
 {
     Vector<T> res(narrow_cast<Index>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
