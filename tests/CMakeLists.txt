@@ -41,6 +41,7 @@ set(PROGRAMS
     test_linalg_blas1
     test_linalg_blas2
     test_linalg_blas3
+    test_linalg_matrix_decomp
 )
 
 foreach(program ${PROGRAMS})

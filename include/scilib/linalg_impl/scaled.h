@@ -7,27 +7,24 @@
 #pragma once
 
 #include <scilib/mdarray.h>
+#include <scilib/linalg_impl/blas1_scale.h>
 #include <cassert>
 
 namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-void scale(const T& scalar, Vector_view<T> v)
+inline Vector_view<T> scaled(const T& scalar, Vector_view<T> v)
 {
-    for (std::size_t i = 0; i < v.size(); ++i) {
-        v(i) *= scalar;
-    }
+    scale(scalar, v);
+    return v;
 }
 
 template <typename T>
-void scale(const T& scalar, Matrix_view<T> m)
+inline Matrix_view<T> scaled(const T& scalar, Matrix_view<T> m)
 {
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
-            m(i, j) *= scalar;
-        }
-    }
+    scale(scalar, m);
+    return m;
 }
 
 } // namespace Linalg

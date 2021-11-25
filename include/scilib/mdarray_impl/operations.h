@@ -294,7 +294,7 @@ void apply(Submatrix_view<T> m, F f)
 // Stream methods:
 
 template <typename T>
-void print(std::ostream& ostrm, const Vector_view<T>& v)
+void print(std::ostream& ostrm, Vector_view<T> v)
 {
     ostrm << v.size() << '\n' << '{';
     for (std::size_t i = 0; i < v.size(); ++i) {
@@ -307,7 +307,7 @@ void print(std::ostream& ostrm, const Vector_view<T>& v)
 }
 
 template <typename T>
-void print(std::ostream& ostrm, const Subvector_view<T>& v)
+void print(std::ostream& ostrm, Subvector_view<T> v)
 {
     ostrm << v.size() << '\n' << '{';
     for (std::size_t i = 0; i < v.size(); ++i) {
@@ -351,7 +351,7 @@ std::istream& operator>>(std::istream& istrm, Vector<T>& v)
 }
 
 template <typename T>
-void print(std::ostream& ostrm, const Matrix_view<T>& m)
+void print(std::ostream& ostrm, Matrix_view<T> m)
 {
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (std::size_t i = 0; i < m.extent(0); ++i) {
@@ -366,7 +366,7 @@ void print(std::ostream& ostrm, const Matrix_view<T>& m)
 }
 
 template <typename T>
-void print(std::ostream& ostrm, const Submatrix_view<T>& m)
+void print(std::ostream& ostrm, Submatrix_view<T> m)
 {
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (std::size_t i = 0; i < m.extent(0); ++i) {

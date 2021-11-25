@@ -14,16 +14,24 @@
 
 #include <scilib/mdarray_impl/matrix.h>
 #include <scilib/traits.h>
+#include <experimental/mdspan>
 #include <cassert>
 #include <complex>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-void matrix_matrix_product(Matrix_view<T> a,
-                           Matrix_view<T> b,
-                           Matrix_view<T> res)
+template <class T,
+          class ExtentsA,
+          class ExtentsB,
+          class ExtentsC,
+          class LayoutA,
+          class LayoutB,
+          class LayoutC,
+          class Accessor>
+void matrix_matrix_product(stdex::mdspan<T, ExtentsA, LayoutA, Accessor> a,
+                           stdex::mdspan<T, ExtentsB, LayoutB, Accessor> b,
+                           stdex::mdspan<T, ExtentsC, LayoutC, Accessor> res)
 {
     const std::size_t n = a.extent(0);
     const std::size_t m = a.extent(1);
