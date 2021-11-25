@@ -26,7 +26,8 @@ copy(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
      stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
-    for (stdex::extents<>::size_type i = 0; i < y.extent(0); ++i) {
+    using size_type = stdex::extents<>::size_type;
+    for (size_type i = 0; i < y.extent(0); ++i) {
         y(i) = x(i);
     }
 }
@@ -42,15 +43,18 @@ template <class T_x,
           class Layout_y,
           class Accessor_y>
 inline void
-// clang-format off
-copy(stdex::mdspan<T_x, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x> x,
-     stdex::mdspan<T_y, stdex::extents<nrows_y, ncols_y>, Layout_y, Accessor_y> y)
-// clang-format on
+copy(stdex::mdspan<T_x, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x>
+         x,
+     stdex::mdspan<T_y, stdex::extents<nrows_y, ncols_y>, Layout_y, Accessor_y>
+         y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
-    for (std::size_t i = 0; i < y.extent(0); ++i) {
-        for (std::size_t j = 0; j < y.extent(1); ++j) {
+
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < y.extent(0); ++i) {
+        for (size_type j = 0; j < y.extent(1); ++j) {
             y(i, j) = x(i, j);
         }
     }

@@ -18,14 +18,15 @@ template <class T,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
           class Accessor_x>
-inline std::size_t
+inline stdex::extents<>::size_type
 idx_abs_max(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
+    using size_type = stdex::extents<>::size_type;
     using magn_type = decltype(std::abs(x(0)));
 
-    std::size_t max_idx = 0;
+    size_type max_idx = 0;
     magn_type max_val = std::abs(x(0));
-    for (std::size_t i = 0; i < x.extent(0); ++i) {
+    for (size_type i = 0; i < x.extent(0); ++i) {
         if (max_val < std::abs(x(i))) {
             max_val = std::abs(x(i));
             max_idx = i;

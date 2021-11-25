@@ -6,9 +6,8 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
+#include <scilib/mdarray_impl/type_aliases.h>
 #include <scilib/linalg_impl/blas1_scale.h>
-#include <cassert>
 
 namespace Scilib {
 namespace Linalg {

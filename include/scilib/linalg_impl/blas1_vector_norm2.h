@@ -12,18 +12,15 @@
 #include <cblas.h>
 #endif
 
-#include <scilib/mdarray_impl/matrix.h>
 #include <scilib/traits.h>
-#include <cassert>
-#include <complex>
 
 namespace Scilib {
 namespace Linalg {
 
 inline double norm2(Vector_view<double> x)
 {
-    const Index n = narrow_cast<Index>(x.size());
-    const Index incx = narrow_cast<Index>(x.stride(0));
+    const BLAS_INT n = narrow_cast<BLAS_INT>(x.size());
+    const BLAS_INT incx = narrow_cast<BLAS_INT>(x.stride(0));
 
     return cblas_dnrm2(n, x.data(), incx);
 }

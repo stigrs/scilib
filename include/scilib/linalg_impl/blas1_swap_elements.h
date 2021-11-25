@@ -6,30 +6,58 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
-#include <cassert>
+#include <experimental/mdspan>
 #include <utility>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-inline void swap_elements(Vector_view<T> a, Vector_view<T> b)
+namespace stdex = std::experimental;
+
+template <class T_x,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          class T_y,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline void
+swap_elements(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+              stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
-    assert(a.size() == b.size());
-    for (std::size_t i = 0; i < a.size(); ++i) {
-        std::swap(a(i), b(i));
+    static_assert(x.static_extent(0) == y.static_extent(0));
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < x.extent(0); ++i) {
+        std::swap(x(i), y(i));
     }
 }
 
-template <typename T>
-inline void swap_elements(Matrix_view<T> a, Matrix_view<T> b)
+template <class T_x,
+          stdex::extents<>::size_type nrows_x,
+          stdex::extents<>::size_type ncols_x,
+          class Layout_x,
+          class Accessor_x,
+          class T_y,
+          stdex::extents<>::size_type nrows_y,
+          stdex::extents<>::size_type ncols_y,
+          class Layout_y,
+          class Accessor_y>
+inline void swap_elements(
+    stdex::mdspan<T_x, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x>
+        x,
+    stdex::mdspan<T_y, stdex::extents<nrows_y, ncols_y>, Layout_y, Accessor_y>
+        y)
 {
-    assert(a.extent(0) == b.extent(0));
-    assert(a.extent(1) == b.extent(1));
-    for (std::size_t i = 0; i < a.extent(0); ++i) {
-        for (std::size_t j = 0; j < a.extent(1); ++j) {
-            std::swap(a(i, j), b(i, j));
+    static_assert(x.static_extent(0) == y.static_extent(0));
+    static_assert(x.static_extent(1) == y.static_extent(1));
+
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < x.extent(0); ++i) {
+        for (size_type j = 0; j < x.extent(1); ++j) {
+            std::swap(x(i, j), y(i, j));
         }
     }
 }

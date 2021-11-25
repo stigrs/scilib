@@ -6,16 +6,9 @@
 
 #pragma once
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <cblas.h>
-#endif
-
 #include <scilib/mdarray_impl/vector.h>
 #include <scilib/mdarray_impl/matrix.h>
 #include <scilib/mdarray_impl/matrix_diag.h>
-#include <scilib/mdarray_impl/type_aliases.h>
 #include <scilib/linalg_impl/blas2_matrix_vector_product.h>
 #include <scilib/linalg_impl/blas3_matrix_product.h>
 #include <algorithm>
@@ -23,6 +16,8 @@
 #include <iomanip>
 
 namespace Scilib {
+
+namespace stdex = std::experimental;
 
 //------------------------------------------------------------------------------
 // Vector operations:
@@ -255,34 +250,29 @@ inline Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
 //------------------------------------------------------------------------------
 // Apply operations:
 
-template <class T, class F>
-inline void apply(Vector_view<T> v, F f)
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor,
+          class F>
+// clang-format off
+inline void 
+apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v, F f)
+// clang-format on
 {
     for (std::size_t i = 0; i < v.extent(0); ++i) {
         f(v(i));
     }
 }
 
-template <class T, class F>
-inline void apply(Subvector_view<T> v, F f)
-{
-    for (std::size_t i = 0; i < v.extent(0); ++i) {
-        f(v(i));
-    }
-}
-
-template <class T, class F>
-inline void apply(Matrix_view<T> m, F f)
-{
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
-            f(m(i, j));
-        }
-    }
-}
-
-template <class T, class F>
-inline void apply(Submatrix_view<T> m, F f)
+template <class T,
+          stdex::extents<>::size_type nrows,
+          stdex::extents<>::size_type ncols,
+          class Layout,
+          class Accessor,
+          class F>
+inline void
+apply(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m, F f)
 {
     for (std::size_t i = 0; i < m.extent(0); ++i) {
         for (std::size_t j = 0; j < m.extent(1); ++j) {
@@ -294,26 +284,17 @@ inline void apply(Submatrix_view<T> m, F f)
 //------------------------------------------------------------------------------
 // Stream methods:
 
-template <typename T>
-inline void print(std::ostream& ostrm, Vector_view<T> v)
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline void print(std::ostream& ostrm,
+                  stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
-    ostrm << v.size() << '\n' << '{';
-    for (std::size_t i = 0; i < v.size(); ++i) {
+    ostrm << v.extent(0) << '\n' << '{';
+    for (std::size_t i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
-        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
-            ostrm << "\n  ";
-        }
-    }
-    ostrm << "}\n";
-}
-
-template <typename T>
-inline void print(std::ostream& ostrm, Subvector_view<T> v)
-{
-    ostrm << v.size() << '\n' << '{';
-    for (std::size_t i = 0; i < v.size(); ++i) {
-        ostrm << std::setw(9) << v(i) << " ";
-        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
+        if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
             ostrm << "\n  ";
         }
     }
@@ -351,23 +332,14 @@ inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
     return istrm;
 }
 
-template <typename T>
-inline void print(std::ostream& ostrm, Matrix_view<T> m)
-{
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
-            ostrm << std::setw(9) << m(i, j) << " ";
-        }
-        if (i != (m.extent(0) - 1)) {
-            ostrm << "\n ";
-        }
-    }
-    ostrm << "}\n";
-}
-
-template <typename T>
-inline void print(std::ostream& ostrm, Submatrix_view<T> m)
+template <class T,
+          stdex::extents<>::size_type nrows,
+          stdex::extents<>::size_type ncols,
+          class Layout,
+          class Accessor>
+inline void
+print(std::ostream& ostrm,
+      stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
 {
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (std::size_t i = 0; i < m.extent(0); ++i) {

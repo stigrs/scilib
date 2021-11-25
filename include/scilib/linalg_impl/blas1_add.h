@@ -34,7 +34,9 @@ add(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
     static_assert(y.static_extent(0) == z.static_extent(0));
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    for (std::size_t i = 0; i < z.extent(0); ++i) {
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < z.extent(0); ++i) {
         z(i) = x(i) + y(i);
     }
 }

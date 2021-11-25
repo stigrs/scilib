@@ -6,18 +6,25 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
-#include <cassert>
+#include <experimental/mdspan>
 #include <cmath>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-inline T abs_sum(Vector_view<T> x)
+namespace stdex = std::experimental;
+
+template <class T,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x>
+inline T
+abs_sum(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
+    using size_type = stdex::extents<>::size_type;
+
     T result = 0;
-    for (std::size_t i = 0; i < x.size(); ++i) {
+    for (size_type i = 0; i < x.extent(0); ++i) {
         result += std::abs(x(i));
     }
     return result;

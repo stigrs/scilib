@@ -29,7 +29,10 @@ axpy(const T_scalar& scalar,
      stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
-    for (std::size_t i = 0; i < y.extent(0); ++i) {
+
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < y.extent(0); ++i) {
         y(i) = scalar * x(i) + y(i);
     }
 }

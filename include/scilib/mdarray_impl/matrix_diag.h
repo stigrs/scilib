@@ -21,7 +21,7 @@ template <class T>
 class diag {
 public:
     using value_type = T;
-    using size_type = std::size_t;
+    using size_type = std::experimental::extents<>::size_type;
 
     diag() = delete;
 

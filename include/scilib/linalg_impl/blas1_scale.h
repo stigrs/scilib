@@ -6,25 +6,41 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
-#include <cassert>
+#include <experimental/mdspan>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-inline void scale(const T& scalar, Vector_view<T> v)
+namespace stdex = std::experimental;
+
+template <class T_scalar,
+          class T_x,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x>
+inline void
+scale(const T_scalar& scalar,
+      stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
-    for (std::size_t i = 0; i < v.size(); ++i) {
-        v(i) *= scalar;
+    using size_type = stdex::extents<>::size_type;
+    for (size_type i = 0; i < x.extent(0); ++i) {
+        x(i) *= scalar;
     }
 }
 
-template <typename T>
-inline void scale(const T& scalar, Matrix_view<T> m)
+template <class T_scalar,
+          class T_m,
+          stdex::extents<>::size_type nrows,
+          stdex::extents<>::size_type ncols,
+          class Layout_m,
+          class Accessor_m>
+inline void
+scale(const T_scalar& scalar,
+      stdex::mdspan<T_m, stdex::extents<nrows, ncols>, Layout_m, Accessor_m> m)
 {
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    using size_type = stdex::extents<>::size_type;
+    for (size_type i = 0; i < m.extent(0); ++i) {
+        for (size_type j = 0; j < m.extent(1); ++j) {
             m(i, j) *= scalar;
         }
     }

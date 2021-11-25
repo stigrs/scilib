@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
 #include <experimental/mdspan>
 
 namespace Scilib {
@@ -27,17 +26,13 @@ dot_product(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
+    using size_type = stdex::extents<>::size_type;
+
     T result = 0;
-    for (std::size_t i = 0; i < x.extent(0); ++i) {
+    for (size_type i = 0; i < x.extent(0); ++i) {
         result += x(i) * y(i);
     }
     return result;
-}
-
-template <typename T>
-inline T dot_product(const Vector<T>& x, const Vector<T>& y)
-{
-    return dot_product(x.view(), y.view());
 }
 
 } // namespace Linalg

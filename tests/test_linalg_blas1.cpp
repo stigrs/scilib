@@ -32,7 +32,7 @@ TEST(TestLinalgBlas1, TestDot)
     Sci::Vector<int> a = {1, 3, -5};
     Sci::Vector<int> b = {4, -2, -1};
 
-    EXPECT_EQ(Sci::Linalg::dot_product(a, b), 3);
+    EXPECT_EQ(Sci::Linalg::dot_product(a.view(), b.view()), 3);
 }
 
 TEST(TestLinalgBlas1, TestIdxAbsMax)
