@@ -29,6 +29,9 @@ void print(int n,
 
 void benchmark(int n)
 {
+    using namespace Sci;
+    using namespace Sci::Linalg;
+
     arma::vec aa(n);
     arma::vec ab(n);
     aa.fill(1.0);
@@ -40,17 +43,16 @@ void benchmark(int n)
     auto t2 = std::chrono::high_resolution_clock::now();
     Timer t_arma = t2 - t1;
 
-    Sci::Vector<double> va(n);
-    Sci::Vector<double> vb(n);
+    Vector<double> va(n);
+    Vector<double> vb(n);
 
     va = 1.0;
     vb = 1.0;
 
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10; ++it) {
-        // Sci::Linalg::scale(va.view(), 2.0);
-        // Sci::Linalg::add(va.view(), vb.view(), vb.view());
-        vb = 2.0 * va + vb;
+        add(scaled(2.0, va.view()), vb.view(), vb.view());
+        // vb = 2.0 * va + vb;
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_scilib = t2 - t1;
