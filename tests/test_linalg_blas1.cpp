@@ -5,6 +5,7 @@
 // and conditions.
 
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
 

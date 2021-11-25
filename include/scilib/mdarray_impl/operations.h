@@ -16,7 +16,8 @@
 #include <scilib/mdarray_impl/matrix.h>
 #include <scilib/mdarray_impl/matrix_diag.h>
 #include <scilib/mdarray_impl/type_aliases.h>
-#include <scilib/linalg.h>
+#include <scilib/linalg_impl/blas2_matrix_vector_product.h>
+#include <scilib/linalg_impl/blas3_matrix_product.h>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -255,7 +256,7 @@ inline Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
 // Apply operations:
 
 template <class T, class F>
-void apply(Vector_view<T> v, F f)
+inline void apply(Vector_view<T> v, F f)
 {
     for (std::size_t i = 0; i < v.extent(0); ++i) {
         f(v(i));
@@ -263,7 +264,7 @@ void apply(Vector_view<T> v, F f)
 }
 
 template <class T, class F>
-void apply(Subvector_view<T> v, F f)
+inline void apply(Subvector_view<T> v, F f)
 {
     for (std::size_t i = 0; i < v.extent(0); ++i) {
         f(v(i));
@@ -271,7 +272,7 @@ void apply(Subvector_view<T> v, F f)
 }
 
 template <class T, class F>
-void apply(Matrix_view<T> m, F f)
+inline void apply(Matrix_view<T> m, F f)
 {
     for (std::size_t i = 0; i < m.extent(0); ++i) {
         for (std::size_t j = 0; j < m.extent(1); ++j) {
@@ -281,7 +282,7 @@ void apply(Matrix_view<T> m, F f)
 }
 
 template <class T, class F>
-void apply(Submatrix_view<T> m, F f)
+inline void apply(Submatrix_view<T> m, F f)
 {
     for (std::size_t i = 0; i < m.extent(0); ++i) {
         for (std::size_t j = 0; j < m.extent(1); ++j) {
@@ -294,7 +295,7 @@ void apply(Submatrix_view<T> m, F f)
 // Stream methods:
 
 template <typename T>
-void print(std::ostream& ostrm, Vector_view<T> v)
+inline void print(std::ostream& ostrm, Vector_view<T> v)
 {
     ostrm << v.size() << '\n' << '{';
     for (std::size_t i = 0; i < v.size(); ++i) {
@@ -303,11 +304,11 @@ void print(std::ostream& ostrm, Vector_view<T> v)
             ostrm << "\n  ";
         }
     }
-    ostrm << '}';
+    ostrm << "}\n";
 }
 
 template <typename T>
-void print(std::ostream& ostrm, Subvector_view<T> v)
+inline void print(std::ostream& ostrm, Subvector_view<T> v)
 {
     ostrm << v.size() << '\n' << '{';
     for (std::size_t i = 0; i < v.size(); ++i) {
@@ -316,11 +317,11 @@ void print(std::ostream& ostrm, Subvector_view<T> v)
             ostrm << "\n  ";
         }
     }
-    ostrm << '}';
+    ostrm << "}\n";
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
+inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
 {
     ostrm << v.size() << '\n' << '{';
     for (std::size_t i = 0; i < v.size(); ++i) {
@@ -329,12 +330,12 @@ std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
             ostrm << "\n  ";
         }
     }
-    ostrm << '}';
+    ostrm << "}\n";
     return ostrm;
 }
 
 template <typename T>
-std::istream& operator>>(std::istream& istrm, Vector<T>& v)
+inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
 {
     std::size_t n;
     istrm >> n;
@@ -351,7 +352,7 @@ std::istream& operator>>(std::istream& istrm, Vector<T>& v)
 }
 
 template <typename T>
-void print(std::ostream& ostrm, Matrix_view<T> m)
+inline void print(std::ostream& ostrm, Matrix_view<T> m)
 {
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (std::size_t i = 0; i < m.extent(0); ++i) {
@@ -362,11 +363,11 @@ void print(std::ostream& ostrm, Matrix_view<T> m)
             ostrm << "\n ";
         }
     }
-    ostrm << '}';
+    ostrm << "}\n";
 }
 
 template <typename T>
-void print(std::ostream& ostrm, Submatrix_view<T> m)
+inline void print(std::ostream& ostrm, Submatrix_view<T> m)
 {
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (std::size_t i = 0; i < m.extent(0); ++i) {
@@ -377,11 +378,11 @@ void print(std::ostream& ostrm, Submatrix_view<T> m)
             ostrm << "\n ";
         }
     }
-    ostrm << '}';
+    ostrm << "}\n";
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
+inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
 {
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (std::size_t i = 0; i < m.extent(0); ++i) {
@@ -392,12 +393,12 @@ std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
             ostrm << "\n ";
         }
     }
-    ostrm << '}';
+    ostrm << "}\n";
     return ostrm;
 }
 
 template <typename T>
-std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
+inline std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
 {
     std::size_t nr;
     std::size_t nc;

@@ -6,17 +6,30 @@
 
 #pragma once
 
+#include <experimental/mdspan>
 #include <scilib/mdarray.h>
-#include <cassert>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-inline void axpy(const T& scalar, Vector_view<T> x, Vector_view<T> y)
+namespace stdex = std::experimental;
+
+template <class T_scalar,
+          class T_x,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          class T_y,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline void
+axpy(const T_scalar& scalar,
+     stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+     stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
-    assert(x.size() == y.size());
-    for (std::size_t i = 0; i < y.size(); ++i) {
+    static_assert(x.static_extent(0) == y.static_extent(0));
+    for (std::size_t i = 0; i < y.extent(0); ++i) {
         y(i) = scalar * x(i) + y(i);
     }
 }

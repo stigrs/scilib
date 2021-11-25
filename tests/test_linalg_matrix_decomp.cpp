@@ -8,6 +8,7 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
+#include <iostream>
 
 TEST(TestMatrixDecomposition, TestQR)
 {
@@ -27,5 +28,10 @@ TEST(TestMatrixDecomposition, TestQR)
     Matrix<double> r(a.rows(), a.cols());
 
     qr(a.view(), q.view(), r.view());
-    EXPECT_EQ(q * r, ans);
+    auto res = q * r;
+    for (std::size_t i = 0; i < ans.rows(); ++i) {
+        for (std::size_t j = 0; j < ans.cols(); ++j) {
+            EXPECT_DOUBLE_EQ(res(i, j), ans(i, j));
+        }
+    }
 }

@@ -29,13 +29,15 @@ template <class T,
           class LayoutB,
           class LayoutC,
           class Accessor>
-void matrix_matrix_product(stdex::mdspan<T, ExtentsA, LayoutA, Accessor> a,
-                           stdex::mdspan<T, ExtentsB, LayoutB, Accessor> b,
-                           stdex::mdspan<T, ExtentsC, LayoutC, Accessor> res)
+inline void
+matrix_matrix_product(stdex::mdspan<T, ExtentsA, LayoutA, Accessor> a,
+                      stdex::mdspan<T, ExtentsB, LayoutB, Accessor> b,
+                      stdex::mdspan<T, ExtentsC, LayoutC, Accessor> res)
 {
     const std::size_t n = a.extent(0);
     const std::size_t m = a.extent(1);
     const std::size_t p = b.extent(1);
+
     assert(m == b.extent(0));
 
     for (std::size_t i = 0; i < n; ++i) {
@@ -55,13 +57,13 @@ inline void matrix_matrix_product(Matrix_view<double> a,
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const Index m = narrow_cast<Index>(a.extent(0));
-    const Index n = narrow_cast<Index>(b.extent(1));
-    const Index k = narrow_cast<Index>(a.extent(1));
+    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = narrow_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = narrow_cast<BLAS_INT>(a.extent(1));
 
-    const Index lda = k;
-    const Index ldb = n;
-    const Index ldc = n;
+    const BLAS_INT lda = k;
+    const BLAS_INT ldb = n;
+    const BLAS_INT ldc = n;
 
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
                 a.data(), lda, b.data(), ldb, beta, res.data(), ldc);
@@ -75,13 +77,13 @@ inline void matrix_matrix_product(Matrix_view<std::complex<double>> a,
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const Index m = narrow_cast<Index>(a.extent(0));
-    const Index n = narrow_cast<Index>(b.extent(1));
-    const Index k = narrow_cast<Index>(a.extent(1));
+    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = narrow_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = narrow_cast<BLAS_INT>(a.extent(1));
 
-    const Index lda = k;
-    const Index ldb = n;
-    const Index ldc = n;
+    const BLAS_INT lda = k;
+    const BLAS_INT ldb = n;
+    const BLAS_INT ldc = n;
 
     cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
                 a.data(), lda, b.data(), ldb, &beta, res.data(), ldc);

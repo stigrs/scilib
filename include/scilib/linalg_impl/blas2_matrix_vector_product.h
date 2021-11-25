@@ -21,7 +21,8 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-void matrix_vector_product(Matrix_view<T> a, Vector_view<T> x, Vector_view<T> y)
+inline void
+matrix_vector_product(Matrix_view<T> a, Vector_view<T> x, Vector_view<T> y)
 {
     assert(x.size() == a.extent(1));
     for (std::size_t i = 0; i < a.extent(0); ++i) {

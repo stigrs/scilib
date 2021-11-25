@@ -14,7 +14,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-void swap_elements(Vector_view<T> a, Vector_view<T> b)
+inline void swap_elements(Vector_view<T> a, Vector_view<T> b)
 {
     assert(a.size() == b.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -23,7 +23,7 @@ void swap_elements(Vector_view<T> a, Vector_view<T> b)
 }
 
 template <typename T>
-void swap_elements(Matrix_view<T> a, Matrix_view<T> b)
+inline void swap_elements(Matrix_view<T> a, Matrix_view<T> b)
 {
     assert(a.extent(0) == b.extent(0));
     assert(a.extent(1) == b.extent(1));

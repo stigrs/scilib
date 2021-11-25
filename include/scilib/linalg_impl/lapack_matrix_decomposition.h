@@ -6,11 +6,8 @@
 
 #pragma once
 
-#include <scilib/mdarray.h>
-#include <scilib/mdarray_impl/operations.h>
+#include <scilib/linalg.h>
 #include <scilib/traits.h>
-#include <scilib/linalg_impl/blas3_matrix_product.h>
-#include <scilib/linalg_impl/transposed.h>
 #include <exception>
 #include <cassert>
 #include <iostream>
@@ -41,36 +38,38 @@ inline void lu(Matrix_view<double> a, Vector_view<BLAS_INT> ipiv)
 inline void
 qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
 {
+    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT lda = n;
+
     assert(q.extent(0) == m && q.extent(1) == n);
     assert(r.extent(0) == m && r.extent(1) == n);
 
     // Compute QR factorization:
 
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT lda = n;
-
     Vector<double> tau(std::min(m, n));
 
-    q = Matrix<double>(a).view();
+    Matrix<double> qq(a); // work on a local copy
 
     BLAS_INT info =
-        LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m, n, q.data(), lda, tau.data());
+        LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m, n, qq.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dgeqrf failed");
     }
 
     // Compute Q:
 
-    info = LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m, n, n, q.data(), lda, tau.data());
+    info =
+        LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m, n, n, qq.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dorgqr failed");
     }
-    Scilib::print(std::cout, q);
 
     // Compute R:
 
-    matrix_matrix_product(transposed(q), a, r);
+    Matrix<double> qt(transposed(qq.view())); // need a deep copy
+    matrix_matrix_product(qt.view(), a, r);
+    copy(qq.view(), q); // copy result back to q
 }
 
 #if 0

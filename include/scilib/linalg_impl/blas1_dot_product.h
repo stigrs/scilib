@@ -7,18 +7,28 @@
 #pragma once
 
 #include <scilib/mdarray.h>
-#include <cassert>
+#include <experimental/mdspan>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-inline T dot_product(Vector_view<T> x, Vector_view<T> y)
+namespace stdex = std::experimental;
+
+template <class T,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline T
+dot_product(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+            stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
-    assert(x.size() == y.size());
+    static_assert(x.static_extent(0) == y.static_extent(0));
 
     T result = 0;
-    for (std::size_t i = 0; i < x.size(); ++i) {
+    for (std::size_t i = 0; i < x.extent(0); ++i) {
         result += x(i) * y(i);
     }
     return result;

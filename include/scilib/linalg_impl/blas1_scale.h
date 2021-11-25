@@ -13,7 +13,7 @@ namespace Scilib {
 namespace Linalg {
 
 template <typename T>
-void scale(const T& scalar, Vector_view<T> v)
+inline void scale(const T& scalar, Vector_view<T> v)
 {
     for (std::size_t i = 0; i < v.size(); ++i) {
         v(i) *= scalar;
@@ -21,7 +21,7 @@ void scale(const T& scalar, Vector_view<T> v)
 }
 
 template <typename T>
-void scale(const T& scalar, Matrix_view<T> m)
+inline void scale(const T& scalar, Matrix_view<T> m)
 {
     for (std::size_t i = 0; i < m.extent(0); ++i) {
         for (std::size_t j = 0; j < m.extent(1); ++j) {

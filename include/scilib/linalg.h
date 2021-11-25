@@ -10,6 +10,7 @@
 
 #include <scilib/linalg_impl/blas1_add.h>
 #include <scilib/linalg_impl/blas1_axpy.h>
+#include <scilib/linalg_impl/blas1_copy.h>
 #include <scilib/linalg_impl/blas1_dot_product.h>
 #include <scilib/linalg_impl/blas1_idx_abs_max.h>
 #include <scilib/linalg_impl/blas1_idx_abs_min.h>
@@ -20,7 +21,7 @@
 #include <scilib/linalg_impl/blas2_matrix_vector_product.h>
 #include <scilib/linalg_impl/blas3_matrix_product.h>
 
-#include <scilib/linalg_impl/lapack_matrix_decomposition.h>
-
 #include <scilib/linalg_impl/scaled.h>
 #include <scilib/linalg_impl/transposed.h>
+
+#include <scilib/linalg_impl/lapack_matrix_decomposition.h>
