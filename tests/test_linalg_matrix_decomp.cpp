@@ -8,7 +8,37 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
-#include <iostream>
+
+TEST(TestMatrixDecomposition, TestLU)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // clang-format off
+    std::vector<double> a_data = {
+        2.0, 5.0, 8.0, 7.0,
+        5.0, 2.0, 2.0, 8.0,
+        7.0, 5.0, 6.0, 6.0,
+        5.0, 4.0, 4.0, 8.0 
+    };
+    std::vector<double> ans_data = {  
+        7.000000,  5.00000,  6.000000, 6.00000,
+        0.285714,  3.57143,  6.285710, 5.28571,
+        0.714286,  0.12000, -1.040000, 3.08000,
+        0.714286, -0.44000, -0.461538, 7.46154 
+    };
+    // clang-format on
+
+    Matrix<double> ans(ans_data, 4, 4);
+    Matrix<double> a(a_data, 4, 4);
+    Vector<BLAS_INT> ipiv(4);
+    lu(a.view(), ipiv.view());
+    for (std::size_t i = 0; i < ans.rows(); ++i) {
+        for (std::size_t j = 0; j < ans.cols(); ++j) {
+            EXPECT_NEAR(a(i, j), ans(i, j), 1.0e-5);
+        }
+    }
+}
 
 TEST(TestMatrixDecomposition, TestQR)
 {

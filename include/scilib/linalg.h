@@ -26,3 +26,4 @@
 #include <scilib/linalg_impl/scaled.h>
 #include <scilib/linalg_impl/transposed.h>
 #include <scilib/linalg_impl/matrix_decomposition.h>
+#include <scilib/linalg_impl/eigenvalue.h>

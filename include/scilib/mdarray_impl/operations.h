@@ -260,7 +260,9 @@ inline void
 apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v, F f)
 // clang-format on
 {
-    for (std::size_t i = 0; i < v.extent(0); ++i) {
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < v.extent(0); ++i) {
         f(v(i));
     }
 }
@@ -274,8 +276,10 @@ template <class T,
 inline void
 apply(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m, F f)
 {
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < m.extent(0); ++i) {
+        for (size_type j = 0; j < m.extent(1); ++j) {
             f(m(i, j));
         }
     }
@@ -291,8 +295,10 @@ template <class T,
 inline void print(std::ostream& ostrm,
                   stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
+    using size_type = stdex::extents<>::size_type;
+
     ostrm << v.extent(0) << '\n' << '{';
-    for (std::size_t i = 0; i < v.extent(0); ++i) {
+    for (size_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
             ostrm << "\n  ";
@@ -304,8 +310,10 @@ inline void print(std::ostream& ostrm,
 template <typename T>
 inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
 {
+    using size_type = stdex::extents<>::size_type;
+
     ostrm << v.size() << '\n' << '{';
-    for (std::size_t i = 0; i < v.size(); ++i) {
+    for (size_type i = 0; i < v.size(); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.size() - 1))) {
             ostrm << "\n  ";
@@ -318,13 +326,15 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
 template <typename T>
 inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
 {
-    std::size_t n;
+    using size_type = stdex::extents<>::size_type;
+
+    size_type n;
     istrm >> n;
     std::vector<T> tmp(n);
 
     char ch;
     istrm >> ch; // {
-    for (std::size_t i = 0; i < n; ++i) {
+    for (size_type i = 0; i < n; ++i) {
         istrm >> tmp[i];
     }
     istrm >> ch; // }
@@ -341,9 +351,11 @@ inline void
 print(std::ostream& ostrm,
       stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
 {
+    using size_type = stdex::extents<>::size_type;
+
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    for (size_type i = 0; i < m.extent(0); ++i) {
+        for (size_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
         }
         if (i != (m.extent(0) - 1)) {
@@ -356,9 +368,11 @@ print(std::ostream& ostrm,
 template <typename T>
 inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
 {
+    using size_type = stdex::extents<>::size_type;
+
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    for (size_type i = 0; i < m.extent(0); ++i) {
+        for (size_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
         }
         if (i != (m.extent(0) - 1)) {
@@ -372,15 +386,17 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
 template <typename T>
 inline std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
 {
-    std::size_t nr;
-    std::size_t nc;
+    using size_type = stdex::extents<>::size_type;
+
+    size_type nr;
+    size_type nc;
     char ch;
 
     istrm >> nr >> ch >> nc;
     std::vector<T> tmp(nr * nc);
 
     istrm >> ch; // {
-    for (std::size_t i = 0; i < nr * nc; ++i) {
+    for (size_type i = 0; i < nr * nc; ++i) {
         istrm >> tmp[i];
     }
     istrm >> ch; // }
