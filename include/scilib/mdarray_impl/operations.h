@@ -235,7 +235,7 @@ inline Matrix<T> operator%(const Matrix<T>& m, const T& scalar)
 template <typename T>
 inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 {
-    return Scilib::Linalg::matrix_matrix_product(a.view(), b.view());
+    return Scilib::Linalg::matrix_product(a.view(), b.view());
 }
 
 //------------------------------------------------------------------------------

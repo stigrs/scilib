@@ -14,19 +14,17 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_scalar,
-          class T_x,
+template <class T,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
           class Accessor_x,
-          class T_y,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
 inline void
-axpy(const T_scalar& scalar,
-     stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-     stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+axpy(const T& scalar,
+     stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+     stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 

@@ -33,7 +33,7 @@ public:
     Matrix(const Matrix& m)
         : elems(m.size()), span(elems.data(), m.rows(), m.cols())
     {
-        std::size_t i = 0;
+        size_type i = 0;
         for (const auto& mi : m) {
             elems[i] = mi;
             ++i;
@@ -60,7 +60,11 @@ public:
     {
     }
 
-    Matrix(const Matrix_view<T>& m)
+    template <stdex::extents<>::size_type nrows,
+              stdex::extents<>::size_type ncols,
+              class Layout,
+              class Accessor>
+    Matrix(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
         : elems(m.size()), span(elems.data(), m.extent(0), m.extent(1))
     {
         for (size_type i = 0; i < m.extent(0); ++i) {
@@ -70,46 +74,16 @@ public:
         }
     }
 
-    Matrix(const Submatrix_view<T>& m)
+    template <stdex::extents<>::size_type nrows,
+              stdex::extents<>::size_type ncols,
+              class Layout,
+              class Accessor>
+    Matrix& operator=(
+        stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
         : elems(m.size()), span(elems.data(), m.extent(0), m.extent(1))
-    {
-        for (size_type i = 0; i < m.extent(0); ++i) {
-            for (size_type j = 0; j < m.extent(1); ++j) {
-                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
-            }
-        }
-    }
-
-    Matrix& operator=(const Matrix& m)
     {
         elems = std::vector<T>(m.size());
         span = Matrix_view<T>(elems.data(), m.rows(), m.cols());
-
-        for (size_type i = 0; i < m.extent(0); ++i) {
-            for (size_type j = 0; j < m.extent(1); ++j) {
-                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
-            }
-        }
-        return *this;
-    }
-
-    Matrix& operator=(const Matrix_view<T>& m)
-    {
-        elems.resize(m.size());
-        span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
-
-        for (size_type i = 0; i < m.extent(0); ++i) {
-            for (size_type j = 0; j < m.extent(1); ++j) {
-                elems[i * view().stride(0) + j * view().stride(1)] = m(i, j);
-            }
-        }
-        return *this;
-    }
-
-    Matrix& operator=(const Submatrix_view<T>& m)
-    {
-        elems.resize(m.size());
-        span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
 
         for (size_type i = 0; i < m.extent(0); ++i) {
             for (size_type j = 0; j < m.extent(1); ++j) {

@@ -13,14 +13,13 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_scalar,
-          class T_x,
+template <class T,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
           class Accessor_x>
 inline void
-scale(const T_scalar& scalar,
-      stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
+scale(const T& scalar,
+      stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
     using size_type = stdex::extents<>::size_type;
     for (size_type i = 0; i < x.extent(0); ++i) {
@@ -28,15 +27,14 @@ scale(const T_scalar& scalar,
     }
 }
 
-template <class T_scalar,
-          class T_m,
+template <class T,
           stdex::extents<>::size_type nrows,
           stdex::extents<>::size_type ncols,
           class Layout_m,
           class Accessor_m>
 inline void
-scale(const T_scalar& scalar,
-      stdex::mdspan<T_m, stdex::extents<nrows, ncols>, Layout_m, Accessor_m> m)
+scale(const T& scalar,
+      stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout_m, Accessor_m> m)
 {
     using size_type = stdex::extents<>::size_type;
     for (size_type i = 0; i < m.extent(0); ++i) {

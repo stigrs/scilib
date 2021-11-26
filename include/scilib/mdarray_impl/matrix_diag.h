@@ -33,7 +33,17 @@ public:
         static_assert(m.static_extent(0) == m.static_extent(1));
     }
 
-    diag& operator=(const Vector_view<T> v)
+    diag& operator=(const Vector<T>& v)
+    {
+        assert(v.extent(0) == extent(0));
+        for (size_type i = 0; i < v.size(); ++i) {
+            span(i) = v(i);
+        }
+        return *this;
+    }
+
+    template <stdex::extents<>::size_type ext, class Layout, class Accessor>
+    diag& operator=(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     {
         assert(v.extent(0) == extent(0));
         for (size_type i = 0; i < v.extent(0); ++i) {

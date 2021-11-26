@@ -6,6 +6,8 @@
 
 #pragma once
 
+// Do not change this ordering.
+
 #include <scilib/mdarray.h>
 
 #include <scilib/linalg_impl/blas1_add.h>
@@ -23,5 +25,4 @@
 
 #include <scilib/linalg_impl/scaled.h>
 #include <scilib/linalg_impl/transposed.h>
-
-#include <scilib/linalg_impl/lapack_matrix_decomposition.h>
+#include <scilib/linalg_impl/matrix_decomposition.h>

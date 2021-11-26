@@ -48,18 +48,11 @@ public:
     {
     }
 
-    Vector(const Vector_view<T>& v)
+    template <stdex::extents<>::size_type ext, class Layout, class Accessor>
+    Vector(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
         : elems(v.size()), span(elems.data(), elems.size())
     {
-        for (size_type i = 0; i < size(); ++i) {
-            elems[i] = v(i);
-        }
-    }
-
-    Vector(const Subvector_view<T>& v)
-        : elems(v.size()), span(elems.data(), elems.size())
-    {
-        for (size_type i = 0; i < size(); ++i) {
+        for (size_type i = 0; i < v.extent(0); ++i) {
             elems[i] = v(i);
         }
     }
@@ -85,23 +78,13 @@ public:
         return *this;
     }
 
-    Vector& operator=(const Vector_view<T>& v)
+    template <stdex::extents<>::size_type ext, class Layout, class Accessor>
+    Vector& operator=(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     {
         elems.resize(v.size());
         span = Vector_view<T>(elems.data(), elems.size());
 
-        for (size_type i = 0; i < size(); ++i) {
-            elems[i] = v(i);
-        }
-        return *this;
-    }
-
-    Vector& operator=(const Subvector_view<T>& v)
-    {
-        elems.resize(v.size());
-        span = Vector_view<T>(elems.data(), elems.size());
-
-        for (size_type i = 0; i < size(); ++i) {
+        for (size_type i = 0; i < v.extent(0); ++i) {
             elems[i] = v(i);
         }
         return *this;

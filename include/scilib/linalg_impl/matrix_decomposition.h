@@ -6,11 +6,16 @@
 
 #pragma once
 
-#include <scilib/linalg.h>
+#ifdef USE_MKL
+#include <mkl.h>
+#else
+#include <cblas.h>
+#endif
+
+#include <scilib/mdarray_impl/type_aliases.h>
 #include <scilib/traits.h>
 #include <exception>
 #include <cassert>
-#include <iostream>
 
 namespace Scilib {
 namespace Linalg {
@@ -48,7 +53,6 @@ qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
     // Compute QR factorization:
 
     Vector<double> tau(std::min(m, n));
-
     Matrix<double> qq(a); // work on a local copy
 
     BLAS_INT info =
@@ -68,33 +72,37 @@ qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
     // Compute R:
 
     Matrix<double> qt(transposed(qq.view())); // need a deep copy
-    matrix_matrix_product(qt.view(), a, r);
+    matrix_product(qt.view(), a, r);
     copy(qq.view(), q); // copy result back to q
 }
 
-#if 0
 // Singular value decomposition.
-inline void svd(Mat<double>& a, Vec<double>& s, Mat<double>& u, Mat<double>& vt)
+inline void svd(Matrix_view<double> a,
+                Vector_view<double> s,
+                Matrix_view<double> u,
+                Matrix_view<double> vt)
 {
-    BLAS_INT m = narrow_cast<BLAS_INT>(a.rows());
-    BLAS_INT n = narrow_cast<BLAS_INT>(a.cols());
+    BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
     BLAS_INT ldu = m;
     BLAS_INT ldvt = n;
 
-    s.resize(std::min(m, n));
-    u.resize(m, ldu);
-    vt.resize(n, ldvt);
+    assert(s.extent(0) == std::min(m, n));
+    assert(u.extent(0) == m);
+    assert(u.extent(1) == ldu);
+    assert(vt.extent(0) == n);
+    assert(vt.extent(1) == ldvt);
 
-    Vec<double> superb(std::min(m, n) - 1);
+    Vector<double> superb(std::min(m, n) - 1);
 
     BLAS_INT info =
         LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'A', 'A', m, n, a.data(), lda,
                        s.data(), u.data(), ldu, vt.data(), ldvt, superb.data());
     if (info != 0) {
-        throw Math_error("dgesvd failed");
+        throw std::runtime_error("dgesvd failed");
     }
 }
-#endif
+
 } // namespace Linalg
 } // namespace Scilib

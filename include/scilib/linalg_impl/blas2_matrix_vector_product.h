@@ -12,22 +12,38 @@
 #include <cblas.h>
 #endif
 
-#include <scilib/mdarray_impl/matrix.h>
 #include <scilib/traits.h>
-#include <cassert>
+#include <scilib/mdarray_impl/type_aliases.h>
+#include <experimental/mdspan>
 #include <complex>
 
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
-inline void
-matrix_vector_product(Matrix_view<T> a, Vector_view<T> x, Vector_view<T> y)
+namespace stdex = std::experimental;
+
+template <class T,
+          stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::mdspan<T, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
-    assert(x.size() == a.extent(1));
-    for (std::size_t i = 0; i < a.extent(0); ++i) {
+    static_assert(x.static_extent(0) == a.static_extent(1));
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < a.extent(0); ++i) {
         y(i) = T{0};
-        for (std::size_t j = 0; j < a.extent(1); ++j) {
+        for (size_type j = 0; j < a.extent(1); ++j) {
             y(i) += a(i, j) * x(j);
         }
     }
@@ -40,14 +56,14 @@ inline void matrix_vector_product(Matrix_view<double> a,
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    assert(x.size() == a.extent(1));
+    static_assert(x.static_extent(0) == a.static_extent(1));
 
-    const Index m = narrow_cast<Index>(a.extent(0));
-    const Index n = narrow_cast<Index>(a.extent(1));
+    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
 
-    const Index lda = n;
-    const Index incx = narrow_cast<Index>(x.stride(0));
-    const Index incy = narrow_cast<Index>(y.stride(0));
+    const BLAS_INT lda = n;
+    const BLAS_INT incx = narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = narrow_cast<BLAS_INT>(y.stride(0));
 
     cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, a.data(), lda,
                 x.data(), incx, beta, y.data(), incy);
@@ -63,12 +79,12 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
 
     assert(x.size() == a.extent(1));
 
-    const Index m = narrow_cast<Index>(a.extent(0));
-    const Index n = narrow_cast<Index>(a.extent(1));
+    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
 
-    const Index lda = n;
-    const Index incx = narrow_cast<Index>(x.stride(0));
-    const Index incy = narrow_cast<Index>(y.stride(0));
+    const BLAS_INT lda = n;
+    const BLAS_INT incx = narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = narrow_cast<BLAS_INT>(y.stride(0));
 
     cblas_zgemv(CblasRowMajor, CblasNoTrans, m, n, &alpha, a.data(), lda,
                 x.data(), incx, &beta, y.data(), incy);
