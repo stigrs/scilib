@@ -20,9 +20,8 @@ template <class T,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
-inline T
-dot_product(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-            stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+inline T dot(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+             stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 

@@ -4,10 +4,8 @@ project(Scilib_tests CXX)
 include_directories(${Scilib_SOURCE_DIR}/include)
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
-#link_directories(${Scilib_BINARY_DIR})
-if(MKL_FOUND)
-    link_directories(${MKL_LIBRARY_DIRS})
-endif()
+link_directories(${Scilib_BINARY_DIR})
+link_directories(${BLAS_LIBRARY_DIRS})
 
 include(FetchContent)
 FetchContent_Declare(
@@ -28,6 +26,7 @@ function(add_scilib_test name)
     target_link_libraries (
         ${name} 
 	    ${BLAS_LIBRARIES}
+	    ${LAPACK_LIBRARIES}
         ${Scilib_LIBRARIES}
         gtest_main
         std::mdspan
@@ -41,6 +40,7 @@ set(PROGRAMS
     test_linalg_blas1
     test_linalg_blas2
     test_linalg_blas3
+    test_linalg_eigenvalue
     test_linalg_matrix_decomp
 )
 

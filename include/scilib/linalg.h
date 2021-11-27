@@ -13,7 +13,7 @@
 #include <scilib/linalg_impl/blas1_add.h>
 #include <scilib/linalg_impl/blas1_axpy.h>
 #include <scilib/linalg_impl/blas1_copy.h>
-#include <scilib/linalg_impl/blas1_dot_product.h>
+#include <scilib/linalg_impl/blas1_dot.h>
 #include <scilib/linalg_impl/blas1_idx_abs_max.h>
 #include <scilib/linalg_impl/blas1_idx_abs_min.h>
 #include <scilib/linalg_impl/blas1_scale.h>

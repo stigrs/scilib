@@ -162,12 +162,6 @@ else()
     add_definitions(${BLAS_DEFINITIONS})
 endif()
 
-install(
-    DIRECTORY include/scilib
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h"
-)
-
 #add_subdirectory(lib)
 
 add_library(scilib INTERFACE)
