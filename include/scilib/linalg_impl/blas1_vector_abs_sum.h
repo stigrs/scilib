@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS1_VECTOR_ABS_SUM_H
+#define SCILIB_LINALG_BLAS1_VECTOR_ABS_SUM_H
 
 #include <experimental/mdspan>
 #include <cmath>
@@ -32,3 +33,5 @@ abs_sum(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS1_VECTOR_ABS_SUM_H

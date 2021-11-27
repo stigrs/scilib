@@ -21,6 +21,7 @@ foreach(program ${PROGRAMS})
     add_executable(${program} ${program}.cpp)
 	target_link_libraries (
 	    ${program} 
+        sci
 	    ${BLAS_LIBRARIES}
 	    ${LAPACK_LIBRARIES}
         std::mdspan

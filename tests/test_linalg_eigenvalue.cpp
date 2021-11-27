@@ -8,6 +8,7 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
+#include <cmath>
 
 TEST(TestLinalgEigenvalue, TestEigs)
 {
@@ -44,6 +45,57 @@ TEST(TestLinalgEigenvalue, TestEigs)
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
             EXPECT_TRUE(std::abs(a(i, j) - evec(i, j)) < 1.0e-4);
+        }
+    }
+}
+
+TEST(TestLinalgEigenvalue, TestEig)
+{
+    // Numpy:
+    std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813,
+                                   7.50500862};
+
+    std::vector<double> eval_im = {1.12844169, -1.12844169, 0.0, 0.0};
+
+    // clang-format off
+    std::vector<double> evec_re_data = {
+        -0.16889612, -0.16889612, -0.19514446, 0.70845976,
+         0.61501958,  0.61501958,  0.08601687, 0.46590401,
+        -0.19838031, -0.19838031, -0.58764782, 0.52110625,
+        -0.72497646, -0.72497646,  0.78050610, 0.09729590
+    };
+    std::vector<double> evec_im_data = {
+        -0.11229493,  0.11229493, 0.0, 0.0,
+        -0.03942734,  0.03942734, 0.0, 0.0,
+         0.11880544, -0.11880544, 0.0, 0.0,
+         0.0,         0.0,        0.0, 0.0
+    };
+    std::vector<double> a_data = {
+         1.0, 5.0,  4.0,  2.0,
+        -2.0, 3.0,  6.0,  4.0,
+         5.0, 1.0,  0.0, -1.0,
+         2.0, 3.0, -4.0,  0.0
+    };
+    // clang-format on
+
+    Sci::Matrix<double> evec_re(evec_re_data, 4, 4);
+    Sci::Matrix<double> evec_im(evec_im_data, 4, 4);
+    Sci::Matrix<double> a(a_data, 4, 4);
+
+    Sci::Vector<std::complex<double>> eval(4);
+    Sci::Matrix<std::complex<double>> evec(4, 4);
+
+    Sci::Linalg::eig(a.view(), evec.view(), eval.view());
+
+    for (std::size_t i = 0; i < eval.size(); ++i) {
+        EXPECT_TRUE(std::abs(eval(i).real() - eval_re[i]) < 5.0e-8);
+        EXPECT_TRUE(std::abs(eval(i).imag() - eval_im[i]) < 5.0e-8);
+    }
+
+    for (std::size_t i = 0; i < evec.rows(); ++i) {
+        for (std::size_t j = 0; j < evec.cols(); ++j) {
+            EXPECT_TRUE(std::abs(evec(i, j).real() - evec_re(i, j)) < 5.0e-9);
+            EXPECT_TRUE(std::abs(evec(i, j).imag() - evec_im(i, j)) < 5.0e-9);
         }
     }
 }

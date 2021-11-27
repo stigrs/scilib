@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS2_MATRIX_VECTOR_PRODUCT_H
+#define SCILIB_LINALG_BLAS2_MATRIX_VECTOR_PRODUCT_H
 
 #ifdef USE_MKL
 #include <mkl.h>
@@ -101,3 +102,5 @@ inline Vector<T> matrix_vector_product(Matrix_view<T> a, Vector_view<T> x)
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS2_MATRIX_VECTOR_PRODUCT_H

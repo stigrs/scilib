@@ -25,9 +25,9 @@ function(add_scilib_test name)
     add_executable(${name} ${name}.cpp)
     target_link_libraries (
         ${name} 
+        sci
 	    ${BLAS_LIBRARIES}
 	    ${LAPACK_LIBRARIES}
-        ${Scilib_LIBRARIES}
         gtest_main
         std::mdspan
     ) 

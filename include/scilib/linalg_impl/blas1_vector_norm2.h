@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS1_VECTOR_NORM2_H
+#define SCILIB_LINALG_BLAS1_VECTOR_NORM2_H
 
 #ifdef USE_MKL
 #include <mkl.h>
@@ -27,3 +28,5 @@ inline double norm2(Vector_view<double> x)
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS1_VECTOR_NORM2_H

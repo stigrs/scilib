@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_EIGENVALUE_H
+#define SCILIB_LINALG_EIGENVALUE_H
 
 #ifdef USE_MKL
 #include <mkl.h>
@@ -16,6 +17,7 @@
 #include <scilib/traits.h>
 #include <exception>
 #include <cassert>
+#include <complex>
 
 namespace Scilib {
 namespace Linalg {
@@ -35,5 +37,12 @@ inline void eigs(Matrix_view<double> a, Vector_view<double> w)
     }
 }
 
+// Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
+void eig(Matrix_view<double> a,
+         Matrix_view<std::complex<double>> evec,
+         Vector_view<std::complex<double>> eval);
+
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_EIGENVALUE_H

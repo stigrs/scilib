@@ -162,7 +162,7 @@ else()
     add_definitions(${BLAS_DEFINITIONS})
 endif()
 
-#add_subdirectory(lib)
+add_subdirectory(lib)
 
 add_library(scilib INTERFACE)
 target_link_libraries(scilib INTERFACE std::mdspan)
