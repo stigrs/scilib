@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-TEST(TestLinalgBlas2, TestMatrixVectorProduct)
+TEST(TestLinalg, TestMatrixVectorProduct)
 {
     std::vector<int> va = {1, -1, 2, 0, -3, 1};
     Sci::Matrix<int> a(va, 2, 3);

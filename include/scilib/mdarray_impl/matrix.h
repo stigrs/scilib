@@ -32,13 +32,8 @@ public:
     Matrix& operator=(Matrix&&) = default;
 
     Matrix(const Matrix& m)
-        : elems(m.size()), span(elems.data(), m.rows(), m.cols())
+        : elems(m.elems), span(elems.data(), m.rows(), m.cols())
     {
-        size_type i = 0;
-        for (const auto& mi : m) {
-            elems[i] = mi;
-            ++i;
-        }
     }
 
     Matrix(size_type nr, size_type nc)
@@ -75,13 +70,19 @@ public:
         }
     }
 
+    Matrix& operator=(const Matrix& m)
+    {
+        elems = m.elems;
+        span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
+        return *this;
+    }
+
     template <stdex::extents<>::size_type nrows,
               stdex::extents<>::size_type ncols,
               class Layout,
               class Accessor>
     Matrix& operator=(
         stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
-        : elems(m.size()), span(elems.data(), m.extent(0), m.extent(1))
     {
         elems = std::vector<T>(m.size());
         span = Matrix_view<T>(elems.data(), m.rows(), m.cols());

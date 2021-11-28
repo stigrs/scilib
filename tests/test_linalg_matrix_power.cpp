@@ -1,0 +1,80 @@
+// Copyright (c) 2021 Stig Rune Sellevag
+//
+// This file is distributed under the MIT License. See the accompanying file
+// LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
+// and conditions.
+
+#include <scilib/mdarray.h>
+#include <scilib/linalg.h>
+#include <gtest/gtest.h>
+#include <vector>
+#include <cmath>
+
+TEST(TestLinalg, TestMatrixPower)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // Example from Numpy:
+    // clang-format off
+    const std::vector<double> ans1_data = {
+        0.0, -1.0, 
+        1.0,  0.0};
+    const std::vector<double> ans2_data = {
+        1.0, 0.0, 
+        0.0, 1.0};
+    const std::vector<double> ans3_data = {
+         0.0, 1.0, 
+        -1.0, 0.0};
+    const std::vector<double> ans4_data = {
+        -1.0,  0.0, 
+         0.0, -1.0};
+    const std::vector<double> M_data = {
+         0.0, 1.0, 
+        -1.0, 0.0};
+    // clang-format on
+
+    Matrix<double> ans1(ans1_data, 2, 2);
+    Matrix<double> ans2(ans2_data, 2, 2);
+    Matrix<double> ans3(ans3_data, 2, 2);
+    Matrix<double> ans4(ans4_data, 2, 2);
+
+    Matrix<double> M(M_data, 2, 2);
+
+    auto res = matrix_power(M.view(), 0);
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), ans2(i, j), 1.0e-6);
+        }
+    }
+    res = matrix_power(M.view(), 1);
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), M(i, j), 1.0e-6);
+        }
+    }
+    res = matrix_power(M.view(), 2);
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), ans4(i, j), 1.0e-6);
+        }
+    }
+    res = matrix_power(M.view(), 3);
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), ans1(i, j), 1.0e-6);
+        }
+    }
+    res = matrix_power(M.view(), -3);
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), ans3(i, j), 1.0e-6);
+        }
+    }
+    res = matrix_power(M.view(), 6);
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), ans4(i, j), 1.0e-6);
+        }
+    }
+}

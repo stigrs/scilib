@@ -8,7 +8,7 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 
-TEST(TestLinalgBlas3, TestMatrixMatrixProductInt)
+TEST(TestLinalg, TestMatrixMatrixProductInt)
 {
     // clang-format off
     std::vector<int> aa = {1, 2, 3, 
@@ -28,7 +28,7 @@ TEST(TestLinalgBlas3, TestMatrixMatrixProductInt)
     EXPECT_EQ(ans, res);
 }
 
-TEST(TestLinalgBlas3, TestMatrixMatrixProductDouble)
+TEST(TestLinalg, TestMatrixMatrixProductDouble)
 {
     // clang-format off
     std::vector<double> aa = {1, 2, 3, 
@@ -48,7 +48,7 @@ TEST(TestLinalgBlas3, TestMatrixMatrixProductDouble)
     EXPECT_EQ(ans, res);
 }
 
-TEST(TestLinalgBlas3, TestMatrixMatrixProductComplex)
+TEST(TestLinalg, TestMatrixMatrixProductComplex)
 {
     // clang-format off
     std::vector<std::complex<double>> aa = {{1.0, 2.0}, {3.0, 4.0}, 

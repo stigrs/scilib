@@ -9,13 +9,13 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-TEST(TestLinalgBlas1, TestAbsSum)
+TEST(TestLinalg, TestAbsSum)
 {
     Sci::Vector<int> v = {1, 2, 3, -4};
     EXPECT_EQ(Sci::Linalg::abs_sum(v.view()), 10);
 }
 
-TEST(TestLinalgBlas1, TestAxpy)
+TEST(TestLinalg, TestAxpy)
 {
     std::vector<int> ans = {4, 8, 12, 16, 20};
     Sci::Vector<int> x = {1, 2, 3, 4, 5};
@@ -27,7 +27,7 @@ TEST(TestLinalgBlas1, TestAxpy)
     }
 }
 
-TEST(TestLinalgBlas1, TestDot)
+TEST(TestLinalg, TestDot)
 {
     Sci::Vector<int> a = {1, 3, -5};
     Sci::Vector<int> b = {4, -2, -1};
@@ -35,26 +35,26 @@ TEST(TestLinalgBlas1, TestDot)
     EXPECT_EQ(Sci::Linalg::dot(a.view(), b.view()), 3);
 }
 
-TEST(TestLinalgBlas1, TestIdxAbsMax)
+TEST(TestLinalg, TestIdxAbsMax)
 {
     Sci::Vector<int> v = {1, 3, -5, 2};
     EXPECT_EQ(Sci::Linalg::idx_abs_max(v.view()), 2);
 }
 
-TEST(TestLinalgBlas1, TestIdxAbsMin)
+TEST(TestLinalg, TestIdxAbsMin)
 {
     Sci::Vector<int> v = {1, 3, -5, 2};
     EXPECT_EQ(Sci::Linalg::idx_abs_min(v.view()), 0);
 }
 
-TEST(TestLinalgBlas1, TestNorm2)
+TEST(TestLinalg, TestNorm2)
 {
     Sci::Vector<double> v = {1.0, 2.0, 3.0};
     auto ans = Sci::Linalg::norm2(v.view());
     EXPECT_EQ(ans * ans, 14.0);
 }
 
-TEST(TestMatrix, TestNorm2Row)
+TEST(TestLinalg, TestNorm2Row)
 {
     // clang-format off
     std::vector<double> aa = {1, 2, 3, 

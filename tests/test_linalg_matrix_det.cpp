@@ -10,7 +10,7 @@
 #include <vector>
 #include <cmath>
 
-TEST(TestLinalgMatrixDet, TestDet)
+TEST(TestLinalg, TestDet)
 {
     using namespace Scilib;
     using namespace Scilib::Linalg;

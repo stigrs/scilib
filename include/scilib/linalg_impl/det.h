@@ -4,8 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#ifndef SCILIB_LINALG_MATRIX_DET_H
-#define SCILIB_LINALG_MATRIX_DET_H
+#ifndef SCILIB_LINALG_DET_H
+#define SCILIB_LINALG_DET_H
 
 #include <scilib/mdarray_impl/type_aliases.h>
 
@@ -18,4 +18,4 @@ double det(Matrix_view<double> a);
 } // namespace Linalg
 } // namespace Scilib
 
-#endif // SCILIB_LINALG_MATRIX_DET_H
+#endif // SCILIB_LINALG_DET_H

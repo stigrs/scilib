@@ -11,6 +11,8 @@
 
 #include <scilib/mdarray.h>
 
+#include <scilib/linalg_impl/auxiliary.h>
+
 #include <scilib/linalg_impl/blas1_add.h>
 #include <scilib/linalg_impl/blas1_axpy.h>
 #include <scilib/linalg_impl/blas1_copy.h>
@@ -27,8 +29,10 @@
 #include <scilib/linalg_impl/scaled.h>
 #include <scilib/linalg_impl/transposed.h>
 #include <scilib/linalg_impl/matrix_decomposition.h>
-#include <scilib/linalg_impl/matrix_det.h>
 #include <scilib/linalg_impl/matrix_norm.h>
+#include <scilib/linalg_impl/matrix_power.h>
+#include <scilib/linalg_impl/det.h>
 #include <scilib/linalg_impl/eigenvalue.h>
+#include <scilib/linalg_impl/inv.h>
 
 #endif // SCILIB_LINALG_H

@@ -60,7 +60,7 @@ public:
 
     Vector& operator=(const Vector& v)
     {
-        elems = std::vector<T>(v.begin(), v.end());
+        elems = v.elems;
         span = Vector_view<T>(elems.data(), elems.size());
         return *this;
     }

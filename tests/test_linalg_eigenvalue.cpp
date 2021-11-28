@@ -10,7 +10,7 @@
 #include <vector>
 #include <cmath>
 
-TEST(TestLinalgEigenvalue, TestEigs)
+TEST(TestLinalg, TestEigs)
 {
     // Numpy:
     // clang-format off
@@ -49,7 +49,7 @@ TEST(TestLinalgEigenvalue, TestEigs)
     }
 }
 
-TEST(TestLinalgEigenvalue, TestEig)
+TEST(TestLinalg, TestEig)
 {
     // Numpy:
     std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813,
