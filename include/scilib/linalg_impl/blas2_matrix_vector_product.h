@@ -95,7 +95,7 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
 template <typename T>
 inline Vector<T> matrix_vector_product(Matrix_view<T> a, Vector_view<T> x)
 {
-    Vector<T> res(narrow_cast<Index>(a.extent(0)));
+    Vector<T> res(narrow_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
     return res;
 }

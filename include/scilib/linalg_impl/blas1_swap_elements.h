@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS1_SWAP_ELEMENTS_H
+#define SCILIB_LINALG_BLAS1_SWAP_ELEMENTS_H
 
 #include <experimental/mdspan>
 #include <utility>
@@ -61,3 +62,5 @@ inline void swap_elements(
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS1_SWAP_ELEMENTS_H

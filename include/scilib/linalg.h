@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_H
+#define SCILIB_LINALG_H
 
 // Do not change this ordering.
 
@@ -26,4 +27,8 @@
 #include <scilib/linalg_impl/scaled.h>
 #include <scilib/linalg_impl/transposed.h>
 #include <scilib/linalg_impl/matrix_decomposition.h>
+#include <scilib/linalg_impl/matrix_det.h>
+#include <scilib/linalg_impl/matrix_norm.h>
 #include <scilib/linalg_impl/eigenvalue.h>
+
+#endif // SCILIB_LINALG_H

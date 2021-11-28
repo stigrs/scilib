@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS1_AXPY_H
+#define SCILIB_LINALG_BLAS1_AXPY_H
 
 #include <experimental/mdspan>
 #include <scilib/mdarray.h>
@@ -43,3 +44,5 @@ inline void axpy(const T& scalar, const Vector<T>& x, Vector<T>& y)
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS1_AXPY_H

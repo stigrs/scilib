@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_TRANSPOSED_H
+#define SCILIB_LINALG_TRANSPOSED_H
 
 #include <scilib/mdarray_impl/type_aliases.h>
 #include <array>
@@ -23,3 +24,5 @@ inline Submatrix_view<T> transposed(Matrix_view<T> m)
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_TRANSPOSED_H

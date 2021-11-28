@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_MDARRAY_TYPE_ALIASES_H
+#define SCILIB_MDARRAY_TYPE_ALIASES_H
 
 #include <experimental/mdspan>
 
@@ -31,3 +32,5 @@ using Submatrix_view =
                   stdex::layout_stride>;
 
 } // namespace Scilib
+
+#endif // SCILIB_MDARRAY_TYPE_ALIASES_H

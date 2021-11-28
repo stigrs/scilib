@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS1_COPY_H
+#define SCILIB_LINALG_BLAS1_COPY_H
 
 #include <experimental/mdspan>
 
@@ -58,3 +59,5 @@ copy(stdex::mdspan<T, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x> x,
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS1_COPY_H

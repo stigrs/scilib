@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_MDARRAY_MATRIX_H
+#define SCILIB_MDARRAY_MATRIX_H
 
 #include <scilib/mdarray_impl/type_aliases.h>
 #include <experimental/mdspan>
@@ -249,3 +250,5 @@ private:
 };
 
 } // namespace Scilib
+
+#endif // SCILIB_MDARRAY_MATRIX_H

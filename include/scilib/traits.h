@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_TRAITS_H
+#define SCILIB_TRAITS_H
 
 #include <utility>
 
@@ -19,11 +20,6 @@
 #endif
 
 //------------------------------------------------------------------------------
-// Signed index type.
-
-using Index = BLAS_INT;
-
-//------------------------------------------------------------------------------
 // Type cast:
 
 // A searchable way to do narrowing casts of values.
@@ -32,3 +28,5 @@ constexpr T narrow_cast(U&& u)
 {
     return static_cast<T>(std::forward<U>(u));
 }
+
+#endif // SCILIB_TRAITS_H

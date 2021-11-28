@@ -42,6 +42,7 @@ set(PROGRAMS
     test_linalg_blas3
     test_linalg_eigenvalue
     test_linalg_matrix_decomp
+    test_linalg_matrix_det
 )
 
 foreach(program ${PROGRAMS})

@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-TEST(TestMatrixDecomposition, TestLU)
+TEST(TestLinalgMatrixDecomposition, TestLU)
 {
     using namespace Scilib;
     using namespace Scilib::Linalg;
@@ -40,7 +40,7 @@ TEST(TestMatrixDecomposition, TestLU)
     }
 }
 
-TEST(TestMatrixDecomposition, TestQR)
+TEST(TestLinalgMatrixDecomposition, TestQR)
 {
     using namespace Scilib;
     using namespace Scilib::Linalg;
@@ -66,7 +66,7 @@ TEST(TestMatrixDecomposition, TestQR)
     }
 }
 
-TEST(TestMatrixDecomposition, TestSVD)
+TEST(TestLinalgMatrixDecomposition, TestSVD)
 {
     using namespace Scilib;
     using namespace Scilib::Linalg;

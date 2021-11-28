@@ -14,6 +14,7 @@ endif()
 set(
     SRC_FILES
     eigenvalue.cpp
+    matrix_det.cpp
 )
 add_library(
     sci 

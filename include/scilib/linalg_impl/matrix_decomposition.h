@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_MATRIX_DECOMPOSITION_H
+#define SCILIB_LINALG_MATRIX_DECOMPOSITION_H
 
 #ifdef USE_MKL
 #include <mkl.h>
@@ -52,28 +53,26 @@ qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
 
     // Compute QR factorization:
 
+    copy(a, q);
     Vector<double> tau(std::min(m, n));
-    Matrix<double> qq(a); // work on a local copy
 
     BLAS_INT info =
-        LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m, n, qq.data(), lda, tau.data());
+        LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m, n, q.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dgeqrf failed");
     }
 
     // Compute Q:
 
-    info =
-        LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m, n, n, qq.data(), lda, tau.data());
+    info = LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m, n, n, q.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dorgqr failed");
     }
 
     // Compute R:
 
-    Matrix<double> qt(transposed(qq.view())); // need a deep copy
-    matrix_product(qt.view(), a, r);
-    copy(qq.view(), q); // copy result back to q
+    matrix_product(transposed(q), a, r);
+    transposed(q);
 }
 
 // Singular value decomposition.
@@ -106,3 +105,5 @@ inline void svd(Matrix_view<double> a,
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_MATRIX_DECOMPOSITION_H

@@ -4,7 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#pragma once
+#ifndef SCILIB_LINALG_BLAS1_SCALE_H
+#define SCILIB_LINALG_BLAS1_SCALE_H
 
 #include <experimental/mdspan>
 
@@ -46,3 +47,5 @@ scale(const T& scalar,
 
 } // namespace Linalg
 } // namespace Scilib
+
+#endif // SCILIB_LINALG_BLAS1_SCALE_H
