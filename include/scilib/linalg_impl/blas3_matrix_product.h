@@ -13,7 +13,7 @@
 #include <cblas.h>
 #endif
 
-#include <scilib/mdarray_impl/type_aliases.h>
+#include <scilib/mdarray.h>
 #include <scilib/traits.h>
 #include <experimental/mdspan>
 #include <complex>

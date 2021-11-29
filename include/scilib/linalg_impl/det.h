@@ -7,7 +7,7 @@
 #ifndef SCILIB_LINALG_DET_H
 #define SCILIB_LINALG_DET_H
 
-#include <scilib/mdarray_impl/type_aliases.h>
+#include <scilib/mdarray.h>
 
 namespace Scilib {
 namespace Linalg {

@@ -309,13 +309,6 @@ private:
     stdex::mdspan<T, Extents> span;
 };
 
-template <class T>
-using Vector = MDArray<T, 1, stdex::extents<stdex::dynamic_extent>>;
-
-template <class T>
-using Matrix =
-    MDArray<T, 2, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
-
 } // namespace Scilib
 
 #endif // SCILIB_MDARRAY_BITS_H

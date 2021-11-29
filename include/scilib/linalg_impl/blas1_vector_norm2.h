@@ -13,6 +13,7 @@
 #include <cblas.h>
 #endif
 
+#include <scilib/mdarray.h>
 #include <scilib/traits.h>
 
 namespace Scilib {

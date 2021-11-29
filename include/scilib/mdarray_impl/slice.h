@@ -7,7 +7,7 @@
 #ifndef SCILIB_MDARRAY_SLICE_H
 #define SCILIB_MDARRAY_SLICE_H
 
-#include <scilib/mdarray_impl/type_aliases.h>
+//#include <scilib/mdarray_impl/type_aliases.h>
 #include <experimental/mdspan>
 #include <array>
 #include <utility>

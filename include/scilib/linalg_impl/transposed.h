@@ -7,7 +7,7 @@
 #ifndef SCILIB_LINALG_TRANSPOSED_H
 #define SCILIB_LINALG_TRANSPOSED_H
 
-#include <scilib/mdarray_impl/type_aliases.h>
+#include <scilib/mdarray.h>
 #include <array>
 
 namespace Scilib {

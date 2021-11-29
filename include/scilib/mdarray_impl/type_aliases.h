@@ -31,6 +31,16 @@ using Submatrix_view =
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_stride>;
 
+template <class T, std::size_t Rank, class Extents>
+class MDArray;
+
+template <class T>
+using Vector = MDArray<T, 1, stdex::extents<stdex::dynamic_extent>>;
+
+template <class T>
+using Matrix =
+    MDArray<T, 2, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
+
 } // namespace Scilib
 
 #endif // SCILIB_MDARRAY_TYPE_ALIASES_H
