@@ -15,6 +15,31 @@ namespace Scilib {
 namespace Linalg {
 
 //------------------------------------------------------------------------------
+// Fill mdspan:
+
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline void fill(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
+                 const T& value)
+{
+    Sci::apply(v, [&](T& vi) { vi = value; });
+}
+
+template <class T,
+          stdex::extents<>::size_type nrows,
+          stdex::extents<>::size_type ncols,
+          class Layout,
+          class Accessor>
+inline void
+fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
+     const T& value)
+{
+    Sci::apply(m, [&](T& mi) { mi = value; });
+}
+
+//------------------------------------------------------------------------------
 // Find argmax, argmin, max, min, sum, and product of elements:
 
 template <class T,

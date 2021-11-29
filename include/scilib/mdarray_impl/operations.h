@@ -21,212 +21,123 @@ namespace Scilib {
 namespace stdex = std::experimental;
 
 //------------------------------------------------------------------------------
-// Vector operations:
+// Equality comparisons:
 
-template <typename T>
-inline bool operator==(const Vector<T>& a, const Vector<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline bool operator==(const MDArray<T, Rank, Extents>& a,
+                       const MDArray<T, Rank, Extents>& b)
 {
     return std::equal(a.begin(), a.end(), b.begin());
 }
 
-template <typename T>
-inline bool operator!=(const Vector<T>& a, const Vector<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline bool operator!=(const MDArray<T, Rank, Extents>& a,
+                       const MDArray<T, Rank, Extents>& b)
 {
     return !(a == b);
 }
 
-template <typename T>
-inline bool operator<(const Vector<T>& a, const Vector<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline bool operator<(const MDArray<T, Rank, Extents>& a,
+                      const MDArray<T, Rank, Extents>& b)
 {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
 }
 
-template <typename T>
-inline bool operator>(const Vector<T>& a, const Vector<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline bool operator>(const MDArray<T, Rank, Extents>& a,
+                      const MDArray<T, Rank, Extents>& b)
 {
     return b < a;
 }
 
-template <typename T>
-inline bool operator<=(const Vector<T>& a, const Vector<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline bool operator<=(const MDArray<T, Rank, Extents>& a,
+                       const MDArray<T, Rank, Extents>& b)
 {
     return !(a > b);
 }
 
-template <typename T>
-inline bool operator>=(const Vector<T>& a, const Vector<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline bool operator>=(const MDArray<T, Rank, Extents>& a,
+                       const MDArray<T, Rank, Extents>& b)
 {
     return !(a < b);
-}
-
-template <typename T>
-inline Vector<T> operator-(const Vector<T>& v)
-{
-    Vector<T> res = v;
-    return res *= -T{1};
-}
-
-template <typename T>
-inline Vector<T> operator+(const Vector<T>& a, const Vector<T>& b)
-{
-    assert(a.size() == b.size());
-    Vector<T> res = a;
-    return res += b;
-}
-
-template <typename T>
-inline Vector<T> operator-(const Vector<T>& a, const Vector<T>& b)
-{
-    assert(a.size() == b.size());
-    Vector<T> res = a;
-    return res -= b;
-}
-
-template <typename T>
-inline Vector<T> operator+(const Vector<T>& v, const T& scalar)
-{
-    Vector<T> res = v;
-    return res += scalar;
-}
-
-template <typename T>
-inline Vector<T> operator-(const Vector<T>& v, const T& scalar)
-{
-    Vector<T> res = v;
-    return res -= scalar;
-}
-
-template <typename T>
-inline Vector<T> operator*(const Vector<T>& v, const T& scalar)
-{
-    Vector<T> res = v;
-    return res *= scalar;
-}
-
-template <typename T>
-inline Vector<T> operator*(const T& scalar, const Vector<T>& v)
-{
-    Vector<T> res = v;
-    return res *= scalar;
-}
-
-template <typename T>
-inline Vector<T> operator/(const Vector<T>& v, const T& scalar)
-{
-    Vector<T> res = v;
-    return res /= scalar;
-}
-
-template <typename T>
-inline Vector<T> operator%(const Vector<T>& v, const T& scalar)
-{
-    Vector<T> res = v;
-    return res %= scalar;
 }
 
 //------------------------------------------------------------------------------
-// Matrix operations:
+// Arithmetic operations:
 
-template <typename T>
-inline bool operator==(const Matrix<T>& a, const Matrix<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& v)
 {
-    return std::equal(a.begin(), a.end(), b.begin());
-}
-
-template <typename T>
-inline bool operator!=(const Matrix<T>& a, const Matrix<T>& b)
-{
-    return !(a == b);
-}
-
-template <typename T>
-inline bool operator<(const Matrix<T>& a, const Matrix<T>& b)
-{
-    return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
-}
-
-template <typename T>
-inline bool operator>(const Matrix<T>& a, const Matrix<T>& b)
-{
-    return b < a;
-}
-
-template <typename T>
-inline bool operator<=(const Matrix<T>& a, const Matrix<T>& b)
-{
-    return !(a > b);
-}
-
-template <typename T>
-inline bool operator>=(const Matrix<T>& a, const Matrix<T>& b)
-{
-    return !(a < b);
-}
-
-template <typename T>
-inline Matrix<T> operator-(const Matrix<T>& m)
-{
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res *= -T{1};
 }
 
-template <typename T>
-inline Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator+(const MDArray<T, Rank, Extents>& a,
+                                           const MDArray<T, Rank, Extents>& b)
 {
-    assert(a.extent(0) == b.extent(0));
-    assert(a.extent(1) == b.extent(1));
-    Matrix<T> res = a;
+    assert(a.view().extents() == b.view().extents());
+    MDArray<T, Rank, Extents> res = a;
     return res += b;
 }
 
-template <typename T>
-inline Matrix<T> operator-(const Matrix<T>& a, const Matrix<T>& b)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& a,
+                                           const MDArray<T, Rank, Extents>& b)
 {
-    assert(a.extent(0) == b.extent(0));
-    assert(a.extent(1) == b.extent(1));
-    Matrix<T> res = a;
+    assert(a.view().extents() == b.view().extents());
+    MDArray<T, Rank, Extents> res = a;
     return res -= b;
 }
 
-template <typename T>
-inline Matrix<T> operator+(const Matrix<T>& m, const T& scalar)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator+(const MDArray<T, Rank, Extents>& v,
+                                           const T& scalar)
 {
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res += scalar;
 }
 
-template <typename T>
-inline Matrix<T> operator-(const Matrix<T>& m, const T& scalar)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& v,
+                                           const T& scalar)
 {
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res -= scalar;
 }
 
-template <typename T>
-inline Matrix<T> operator*(const Matrix<T>& m, const T& scalar)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator*(const MDArray<T, Rank, Extents>& v,
+                                           const T& scalar)
 {
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res *= scalar;
 }
 
-template <typename T>
-inline Matrix<T> operator*(const T& scalar, const Matrix<T>& m)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator*(const T& scalar,
+                                           const MDArray<T, Rank, Extents>& v)
 {
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res *= scalar;
 }
 
-template <typename T>
-inline Matrix<T> operator/(const Matrix<T>& m, const T& scalar)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator/(const MDArray<T, Rank, Extents>& v,
+                                           const T& scalar)
 {
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res /= scalar;
 }
 
-template <typename T>
-inline Matrix<T> operator%(const Matrix<T>& m, const T& scalar)
+template <class T, std::size_t Rank, class Extents>
+inline MDArray<T, Rank, Extents> operator%(const MDArray<T, Rank, Extents>& v,
+                                           const T& scalar)
 {
-    Matrix<T> res = m;
+    MDArray<T, Rank, Extents> res = v;
     return res %= scalar;
 }
 

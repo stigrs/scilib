@@ -5,6 +5,7 @@
 // and conditions.
 
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -21,7 +22,6 @@ int main()
     Sci::Matrix<int> m(data, 3, 3);
     std::cout << "matrix:\n" << m << '\n';
 
-    auto d = Sci::diag(m.view());
-    Sci::apply(d, [&](int& a) { a = 10; });
+    Sci::Linalg::fill(Sci::diag(m.view()), 10);
     std::cout << "matrix:\n" << m << '\n';
 }

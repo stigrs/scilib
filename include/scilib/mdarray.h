@@ -8,12 +8,7 @@
 #define SCILIB_MDARRAY_H
 
 #include <scilib/traits.h>
-//#include <scilib/mdarray_impl/vector.h>
-//#include <scilib/mdarray_impl/matrix.h>
 #include <scilib/mdarray_impl/mdarray_bits.h>
-//#include <scilib/mdarray_impl/row.h>
-//#include <scilib/mdarray_impl/column.h>
-//#include <scilib/mdarray_impl/diag.h>
 #include <scilib/mdarray_impl/slice.h>
 #include <scilib/mdarray_impl/operations.h>
 
