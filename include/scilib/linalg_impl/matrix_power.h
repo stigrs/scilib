@@ -36,14 +36,12 @@ inline Matrix<T> matrix_power(Matrix_view<T> m, int n)
     }
     else if (nn == 1) {
         res = tmp;
-        // copy(tmp.view(), res.view());
     }
     else if (nn == 2) {
         matrix_product(tmp.view(), tmp.view(), res.view());
     }
     else {
         res = tmp;
-        // copy(tmp.view(), res.view());
         for (int ni = 1; ni < nn; ++ni) {
             matrix_product(res.view(), tmp.view(), res.view());
         }

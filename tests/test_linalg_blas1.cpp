@@ -11,15 +11,15 @@
 
 TEST(TestLinalg, TestAbsSum)
 {
-    Sci::Vector<int> v = {1, 2, 3, -4};
+    Sci::Vector<int> v(std::vector<int>{1, 2, 3, -4}, 4);
     EXPECT_EQ(Sci::Linalg::abs_sum(v.view()), 10);
 }
 
 TEST(TestLinalg, TestAxpy)
 {
     std::vector<int> ans = {4, 8, 12, 16, 20};
-    Sci::Vector<int> x = {1, 2, 3, 4, 5};
-    Sci::Vector<int> y = {2, 4, 6, 8, 10};
+    Sci::Vector<int> x(std::vector<int>{1, 2, 3, 4, 5}, 5);
+    Sci::Vector<int> y(std::vector<int>{2, 4, 6, 8, 10}, 5);
 
     Sci::Linalg::axpy(2, x, y);
     for (std::size_t i = 0; i < x.size(); ++i) {
@@ -29,27 +29,27 @@ TEST(TestLinalg, TestAxpy)
 
 TEST(TestLinalg, TestDot)
 {
-    Sci::Vector<int> a = {1, 3, -5};
-    Sci::Vector<int> b = {4, -2, -1};
+    Sci::Vector<int> a(std::vector<int>{1, 3, -5}, 3);
+    Sci::Vector<int> b(std::vector<int>{4, -2, -1}, 3);
 
     EXPECT_EQ(Sci::Linalg::dot(a.view(), b.view()), 3);
 }
 
 TEST(TestLinalg, TestIdxAbsMax)
 {
-    Sci::Vector<int> v = {1, 3, -5, 2};
+    Sci::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
     EXPECT_EQ(Sci::Linalg::idx_abs_max(v.view()), 2);
 }
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
-    Sci::Vector<int> v = {1, 3, -5, 2};
+    Sci::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
     EXPECT_EQ(Sci::Linalg::idx_abs_min(v.view()), 0);
 }
 
 TEST(TestLinalg, TestNorm2)
 {
-    Sci::Vector<double> v = {1.0, 2.0, 3.0};
+    Sci::Vector<double> v(std::vector<double>{1.0, 2.0, 3.0}, 3);
     auto ans = Sci::Linalg::norm2(v.view());
     EXPECT_EQ(ans * ans, 14.0);
 }
@@ -61,6 +61,6 @@ TEST(TestLinalg, TestNorm2Row)
                               4, 5, 6};
     // clang-format on
     Sci::Matrix<double> ma(aa, 2, 3);
-    auto ans = Sci::Linalg::norm2(ma.row(0));
+    auto ans = Sci::Linalg::norm2(Sci::row(ma.view(), 0));
     EXPECT_EQ(ans * ans, 14.0);
 }

@@ -92,8 +92,8 @@ TEST(TestLinalg, TestEig)
         EXPECT_TRUE(std::abs(eval(i).imag() - eval_im[i]) < 5.0e-8);
     }
 
-    for (std::size_t i = 0; i < evec.rows(); ++i) {
-        for (std::size_t j = 0; j < evec.cols(); ++j) {
+    for (std::size_t i = 0; i < evec.extent(0); ++i) {
+        for (std::size_t j = 0; j < evec.extent(1); ++j) {
             EXPECT_TRUE(std::abs(evec(i, j).real() - evec_re(i, j)) < 5.0e-9);
             EXPECT_TRUE(std::abs(evec(i, j).imag() - evec_im(i, j)) < 5.0e-9);
         }

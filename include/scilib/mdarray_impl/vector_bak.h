@@ -94,22 +94,30 @@ public:
     ~Vector() = default;
 
     constexpr auto& operator()(size_type i) noexcept { return span(i); }
-    constexpr auto& operator()(size_type i) const noexcept { return span(i); }
+    constexpr const auto& operator()(size_type i) const noexcept
+    {
+        return span(i);
+    }
 
-    iterator begin() noexcept { return elems.begin(); }
-    iterator end() noexcept { return elems.end(); }
+    constexpr iterator begin() noexcept { return elems.begin(); }
+    constexpr iterator end() noexcept { return elems.end(); }
 
-    const_iterator begin() const noexcept { return elems.begin(); }
-    const_iterator end() const noexcept { return elems.end(); }
+    constexpr const_iterator begin() const noexcept { return elems.begin(); }
+    constexpr const_iterator end() const noexcept { return elems.end(); }
 
-    T* data() noexcept { return elems.data(); }
-    const T* data() const noexcept { return elems.data(); }
+    constexpr T* data() noexcept { return elems.data(); }
+    constexpr const T* data() const noexcept { return elems.data(); }
 
-    auto view() noexcept { return span; }
-    const auto view() const noexcept { return span; }
+    constexpr auto view() noexcept { return span; }
+    constexpr const auto view() const noexcept { return span; }
 
-    bool empty() const noexcept { return elems.empty(); }
-    auto size() const noexcept { return span.size(); }
+    constexpr bool empty() const noexcept { return elems.empty(); }
+    constexpr auto size() const noexcept { return span.size(); }
+
+    constexpr auto extent(size_type dim = 0) const noexcept
+    {
+        return span.extent(dim);
+    }
 
     void resize(size_type n)
     {

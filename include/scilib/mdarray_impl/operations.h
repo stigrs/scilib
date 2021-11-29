@@ -7,14 +7,14 @@
 #ifndef SCILIB_MDARRAY_OPERATIONS_H
 #define SCILIB_MDARRAY_OPERATIONS_H
 
-#include <scilib/mdarray_impl/vector.h>
-#include <scilib/mdarray_impl/matrix.h>
-#include <scilib/mdarray_impl/matrix_diag.h>
+#include <scilib/mdarray_impl/mdarray_bits.h>
+#include <scilib/mdarray_impl/slice.h>
 #include <scilib/linalg_impl/blas2_matrix_vector_product.h>
 #include <scilib/linalg_impl/blas3_matrix_product.h>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 
 namespace Scilib {
 
@@ -173,8 +173,8 @@ inline Matrix<T> operator-(const Matrix<T>& m)
 template <typename T>
 inline Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
 {
-    assert(a.rows() == b.rows());
-    assert(a.cols() == b.cols());
+    assert(a.extent(0) == b.extent(0));
+    assert(a.extent(1) == b.extent(1));
     Matrix<T> res = a;
     return res += b;
 }
@@ -182,8 +182,8 @@ inline Matrix<T> operator+(const Matrix<T>& a, const Matrix<T>& b)
 template <typename T>
 inline Matrix<T> operator-(const Matrix<T>& a, const Matrix<T>& b)
 {
-    assert(a.rows() == b.rows());
-    assert(a.cols() == b.cols());
+    assert(a.extent(0) == b.extent(0));
+    assert(a.extent(1) == b.extent(1));
     Matrix<T> res = a;
     return res -= b;
 }

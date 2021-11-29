@@ -37,8 +37,8 @@ TEST(TestLinalg, TestInv)
 
     auto res = inv(a.view());
 
-    for (std::size_t i = 0; i < res.rows(); ++i) {
-        for (std::size_t j = 0; j < res.cols(); ++j) {
+    for (std::size_t i = 0; i < res.extent(0); ++i) {
+        for (std::size_t j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-8);
         }
     }

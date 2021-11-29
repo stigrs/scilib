@@ -127,9 +127,12 @@ inline T prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 template <typename T = double>
 inline Matrix<T> identity(std::size_t n)
 {
-    Matrix<T> res(n, n, T{0});
+    Matrix<T> res(n, n);
+    res = T{0};
     auto res_diag = Sci::diag(res.view());
-    res_diag = T{1};
+    for (std::size_t i = 0; i < res_diag.extent(0); ++i) {
+        res_diag(i) = T{1};
+    }
     return res;
 }
 

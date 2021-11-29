@@ -78,7 +78,7 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    assert(x.size() == a.extent(1));
+    static_assert(x.static_extent(0) == a.static_extent(1));
 
     const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));

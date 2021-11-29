@@ -20,10 +20,10 @@ int main()
     Sci::Matrix<int> m(data, 3, 4);
     std::cout << "matrix:\n" << m << '\n';
 
-    Sci::Vector<int> r = m.row(1);
+    Sci::Vector<int> r = Scilib::row(m.view(), 1);
     std::cout << "m.row(1):\n" << r << '\n';
 
-    Sci::Vector<int> c = m.column(2);
+    Sci::Vector<int> c = Scilib::column(m.view(), 2);
     std::cout << "m.column(2):\n" << c << '\n';
 
     auto sub = stdex::submdspan(m.view(), std::pair<int, int>{1, 3},
@@ -32,6 +32,6 @@ int main()
     Sci::print(std::cout, sub);
     std::cout << '\n';
 
-    Sci::apply(sub, [&](int& a) { a *= -1; });
+    Sci::apply(sub, [&](int& i) { i *= -1; });
     std::cout << "matrix:\n" << m << '\n';
 }

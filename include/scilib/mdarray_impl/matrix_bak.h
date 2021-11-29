@@ -32,7 +32,7 @@ public:
     Matrix& operator=(Matrix&&) = default;
 
     Matrix(const Matrix& m)
-        : elems(m.elems), span(elems.data(), m.rows(), m.cols())
+        : elems(m.elems), span(elems.data(), m.extent(0), m.extent(1))
     {
     }
 
@@ -85,7 +85,7 @@ public:
         stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
     {
         elems = std::vector<T>(m.size());
-        span = Matrix_view<T>(elems.data(), m.rows(), m.cols());
+        span = Matrix_view<T>(elems.data(), m.extent(0), m.extent(1));
 
         for (size_type i = 0; i < m.extent(0); ++i) {
             for (size_type j = 0; j < m.extent(1); ++j) {
@@ -102,57 +102,50 @@ public:
         return span(i, j);
     }
 
-    constexpr auto& operator()(size_type i, size_type j) const noexcept
+    constexpr const auto& operator()(size_type i, size_type j) const noexcept
     {
         return span(i, j);
     }
 
-    iterator begin() noexcept { return elems.begin(); }
-    iterator end() noexcept { return elems.end(); }
+    constexpr iterator begin() noexcept { return elems.begin(); }
+    constexpr iterator end() noexcept { return elems.end(); }
 
-    const_iterator begin() const noexcept { return elems.begin(); }
-    const_iterator end() const noexcept { return elems.end(); }
+    constexpr const_iterator begin() const noexcept { return elems.begin(); }
+    constexpr const_iterator end() const noexcept { return elems.end(); }
 
-    T* data() noexcept { return elems.data(); }
-    const T* data() const noexcept { return elems.data(); }
+    constexpr T* data() noexcept { return elems.data(); }
+    constexpr const T* data() const noexcept { return elems.data(); }
 
-    auto view() noexcept { return span; }
-    const auto view() const noexcept { return span; }
+    constexpr auto view() noexcept { return span; }
+    constexpr const auto view() const noexcept { return span; }
 
-    bool empty() const noexcept { return elems.empty(); }
-    auto size() const noexcept { return span.size(); }
+    constexpr bool empty() const noexcept { return elems.empty(); }
+    constexpr auto size() const noexcept { return span.size(); }
 
-    auto rows() const noexcept { return span.extent(0); }
-    auto cols() const noexcept { return span.extent(1); }
+    constexpr auto extent(0) const noexcept { return span.extent(0); }
+    constexpr auto extent(1) const noexcept { return span.extent(1); }
 
-    auto extent(size_type dim) const noexcept
+    constexpr auto extent(size_type dim) const noexcept
     {
-        assert(dim == 0 || dim == 1);
         return span.extent(dim);
     }
 
-    auto stride(size_type dim) const noexcept
-    {
-        assert(dim == 0 || dim == 1);
-        return span.stride(dim);
-    }
-
-    auto row(size_type i) noexcept
+    constexpr auto row(size_type i) noexcept
     {
         return stdex::submdspan(span, i, stdex::full_extent);
     }
 
-    const auto row(size_type i) const noexcept
+    constexpr const auto row(size_type i) const noexcept
     {
         return stdex::submdspan(span, i, stdex::full_extent);
     }
 
-    auto column(size_type j) noexcept
+    constexpr auto column(size_type j) noexcept
     {
         return stdex::submdspan(span, stdex::full_extent, j);
     }
 
-    const auto column(size_type j) const noexcept
+    constexpr const auto column(size_type j) const noexcept
     {
         return stdex::submdspan(span, stdex::full_extent, j);
     }

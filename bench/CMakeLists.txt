@@ -13,11 +13,10 @@ if(NOT TARGET std::mdspan)
   find_package(mdspan REQUIRED)
 endif()
 
-set(
-    PROGRAMS 
+set(PROGRAMS 
     bench_axpy 
     bench_dot 
-    #bench_eigs
+    bench_eigs
     bench_matrix_product
     bench_matrix_vector_product
     bench_transpose

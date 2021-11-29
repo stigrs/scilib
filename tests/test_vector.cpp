@@ -63,7 +63,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::vector<int> v(5, 1);
-    Sci::Vector<int> a = v;
+    Sci::Vector<int> a(v, v.size());
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));
@@ -100,7 +100,7 @@ TEST(TestVector, TestEmpty)
 TEST(TestVector, TestInitializer)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(v);
+    Sci::Vector<int> a(v, v.size());
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -110,7 +110,7 @@ TEST(TestVector, TestInitializer)
 
 TEST(TestVector, TestSetValue)
 {
-    Sci::Vector<int> v(5, 2);
+    Sci::Vector<int> v(5);
     v = 4;
     for (const auto& vi : v) {
         EXPECT_EQ(vi, 4);
@@ -119,7 +119,8 @@ TEST(TestVector, TestSetValue)
 
 TEST(TestVector, TestAddValue)
 {
-    Sci::Vector<int> v(5, 2);
+    Sci::Vector<int> v(5);
+    v = 2;
     v += 4;
     for (const auto& vi : v) {
         EXPECT_EQ(vi, 6);
@@ -128,8 +129,10 @@ TEST(TestVector, TestAddValue)
 
 TEST(TestVector, TestAddVector)
 {
-    Sci::Vector<int> a(5, 1);
-    Sci::Vector<int> b(5, 1);
+    Sci::Vector<int> a(5);
+    a = 1;
+    Sci::Vector<int> b(5);
+    b = 1;
     a += b;
     for (const auto& ai : a) {
         EXPECT_EQ(ai, 2);
@@ -141,14 +144,18 @@ TEST(TestVector, TestAddVector)
 
 TEST(TestVector, TestAequalB)
 {
-    Sci::Vector<int> a(5, 1);
-    Sci::Vector<int> b(5, 1);
+    Sci::Vector<int> a(5);
+    a = 1;
+    Sci::Vector<int> b(5);
+    b = 1;
     EXPECT_TRUE(a == b);
 }
 
 TEST(TestVector, TestAnotequalB)
 {
-    Sci::Vector<int> a(5, 1);
-    Sci::Vector<int> b(4, 2);
+    Sci::Vector<int> a(5);
+    a = 1;
+    Sci::Vector<int> b(4);
+    b = 2;
     EXPECT_TRUE(a != b);
 }

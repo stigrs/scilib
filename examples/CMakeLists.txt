@@ -10,9 +10,9 @@ if(NOT TARGET std::mdspan)
   find_package(mdspan REQUIRED)
 endif()
 
-set(
-    PROGRAMS 
+set(PROGRAMS 
     matrix_diag
+    mdarray_properties
     submatrix_views 
     transposed
 )

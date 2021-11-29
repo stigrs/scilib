@@ -33,7 +33,7 @@ double Scilib::Linalg::det(Matrix_view<double> a)
                 permut++;
             }
         }
-        ddet = Sci::Linalg::prod(Sci::diag(tmp.view()).view());
+        ddet = Sci::Linalg::prod(Sci::diag(tmp.view()));
         ddet *= std::pow(-1.0, narrow_cast<double>(permut));
     }
     return ddet;

@@ -31,8 +31,10 @@ void benchmark(int n, int m)
     auto t2 = std::chrono::high_resolution_clock::now();
     Timer t_arma = t2 - t1;
 
-    Sci::Matrix<double> b1(n, m, 1.0);
-    Sci::Vector<double> b2(m, 1.0);
+    Sci::Matrix<double> b1(n, m);
+    b1 = 1.0;
+    Sci::Vector<double> b2(m);
+    b2 = 1.0;
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10; ++it) {
         auto b3 = b1 * b2;

@@ -11,8 +11,7 @@ if(NOT TARGET std::mdspan)
   find_package(mdspan REQUIRED)
 endif()
 
-set(
-    SRC_FILES
+set(SRC_FILES
     eigenvalue.cpp
     det.cpp
 )

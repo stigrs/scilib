@@ -7,11 +7,9 @@
 #ifndef SCILIB_MDARRAY_MATRIX_DIAG_H
 #define SCILIB_MDARRAY_MATRIX_DIAG_H
 
+#include <scilib/mdarray_impl/mdarray_bits.h>
 #include <scilib/mdarray_impl/type_aliases.h>
-#include <scilib/mdarray_impl/matrix.h>
-#include <scilib/mdarray_impl/vector.h>
 #include <experimental/mdspan>
-#include <cassert>
 #include <vector>
 #include <array>
 
@@ -36,7 +34,7 @@ public:
 
     diag& operator=(const Vector<T>& v)
     {
-        assert(v.extent(0) == extent(0));
+        static_assert(v.static_extent(0) == span.static_extent(0));
         for (size_type i = 0; i < v.size(); ++i) {
             span(i) = v(i);
         }
@@ -46,7 +44,7 @@ public:
     template <stdex::extents<>::size_type ext, class Layout, class Accessor>
     diag& operator=(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     {
-        assert(v.extent(0) == extent(0));
+        static_assert(v.static_extent(0) == span.static_extent(0));
         for (size_type i = 0; i < v.extent(0); ++i) {
             span(i) = v(i);
         }
@@ -55,7 +53,7 @@ public:
 
     diag& operator=(const std::vector<T>& v)
     {
-        assert(v.extent(0) == extent(0));
+        static_assert(v.static_extent(0) == span.static_extent(0));
         for (size_type i = 0; i < v.size(); ++i) {
             span(i) = v(i);
         }
@@ -65,20 +63,23 @@ public:
     ~diag() = default;
 
     constexpr auto& operator()(size_type i) noexcept { return span(i); }
-    constexpr auto& operator()(size_type i) const noexcept { return span(i); }
+    constexpr const auto& operator()(size_type i) const noexcept
+    {
+        return span(i);
+    }
 
-    size_type size() const noexcept { return span.size(); }
+    constexpr size_type size() const noexcept { return span.size(); }
 
-    size_type extent(size_type dim = 0) const noexcept
+    constexpr size_type extent(size_type dim = 0) const noexcept
     {
         return span.extent(dim);
     }
 
-    T* data() noexcept { return span.data(); }
-    const T* data() const noexcept { return span.data(); }
+    constexpr T* data() noexcept { return span.data(); }
+    constexpr const T* data() const noexcept { return span.data(); }
 
-    auto view() noexcept { return span; }
-    const auto view() const noexcept { return span; }
+    constexpr auto view() noexcept { return span; }
+    constexpr const auto view() const noexcept { return span; }
 
     // Apply f(x) for every element x.
     template <class F>
