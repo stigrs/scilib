@@ -30,9 +30,9 @@
 #include <scilib/linalg_impl/transposed.h>
 #include <scilib/linalg_impl/matrix_decomposition.h>
 #include <scilib/linalg_impl/matrix_norm.h>
-#include <scilib/linalg_impl/matrix_power.h>
 #include <scilib/linalg_impl/det.h>
 #include <scilib/linalg_impl/eigenvalue.h>
 #include <scilib/linalg_impl/inv.h>
+#include <scilib/linalg_impl/matrix_power.h>
 
 #endif // SCILIB_LINALG_H
