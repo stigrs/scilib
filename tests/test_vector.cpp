@@ -62,8 +62,8 @@ TEST(TestVector, TestCopySpan)
 
 TEST(TestVector, TestCopyVector)
 {
-    std::vector<int> v(5, 1);
-    Sci::Vector<int> a(v, v.size());
+    std::array<int, 5> v{1, 1, 1, 1, 1};
+    Sci::Vector<int> a(v, std::array<std::size_t, 1>{v.size()});
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));

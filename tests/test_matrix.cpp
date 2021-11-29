@@ -24,6 +24,9 @@ TEST(TestMatrix, TestElementAccess)
             EXPECT_EQ(m(i, j), 2);
         }
     }
+#ifndef NDEBUG
+    EXPECT_DEATH(m(5, 2), "");
+#endif
 }
 
 TEST(TestMatrix, TestView)
