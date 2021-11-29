@@ -13,19 +13,6 @@ namespace stdex = std::experimental;
 
 namespace Scilib {
 
-template <class T, std::size_t Rank, class Extents>
-class MDArray;
-
-template <class T>
-using Vector = MDArray<T, 1, stdex::extents<stdex::dynamic_extent>>;
-
-template <class T>
-using Matrix =
-    MDArray<T, 2, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
-
-namespace Scilib {
-namespace stdex = std::experimental;
-
 template <typename T>
 using Vector_view = stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>>;
 
@@ -44,6 +31,16 @@ using Submatrix_view =
     stdex::mdspan<T,
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_stride>;
+
+template <class T, std::size_t Rank, class Extents>
+class MDArray;
+
+template <class T>
+using Vector = MDArray<T, 1, stdex::extents<stdex::dynamic_extent>>;
+
+template <class T>
+using Matrix =
+    MDArray<T, 2, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
 
 } // namespace Scilib
 

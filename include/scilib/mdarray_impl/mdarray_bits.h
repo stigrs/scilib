@@ -7,22 +7,12 @@
 #ifndef SCILIB_MDARRAY_BITS_H
 #define SCILIB_MDARRAY_BITS_H
 
-//#ifdef _MSC_VER
-//#pragma warning(push)
-//#pragma warning(disable : 4267) // caused by experimental/mdspan
-//#endif
-
-#include <scilib/mdarray_impl/type_aliases.h>
 #include <experimental/mdspan>
 #include <vector>
 #include <array>
 #include <algorithm>
 #include <functional>
 #include <cassert>
-
-//#ifdef _MSC_VER
-//#pragma warning(pop)
-//#endif
 
 namespace Scilib {
 namespace stdex = std::experimental;
