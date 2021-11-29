@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
-#include <cassert>
 
 namespace Scilib {
 
@@ -79,7 +78,6 @@ template <class T, std::size_t Rank, class Extents>
 inline MDArray<T, Rank, Extents> operator+(const MDArray<T, Rank, Extents>& a,
                                            const MDArray<T, Rank, Extents>& b)
 {
-    assert(a.view().extents() == b.view().extents());
     MDArray<T, Rank, Extents> res = a;
     return res += b;
 }
@@ -88,7 +86,6 @@ template <class T, std::size_t Rank, class Extents>
 inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& a,
                                            const MDArray<T, Rank, Extents>& b)
 {
-    assert(a.view().extents() == b.view().extents());
     MDArray<T, Rank, Extents> res = a;
     return res -= b;
 }

@@ -190,13 +190,11 @@ public:
     constexpr bool empty() const noexcept { return storage.empty(); }
     constexpr auto size() const noexcept { return span.size(); }
 
-    constexpr size_type rank() const noexcept
-    {
-        return static_cast<size_type>(span.rank());
-    }
+    constexpr auto rank() const noexcept { return span.rank(); }
 
     constexpr auto extent(size_type dim) const noexcept
     {
+        assert(dim >= 0 && dim < Rank);
         return span.extent(dim);
     }
 
@@ -284,13 +282,11 @@ public:
 
     MDArray& operator+=(const MDArray& m) noexcept
     {
-        // static_assert(view().extents() == m.view().extents());
         return apply(m, [](T& a, const T& b) { a += b; });
     }
 
     MDArray& operator-=(const MDArray& m) noexcept
     {
-        // static_assert(view().extents() == m.view().extents());
         return apply(m, [](T& a, const T& b) { a -= b; });
     }
 
