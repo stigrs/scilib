@@ -32,15 +32,28 @@ using Submatrix_view =
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_stride>;
 
-template <class T, std::size_t Rank, class Extents>
+template <class T, class Extents>
 class MDArray;
 
 template <class T>
-using Vector = MDArray<T, 1, stdex::extents<stdex::dynamic_extent>>;
+using Vector = MDArray<T, stdex::extents<stdex::dynamic_extent>>;
 
 template <class T>
 using Matrix =
-    MDArray<T, 2, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
+    MDArray<T, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
+
+template <class T>
+using Cube = MDArray<T,
+                     stdex::extents<stdex::dynamic_extent,
+                                    stdex::dynamic_extent,
+                                    stdex::dynamic_extent>>;
+
+template <class T>
+using Hypercube = MDArray<T,
+                          stdex::extents<stdex::dynamic_extent,
+                                         stdex::dynamic_extent,
+                                         stdex::dynamic_extent,
+                                         stdex::dynamic_extent>>;
 
 } // namespace Scilib
 

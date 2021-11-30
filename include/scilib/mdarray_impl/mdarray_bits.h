@@ -49,7 +49,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 
 // Dense multidimensional array class with row-major storage order and using
 // mdspan for views.
-template <class T, std::size_t Rank, class Extents>
+template <class T, class Extents>
 class MDArray {
 public:
     using value_type = T;
@@ -58,30 +58,32 @@ public:
     using iterator = typename std::vector<T>::iterator;
     using const_iterator = typename std::vector<T>::const_iterator;
 
+    constexpr static size_type N_dim = Extents::rank();
+
     MDArray() = default;
 
     template <class... Exts>
     explicit MDArray(Exts... exts)
         : storage(__detail::__compute_size(static_cast<size_type>(exts)...)),
           span(storage.data(),
-               std::array<size_type, Rank>{static_cast<size_type>(exts)...})
+               std::array<size_type, N_dim>{static_cast<size_type>(exts)...})
     {
-        static_assert(sizeof...(exts) == Rank);
+        static_assert(sizeof...(exts) == N_dim);
     }
 
     template <class... Exts>
     MDArray(const std::vector<T>& m, Exts... exts)
         : storage(m),
           span(storage.data(),
-               std::array<size_type, Rank>{static_cast<size_type>(exts)...})
+               std::array<size_type, N_dim>{static_cast<size_type>(exts)...})
     {
-        static_assert(sizeof...(exts) == Rank);
+        static_assert(sizeof...(exts) == N_dim);
         assert(m.size() ==
                __detail::__compute_size(static_cast<size_type>(exts)...));
     }
 
     template <std::size_t N>
-    MDArray(const std::array<T, N>& a, const std::array<size_type, Rank>& exts)
+    MDArray(const std::array<T, N>& a, const std::array<size_type, N_dim>& exts)
         : storage(a.begin(), a.end()), span(storage.data(), exts)
     {
         constexpr size_type one = 1;
@@ -101,12 +103,12 @@ public:
     MDArray(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
         : storage(m.size())
     {
-        static_assert(m.rank() == Rank);
+        static_assert(m.rank() == N_dim);
         static_assert(m.rank() <= 2);
 
         if constexpr (m.rank() == 1) {
             span = stdex::mdspan<T, Extents>(
-                storage.data(), std::array<size_type, Rank>{m.extent(0)});
+                storage.data(), std::array<size_type, N_dim>{m.extent(0)});
             for (size_type i = 0; i < m.extent(0); ++i) {
                 storage[i] = m(i);
             }
@@ -114,7 +116,7 @@ public:
         else if constexpr (m.rank() == 2) {
             span = stdex::mdspan<T, Extents>(
                 storage.data(),
-                std::array<size_type, Rank>{m.extent(0), m.extent(1)});
+                std::array<size_type, N_dim>{m.extent(0), m.extent(1)});
             for (size_type i = 0; i < m.extent(0); ++i) {
                 for (size_type j = 0; j < m.extent(1); ++j) {
                     storage[i * view().stride(0) + j * view().stride(1)] =
@@ -134,13 +136,13 @@ public:
     template <class Extents_m, class Layout_m, class Accessor_m>
     MDArray& operator=(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
     {
-        static_assert(m.rank() == Rank);
+        static_assert(m.rank() == N_dim);
         static_assert(m.rank() <= 2);
 
         storage = std::vector<T>(m.size());
         if constexpr (m.rank() == 1) {
             span = stdex::mdspan<T, Extents>(
-                storage.data(), std::array<size_type, Rank>{m.extent(0)});
+                storage.data(), std::array<size_type, N_dim>{m.extent(0)});
             for (size_type i = 0; i < m.extent(0); ++i) {
                 storage[i] = m(i);
             }
@@ -148,7 +150,7 @@ public:
         else if constexpr (m.rank() == 2) {
             span = stdex::mdspan<T, Extents>(
                 storage.data(),
-                std::array<size_type, Rank>{m.extent(0), m.extent(1)});
+                std::array<size_type, N_dim>{m.extent(0), m.extent(1)});
             for (size_type i = 0; i < m.extent(0); ++i) {
                 for (size_type j = 0; j < m.extent(1); ++j) {
                     storage[i * view().stride(0) + j * view().stride(1)] =
@@ -159,10 +161,12 @@ public:
         return *this;
     }
 
+    ~MDArray() = default;
+
     template <class... Indices>
     constexpr auto& operator()(Indices... indices) noexcept
     {
-        static_assert(sizeof...(indices) == Rank);
+        static_assert(sizeof...(indices) == N_dim);
         assert(__detail::__check_bounds(span.extents(), indices...));
         return span(indices...);
     }
@@ -170,7 +174,7 @@ public:
     template <class... Indices>
     constexpr const auto& operator()(Indices... indices) const noexcept
     {
-        static_assert(sizeof...(indices) == Rank);
+        static_assert(sizeof...(indices) == N_dim);
         assert(__detail::__check_bounds(span.extents(), indices...));
         return span(indices...);
     }
@@ -194,19 +198,19 @@ public:
 
     constexpr auto extent(size_type dim) const noexcept
     {
-        assert(dim >= 0 && dim < Rank);
+        assert(dim >= 0 && dim < N_dim);
         return span.extent(dim);
     }
 
     template <class... Exts>
     void resize(Exts... exts) noexcept
     {
-        static_assert(sizeof...(exts) == Rank);
+        static_assert(sizeof...(exts) == N_dim);
         storage = std::vector<T>(
             __detail::__compute_size(static_cast<size_type>(exts)...));
         span = stdex::mdspan<T, Extents>(
             storage.data(),
-            std::array<size_type, Rank>{static_cast<size_type>(exts)...});
+            std::array<size_type, N_dim>{static_cast<size_type>(exts)...});
     }
 
     void swap(MDArray& m) noexcept

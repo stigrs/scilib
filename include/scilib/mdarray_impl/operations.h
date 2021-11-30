@@ -22,44 +22,44 @@ namespace stdex = std::experimental;
 //------------------------------------------------------------------------------
 // Equality comparisons:
 
-template <class T, std::size_t Rank, class Extents>
-inline bool operator==(const MDArray<T, Rank, Extents>& a,
-                       const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline bool operator==(const MDArray<T, Extents>& a,
+                       const MDArray<T, Extents>& b)
 {
     return std::equal(a.begin(), a.end(), b.begin());
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline bool operator!=(const MDArray<T, Rank, Extents>& a,
-                       const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline bool operator!=(const MDArray<T, Extents>& a,
+                       const MDArray<T, Extents>& b)
 {
     return !(a == b);
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline bool operator<(const MDArray<T, Rank, Extents>& a,
-                      const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline bool operator<(const MDArray<T, Extents>& a,
+                      const MDArray<T, Extents>& b)
 {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline bool operator>(const MDArray<T, Rank, Extents>& a,
-                      const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline bool operator>(const MDArray<T, Extents>& a,
+                      const MDArray<T, Extents>& b)
 {
     return b < a;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline bool operator<=(const MDArray<T, Rank, Extents>& a,
-                       const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline bool operator<=(const MDArray<T, Extents>& a,
+                       const MDArray<T, Extents>& b)
 {
     return !(a > b);
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline bool operator>=(const MDArray<T, Rank, Extents>& a,
-                       const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline bool operator>=(const MDArray<T, Extents>& a,
+                       const MDArray<T, Extents>& b)
 {
     return !(a < b);
 }
@@ -67,74 +67,74 @@ inline bool operator>=(const MDArray<T, Rank, Extents>& a,
 //------------------------------------------------------------------------------
 // Arithmetic operations:
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& v)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator-(const MDArray<T, Extents>& v)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res *= -T{1};
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator+(const MDArray<T, Rank, Extents>& a,
-                                           const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator+(const MDArray<T, Extents>& a,
+                                     const MDArray<T, Extents>& b)
 {
-    MDArray<T, Rank, Extents> res = a;
+    MDArray<T, Extents> res = a;
     return res += b;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& a,
-                                           const MDArray<T, Rank, Extents>& b)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator-(const MDArray<T, Extents>& a,
+                                     const MDArray<T, Extents>& b)
 {
-    MDArray<T, Rank, Extents> res = a;
+    MDArray<T, Extents> res = a;
     return res -= b;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator+(const MDArray<T, Rank, Extents>& v,
-                                           const T& scalar)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator+(const MDArray<T, Extents>& v,
+                                     const T& scalar)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res += scalar;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator-(const MDArray<T, Rank, Extents>& v,
-                                           const T& scalar)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator-(const MDArray<T, Extents>& v,
+                                     const T& scalar)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res -= scalar;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator*(const MDArray<T, Rank, Extents>& v,
-                                           const T& scalar)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator*(const MDArray<T, Extents>& v,
+                                     const T& scalar)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res *= scalar;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator*(const T& scalar,
-                                           const MDArray<T, Rank, Extents>& v)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator*(const T& scalar,
+                                     const MDArray<T, Extents>& v)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res *= scalar;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator/(const MDArray<T, Rank, Extents>& v,
-                                           const T& scalar)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator/(const MDArray<T, Extents>& v,
+                                     const T& scalar)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res /= scalar;
 }
 
-template <class T, std::size_t Rank, class Extents>
-inline MDArray<T, Rank, Extents> operator%(const MDArray<T, Rank, Extents>& v,
-                                           const T& scalar)
+template <class T, class Extents>
+inline MDArray<T, Extents> operator%(const MDArray<T, Extents>& v,
+                                     const T& scalar)
 {
-    MDArray<T, Rank, Extents> res = v;
+    MDArray<T, Extents> res = v;
     return res %= scalar;
 }
 
