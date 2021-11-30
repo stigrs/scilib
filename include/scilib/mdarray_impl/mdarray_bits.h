@@ -13,12 +13,11 @@
 #include <algorithm>
 #include <functional>
 #include <cassert>
-#include <concepts>
 
 namespace Scilib {
 namespace stdex = std::experimental;
 
-namespace __detail {
+namespace __Detail {
 
 template <class... Exts>
 inline auto __compute_size(Exts... exts)
@@ -46,14 +45,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
     return result;
 }
 
-} // namespace __detail
-
-// clang-format off
-template <class E>
-concept Extents_has_rank = 
-    requires (E exts) { { exts.rank() } -> std::convertible_to<std::size_t>; 
-};
-// clang-format on
+} // namespace __Detail
 
 // Dense multidimensional array class with row-major storage order and using
 // mdspan for views.
@@ -72,7 +64,7 @@ public:
 
     template <class... Exts>
     explicit MDArray(Exts... exts)
-        : storage(__detail::__compute_size(static_cast<size_type>(exts)...)),
+        : storage(__Detail::__compute_size(static_cast<size_type>(exts)...)),
           span(storage.data(),
                std::array<size_type, N_dim>{static_cast<size_type>(exts)...})
     {
@@ -87,7 +79,7 @@ public:
     {
         static_assert(sizeof...(exts) == N_dim);
         assert(m.size() ==
-               __detail::__compute_size(static_cast<size_type>(exts)...));
+               __Detail::__compute_size(static_cast<size_type>(exts)...));
     }
 
     template <std::size_t N>
@@ -175,7 +167,7 @@ public:
     constexpr auto& operator()(Indices... indices) noexcept
     {
         static_assert(sizeof...(indices) == N_dim);
-        assert(__detail::__check_bounds(span.extents(), indices...));
+        assert(__Detail::__check_bounds(span.extents(), indices...));
         return span(indices...);
     }
 
@@ -183,7 +175,7 @@ public:
     constexpr const auto& operator()(Indices... indices) const noexcept
     {
         static_assert(sizeof...(indices) == N_dim);
-        assert(__detail::__check_bounds(span.extents(), indices...));
+        assert(__Detail::__check_bounds(span.extents(), indices...));
         return span(indices...);
     }
 
@@ -215,7 +207,7 @@ public:
     {
         static_assert(sizeof...(exts) == N_dim);
         storage = std::vector<T>(
-            __detail::__compute_size(static_cast<size_type>(exts)...));
+            __Detail::__compute_size(static_cast<size_type>(exts)...));
         span = stdex::mdspan<T, Extents>(
             storage.data(),
             std::array<size_type, N_dim>{static_cast<size_type>(exts)...});
