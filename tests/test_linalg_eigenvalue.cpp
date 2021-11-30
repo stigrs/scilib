@@ -8,29 +8,27 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
-#include <cmath>
 
 TEST(TestLinalg, TestEigs)
 {
-    // Numpy:
+    // Intel MKL example:
     // clang-format off
     std::vector<double> eval = {
-        3.28792877e-06, 3.05898040e-04, 1.14074916e-02, 2.08534219e-01, 
-        1.56705069e+00
+        -17.44, -11.96, 6.72, 14.25, 19.84
     };
     std::vector<double> evec_data = {
-        -0.0062,  0.0472,  0.2142, -0.6019, 0.7679,
-         0.1167, -0.4327, -0.7241,  0.2759, 0.4458,
-        -0.5062,  0.6674, -0.1205,  0.4249, 0.3216,
-         0.7672,  0.2330,  0.3096,  0.4439, 0.2534,
-        -0.3762, -0.5576,  0.5652,  0.4290, 0.2098
+        -0.26,  0.31, -0.74,  0.33,  0.42,
+        -0.17, -0.39, -0.38, -0.80,  0.16,
+        -0.89,  0.04,  0.09,  0.03, -0.45,
+        -0.29, -0.59,  0.34,  0.31,  0.60,
+        -0.19,  0.63,  0.44, -0.38,  0.48
     };
     std::vector<double> a_data = {
-        1.0, 0.5, 1. / 3., 1. / 4., 1. / 5,
-        0.5, 1. / 3., 1. / 4., 1. / 5., 1. / 6.,
-        1. / 3., 1. / 4., 1. / 5., 1. / 6., 1. / 7.,
-        1. / 4., 1. / 5., 1. / 6., 1. / 7., 1. / 8.,
-        1. / 5., 1. / 6., 1. / 7., 1. / 8., 1. / 9.
+        6.39,  0.13, -8.23,  5.71, -3.18,
+        0.00,  8.37, -4.46, -6.10,  7.21,
+        0.00,  0.00, -9.58, -9.25, -7.42,
+        0.00,  0.00,  0.00,  3.72,  8.54,
+        0.00,  0.00,  0.00,  0.00,  2.51
     };
     // clang-format on
     Sci::Matrix<double> evec(evec_data, 5, 5);
@@ -40,13 +38,22 @@ TEST(TestLinalg, TestEigs)
     Sci::Linalg::eigs(a.view(), w.view());
 
     for (int i = 0; i < 5; ++i) {
-        EXPECT_TRUE(std::abs(w(i) - eval[i]) < 1.0e-8);
+        EXPECT_NEAR(w(i), eval[i], 1.0e-2);
     }
+
+#ifdef USE_MKL
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
-            EXPECT_TRUE(std::abs(a(i, j) - evec(i, j)) < 1.0e-4);
+            EXPECT_NEAR(a(i, j), evec(i, j), 1.0e-2);
         }
     }
+#else
+    for (int i = 0; i < 5; ++i) {
+        for (int j = i; j < 5; ++j) {
+            EXPECT_NEAR(a(i, j), evec(i, j), 1.0e-2);
+        }
+    }
+#endif
 }
 
 TEST(TestLinalg, TestEig)
@@ -88,14 +95,15 @@ TEST(TestLinalg, TestEig)
     Sci::Linalg::eig(a.view(), evec.view(), eval.view());
 
     for (std::size_t i = 0; i < eval.size(); ++i) {
-        EXPECT_TRUE(std::abs(eval(i).real() - eval_re[i]) < 5.0e-8);
-        EXPECT_TRUE(std::abs(eval(i).imag() - eval_im[i]) < 5.0e-8);
+        EXPECT_NEAR(eval(i).real(), eval_re[i], 5.0e-8);
+        EXPECT_NEAR(eval(i).imag(), eval_im[i], 5.0e-8);
     }
 
     for (std::size_t i = 0; i < evec.extent(0); ++i) {
         for (std::size_t j = 0; j < evec.extent(1); ++j) {
-            EXPECT_TRUE(std::abs(evec(i, j).real() - evec_re(i, j)) < 5.0e-9);
-            EXPECT_TRUE(std::abs(evec(i, j).imag() - evec_im(i, j)) < 5.0e-9);
+            EXPECT_NEAR(evec(i, j).real(), evec_re(i, j), 5.0e-9);
+            EXPECT_NEAR(evec(i, j).imag(), evec_im(i, j), 5.0e-9);
         }
     }
 }
+

@@ -25,6 +25,8 @@ namespace Linalg {
 // Compute eigenvalues and eigenvectors of a real symmetric matrix.
 inline void eigs(Matrix_view<double> a, Vector_view<double> w)
 {
+    using size_type = stdex::extents<>::size_type;
+
     assert(a.extent(0) == a.extent(1));
     assert(w.extent(0) == a.extent(0));
 

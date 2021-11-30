@@ -38,12 +38,20 @@ inline Matrix<T> matrix_power(Matrix_view<T> m, int n)
         res = tmp;
     }
     else if (nn == 2) {
+#ifdef USE_MKL
         matrix_product(tmp.view(), tmp.view(), res.view());
+#else
+        res = tmp * tmp;
+#endif
     }
     else {
         res = tmp;
         for (int ni = 1; ni < nn; ++ni) {
+#ifdef USE_MKL
             matrix_product(res.view(), tmp.view(), res.view());
+#else
+            res = res * tmp;
+#endif
         }
     }
     return res;
