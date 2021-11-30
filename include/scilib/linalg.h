@@ -7,6 +7,11 @@
 #ifndef SCILIB_LINALG_H
 #define SCILIB_LINALG_H
 
+#ifndef USE_MKL
+#include <complex>
+#define lapack_complex_double std::complex<double>
+#endif
+
 // Do not change this ordering.
 
 #include <scilib/mdarray.h>
