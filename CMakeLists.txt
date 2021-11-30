@@ -84,7 +84,7 @@ if(MDSPAN_ENABLE_CONCEPTS)
             if(COMPILER_SUPPORTS_FCONCEPTS)
                 message(STATUS "-- Using \"-fconcepts-ts\" to enable concepts support")
                 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts-ts")
-        endif()
+            endif()
         endif()
         # Otherwise, it's possible that the compiler supports concepts without flags,
         # but if it doesn't, they just won't be used, which is fine

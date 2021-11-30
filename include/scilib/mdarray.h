@@ -43,17 +43,17 @@ using Matrix =
     MDArray<T, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
 
 template <class T>
-using Cube = MDArray<T,
-                     stdex::extents<stdex::dynamic_extent,
-                                    stdex::dynamic_extent,
-                                    stdex::dynamic_extent>>;
+using Array3D = MDArray<T,
+                        stdex::extents<stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent>>;
 
 template <class T>
-using Hypercube = MDArray<T,
-                          stdex::extents<stdex::dynamic_extent,
-                                         stdex::dynamic_extent,
-                                         stdex::dynamic_extent,
-                                         stdex::dynamic_extent>>;
+using Array4D = MDArray<T,
+                        stdex::extents<stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent>>;
 
 } // namespace Scilib
 

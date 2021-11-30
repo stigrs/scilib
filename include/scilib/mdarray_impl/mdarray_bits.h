@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <functional>
 #include <cassert>
+#include <concepts>
 
 namespace Scilib {
 namespace stdex = std::experimental;
@@ -47,10 +48,17 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 
 } // namespace __detail
 
+// clang-format off
+template <class E>
+concept Extents_has_rank = 
+    requires (E exts) { { exts.rank() } -> std::convertible_to<std::size_t>; 
+};
+// clang-format on
+
 // Dense multidimensional array class with row-major storage order and using
 // mdspan for views.
 template <class T, class Extents>
-class MDArray {
+requires Extents_has_rank<Extents> class MDArray {
 public:
     using value_type = T;
     using size_type = stdex::extents<>::size_type;
