@@ -47,8 +47,9 @@ concept Extents_has_rank =
 };
 // clang-format on
 
-template <class T, class Extents>
-requires Extents_has_rank<Extents> class MDArray;
+template <class T, Extents_has_rank Extents>
+/* requires Extents_has_rank<Extents> */
+class MDArray;
 
 template <class T>
 using Vector = MDArray<T, stdex::extents<stdex::dynamic_extent>>;

@@ -49,9 +49,13 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 
 // Dense multidimensional array class with row-major storage order and using
 // mdspan for views.
-template <class T, class Extents>
-requires Extents_has_rank<Extents> class MDArray {
+//
+// clang-format off
+template <class T, Extents_has_rank Extents>
+    //requires Extents_has_rank<Extents> 
+class MDArray {
 public:
+    // clang-format on
     using value_type = T;
     using size_type = stdex::extents<>::size_type;
     using difference_type = std::ptrdiff_t;
