@@ -9,6 +9,7 @@
 
 #ifndef USE_MKL
 #include <complex>
+#define lapack_complex_float std::complex<float>
 #define lapack_complex_double std::complex<double>
 #endif
 
