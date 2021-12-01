@@ -17,10 +17,10 @@ jobs:
 
   steps:
   - powershell: |
-      $env:BLAS_DIR = ${Build.SourcesDirectory}\openblas
+      $env:BLAS_DIR = "${Build.SourcesDirectory}\openblas"
       mkdir $env:BLAS_DIR
       nuget install OpenBLAS -o $env:BLAS_DIR
-      $env:BLAS_ROOT=$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native
+      $env:BLAS_ROOT="$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native"
       $env:PATH="$env:BLAS_ROOT\win32\bin;$env:BLAS_DIR\native\x64\bin;$env:PATH"
     name: Prepare
 
