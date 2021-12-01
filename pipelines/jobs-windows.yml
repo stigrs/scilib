@@ -16,7 +16,7 @@ jobs:
   continueOnError: false
 
   steps:
-  - script: |
+  - powershell: |
       nuget install OpenBLAS -o ".\local\"
       $env:CURR_DIR=Get-Location
       $env:BLAS_DIR=$env:CURR_DIR\local
