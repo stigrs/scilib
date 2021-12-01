@@ -62,7 +62,6 @@ inline auto submatrix(
     const std::pair<stdex::extents<>::size_type, stdex::extents<>::size_type>&
         col_slice)
 {
-    using size_type = stdex::extents<>::size_type;
     return stdex::submdspan(m, row_slice, col_slice);
 }
 
