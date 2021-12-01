@@ -39,7 +39,6 @@ stages:
   variables:
     BLAS_DIR: "${Build.SourcesDirectory}/openblas"
     BLAS_ROOT: "D:/openblas/OpenBLAS.0.2.14.1/lib/native"
-    PATH: "$(BLAS_ROOT)/win32/bin;$(BLAS_ROOT)/native/x64/bin;$(PATH)"
   jobs:
   - template: ./pipelines/jobs-windows.yml
     parameters:

@@ -19,7 +19,7 @@ jobs:
   - powershell: |
       mkdir $(BLAS_DIR)
       nuget install OpenBLAS -o $(BLAS_DIR)
-      $env:PATH="$(BLAS_ROOT)\win32\bin;$(BLAS_DIR)\native\x64\bin;$env:PATH"
+      $env:PATH="$(BLAS_ROOT)\win32\bin;$(BLAS_ROOT)\native\x64\bin;$env:PATH"
       dir "$(BLAS_ROOT)"
       dir "$(BLAS_ROOT)\lib\x64\"
       dir "$(BLAS_ROOT)\lib\win32\"
