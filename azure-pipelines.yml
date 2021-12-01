@@ -36,6 +36,9 @@ stages:
 # MSVC
 - stage: MSVC
   dependsOn: []
+  variables:
+    BLAS_DIR: "${Build.SourcesDirectory}\openblas"
+    BLAS_ROOT: "${Build.SourcesDirectory}\openblas\OpenBLAS.0.2.14.1\lib\native"
   jobs:
   - template: ./pipelines/jobs-windows.yml
     parameters:

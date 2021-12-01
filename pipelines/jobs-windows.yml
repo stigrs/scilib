@@ -2,10 +2,6 @@ parameters:
   jobName: ''
   imageName: ''
 
-variables:
-  BLAS_DIR: "${Build.SourcesDirectory}\openblas"
-  BLAS_ROOT: "${Build.SourcesDirectory}\openblas\OpenBLAS.0.2.14.1\lib\native"
-
 jobs:
 - job:
   displayName: ${{ parameters.imageName }} 
