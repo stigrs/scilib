@@ -17,9 +17,8 @@ jobs:
 
   steps:
   - powershell: |
-      nuget install OpenBLAS -o ".\local\"
-      $env:CURR_DIR=Get-Location
-      $env:BLAS_DIR=$env:CURR_DIR\local
+      nuget install OpenBLAS -o "."
+      $env:BLAS_DIR=Get-Location
       $env:PATH="$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\win32\bin;$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\x64\bin;$env:PATH" 
     name: Prepare
 
