@@ -18,6 +18,7 @@
 #include <scilib/mdarray.h>
 
 #include <scilib/linalg_impl/auxiliary.h>
+#include <scilib/linalg_impl/element_wise_math.h>
 
 #include <scilib/linalg_impl/blas1_add.h>
 #include <scilib/linalg_impl/blas1_axpy.h>
