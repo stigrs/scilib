@@ -19,8 +19,7 @@ jobs:
   - powershell: |
       mkdir $(BLAS_DIR)
       nuget install OpenBLAS -o $(BLAS_DIR)
-      $env:BLAS_ROOT="$(BLAS_DIR)/openblas/OpenBLAS.0.2.14.1/lib/native"
-      $env:PATH="$env:BLAS_ROOT\win32\bin;$env:BLAS_ROOT\native\x64\bin;$env:PATH"
+      $env:PATH="$(BLAS_ROOT)\win32\bin;$(BLAS_ROOT)\native\x64\bin;$env:PATH"
     name: Prepare
 
   - task: CMake@1
