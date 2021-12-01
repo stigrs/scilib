@@ -13,7 +13,7 @@
 namespace Scilib {
 namespace Linalg {
 
-template <typename T>
+template <class T>
 inline Submatrix_view<T> transposed(Matrix_view<T> m)
 {
     return Submatrix_view<T>{

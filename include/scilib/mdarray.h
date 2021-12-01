@@ -10,7 +10,7 @@
 #include <experimental/mdspan>
 #include <scilib/mdarray_impl/support.h>
 
-#ifdef _MSC_VER
+#if _MSC_VER >= 1927
 #include <concepts>
 #define STD_CONVERTIBLE_TO(X) std::convertible_to<X>
 #else
@@ -21,20 +21,20 @@ namespace stdex = std::experimental;
 
 namespace Scilib {
 
-template <typename T>
+template <class T>
 using Vector_view = stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>>;
 
-template <typename T>
+template <class T>
 using Subvector_view = stdex::
     mdspan<T, stdex::extents<stdex::dynamic_extent>, stdex::layout_stride>;
 
-template <typename T>
+template <class T>
 using Matrix_view =
     stdex::mdspan<T,
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_right>;
 
-template <typename T>
+template <class T>
 using Submatrix_view =
     stdex::mdspan<T,
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
@@ -45,11 +45,11 @@ template <class E>
 concept Extents_has_rank = 
     requires (E /* exts */) { { E::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
 };
-// clang-format on
 
-template <class T, Extents_has_rank Extents>
-/* requires Extents_has_rank<Extents> */
+template <class T, class Extents>
+    requires Extents_has_rank<Extents> 
 class MDArray;
+// clang-format on
 
 template <class T>
 using Vector = MDArray<T, stdex::extents<stdex::dynamic_extent>>;

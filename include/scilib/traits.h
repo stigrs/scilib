@@ -23,7 +23,7 @@
 // Type cast:
 
 // A searchable way to do narrowing casts of values.
-template <typename T, typename U>
+template <class T, typename U>
 constexpr T narrow_cast(U&& u)
 {
     return static_cast<T>(std::forward<U>(u));

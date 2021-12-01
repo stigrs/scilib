@@ -141,7 +141,7 @@ inline MDArray<T, Extents> operator%(const MDArray<T, Extents>& v,
 //------------------------------------------------------------------------------
 // Matrix-matrix product:
 
-template <typename T>
+template <class T>
 inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 {
     return Scilib::Linalg::matrix_product(a.view(), b.view());
@@ -150,7 +150,7 @@ inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 //------------------------------------------------------------------------------
 // Matrix-vector product:
 
-template <typename T>
+template <class T>
 inline Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
 {
     return Scilib::Linalg::matrix_vector_product(a.view(), x.view());
@@ -216,7 +216,7 @@ inline void print(std::ostream& ostrm,
     ostrm << "}\n";
 }
 
-template <typename T>
+template <class T>
 inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
 {
     using size_type = stdex::extents<>::size_type;
@@ -232,7 +232,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
     return ostrm;
 }
 
-template <typename T>
+template <class T>
 inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
 {
     using size_type = stdex::extents<>::size_type;
@@ -274,7 +274,7 @@ print(std::ostream& ostrm,
     ostrm << "}\n";
 }
 
-template <typename T>
+template <class T>
 inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
 {
     using size_type = stdex::extents<>::size_type;
@@ -292,7 +292,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
     return ostrm;
 }
 
-template <typename T>
+template <class T>
 inline std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
 {
     using size_type = stdex::extents<>::size_type;

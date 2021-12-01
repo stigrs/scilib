@@ -36,7 +36,7 @@ axpy(const T& scalar,
     }
 }
 
-template <typename T>
+template <class T>
 inline void axpy(const T& scalar, const Vector<T>& x, Vector<T>& y)
 {
     axpy(scalar, x.view(), y.view());

@@ -99,7 +99,7 @@ inline void matrix_product(Matrix_view<std::complex<double>> a,
 }
 #endif
 
-template <typename T>
+template <class T>
 inline Matrix<T> matrix_product(Matrix_view<T> a, Matrix_view<T> b)
 {
     using size_type = stdex::extents<>::size_type;

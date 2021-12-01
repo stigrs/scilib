@@ -149,7 +149,7 @@ inline T prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 //------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
-template <typename T = double>
+template <class T = double>
 inline Matrix<T> identity(std::size_t n)
 {
     Matrix<T> res(n, n);
@@ -163,7 +163,7 @@ inline Matrix<T> identity(std::size_t n)
 
 // Create a random vector from a normal distribution with zero mean and unit
 // variance.
-template <typename T = double>
+template <class T = double>
 inline Vector<T> randn(std::size_t n)
 {
     Vector<T> res(n);
@@ -180,7 +180,7 @@ inline Vector<T> randn(std::size_t n)
 
 // Create a random matrix from a normal distribution with zero mean and unit
 // variance.
-template <typename T = double>
+template <class T = double>
 inline Matrix<T> randn(std::size_t nr, std::size_t nc)
 {
     Matrix<T> res(nr, nc);

@@ -51,8 +51,8 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // mdspan for views.
 //
 // clang-format off
-template <class T, Extents_has_rank Extents>
-    //requires Extents_has_rank<Extents> 
+template <class T, class Extents>
+    requires Extents_has_rank<Extents> 
 class MDArray {
 public:
     // clang-format on

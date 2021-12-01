@@ -15,7 +15,7 @@ namespace Linalg {
 #include <cmath>
 
 // Raise a square matrix to the (integer) power n.
-template <typename T>
+template <class T>
 inline Matrix<T> matrix_power(Matrix_view<T> m, int n)
 {
     using namespace Scilib;

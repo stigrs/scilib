@@ -92,7 +92,7 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
 }
 #endif
 
-template <typename T>
+template <class T>
 inline Vector<T> matrix_vector_product(Matrix_view<T> a, Vector_view<T> x)
 {
     Vector<T> res(narrow_cast<BLAS_INT>(a.extent(0)));
