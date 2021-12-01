@@ -8,6 +8,7 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
+#include <cmath>
 
 TEST(TestLinalg, TestEigs)
 {
@@ -43,7 +44,7 @@ TEST(TestLinalg, TestEigs)
 
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
-            EXPECT_NEAR(a(i, j), evec(i, j), 1.0e-6);
+            EXPECT_NEAR(std::abs(a(i, j)), std::abs(evec(i, j)), 1.0e-6);
         }
     }
 }
@@ -98,4 +99,3 @@ TEST(TestLinalg, TestEig)
         }
     }
 }
-
