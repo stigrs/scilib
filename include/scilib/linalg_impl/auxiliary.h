@@ -149,6 +149,34 @@ inline T prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 //------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
+// clang-format off
+template <class M, class... Args>
+    requires MDArray_type<M>
+inline M zeros(Args... args)
+// clang-format on
+{
+    static_assert(M::N_dim == sizeof...(Args));
+    using value_type = typename M::value_type;
+
+    M res(args...);
+    res = value_type{0};
+    return res;
+}
+
+// clang-format off
+template <class M, class... Args>
+    requires MDArray_type<M>
+inline M ones(Args... args)
+// clang-format on
+{
+    static_assert(M::N_dim == sizeof...(Args));
+    using value_type = typename M::value_type;
+
+    M res(args...);
+    res = value_type{1};
+    return res;
+}
+
 template <class T = double>
 inline Matrix<T> identity(std::size_t n)
 {
