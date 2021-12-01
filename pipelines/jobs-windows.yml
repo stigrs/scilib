@@ -19,16 +19,14 @@ jobs:
   - powershell: |
       nuget install OpenBLAS -o "."
       $env:BLAS_DIR=Get-Location
-      echo $env:BLAS_DIR
       $env:PATH="$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\win32\bin;$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\x64\bin;$env:PATH" 
-      echo $env:PATH
     name: Prepare
 
   - task: CMake@1
     name: Configure
     inputs:
       workingDirectory: build
-      cmakeArgs: ' -DBLAS_DIR=. -DBUILD_BENCH=OFF .. '
+      cmakeArgs: ' -DBLAS_DIR="./OpenBLAS.0.2.14.1/lib/native" -DBUILD_BENCH=OFF .. '
 
   - task: CMake@1
     name: Build
