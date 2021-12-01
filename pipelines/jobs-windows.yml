@@ -17,16 +17,19 @@ jobs:
 
   steps:
   - powershell: |
-      nuget install OpenBLAS -o "."
+      mkdir openblas
+      $url = "https://sourceforge.net/projects/openblas/files/v0.3.7/OpenBLAS-0.3.7-x64.zip"
+      Invoke-WebRequest -Uri $url -OutFile . -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::Chrome
+      Expand-Archive OpenBLas-0.3.7-x64.zip -DestinationPath .\openblas
       $env:BLAS_DIR=Get-Location
-      $env:PATH="$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\win32\bin;$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\x64\bin;$env:PATH" 
+      $env:PATH="$env:BLAS_DIR\bin;$env:PATH" 
     name: Prepare
 
   - task: CMake@1
     name: Configure
     inputs:
       workingDirectory: build
-      cmakeArgs: ' -DBLAS_DIR="./OpenBLAS.0.2.14.1/lib/native" -DBUILD_BENCH=OFF .. '
+      cmakeArgs: ' -DBUILD_BENCH=OFF .. '
 
   - task: CMake@1
     name: Build
