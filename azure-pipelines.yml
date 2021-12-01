@@ -33,6 +33,15 @@ stages:
       jobName: 'Validate Clang'
       imageName: ubuntu-latest
 
+# MSVC
+- stage: MSVC
+  dependsOn: []
+  jobs:
+  - template: ./pipelines/jobs-windows.yml
+    parameters:
+      jobName: 'Validate MSVC latest'
+      imageName: windows-latest
+
 # Apple-Clang
 - stage: Apple_Clang
   dependsOn: []
