@@ -4,8 +4,7 @@ parameters:
 
 jobs:
 - job:
-  displayName: ${{ parameters.imageName }}
-  pool:
+  displayName: ${{ parameters.imageName }} pool:
     vmImage: ${{ parameters.imageName }}
   strategy:
     matrix:
@@ -16,32 +15,18 @@ jobs:
   continueOnError: false
 
   steps:
-  - script: 'pip install wget'
-    displayName: 'Install wget'
-
-  - task: PythonScript@0
-    inputs:
-      scriptSource: inline
-      script: |
-        import wget
-     
-        print('Beginning file download with wget module')
-        url = "https://sourceforge.net/projects/openblas/files/v0.3.7/OpenBLAS-0.3.7-x64.zip"
-        path = r"$(Build.ArtifactStagingDirectory)"
-        wget.download(url, path)
-
   - powershell: |
-      mkdir openblas
-      Expand-Archive OpenBLas-0.3.7-x64.zip -DestinationPath .\openblas
-      $env:BLAS_DIR=Get-Location
-      $env:PATH="$env:BLAS_DIR\bin;$env:PATH" 
+      $env:BLAS_DIR = ${Build.SourcesDirectory}\openblas
+      mkdir $env:BLAS_DIR
+      nuget install OpenBLAS -o $env:BLAS_DIR
+      $env:PATH="$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\win32\bin;$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native\x64\bin;$env:PATH"
     name: Prepare
 
   - task: CMake@1
     name: Configure
     inputs:
       workingDirectory: build
-      cmakeArgs: ' -DBUILD_BENCH=OFF .. '
+      cmakeArgs: ' -DBLAS_DIR="$(BLAS_DIR)/OpenBLAS.2.14.1/lib/native -DBUILD_BENCH=OFF .. '
 
   - task: CMake@1
     name: Build
