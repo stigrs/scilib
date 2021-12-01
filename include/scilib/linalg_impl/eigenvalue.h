@@ -23,7 +23,7 @@ namespace Scilib {
 namespace Linalg {
 
 // Compute eigenvalues and eigenvectors of a real symmetric matrix.
-inline void eigs(Matrix_view<double> a, Vector_view<double> w)
+inline void eigs(Matrix_view<double> a, Vector_view<double> w, double abstol = -1.0 /* use default value */)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -31,12 +31,27 @@ inline void eigs(Matrix_view<double> a, Vector_view<double> w)
     assert(w.extent(0) == a.extent(0));
 
     const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT nselect = n;
+    const BLAS_INT lda = n;
+    const BLAS_INT ldz = nselect;
 
-    BLAS_INT info =
-        LAPACKE_dsyevd(LAPACK_ROW_MAJOR, 'V', 'U', n, a.data(), n, w.data());
+    BLAS_INT il = 1;
+    BLAS_INT iu = n;
+    BLAS_INT m;
+    BLAS_INT info;
+
+    double vl;
+    double vu;
+
+    Sci::Vector<BLAS_INT> isuppz(2 * n);
+    Sci::Matrix<double> z(ldz, n);
+
+    info = LAPACKE_dsyevr(LAPACK_ROW_MAJOR, 'V', 'A', 'U', n, a.data(), lda, vl, vu, il, iu, abstol, &m, w.data(), z.view().data(), ldz, isuppz.data());
+
     if (info != 0) {
-        throw std::runtime_error("dsyevd failed");
+        throw std::runtime_error("dsyevr failed");
     }
+    copy(z.view(), a);
 }
 
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
