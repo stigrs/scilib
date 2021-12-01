@@ -2,6 +2,10 @@ parameters:
   jobName: ''
   imageName: ''
 
+variables:
+  BLAS_DIR: "${Build.SourcesDirectory}\openblas"
+  BLAS_ROOT: "${Build.SourcesDirectory}\openblas\OpenBLAS.0.2.14.1\lib\native"
+
 jobs:
 - job:
   displayName: ${{ parameters.imageName }} 
@@ -17,18 +21,16 @@ jobs:
 
   steps:
   - powershell: |
-      $env:BLAS_DIR = "${Build.SourcesDirectory}\openblas"
-      mkdir $env:BLAS_DIR
-      nuget install OpenBLAS -o $env:BLAS_DIR
-      $env:BLAS_ROOT="$env:BLAS_DIR\OpenBLAS.0.2.14.1\lib\native"
-      $env:PATH="$env:BLAS_ROOT\win32\bin;$env:BLAS_DIR\native\x64\bin;$env:PATH"
+      mkdir $(BLAS_DIR)
+      nuget install OpenBLAS -o $(BLAS_DIR)
+      $env:PATH="$(BLAS_ROOT)\win32\bin;$(BLAS_DIR)\native\x64\bin;$env:PATH"
     name: Prepare
 
   - task: CMake@1
     name: Configure
     inputs:
       workingDirectory: build
-      cmakeArgs: ' -DBUILD_BENCH=OFF .. '
+      cmakeArgs: ' -DBLAS_DIR="$(BLAS_ROOT)" -DBUILD_BENCH=OFF .. '
 
   - task: CMake@1
     name: Build
