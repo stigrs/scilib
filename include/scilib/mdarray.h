@@ -46,6 +46,11 @@ concept Extents_has_rank =
     requires (E /* exts */) { { E::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
 };
 
+template <class M>
+concept MDArray_type = 
+    requires (M /* m */) { { M::N_dim } -> STD_CONVERTIBLE_TO(std::size_t);
+};
+
 template <class T, class Extents>
     requires Extents_has_rank<Extents> 
 class MDArray;
