@@ -30,7 +30,7 @@ jobs:
     name: Configure
     inputs:
       workingDirectory: build
-      cmakeArgs: ' -DBLAS_DIR="$(BLAS_ROOT)" -DBUILD_BENCH=OFF .. '
+      cmakeArgs: ' -DBUILD_BENCH=OFF .. '
 
   - task: CMake@1
     name: Build
