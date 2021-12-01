@@ -4,7 +4,8 @@ parameters:
 
 jobs:
 - job:
-  displayName: ${{ parameters.imageName }} pool:
+  displayName: ${{ parameters.imageName }} 
+  pool:
     vmImage: ${{ parameters.imageName }}
   strategy:
     matrix:
