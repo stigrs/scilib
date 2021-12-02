@@ -27,8 +27,6 @@ inline void eigs(Matrix_view<double> a,
                  Vector_view<double> w,
                  double abstol = -1.0 /* use default value */)
 {
-    using size_type = stdex::extents<>::size_type;
-
     assert(a.extent(0) == a.extent(1));
     assert(w.extent(0) == a.extent(0));
 
@@ -49,12 +47,12 @@ inline void eigs(Matrix_view<double> a,
     Sci::Matrix<double> z(ldz, n);
 
     info = LAPACKE_dsyevr(LAPACK_ROW_MAJOR, 'V', 'A', 'U', n, a.data(), lda, vl,
-                          vu, il, iu, abstol, &m, w.data(), z.view().data(),
-                          ldz, isuppz.data());
+                          vu, il, iu, abstol, &m, w.data(), z.data(), ldz,
+                          isuppz.data());
     if (info != 0) {
         throw std::runtime_error("dsyevr failed");
     }
-    copy(z.view(), a);
+    Scilib::copy(z.view(), a);
 }
 
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.

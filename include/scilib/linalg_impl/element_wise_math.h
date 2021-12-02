@@ -10,6 +10,7 @@
 #include <scilib/mdarray.h>
 #include <cmath>
 #include <complex>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
@@ -29,7 +30,7 @@ inline MDArray<T, Extents> abs(const MDArray<T, Extents>& m)
 }
 
 template <class T, class Extents>
-    requires Scilib::Extents_has_rank<Extents>
+    requires std::is_floating_point_v<T> && Scilib::Extents_has_rank<Extents> 
 inline MDArray<T, Extents> pow(const MDArray<T, Extents>& m, const T& val)
 {
     MDArray<T, Extents> res(m);

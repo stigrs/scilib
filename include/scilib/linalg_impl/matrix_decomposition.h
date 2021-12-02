@@ -53,7 +53,7 @@ qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
 
     // Compute QR factorization:
 
-    copy(a, q);
+    Scilib::copy(a, q);
     Vector<double> tau(std::min(m, n));
 
     BLAS_INT info =

@@ -7,6 +7,7 @@
 #ifndef SCILIB_MDARRAY_BITS_H
 #define SCILIB_MDARRAY_BITS_H
 
+#include <scilib/mdarray_impl/copy.h>
 #include <experimental/mdspan>
 #include <vector>
 #include <array>
@@ -108,26 +109,29 @@ public:
         : storage(m.size())
     {
         static_assert(m.rank() == N_dim);
-        static_assert(m.rank() <= 2);
+        static_assert(m.rank() <= 4);
 
         if constexpr (m.rank() == 1) {
             span = stdex::mdspan<T, Extents>(
                 storage.data(), std::array<size_type, N_dim>{m.extent(0)});
-            for (size_type i = 0; i < m.extent(0); ++i) {
-                storage[i] = m(i);
-            }
         }
         else if constexpr (m.rank() == 2) {
             span = stdex::mdspan<T, Extents>(
                 storage.data(),
                 std::array<size_type, N_dim>{m.extent(0), m.extent(1)});
-            for (size_type i = 0; i < m.extent(0); ++i) {
-                for (size_type j = 0; j < m.extent(1); ++j) {
-                    storage[i * view().stride(0) + j * view().stride(1)] =
-                        m(i, j);
-                }
-            }
         }
+        else if constexpr (m.rank() == 3) {
+            span = stdex::mdspan<T, Extents>(
+                storage.data(), std::array<size_type, N_dim>{
+                                    m.extent(0), m.extent(1), m.extent(2)});
+        }
+        else if constexpr (m.rank() == 4) {
+            span = stdex::mdspan<T, Extents>(
+                storage.data(),
+                std::array<size_type, N_dim>{m.extent(0), m.extent(1),
+                                             m.extent(2), m.extent(3)});
+        }
+        copy(m, span);
     }
 
     MDArray& operator=(const MDArray& m)
@@ -141,27 +145,30 @@ public:
     MDArray& operator=(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
     {
         static_assert(m.rank() == N_dim);
-        static_assert(m.rank() <= 2);
+        static_assert(m.rank() <= 4);
 
         storage = std::vector<T>(m.size());
         if constexpr (m.rank() == 1) {
             span = stdex::mdspan<T, Extents>(
                 storage.data(), std::array<size_type, N_dim>{m.extent(0)});
-            for (size_type i = 0; i < m.extent(0); ++i) {
-                storage[i] = m(i);
-            }
         }
         else if constexpr (m.rank() == 2) {
             span = stdex::mdspan<T, Extents>(
                 storage.data(),
                 std::array<size_type, N_dim>{m.extent(0), m.extent(1)});
-            for (size_type i = 0; i < m.extent(0); ++i) {
-                for (size_type j = 0; j < m.extent(1); ++j) {
-                    storage[i * view().stride(0) + j * view().stride(1)] =
-                        m(i, j);
-                }
-            }
         }
+        else if constexpr (m.rank() == 3) {
+            span = stdex::mdspan<T, Extents>(
+                storage.data(), std::array<size_type, N_dim>{
+                                    m.extent(0), m.extent(1), m.extent(2)});
+        }
+        else if constexpr (m.rank() == 4) {
+            span = stdex::mdspan<T, Extents>(
+                storage.data(),
+                std::array<size_type, N_dim>{m.extent(0), m.extent(1),
+                                             m.extent(2), m.extent(3)});
+        }
+        copy(m, span);
         return *this;
     }
 

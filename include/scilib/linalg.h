@@ -22,12 +22,10 @@
 
 #include <scilib/linalg_impl/blas1_add.h>
 #include <scilib/linalg_impl/blas1_axpy.h>
-#include <scilib/linalg_impl/blas1_copy.h>
 #include <scilib/linalg_impl/blas1_dot.h>
 #include <scilib/linalg_impl/blas1_idx_abs_max.h>
 #include <scilib/linalg_impl/blas1_idx_abs_min.h>
 #include <scilib/linalg_impl/blas1_scale.h>
-#include <scilib/linalg_impl/blas1_swap_elements.h>
 #include <scilib/linalg_impl/blas1_vector_abs_sum.h>
 #include <scilib/linalg_impl/blas1_vector_norm2.h>
 #include <scilib/linalg_impl/blas2_matrix_vector_product.h>

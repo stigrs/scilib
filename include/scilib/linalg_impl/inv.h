@@ -32,7 +32,7 @@ inline void inv(Matrix_view<double> a, Matrix_view<double> res)
     const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT lda = n;
 
-    copy(a, res);
+    Scilib::copy(a, res);
 
     Vector<BLAS_INT> ipiv(n);
     lu(res, ipiv.view()); // perform LU factorization
