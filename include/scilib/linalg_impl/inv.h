@@ -14,7 +14,7 @@
 #endif
 
 #include <scilib/mdarray.h>
-#include <scilib/traits.h>
+#include <scilib/linalg_impl/lapack_types.h>
 #include <exception>
 #include <cassert>
 
@@ -29,7 +29,7 @@ inline void inv(Matrix_view<double> a, Matrix_view<double> res)
     if (det(a) == 0.0) {
         throw std::runtime_error("inv: matrix not invertible");
     }
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT lda = n;
 
     Scilib::copy(a, res);

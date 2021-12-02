@@ -11,7 +11,6 @@ namespace Scilib {
 namespace Linalg {
 
 #include <scilib/mdarray.h>
-#include <scilib/traits.h>
 #include <cmath>
 
 // Raise a square matrix to the (integer) power n.

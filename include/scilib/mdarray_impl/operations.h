@@ -9,6 +9,7 @@
 
 #include <scilib/mdarray_impl/mdarray_bits.h>
 #include <scilib/mdarray_impl/slice.h>
+#include <scilib/mdarray_impl/support.h>
 #include <scilib/linalg_impl/blas2_matrix_vector_product.h>
 #include <scilib/linalg_impl/blas3_matrix_product.h>
 #include <algorithm>
@@ -167,7 +168,6 @@ template <class T,
 // clang-format off
 inline void 
 apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v, F f)
-// clang-format on
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -312,6 +312,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
     m = Matrix<T>(tmp, nr, nc);
     return istrm;
 }
+// clang-format on
 
 } // namespace Scilib
 

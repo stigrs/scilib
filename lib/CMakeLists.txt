@@ -12,8 +12,9 @@ if(NOT TARGET std::mdspan)
 endif()
 
 set(SRC_FILES
-    eigenvalue.cpp
     det.cpp
+    eigenvalue.cpp
+    expm.cpp
 )
 add_library(
     sci 

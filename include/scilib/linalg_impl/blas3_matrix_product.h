@@ -14,7 +14,7 @@
 #endif
 
 #include <scilib/mdarray.h>
-#include <scilib/traits.h>
+#include <scilib/linalg_impl/lapack_types.h>
 #include <experimental/mdspan>
 #include <complex>
 
@@ -66,9 +66,9 @@ inline void matrix_product(Matrix_view<double> a,
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(b.extent(1));
-    const BLAS_INT k = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
 
     const BLAS_INT lda = k;
     const BLAS_INT ldb = n;
@@ -86,9 +86,9 @@ inline void matrix_product(Matrix_view<std::complex<double>> a,
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(b.extent(1));
-    const BLAS_INT k = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
 
     const BLAS_INT lda = k;
     const BLAS_INT ldb = n;

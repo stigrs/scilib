@@ -14,7 +14,7 @@
 #endif
 
 #include <scilib/mdarray.h>
-#include <scilib/traits.h>
+#include <scilib/linalg_impl/lapack_types.h>
 #include <exception>
 #include <cassert>
 
@@ -24,8 +24,8 @@ namespace Linalg {
 // LU factorization.
 inline void lu(Matrix_view<double> a, Vector_view<BLAS_INT> ipiv)
 {
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT lda = n;
 
     assert(ipiv.size() >= std::min(m, n));
@@ -44,8 +44,8 @@ inline void lu(Matrix_view<double> a, Vector_view<BLAS_INT> ipiv)
 inline void
 qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
 {
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT lda = n;
 
     assert(q.extent(0) == m && q.extent(1) == n);
@@ -81,8 +81,8 @@ inline void svd(Matrix_view<double> a,
                 Matrix_view<double> u,
                 Matrix_view<double> vt)
 {
-    BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
     BLAS_INT ldu = m;
     BLAS_INT ldvt = n;

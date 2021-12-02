@@ -4,10 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#ifndef SCILIB_TRAITS_H
-#define SCILIB_TRAITS_H
-
-#include <utility>
+#ifndef SCILIB_LINALG_LAPACK_TYPES_H
+#define SCILIB_LINALG_LAPACK_TYPES_H
 
 //------------------------------------------------------------------------------
 // Define integer type for use with BLAS, LAPACK and Intel MKL.
@@ -20,13 +18,12 @@
 #endif
 
 //------------------------------------------------------------------------------
-// Type cast:
+// Define complex type for use with LAPACK.
 
-// A searchable way to do narrowing casts of values.
-template <class T, typename U>
-constexpr T narrow_cast(U&& u)
-{
-    return static_cast<T>(std::forward<U>(u));
-}
+#ifndef USE_MKL
+#include <complex>
+#define lapack_complex_float std::complex<float>
+#define lapack_complex_double std::complex<double>
+#endif
 
-#endif // SCILIB_TRAITS_H
+#endif // SCILIB_LINALG_LAPACK_TYPES_H

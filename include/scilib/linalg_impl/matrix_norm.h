@@ -13,8 +13,8 @@
 #include <lapacke.h>
 #endif
 
-#include <scilib/traits.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg_impl/lapack_types.h>
 
 namespace Scilib {
 namespace Linalg {
@@ -35,8 +35,8 @@ inline double matrix_norm(Matrix_view<double> a, char norm)
            norm == 'o' || norm == 'I' || norm == 'i' || norm == 'F' ||
            norm == 'f' || norm == 'E' || norm == 'e');
 
-    BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
 
     return LAPACKE_dlange(LAPACK_ROW_MAJOR, norm, m, n, a.data(), lda);

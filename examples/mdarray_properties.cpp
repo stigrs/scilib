@@ -12,11 +12,11 @@
 int main()
 {
     std::vector<int> v1_data = {10, 20, 30, 40};
-    Sci::Vector<int> v1(v1_data, v1_data.size());
+    Scilib::Vector<int> v1(v1_data, v1_data.size());
     std::cout << "v1 = " << v1 << "\n\n";
 
-    Sci::Vector<int> v2(5);
-    Sci::Linalg::fill(v2.view(), 1);
+    Scilib::Vector<int> v2(5);
+    Scilib::Linalg::fill(v2.view(), 1);
     std::cout << "v2 = " << v2 << '\n';
 
     // clang-format off
@@ -46,7 +46,7 @@ int main()
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
     std::cout << "m2 = " << m2 << "\n\n";
 
-    Sci::Linalg::fill(Sci::diag(m2.view()), 0);
+    Scilib::Linalg::fill(Scilib::diag(m2.view()), 0);
     std::cout << "m2.size() =    " << m2.size() << '\n';
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";

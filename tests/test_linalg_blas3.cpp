@@ -20,10 +20,10 @@ TEST(TestLinalg, TestMatrixMatrixProductInt)
                            139, 154};
     // clang-format on
 
-    Sci::Matrix<int> ma(aa, 2, 3);
-    Sci::Matrix<int> mb(bb, 3, 2);
-    Sci::Matrix<int> ans(rr, 2, 2);
-    Sci::Matrix<int> res = ma * mb;
+    Scilib::Matrix<int> ma(aa, 2, 3);
+    Scilib::Matrix<int> mb(bb, 3, 2);
+    Scilib::Matrix<int> ans(rr, 2, 2);
+    Scilib::Matrix<int> res = ma * mb;
 
     EXPECT_EQ(ans, res);
 }
@@ -40,10 +40,10 @@ TEST(TestLinalg, TestMatrixMatrixProductDouble)
                               139, 154};
     // clang-format on
 
-    Sci::Matrix<double> ma(aa, 2, 3);
-    Sci::Matrix<double> mb(bb, 3, 2);
-    Sci::Matrix<double> ans(rr, 2, 2);
-    Sci::Matrix<double> res = ma * mb;
+    Scilib::Matrix<double> ma(aa, 2, 3);
+    Scilib::Matrix<double> mb(bb, 3, 2);
+    Scilib::Matrix<double> ans(rr, 2, 2);
+    Scilib::Matrix<double> res = ma * mb;
 
     EXPECT_EQ(ans, res);
 }
@@ -59,10 +59,10 @@ TEST(TestLinalg, TestMatrixMatrixProductComplex)
                                             {100.0, -6.0}, {152.0, -2.0}};
     // clang-format on
 
-    Sci::Matrix<std::complex<double>> ma(aa, 2, 2);
-    Sci::Matrix<std::complex<double>> mb(bb, 2, 2);
-    Sci::Matrix<std::complex<double>> ans(rr, 2, 2);
-    Sci::Matrix<std::complex<double>> res = ma * mb;
+    Scilib::Matrix<std::complex<double>> ma(aa, 2, 2);
+    Scilib::Matrix<std::complex<double>> mb(bb, 2, 2);
+    Scilib::Matrix<std::complex<double>> ans(rr, 2, 2);
+    Scilib::Matrix<std::complex<double>> res = ma * mb;
 
     EXPECT_EQ(ans, res);
 }

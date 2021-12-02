@@ -7,6 +7,8 @@
 #ifndef SCILIB_MDARRAY_SUPPORT_H
 #define SCILIB_MDARRAY_SUPPORT_H
 
+#include <complex>
+
 namespace Scilib {
 namespace __Detail {
 

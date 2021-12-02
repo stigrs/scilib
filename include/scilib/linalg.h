@@ -7,16 +7,11 @@
 #ifndef SCILIB_LINALG_H
 #define SCILIB_LINALG_H
 
-#ifndef USE_MKL
-#include <complex>
-#define lapack_complex_float std::complex<float>
-#define lapack_complex_double std::complex<double>
-#endif
-
 // Do not change this ordering.
 
 #include <scilib/mdarray.h>
 
+#include <scilib/linalg_impl/lapack_types.h>
 #include <scilib/linalg_impl/auxiliary.h>
 #include <scilib/linalg_impl/element_wise_math.h>
 
@@ -38,6 +33,7 @@
 #include <scilib/linalg_impl/det.h>
 #include <scilib/linalg_impl/eigenvalue.h>
 #include <scilib/linalg_impl/inv.h>
+#include <scilib/linalg_impl/expm.h>
 #include <scilib/linalg_impl/matrix_power.h>
 
 #endif // SCILIB_LINALG_H

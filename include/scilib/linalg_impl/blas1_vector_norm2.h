@@ -14,15 +14,14 @@
 #endif
 
 #include <scilib/mdarray.h>
-#include <scilib/traits.h>
 
 namespace Scilib {
 namespace Linalg {
 
 inline double norm2(Vector_view<double> x)
 {
-    const BLAS_INT n = narrow_cast<BLAS_INT>(x.size());
-    const BLAS_INT incx = narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(x.size());
+    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
 
     return cblas_dnrm2(n, x.data(), incx);
 }

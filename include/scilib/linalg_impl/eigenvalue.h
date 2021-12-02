@@ -14,7 +14,7 @@
 #endif
 
 #include <scilib/mdarray.h>
-#include <scilib/traits.h>
+#include <scilib/linalg_impl/lapack_types.h>
 #include <exception>
 #include <cassert>
 #include <complex>
@@ -30,7 +30,7 @@ inline void eigs(Matrix_view<double> a,
     assert(a.extent(0) == a.extent(1));
     assert(w.extent(0) == a.extent(0));
 
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT nselect = n;
     const BLAS_INT lda = n;
     const BLAS_INT ldz = nselect;

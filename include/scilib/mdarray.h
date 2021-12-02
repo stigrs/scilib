@@ -78,7 +78,6 @@ using Array4D = MDArray<T,
 
 } // namespace Scilib
 
-#include <scilib/traits.h>
 #include <scilib/mdarray_impl/copy.h>
 #include <scilib/mdarray_impl/swap_elements.h>
 #include <scilib/mdarray_impl/slice.h>

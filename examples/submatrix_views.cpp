@@ -17,20 +17,20 @@ int main()
         9, 10, 11, 12
     };
     // clang-format on
-    Sci::Matrix<int> m(data, 3, 4);
+    Scilib::Matrix<int> m(data, 3, 4);
     std::cout << "matrix:\n" << m << '\n';
 
-    Sci::Vector<int> r = Sci::row(m.view(), 1);
+    Scilib::Vector<int> r = Scilib::row(m.view(), 1);
     std::cout << "m.row(1):\n" << r << '\n';
 
-    Sci::Vector<int> c = Sci::column(m.view(), 2);
+    Scilib::Vector<int> c = Scilib::column(m.view(), 2);
     std::cout << "m.column(2):\n" << c << '\n';
 
-    auto sub = Sci::submatrix(m.view(), {1, 3}, {1, 4});
+    auto sub = Scilib::submatrix(m.view(), {1, 3}, {1, 4});
     std::cout << "m.sub:\n";
-    Sci::print(std::cout, sub);
+    Scilib::print(std::cout, sub);
     std::cout << '\n';
 
-    Sci::apply(sub, [&](int& i) { i *= -1; });
+    Scilib::apply(sub, [&](int& i) { i *= -1; });
     std::cout << "matrix:\n" << m << '\n';
 }

@@ -24,7 +24,7 @@ template <class T,
 inline void fill(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
                  const T& value)
 {
-    Sci::apply(v, [&](T& vi) { vi = value; });
+    Scilib::apply(v, [&](T& vi) { vi = value; });
 }
 
 template <class T,
@@ -36,7 +36,7 @@ inline void
 fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
      const T& value)
 {
-    Sci::apply(m, [&](T& mi) { mi = value; });
+    Scilib::apply(m, [&](T& mi) { mi = value; });
 }
 
 //------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ inline Matrix<T> identity(std::size_t n)
 {
     Matrix<T> res(n, n);
     res = T{0};
-    auto res_diag = Sci::diag(res.view());
+    auto res_diag = Scilib::diag(res.view());
     for (std::size_t i = 0; i < res_diag.extent(0); ++i) {
         res_diag(i) = T{1};
     }

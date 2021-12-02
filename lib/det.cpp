@@ -13,7 +13,7 @@ double Scilib::Linalg::det(Matrix_view<double> a)
     assert(a.extent(0) == a.extent(1));
 
     double ddet = 0.0;
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
 
     if (n == 1) {
         ddet = a(0, 0);
@@ -22,8 +22,8 @@ double Scilib::Linalg::det(Matrix_view<double> a)
         ddet = a(0, 0) * a(1, 1) - a(1, 0) * a(0, 1);
     }
     else { // use LU decomposition
-        Sci::Matrix<double> tmp(a);
-        Sci::Vector<BLAS_INT> ipiv(n);
+        Scilib::Matrix<double> tmp(a);
+        Scilib::Vector<BLAS_INT> ipiv(n);
 
         lu(tmp.view(), ipiv.view());
 
@@ -33,8 +33,8 @@ double Scilib::Linalg::det(Matrix_view<double> a)
                 permut++;
             }
         }
-        ddet = Sci::Linalg::prod(Sci::diag(tmp.view()));
-        ddet *= std::pow(-1.0, narrow_cast<double>(permut));
+        ddet = Scilib::Linalg::prod(Scilib::diag(tmp.view()));
+        ddet *= std::pow(-1.0, static_cast<double>(permut));
     }
     return ddet;
 }

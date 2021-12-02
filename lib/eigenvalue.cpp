@@ -19,7 +19,7 @@ void Scilib::Linalg::eig(Matrix_view<double> a,
     assert(a.extent(0) == evec.extent(0));
     assert(a.extent(1) == evec.extent(1));
 
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
 
     Vector<double> wr(n);
     Vector<double> wi(n);

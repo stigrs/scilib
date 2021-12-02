@@ -13,8 +13,8 @@
 #include <cblas.h>
 #endif
 
-#include <scilib/traits.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg_impl/lapack_types.h>
 #include <experimental/mdspan>
 #include <complex>
 
@@ -59,12 +59,12 @@ inline void matrix_vector_product(Matrix_view<double> a,
 
     static_assert(x.static_extent(0) == a.static_extent(1));
 
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
 
     const BLAS_INT lda = n;
-    const BLAS_INT incx = narrow_cast<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = narrow_cast<BLAS_INT>(y.stride(0));
+    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
     cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, a.data(), lda,
                 x.data(), incx, beta, y.data(), incy);
@@ -80,12 +80,12 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
 
     static_assert(x.static_extent(0) == a.static_extent(1));
 
-    const BLAS_INT m = narrow_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
 
     const BLAS_INT lda = n;
-    const BLAS_INT incx = narrow_cast<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = narrow_cast<BLAS_INT>(y.stride(0));
+    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
     cblas_zgemv(CblasRowMajor, CblasNoTrans, m, n, &alpha, a.data(), lda,
                 x.data(), incx, &beta, y.data(), incy);
@@ -95,7 +95,7 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
 template <class T>
 inline Vector<T> matrix_vector_product(Matrix_view<T> a, Vector_view<T> x)
 {
-    Vector<T> res(narrow_cast<BLAS_INT>(a.extent(0)));
+    Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
     return res;
 }
