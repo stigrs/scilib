@@ -15,6 +15,7 @@ set(SRC_FILES
     det.cpp
     eigenvalue.cpp
     expm.cpp
+    trapz.cpp
 )
 add_library(
     sci 
