@@ -8,8 +8,8 @@ and Intel MKL are supported.
 
 * N-dimensional dense matrices using std::experimental::mdspan for views 
   (row-major storage order)
-* Selected mathematical functions not provided by the STL
 * Linear algebra methods
+* Integration methods
 * Mathematical constants, metric prefixes, physical constants, and
   conversion factors
 
