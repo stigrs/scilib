@@ -40,6 +40,53 @@ fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
 }
 
 //------------------------------------------------------------------------------
+// Limit array values:
+
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline void clip(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> a,
+                 const T& a_min,
+                 const T& a_max)
+{
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < a.extent(0); ++i) {
+        if (a(i) < a_min) {
+            a(i) = a_min;
+        }
+        if (a_max < a(i)) {
+            a(i) = a_max;
+        }
+    }
+}
+
+template <class T,
+          stdex::extents<>::size_type nrows,
+          stdex::extents<>::size_type ncols,
+          class Layout,
+          class Accessor>
+inline void
+clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
+     const T& a_min,
+     const T& a_max)
+{
+    using size_type = stdex::extents<>::size_type;
+
+    for (size_type i = 0; i < a.extent(0); ++i) {
+        for (size_type j = 0; i < a.extent(1); ++i) {
+            if (a(i, j) < a_min) {
+                a(i, j) = a_min;
+            }
+            if (a_max < a(i)) {
+                a(i, j) = a_max;
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
 // Find argmax, argmin, max, min, sum, and product of elements:
 
 template <class T,
