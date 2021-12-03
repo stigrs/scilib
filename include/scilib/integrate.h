@@ -8,5 +8,6 @@
 #define SCILIB_INTEGRATE_H
 
 #include <scilib/integrate_impl/trapz.h>
+#include <scilib/integrate_impl/quad.h>
 
 #endif // SCILIB_INTEGRATE_H
