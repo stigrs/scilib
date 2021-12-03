@@ -37,6 +37,8 @@ endfunction()
 set(PROGRAMS 
     test_vector
     test_matrix
+    test_array3d
+    test_array4d
     test_integrate
     test_linalg_blas1
     test_linalg_blas2
@@ -44,6 +46,8 @@ set(PROGRAMS
     test_linalg_eigenvalue
     test_linalg_element_wise_math
     test_linalg_expm
+    test_linalg_linsolve
+    test_linalg_lstsq
     test_linalg_matrix_decomp
     test_linalg_matrix_det
     test_linalg_matrix_inv

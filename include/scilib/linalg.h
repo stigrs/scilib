@@ -35,5 +35,7 @@
 #include <scilib/linalg_impl/inv.h>
 #include <scilib/linalg_impl/expm.h>
 #include <scilib/linalg_impl/matrix_power.h>
+#include <scilib/linalg_impl/linsolve.h>
+#include <scilib/linalg_impl/lstsq.h>
 
 #endif // SCILIB_LINALG_H
