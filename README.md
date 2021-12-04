@@ -6,8 +6,8 @@ and Intel MKL are supported.
 
 ## Features
 
-* N-dimensional dense matrices using std::experimental::mdspan for views 
-  (row-major storage order)
+* N-dimensional dense matrices using [mdspan](https://github.com/kokkos/mdspan) 
+  for views (row-major storage order)
 * Linear algebra methods
 * Integration methods
 * Mathematical constants, metric prefixes, physical constants, and
@@ -21,9 +21,8 @@ Numlib is released under the [MIT](LICENSE) license.
 
 ## Usage of Third Party Libraries
 
-This project makes use of [GoogleTest](https://https://github.com/google/googletest).
-Please see the [ThirdPartyNotices.txt](ThirdPartyNotices.txt) file for details
-regarding the licensing of GoogleTest.
+This project makes use of [GoogleTest](https://github.com/google/googletest) and code from [stdBLAS](https://github.com/kokkos/stdBLAS) Please see the [ThirdPartyNotices.txt](ThirdPartyNotices.txt) file for details
+regarding the licensing of GoogleTest and stdBLAS.
 
 ## Quick Start
 

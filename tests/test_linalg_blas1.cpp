@@ -64,3 +64,16 @@ TEST(TestLinalg, TestNorm2Row)
     auto ans = Scilib::Linalg::norm2(Scilib::row(ma.view(), 0));
     EXPECT_EQ(ans * ans, 14.0);
 }
+
+TEST(TestLinalg, TestScaled)
+{
+    // clang-format off
+    std::vector<double> a_data = {1, 2, 3, 4, 5, 6};
+    // clang-format on
+    Scilib::Vector<double> a(a_data, 6);
+    auto ans = Scilib::Linalg::scaled(2.0, a.view());
+
+    for (std::size_t i = 0; i < ans.size(); ++i) {
+        EXPECT_EQ(ans(i), 2.0 * (1.0 + i));
+    }
+}

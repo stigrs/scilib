@@ -52,7 +52,6 @@ void benchmark(int n)
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10; ++it) {
         add(scaled(2.0, va.view()), vb.view(), vb.view());
-        // vb = 2.0 * va + vb;
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_scilib = t2 - t1;
