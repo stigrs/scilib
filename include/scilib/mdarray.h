@@ -82,6 +82,7 @@ using Array4D = MDArray<T,
 #include <scilib/mdarray_impl/swap_elements.h>
 #include <scilib/mdarray_impl/slice.h>
 #include <scilib/mdarray_impl/support.h>
+#include <scilib/mdarray_impl/sort.h>
 #include <scilib/mdarray_impl/mdarray_bits.h>
 #include <scilib/mdarray_impl/operations.h>
 
