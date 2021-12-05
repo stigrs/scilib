@@ -53,6 +53,7 @@ set(PROGRAMS
     test_linalg_matrix_inv
     test_linalg_matrix_power
     test_linalg_transposed
+    test_stats
 )
 
 foreach(program ${PROGRAMS})
