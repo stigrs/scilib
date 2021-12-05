@@ -15,24 +15,25 @@ namespace Scilib {
 namespace Integrate {
 namespace __Detail {
 
-// Explicit Runge-Kutta-Fehlberg method of order 5(4).
-void rk45(std::function<
-              Scilib::Vector<double>(double, const Scilib::Vector<double>&)> f,
-          double& x,
-          double xf,
-          Scilib::Vector<double>& y,
-          double tol = 1.0e-6,
-          double hmin = 1.0e-9);
-
-// Explicit Dormand-Prince method of order 5.
-void dopri5(
+// Embedded Runge-Kutta-Fehlberg method of order 4(5).
+void runge_kutta_fehlberg(
     std::function<Scilib::Vector<double>(double, const Scilib::Vector<double>&)>
         f,
     double& x,
     double xf,
     Scilib::Vector<double>& y,
-    double tol = 1.0e-6,
-    double hmin = 1.0e-9);
+    double tol,
+    double hmin);
+
+// Embedded Dormand-Prince method of order 4(5).
+void dormand_prince(
+    std::function<Scilib::Vector<double>(double, const Scilib::Vector<double>&)>
+        f,
+    double& x,
+    double xf,
+    Scilib::Vector<double>& y,
+    double tol,
+    double hmin);
 
 } // namespace __Detail
 
@@ -47,15 +48,15 @@ inline void solve_ivp(
     double& x,
     double xf,
     Scilib::Vector<double>& y,
-    const std::string& method = "DOPRI5",
+    const std::string& method = "Dormand-Prince",
     double tol = 1.0e-6,
     double hmin = 1.0e-9)
 {
-    if (method == "RK45" || method == "rk45") {
-        __Detail::rk45(f, x, xf, y, tol, hmin);
+    if (method == "Runge-Kutta-Fehlberg") {
+        __Detail::runge_kutta_fehlberg(f, x, xf, y, tol, hmin);
     }
     else {
-        __Detail::dopri5(f, x, xf, y, tol, hmin);
+        __Detail::dormand_prince(f, x, xf, y, tol, hmin);
     }
 }
 

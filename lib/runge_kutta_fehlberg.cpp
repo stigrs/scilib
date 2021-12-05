@@ -8,7 +8,7 @@
 #include <scilib/linalg.h>
 #include <exception>
 
-void Scilib::Integrate::__Detail::rk45(
+void Scilib::Integrate::__Detail::runge_kutta_fehlberg(
     std::function<Scilib::Vector<double>(double, const Scilib::Vector<double>&)>
         f,
     double& x,
@@ -17,8 +17,8 @@ void Scilib::Integrate::__Detail::rk45(
     double tol,
     double hmin)
 {
-    // Coefficients for RF4(5), formula 2, Table III in Fehlberg (1969):
-    // (source: https://en.wikipedia.org/wiki/Runge-Kutta-Fehlberg_method)
+    // Butcher tableau for Fehlberg's 4(5) method:
+    // Source: https://en.wikipedia.org/wiki/Runge-Kutta-Fehlberg_method
 
     constexpr double c1 = 0.0;
     constexpr double c2 = 1.0 / 4.0;

@@ -9,7 +9,7 @@
 #include <exception>
 #include <cmath>
 
-void Scilib::Integrate::__Detail::dopri5(
+void Scilib::Integrate::__Detail::dormand_prince(
     std::function<Scilib::Vector<double>(double, const Scilib::Vector<double>&)>
         f,
     double& x,
@@ -18,8 +18,8 @@ void Scilib::Integrate::__Detail::dopri5(
     double tol,
     double hmin)
 {
-    // Coefficients for DOPRI5:
-    // (source: https://en.wikipedia.org/wiki/Dormand-Prince_method)
+    // Butcher tableau for Dormand-Prince method:
+    // Source: https://en.wikipedia.org/wiki/Dormand-Prince_method
 
     constexpr double c1 = 0.0;
     constexpr double c2 = 1.0 / 5.0;

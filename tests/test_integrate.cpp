@@ -57,7 +57,7 @@ TEST(TestIntegrate, TestQuad)
     EXPECT_NEAR(res, 2.0, eps);
 }
 
-TEST(TestIntegrate, TestRK45)
+TEST(TestIntegrate, TestRungeKuttaFehlberg)
 {
     using namespace Scilib;
     using namespace Scilib::Integrate;
@@ -80,7 +80,7 @@ TEST(TestIntegrate, TestRK45)
     double tf = 0.1;
 
     for (int i = 0; i < 5; ++i) {
-        solve_ivp(lorentz, t0, tf, y, "RK45");
+        solve_ivp(lorentz, t0, tf, y, "Runge-Kutta-Fehlberg");
         for (std::size_t j = 0; j < y.extent(0); ++j) {
             EXPECT_NEAR(y(j), ans(i, j), 1.0e-4);
         }
@@ -88,7 +88,7 @@ TEST(TestIntegrate, TestRK45)
     }
 }
 
-TEST(TestIntegrate, TestDopri5)
+TEST(TestIntegrate, TestDormandPrince)
 {
     using namespace Scilib;
     using namespace Scilib::Integrate;
@@ -111,7 +111,7 @@ TEST(TestIntegrate, TestDopri5)
     double tf = 0.1;
 
     for (int i = 0; i < 5; ++i) {
-        solve_ivp(lorentz, t0, tf, y, "DOPRI5");
+        solve_ivp(lorentz, t0, tf, y, "Dormand-Prince");
         for (std::size_t j = 0; j < y.extent(0); ++j) {
             EXPECT_NEAR(y(j), ans(i, j), 1.0e-5);
         }

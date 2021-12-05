@@ -13,10 +13,10 @@ endif()
 
 set(SRC_FILES
     det.cpp
-    dopri5.cpp
+    dormand_prince.cpp
     eigenvalue.cpp
     expm.cpp
-    rk45.cpp
+    runge_kutta_fehlberg.cpp
     trapz.cpp
 )
 add_library(
