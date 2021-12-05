@@ -10,6 +10,7 @@ and Intel MKL are supported.
   for views (row-major storage order)
 * Linear algebra methods
 * Integration methods
+* ODE solver
 * Mathematical constants, metric prefixes, physical constants, and
   conversion factors
 
