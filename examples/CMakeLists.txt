@@ -13,6 +13,7 @@ endif()
 set(PROGRAMS 
     matrix_diag
     mdarray_properties
+    solve_ivp
     submatrix_views 
     transposed
 )

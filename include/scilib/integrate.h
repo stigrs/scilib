@@ -7,6 +7,7 @@
 #ifndef SCILIB_INTEGRATE_H
 #define SCILIB_INTEGRATE_H
 
+#include <scilib/integrate_impl/solve_ivp.h>
 #include <scilib/integrate_impl/trapz.h>
 #include <scilib/integrate_impl/quad.h>
 
