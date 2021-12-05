@@ -4,8 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#ifndef SCILIB_MDARRAY_SORT_H
-#define SCILIB_MDARRAY_SORT_H
+#ifndef SCILIB_LINALG_SORT_H
+#define SCILIB_LINALG_SORT_H
 
 #ifdef USE_MKL
 #include <mkl.h>
@@ -18,6 +18,7 @@
 #include <exception>
 
 namespace Scilib {
+namespace Linalg {
 namespace stdex = std::experimental;
 
 template <stdex::extents<>::size_type ext, class Layout, class Accessor>
@@ -32,6 +33,7 @@ inline void sort(stdex::mdspan<double, stdex::extents<ext>, Layout, Accessor> x,
     }
 }
 
+} // namespace Linalg
 } // namespace Scilib
 
-#endif // SCILIB_MDARRAY_SORT_H
+#endif // SCILIB_LINALG_SORT_H

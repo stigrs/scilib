@@ -22,12 +22,8 @@
 
 #ifndef USE_MKL
 #include <complex>
-#ifndef lapack_complex_float
 #define lapack_complex_float std::complex<float>
-#endif
-#ifndef lapack_complex_double
 #define lapack_complex_double std::complex<double>
-#endif
 #endif
 
 #endif // SCILIB_LINALG_LAPACK_TYPES_H
