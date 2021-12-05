@@ -24,7 +24,7 @@ template <stdex::extents<>::size_type ext, class Layout, class Accessor>
 inline void sort(stdex::mdspan<double, stdex::extents<ext>, Layout, Accessor> x,
                  char id = 'I')
 {
-    const BLAS_INT n = x.extent(0);
+    const BLAS_INT n = static_cast<BLAS_INT>(x.extent(0));
 
     BLAS_INT info = LAPACKE_dlasrt(id, n, x.data());
     if (info != 0) {
