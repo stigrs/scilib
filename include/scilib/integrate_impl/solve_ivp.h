@@ -4,11 +4,11 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#ifndef SCILIB_INTEGRATE_RK45_H
-#define SCILIB_INTEGRATE_RK45_H
+#ifndef SCILIB_INTEGRATE_SOLVE_IVP_H
+#define SCILIB_INTEGRATE_SOLVE_IVP_H
 
-#include <functional>
 #include <scilib/mdarray.h>
+#include <functional>
 #include <string>
 
 namespace Scilib {
@@ -63,4 +63,4 @@ inline void solve_ivp(
 } // namespace Integrate
 } // namespace Scilib
 
-#endif // SCILIB_INTEGRATE_RK45_H
+#endif // SCILIB_INTEGRATE_SOLVE_IVP_H
