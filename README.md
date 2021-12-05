@@ -14,8 +14,6 @@ and Intel MKL are supported.
 * Mathematical constants, metric prefixes, physical constants, and
   conversion factors
 
-_Note: Some features are only available if Intel MKL is used._
-
 ## Licensing
 
 Numlib is released under the [MIT](LICENSE) license.
