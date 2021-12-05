@@ -17,7 +17,7 @@ void Scilib::Integrate::__Detail::rk45(
     double tol,
     double hmin)
 {
-    // Coefficients for RF4(5), formula 2, Table III in Fehlberg
+    // Coefficients for RF4(5), formula 2, Table III in Fehlberg (1969):
     // (source: https://en.wikipedia.org/wiki/Runge-Kutta-Fehlberg_method)
 
     constexpr double c1 = 0.0;
@@ -65,22 +65,22 @@ void Scilib::Integrate::__Detail::rk45(
 
     while (x <= xf - h) {
         // clang-format off
-        auto k1 = h * f(x + c1 * h, y);
-        auto k2 = h * f(x + c2 * h, y + a21 * k1);
-        auto k3 = h * f(x + c3 * h, y + a31 * k1 + a32 * k2);
-        auto k4 = h * f(x + c4 * h, y + a41 * k1 + a42 * k2 + a43 * k3);
-        auto k5 = h * f(x + c5 * h, y + a51 * k1 + a52 * k2 + a53 * k3 + a54 * k4);
-        auto k6 = h * f(x + c6 * h, y + a61 * k1 + a62 * k2 + a63 * k3 + a64 * k4 + a65 * k5);
+        auto k1 = f(x + c1 * h, y);
+        auto k2 = f(x + c2 * h, y + h * (a21 * k1));
+        auto k3 = f(x + c3 * h, y + h * (a31 * k1 + a32 * k2));
+        auto k4 = f(x + c4 * h, y + h * (a41 * k1 + a42 * k2 + a43 * k3));
+        auto k5 = f(x + c5 * h, y + h * (a51 * k1 + a52 * k2 + a53 * k3 + a54 * k4));
+        auto k6 = f(x + c6 * h, y + h * (a61 * k1 + a62 * k2 + a63 * k3 + a64 * k4 + a65 * k5));
 
-        auto e_vec = (b1 - bs1) * k1 + (b2 - bs2) * k2 + (b3 - bs3) * k3 + (b4 - bs4) * k4 + (b5 - bs5) * k5 + (b6 - bs6) * k6;
-        e_vec *= h;
-        double te = Scilib::Linalg::norm2(e_vec.view());
-        if (te <= tol) {
+        auto err_vec = (b1 - bs1) * k1 + (b2 - bs2) * k2 + (b3 - bs3) * k3 + (b4 - bs4) * k4 + (b5 - bs5) * k5 + (b6 - bs6) * k6;
+        err_vec *= h;
+        double trunc_err = Scilib::Linalg::norm2(err_vec.view());
+        if (trunc_err <= tol) {
             x += h;
-            y += b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6;
+            y += h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6);
         }
         // clang-format on
-        h = 0.9 * h * std::pow(tol / te, 0.2);
+        h = 0.9 * h * std::pow(tol / trunc_err, 0.2);
         if (h < hmin) {
             h = hmin;
         }

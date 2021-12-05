@@ -80,9 +80,40 @@ TEST(TestIntegrate, TestRK45)
     double tf = 0.1;
 
     for (int i = 0; i < 5; ++i) {
-        solve_ivp(lorentz, t0, tf, y);
+        solve_ivp(lorentz, t0, tf, y, "RK45");
         for (std::size_t j = 0; j < y.extent(0); ++j) {
-            EXPECT_NEAR(y(j), ans(i, j), 5.0e-4);
+            EXPECT_NEAR(y(j), ans(i, j), 1.0e-4);
+        }
+        tf += 0.1;
+    }
+}
+
+TEST(TestIntegrate, TestDopri5)
+{
+    using namespace Scilib;
+    using namespace Scilib::Integrate;
+
+    // clang-format off
+    std::vector<double> ans_data = { // result from Matlab
+        12.420121076782189, 22.132678932307815, 11.996473826705991,
+        19.500081683089384, 16.224736836476261, 45.258556702999961,
+         6.613599319856808, -7.931580903108999, 37.735650643710017,
+        -2.963989264539828, -8.250556890143775, 28.287476810924446,
+        -6.217033890199554, -8.278471219613175, 25.168552598624345
+    };
+    // clang-format on
+    Matrix<double> ans(ans_data, 5, 3);
+
+    std::vector<double> y0 = {10.0, 1.0, 1.0};
+    Vector<double> y(y0, 3);
+
+    double t0 = 0.0;
+    double tf = 0.1;
+
+    for (int i = 0; i < 5; ++i) {
+        solve_ivp(lorentz, t0, tf, y, "DOPRI5");
+        for (std::size_t j = 0; j < y.extent(0); ++j) {
+            EXPECT_NEAR(y(j), ans(i, j), 1.0e-5);
         }
         tf += 0.1;
     }

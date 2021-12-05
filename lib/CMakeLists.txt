@@ -13,6 +13,7 @@ endif()
 
 set(SRC_FILES
     det.cpp
+    dopri5.cpp
     eigenvalue.cpp
     expm.cpp
     rk45.cpp
