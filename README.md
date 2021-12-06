@@ -22,7 +22,7 @@ Scilib is released under the [MIT](LICENSE) license.
 ## Usage of Third Party Libraries
 
 This project makes use of [GoogleTest](https://github.com/google/googletest) 
-and code from [stdBLAS](https://github.com/kokkos/stdBLAS) Please see the 
+and code from [stdBLAS](https://github.com/kokkos/stdBLAS). Please see the 
 [ThirdPartyNotices.txt](ThirdPartyNotices.txt) file for details regarding the 
 licensing of GoogleTest and stdBLAS.
 
