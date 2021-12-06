@@ -70,6 +70,8 @@ inline void matrix_vector_product(Scilib::Matrix_view<double> a,
                 x.data(), incx, beta, y.data(), incy);
 }
 
+#ifdef USE_MKL
+// Does not work with OpenBLAS version 0.2.14.1
 inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
                                   Scilib::Vector_view<std::complex<double>> x,
                                   Scilib::Vector_view<std::complex<double>> y)
@@ -89,6 +91,7 @@ inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
     cblas_zgemv(CblasRowMajor, CblasNoTrans, m, n, &alpha, a.data(), lda,
                 x.data(), incx, &beta, y.data(), incy);
 }
+#endif
 
 template <class T>
 inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<T> a,
