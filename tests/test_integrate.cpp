@@ -82,7 +82,7 @@ TEST(TestIntegrate, TestDormandPrince)
     for (int i = 0; i < 5; ++i) {
         solve_ivp(lorentz, t0, tf, y);
         for (std::size_t j = 0; j < y.extent(0); ++j) {
-            EXPECT_NEAR(y(j), ans(i, j), 5.0e-6);
+            EXPECT_NEAR(y(j), ans(i, j), 1.0e-5);
         }
         tf += 0.1;
     }
