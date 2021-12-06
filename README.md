@@ -6,22 +6,24 @@ and Intel MKL are supported.
 
 ## Features
 
-* N-dimensional dense matrices using [mdspan](https://github.com/kokkos/mdspan) 
+* N-dimensional dense arrays using [mdspan](https://github.com/kokkos/mdspan) 
   for views (row-major storage order)
 * Linear algebra methods
 * Integration methods
-* ODE solver
+* ODE solver (Dormand-Prince)
 * Mathematical constants, metric prefixes, physical constants, and
   conversion factors
 
 ## Licensing
 
-Numlib is released under the [MIT](LICENSE) license.
+Scilib is released under the [MIT](LICENSE) license.
 
 ## Usage of Third Party Libraries
 
-This project makes use of [GoogleTest](https://github.com/google/googletest) and code from [stdBLAS](https://github.com/kokkos/stdBLAS) Please see the [ThirdPartyNotices.txt](ThirdPartyNotices.txt) file for details
-regarding the licensing of GoogleTest and stdBLAS.
+This project makes use of [GoogleTest](https://github.com/google/googletest) 
+and code from [stdBLAS](https://github.com/kokkos/stdBLAS) Please see the 
+[ThirdPartyNotices.txt](ThirdPartyNotices.txt) file for details regarding the 
+licensing of GoogleTest and stdBLAS.
 
 ## Quick Start
 

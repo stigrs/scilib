@@ -15,8 +15,8 @@ void Scilib::Integrate::__Detail::dormand_prince(
     double& x,
     double xf,
     Scilib::Vector<double>& y,
-    double tol,
-    double hmin)
+    double atol,
+    double rtol)
 {
     // Butcher tableau for Dormand-Prince method:
     // Source: https://en.wikipedia.org/wiki/Dormand-Prince_method
@@ -67,7 +67,19 @@ void Scilib::Integrate::__Detail::dormand_prince(
     constexpr double bs6 = 187.0 / 2100.0;
     constexpr double bs7 = 1.0 / 40.0;
 
-    double hmax = 0.9 * (xf - x); // maximum step size
+    constexpr double ct1 = b1 - bs1;
+    constexpr double ct2 = b2 - bs2;
+    constexpr double ct3 = b3 - bs3;
+    constexpr double ct4 = b4 - bs4;
+    constexpr double ct5 = b5 - bs5;
+    constexpr double ct6 = b6 - bs6;
+    constexpr double ct7 = b7 - bs7;
+
+    constexpr double safety = 0.9;
+
+    const double hmax = safety * (xf - x);
+    const double hmin = 1.0e-12 * hmax;
+
     double h = hmax;
 
     constexpr int max_iter = 100;
@@ -83,19 +95,19 @@ void Scilib::Integrate::__Detail::dormand_prince(
         auto k6 = f(x + c6 * h, y + h * (a61 * k1 + a62 * k2 + a63 * k3 + a64 * k4 + a65 * k5));
         auto k7 = f(x + c7 * h, y + h * (a71 * k1 + a72 * k2 + a73 * k3 + a74 * k4 + a75 * k5 + a76 * k6));
 
-        auto err_vec = (b1 - bs1) * k1 + (b2 - bs2) * k2 + (b3 - bs3) * k3 + (b4 - bs4) * k4 + (b5 - bs5) * k5 + (b6 - bs6) * k6 + (b7 - bs7) * k7;
-        err_vec *= h;
+        auto err_vec = h * (ct1 * k1 + ct2 * k2 + ct3 * k3 + ct4 * k4 + ct5 * k5 + ct6 * k6 + ct7 * k7);
+        double epsilon = std::min(atol, Scilib::Linalg::norm2(y.view()) * rtol);
         double trunc_err = Scilib::Linalg::norm2(err_vec.view());
-        if (trunc_err <= tol) {
+        if (trunc_err <= epsilon) {
             x += h;
             y += h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
         }
         // clang-format on
-        h *= 0.9 * std::pow(tol / trunc_err, 0.2);
+        h *= safety * std::pow(epsilon / trunc_err, 0.2); // may become infinite
         if (h < hmin) {
             h = hmin;
         }
-        if (h > hmax) {
+        if (h > hmax) { // ... fix it here
             h = hmax;
         }
         if (x + h > xf) {
