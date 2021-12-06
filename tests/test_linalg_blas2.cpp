@@ -8,6 +8,7 @@
 #include <scilib/linalg.h>
 #include <gtest/gtest.h>
 #include <vector>
+#include <complex>
 
 TEST(TestLinalg, TestMatrixVectorProduct)
 {
@@ -16,4 +17,24 @@ TEST(TestLinalg, TestMatrixVectorProduct)
     Scilib::Vector<int> x(std::vector<int>{2, 1, 0}, 3);
     Scilib::Vector<int> y(std::vector<int>{1, -3}, 2);
     EXPECT_EQ((a * x), y);
+}
+
+TEST(TestLinalg, TestComplexMatrixVectorProduct)
+{
+    // clang-format off
+    std::vector<std::complex<double>> A_data = {
+        {2.0, 3.0}, {4.0, 5.0}, {4.0, 5.0}, {6.0, 7.0}
+    };
+    std::vector<std::complex<double>> x_data = {
+        {8.0, 7.0}, {5.0, 6.0}
+    };
+    std::vector<std::complex<double>> z_data = {
+        {-15.0, 87.0}, {-15.0, 139.0}
+    };
+    // clang-format on
+    Scilib::Matrix<std::complex<double>> A(A_data, 2, 2);
+    Scilib::Vector<std::complex<double>> x(x_data, 2);
+    Scilib::Vector<std::complex<double>> z(z_data, 2);
+
+    EXPECT_EQ((A * x), z);
 }
