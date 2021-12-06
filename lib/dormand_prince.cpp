@@ -117,7 +117,7 @@ void Scilib::Integrate::__Detail::dormand_prince(
         }
         ++iter;
         if (iter > max_iter) {
-            std::runtime_error("dopri5 failed to converge");
+            std::runtime_error("dormand_prince failed to converge");
         }
     }
 }
