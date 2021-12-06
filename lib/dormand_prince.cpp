@@ -67,13 +67,13 @@ void Scilib::Integrate::__Detail::dormand_prince(
     constexpr double bs6 = 187.0 / 2100.0;
     constexpr double bs7 = 1.0 / 40.0;
 
-    constexpr double ct1 = b1 - bs1;
-    constexpr double ct2 = b2 - bs2;
-    constexpr double ct3 = b3 - bs3;
-    constexpr double ct4 = b4 - bs4;
-    constexpr double ct5 = b5 - bs5;
-    constexpr double ct6 = b6 - bs6;
-    constexpr double ct7 = b7 - bs7;
+    constexpr double e1 = b1 - bs1;
+    constexpr double e2 = b2 - bs2;
+    constexpr double e3 = b3 - bs3;
+    constexpr double e4 = b4 - bs4;
+    constexpr double e5 = b5 - bs5;
+    constexpr double e6 = b6 - bs6;
+    constexpr double e7 = b7 - bs7;
 
     constexpr double safety = 0.9;
 
@@ -95,10 +95,12 @@ void Scilib::Integrate::__Detail::dormand_prince(
         auto k6 = f(x + c6 * h, y + h * (a61 * k1 + a62 * k2 + a63 * k3 + a64 * k4 + a65 * k5));
         auto k7 = f(x + c7 * h, y + h * (a71 * k1 + a72 * k2 + a73 * k3 + a74 * k4 + a75 * k5 + a76 * k6));
 
-        auto err_vec = h * (ct1 * k1 + ct2 * k2 + ct3 * k3 + ct4 * k4 + ct5 * k5 + ct6 * k6 + ct7 * k7);
+        auto err_vec = h * (e1 * k1 + e2 * k2 + e3 * k3 + e4 * k4 + e5 * k5 + e6 * k6 + e7 * k7);
+
         double epsilon = std::min(atol, Scilib::Linalg::norm2(y.view()) * rtol);
         double trunc_err = Scilib::Linalg::norm2(err_vec.view());
-        if (trunc_err <= epsilon) {
+
+        if (trunc_err <= epsilon) { // accept step
             x += h;
             y += h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
         }
