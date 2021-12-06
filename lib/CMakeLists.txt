@@ -16,7 +16,6 @@ set(SRC_FILES
     dormand_prince.cpp
     eigenvalue.cpp
     expm.cpp
-    trapz.cpp
 )
 add_library(
     sci 
