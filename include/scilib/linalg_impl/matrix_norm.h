@@ -29,8 +29,10 @@ namespace stdex = std::experimental;
 // - I, i:       infinity norm of the matrix (maximum row sum)
 // - F, f, E, e: Frobenius norm of the matrix (square root of sum of squares)
 //
-inline double matrix_norm(Matrix_view<double> a, char norm)
+inline double matrix_norm(Scilib::Matrix_view<double> a, char norm)
 {
+    static_assert(a.is_contiguous());
+
     assert(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' ||
            norm == 'o' || norm == 'I' || norm == 'i' || norm == 'F' ||
            norm == 'f' || norm == 'E' || norm == 'e');

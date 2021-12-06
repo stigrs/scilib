@@ -239,9 +239,9 @@ inline Matrix<T> identity(std::size_t n)
 // Create a random vector from a normal distribution with zero mean and unit
 // variance.
 template <class T = double>
-inline Vector<T> randn(std::size_t n)
+inline Scilib::Vector<T> randn(std::size_t n)
 {
-    Vector<T> res(n);
+    Scilib::Vector<T> res(n);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
@@ -256,9 +256,9 @@ inline Vector<T> randn(std::size_t n)
 // Create a random matrix from a normal distribution with zero mean and unit
 // variance.
 template <class T = double>
-inline Matrix<T> randn(std::size_t nr, std::size_t nc)
+inline Scilib::Matrix<T> randn(std::size_t nr, std::size_t nc)
 {
-    Matrix<T> res(nr, nc);
+    Scilib::Matrix<T> res(nr, nc);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
@@ -272,9 +272,9 @@ inline Matrix<T> randn(std::size_t nr, std::size_t nc)
 
 // Create a random vector from a uniform real distribution on the
 // interval [0, 1).
-inline Vector<double> randu(std::size_t n)
+inline Scilib::Vector<double> randu(std::size_t n)
 {
-    Vector<double> res(n);
+    Scilib::Vector<double> res(n);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
@@ -288,9 +288,9 @@ inline Vector<double> randu(std::size_t n)
 
 // Create a random matrix from a uniform real distribution on the
 // interval [0, 1).
-inline Matrix<double> randu(std::size_t nr, std::size_t nc)
+inline Scilib::Matrix<double> randu(std::size_t nr, std::size_t nc)
 {
-    Matrix<double> res(nr, nc);
+    Scilib::Matrix<double> res(nr, nc);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
@@ -304,9 +304,9 @@ inline Matrix<double> randu(std::size_t nr, std::size_t nc)
 
 // Create a random vector from a uniform integer distribution on the
 // interval [0, 1].
-inline Vector<int> randi(std::size_t n)
+inline Scilib::Vector<int> randi(std::size_t n)
 {
-    Vector<int> res(n);
+    Scilib::Vector<int> res(n);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
@@ -320,9 +320,9 @@ inline Vector<int> randi(std::size_t n)
 
 // Create a random matrix from a uniform integer distribution on the
 // interval [0, 1].
-inline Matrix<int> randi(std::size_t nr, std::size_t nc)
+inline Scilib::Matrix<int> randi(std::size_t nr, std::size_t nc)
 {
-    Matrix<int> res(nr, nc);
+    Scilib::Matrix<int> res(nr, nc);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};

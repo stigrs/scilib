@@ -8,8 +8,9 @@
 #include <scilib/linalg.h>
 #include <cassert>
 
-double Scilib::Linalg::det(Matrix_view<double> a)
+double Scilib::Linalg::det(Scilib::Matrix_view<double> a)
 {
+    static_assert(a.is_contiguous());
     assert(a.extent(0) == a.extent(1));
 
     double ddet = 0.0;

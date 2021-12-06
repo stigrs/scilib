@@ -8,11 +8,15 @@
 #include <scilib/linalg.h>
 #include <exception>
 
-void Scilib::Linalg::eig(Matrix_view<double> a,
-                         Matrix_view<std::complex<double>> evec,
-                         Vector_view<std::complex<double>> eval)
+void Scilib::Linalg::eig(Scilib::Matrix_view<double> a,
+                         Scilib::Matrix_view<std::complex<double>> evec,
+                         Scilib::Vector_view<std::complex<double>> eval)
 {
     using namespace Scilib;
+
+    static_assert(a.is_contiguous());
+    static_assert(evec.is_contiguous());
+    static_assert(eval.is_contiguous());
 
     assert(a.extent(0) == a.extent(1));
     assert(a.extent(0) == eval.extent(0));
@@ -21,10 +25,10 @@ void Scilib::Linalg::eig(Matrix_view<double> a,
 
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
 
-    Vector<double> wr(n);
-    Vector<double> wi(n);
-    Matrix<double> vr(n, n);
-    Matrix<double> vl(n, n);
+    Scilib::Vector<double> wr(n);
+    Scilib::Vector<double> wi(n);
+    Scilib::Matrix<double> vr(n, n);
+    Scilib::Matrix<double> vl(n, n);
 
     BLAS_INT info =
         LAPACKE_dgeev(LAPACK_ROW_MAJOR, 'N', 'V', n, a.data(), n, wr.data(),

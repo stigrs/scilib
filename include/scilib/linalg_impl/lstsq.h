@@ -24,6 +24,9 @@ namespace Linalg {
 // Compute the minimum norm-solution to a real linear least squares problem.
 inline void lstsq(Scilib::Matrix_view<double> a, Scilib::Matrix_view<double> b)
 {
+    static_assert(a.is_contiguous());
+    static_assert(b.is_contiguous());
+
     BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));

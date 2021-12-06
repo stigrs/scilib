@@ -8,6 +8,7 @@
 #define SCILIB_STATS_BITS_H
 
 #include <experimental/mdspan>
+#include <scilib/mdarray.h>
 #include <scilib/linalg.h>
 #include <type_traits>
 #include <cmath>
@@ -42,7 +43,7 @@ inline T median(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
     using size_type = stdex::extents<>::size_type;
 
     Scilib::Vector<T> xcopy(x);
-    Scilib::Linalg::sort(xcopy.view());
+    Scilib::sort(xcopy.view());
 
     size_type n = (xcopy.extent(0) + 1) / 2;
     T med = xcopy(n);

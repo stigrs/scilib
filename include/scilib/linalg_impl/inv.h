@@ -22,8 +22,11 @@ namespace Scilib {
 namespace Linalg {
 
 // Matrix inversion.
-inline void inv(Matrix_view<double> a, Matrix_view<double> res)
+inline void inv(Scilib::Matrix_view<double> a, Scilib::Matrix_view<double> res)
 {
+    static_assert(a.is_contiguous());
+    static_assert(res.is_contiguous());
+
     assert(a.extent(0) == a.extent(1));
 
     if (det(a) == 0.0) {
@@ -34,7 +37,7 @@ inline void inv(Matrix_view<double> a, Matrix_view<double> res)
 
     Scilib::copy(a, res);
 
-    Vector<BLAS_INT> ipiv(n);
+    Scilib::Vector<BLAS_INT> ipiv(n);
     lu(res, ipiv.view()); // perform LU factorization
 
     BLAS_INT info =
@@ -44,9 +47,9 @@ inline void inv(Matrix_view<double> a, Matrix_view<double> res)
     }
 }
 
-inline Matrix<double> inv(Matrix_view<double> a)
+inline Scilib::Matrix<double> inv(Scilib::Matrix_view<double> a)
 {
-    Matrix<double> res(a.extent(0), a.extent(1));
+    Scilib::Matrix<double> res(a.extent(0), a.extent(1));
     inv(a, res.view());
     return res;
 }

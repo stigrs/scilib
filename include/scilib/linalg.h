@@ -14,7 +14,6 @@
 #include <scilib/linalg_impl/lapack_types.h>
 #include <scilib/linalg_impl/auxiliary.h>
 #include <scilib/linalg_impl/element_wise_math.h>
-#include <scilib/linalg_impl/sort.h>
 
 #include <scilib/linalg_impl/blas1_add.h>
 #include <scilib/linalg_impl/blas1_axpy.h>

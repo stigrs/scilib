@@ -37,7 +37,8 @@ axpy(const T& scalar,
 }
 
 template <class T>
-inline void axpy(const T& scalar, const Vector<T>& x, Vector<T>& y)
+inline void
+axpy(const T& scalar, const Scilib::Vector<T>& x, Scilib::Vector<T>& y)
 {
     axpy(scalar, x.view(), y.view());
 }

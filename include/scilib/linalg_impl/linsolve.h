@@ -25,6 +25,9 @@ namespace Linalg {
 inline void linsolve(Scilib::Matrix_view<double> a,
                      Scilib::Matrix_view<double> b)
 {
+    static_assert(a.is_contiguous());
+    static_assert(b.is_contiguous());
+
     assert(a.extent(0) == a.extent(1));
     assert(b.extent(0) == a.extent(1));
 

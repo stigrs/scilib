@@ -22,8 +22,12 @@ namespace Scilib {
 namespace Linalg {
 
 // LU factorization.
-inline void lu(Matrix_view<double> a, Vector_view<BLAS_INT> ipiv)
+inline void lu(Scilib::Matrix_view<double> a,
+               Scilib::Vector_view<BLAS_INT> ipiv)
 {
+    static_assert(a.is_contiguous());
+    static_assert(ipiv.is_contiguous());
+
     const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT lda = n;
@@ -41,8 +45,9 @@ inline void lu(Matrix_view<double> a, Vector_view<BLAS_INT> ipiv)
 }
 
 // QR factorization.
-inline void
-qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
+inline void qr(Scilib::Matrix_view<double> a,
+               Scilib::Matrix_view<double> q,
+               Scilib::Matrix_view<double> r)
 {
     const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
@@ -54,7 +59,7 @@ qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
     // Compute QR factorization:
 
     Scilib::copy(a, q);
-    Vector<double> tau(std::min(m, n));
+    Scilib::Vector<double> tau(std::min(m, n));
 
     BLAS_INT info =
         LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m, n, q.data(), lda, tau.data());
@@ -76,10 +81,10 @@ qr(Matrix_view<double> a, Matrix_view<double> q, Matrix_view<double> r)
 }
 
 // Singular value decomposition.
-inline void svd(Matrix_view<double> a,
-                Vector_view<double> s,
-                Matrix_view<double> u,
-                Matrix_view<double> vt)
+inline void svd(Scilib::Matrix_view<double> a,
+                Scilib::Vector_view<double> s,
+                Scilib::Matrix_view<double> u,
+                Scilib::Matrix_view<double> vt)
 {
     BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
@@ -93,7 +98,7 @@ inline void svd(Matrix_view<double> a,
     assert(vt.extent(0) == n);
     assert(vt.extent(1) == ldvt);
 
-    Vector<double> superb(std::min(m, n) - 1);
+    Scilib::Vector<double> superb(std::min(m, n) - 1);
 
     BLAS_INT info =
         LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'A', 'A', m, n, a.data(), lda,

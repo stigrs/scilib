@@ -50,9 +50,9 @@ inline void matrix_vector_product(
     }
 }
 
-inline void matrix_vector_product(Matrix_view<double> a,
-                                  Vector_view<double> x,
-                                  Vector_view<double> y)
+inline void matrix_vector_product(Scilib::Matrix_view<double> a,
+                                  Scilib::Vector_view<double> x,
+                                  Scilib::Vector_view<double> y)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -71,9 +71,9 @@ inline void matrix_vector_product(Matrix_view<double> a,
 }
 
 #ifdef USE_MKL
-inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
-                                  Vector_view<std::complex<double>> x,
-                                  Vector_view<std::complex<double>> y)
+inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
+                                  Scilib::Vector_view<std::complex<double>> x,
+                                  Scilib::Vector_view<std::complex<double>> y)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -93,9 +93,10 @@ inline void matrix_vector_product(Matrix_view<std::complex<double>> a,
 #endif
 
 template <class T>
-inline Vector<T> matrix_vector_product(Matrix_view<T> a, Vector_view<T> x)
+inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<T> a,
+                                               Scilib::Vector_view<T> x)
 {
-    Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
+    Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
     return res;
 }

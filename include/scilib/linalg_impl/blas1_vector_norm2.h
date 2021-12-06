@@ -18,7 +18,7 @@
 namespace Scilib {
 namespace Linalg {
 
-inline double norm2(Vector_view<double> x)
+inline double norm2(Scilib::Vector_view<double> x)
 {
     const BLAS_INT n = static_cast<BLAS_INT>(x.size());
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));

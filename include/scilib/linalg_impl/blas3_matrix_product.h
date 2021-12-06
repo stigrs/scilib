@@ -59,9 +59,9 @@ inline void matrix_product(
     }
 }
 
-inline void matrix_product(Matrix_view<double> a,
-                           Matrix_view<double> b,
-                           Matrix_view<double> c)
+inline void matrix_product(Scilib::Matrix_view<double> a,
+                           Scilib::Matrix_view<double> b,
+                           Scilib::Matrix_view<double> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -79,9 +79,9 @@ inline void matrix_product(Matrix_view<double> a,
 }
 
 #ifdef USE_MKL
-inline void matrix_product(Matrix_view<std::complex<double>> a,
-                           Matrix_view<std::complex<double>> b,
-                           Matrix_view<std::complex<double>> c)
+inline void matrix_product(Scilib::Matrix_view<std::complex<double>> a,
+                           Scilib::Matrix_view<std::complex<double>> b,
+                           Scilib::Matrix_view<std::complex<double>> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -100,14 +100,15 @@ inline void matrix_product(Matrix_view<std::complex<double>> a,
 #endif
 
 template <class T>
-inline Matrix<T> matrix_product(Matrix_view<T> a, Matrix_view<T> b)
+inline Scilib::Matrix<T> matrix_product(Scilib::Matrix_view<T> a,
+                                        Scilib::Matrix_view<T> b)
 {
     using size_type = stdex::extents<>::size_type;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);
 
-    Matrix<T> res(n, p);
+    Scilib::Matrix<T> res(n, p);
     matrix_product(a, b, res.view());
     return res;
 }
