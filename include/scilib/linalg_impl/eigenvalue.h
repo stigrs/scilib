@@ -59,9 +59,9 @@ inline void eigs(Scilib::Matrix_view<double> a,
 }
 
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
-void eig(Matrix_view<double> a,
-         Matrix_view<std::complex<double>> evec,
-         Vector_view<std::complex<double>> eval);
+void eig(Scilib::Matrix_view<double> a,
+         Scilib::Matrix_view<std::complex<double>> evec,
+         Scilib::Vector_view<std::complex<double>> eval);
 
 } // namespace Linalg
 } // namespace Scilib

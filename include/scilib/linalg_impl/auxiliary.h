@@ -225,9 +225,9 @@ inline M ones(Args... args)
 }
 
 template <class T = double>
-inline Matrix<T> identity(std::size_t n)
+inline Scilib::Matrix<T> identity(std::size_t n)
 {
-    Matrix<T> res(n, n);
+    Scilib::Matrix<T> res(n, n);
     res = T{0};
     auto res_diag = Scilib::diag(res.view());
     for (std::size_t i = 0; i < res_diag.extent(0); ++i) {

@@ -13,7 +13,7 @@ namespace Scilib {
 namespace Linalg {
 
 // Determinant of square matrix.
-double det(Matrix_view<double> a);
+double det(Scilib::Matrix_view<double> a);
 
 } // namespace Linalg
 } // namespace Scilib
