@@ -21,3 +21,70 @@ TEST(TestStats, TestMean)
 
     EXPECT_NEAR(Scilib::Stats::mean(v.view()), 22.066666666666666, 1.0e-8);
 }
+
+TEST(TestStats, TestMedianOdd)
+{
+    // clang-format off
+    std::vector<double> data = {
+        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
+    };
+    // clang-format on
+    Scilib::Vector<double> v(data, data.size());
+    EXPECT_EQ(Scilib::Stats::median(v.view()), 23.0);
+}
+
+TEST(TestStats, TestMedianEven)
+{
+    // clang-format off
+    std::vector<double> data = {
+        3.0,  13.0, 7.0,  5.0, 21.0, 39.0, 40.0, 23.0, 14.0, 12.0, 56.0, 29.0
+    };
+    // clang-format on
+    Scilib::Vector<double> v(data, data.size());
+    EXPECT_EQ(Scilib::Stats::median(v.view()), 17.5);
+}
+
+TEST(TestStats, TestStddev)
+{
+    // clang-format off
+    std::vector<double> data = {
+        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
+    };
+    // clang-format on
+    Scilib::Vector<double> v(data, data.size());
+
+    EXPECT_NEAR(Scilib::Stats::stddev(v.view()), 14.49860420211283, 1.0e-8);
+}
+
+TEST(TestStats, TestRMS)
+{
+    // clang-format off
+    std::vector<double> data = {
+        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
+    };
+    // clang-format on
+    Scilib::Vector<double> v(data, data.size());
+
+    EXPECT_NEAR(Scilib::Stats::rms(v.view()), 26.136819495365792, 1.0e-8);
+}
+
+TEST(TestStats, TestCov)
+{
+    // clang-format off
+    std::vector<double> b_data = {
+        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 23.0,
+        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
+    };
+    std::vector<double> c_data = {
+        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0,
+        23.0, 40.0, 23.0, 14.0, 12.0, 56.0, 23.0
+    };
+    // clang-format on
+    Scilib::Vector<double> b(b_data, b_data.size());
+    Scilib::Vector<double> c(c_data, c_data.size());
+
+    EXPECT_NEAR(Scilib::Stats::cov(b.view(), c.view()), 59.78021978, 1.0e-8);
+}

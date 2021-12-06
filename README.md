@@ -11,6 +11,7 @@ and Intel MKL are supported.
 * Linear algebra methods
 * Integration methods
 * ODE solver (Dormand-Prince)
+* Statistical methods
 * Mathematical constants, metric prefixes, physical constants, and
   conversion factors
 
