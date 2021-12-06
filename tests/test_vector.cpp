@@ -6,6 +6,7 @@
 
 #include <scilib/mdarray.h>
 #include <gtest/gtest.h>
+#include <vector>
 
 TEST(TestVector, TestSize)
 {
@@ -158,4 +159,14 @@ TEST(TestVector, TestAnotequalB)
     Scilib::Vector<int> b(4);
     b = 2;
     EXPECT_TRUE(a != b);
+}
+
+TEST(TestVector, TestSort)
+{
+    std::vector<int> data = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    Scilib::Vector<int> x(data, data.size());
+    Scilib::sort(x.view());
+    for (std::size_t i = 0; i < x.size(); ++i) {
+        EXPECT_EQ(x(i), i + 1);
+    }
 }

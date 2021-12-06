@@ -13,7 +13,50 @@
 namespace Scilib {
 namespace stdex = std::experimental;
 
-// Insertion sort.
+namespace __Detail {
+
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline stdex::extents<>::size_type
+partition(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x,
+          stdex::extents<>::size_type start,
+          stdex::extents<>::size_type end)
+{
+    using size_type = stdex::extents<>::size_type;
+
+    T xi = x(start);
+    size_type i = start;
+    for (size_type j = start + 1; j < end; ++j) {
+        if (x(j) <= xi) {
+            ++i;
+            std::swap(x(i), x(j));
+        }
+    }
+    std::swap(x(i), x(start));
+    return i;
+}
+
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline void
+quick_sort(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x,
+           stdex::extents<>::size_type start,
+           stdex::extents<>::size_type end)
+{
+    if (start < end) {
+        auto pivot = partition(x, start, end);
+        quick_sort(x, start, pivot);
+        quick_sort(x, pivot + 1, end);
+    }
+}
+
+} // namespace __Detail
+
+// Quick sort.
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
@@ -22,15 +65,9 @@ inline void sort(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
     using size_type = stdex::extents<>::size_type;
 
-    size_type i = 1;
-    while (i < x.extent(0)) {
-        size_type j = i;
-        while (j > 0 && x(j - 1) > x(j)) {
-            std::swap(x(j), x(j - 1));
-            j -= 1;
-        }
-        i += 1;
-    }
+    size_type start = 0;
+    size_type end = x.extent(0);
+    __Detail::quick_sort(x, start, end);
 }
 
 } // namespace Scilib
