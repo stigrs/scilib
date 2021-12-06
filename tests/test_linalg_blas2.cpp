@@ -19,6 +19,8 @@ TEST(TestLinalg, TestMatrixVectorProduct)
     EXPECT_EQ((a * x), y);
 }
 
+#ifdef USE_MKL
+// Does not work with OpenBLAS version 0.2.14.1
 TEST(TestLinalg, TestComplexMatrixVectorProduct)
 {
     // clang-format off
@@ -38,3 +40,4 @@ TEST(TestLinalg, TestComplexMatrixVectorProduct)
 
     EXPECT_EQ((A * x), z);
 }
+#endif
