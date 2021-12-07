@@ -247,7 +247,7 @@ inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    v = Vector<T>(tmp);
+    v = Vector<T>(tmp, tmp.size());
     return istrm;
 }
 
