@@ -1,3 +1,5 @@
 @PACKAGE_INIT@
 
 include("${CMAKE_CURRENT_LIST_DIR}/scilibTargets.cmake")
+set_and_check(Scilib_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
+set(Scilib_LIBRARIES sci)
