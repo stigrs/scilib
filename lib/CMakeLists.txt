@@ -29,6 +29,7 @@ target_link_libraries(
 
 install(
     TARGETS sci
+    EXPORT ScilibTargets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
 )
