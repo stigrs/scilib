@@ -29,7 +29,7 @@ void print(int n,
 
 void benchmark(int n)
 {
-    using namespace Sci;
+    using namespace Scilib;
     using namespace Scilib::Linalg;
 
     arma::vec aa(n);

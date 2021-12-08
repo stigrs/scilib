@@ -18,8 +18,6 @@ template <class T,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
           class Accessor_x,
-          stdex::extents<>::size_type start,
-          stdex::extents<>::size_type count,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
