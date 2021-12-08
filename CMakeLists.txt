@@ -182,28 +182,38 @@ target_include_directories(scilib INTERFACE
 
 ################################################################################
 
-set(INCLUDE_INSTALL_DIR include CACHE PATH "Include directory")
-set(LIB_INSTALL_DIR lib CACHE PATH "Library directory")
+set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for header files")
+set(LIB_INSTALL_DIR lib CACHE PATH "Installation directory for libraries")
+set(DEF_INSTALL_CMAKE_DIR lib/cmake/scilib)
+set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
+
+# Make relative paths absolute (needed later on)
+foreach(p LIB INCLUDE CMAKE)
+    set(var INSTALL_${p}_DIR)
+    if(NOT IS_ABSOLUTE "${${var}}")
+        set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+    endif()
+endforeach()
 
 install(TARGETS scilib EXPORT ScilibTargets
-  INCLUDES DESTINATION include
+  INCLUDES DESTINATION ${INCLUDE_INSTALL_DIR}
 )
 
 install(EXPORT ScilibTargets
     FILE ScilibTargets.cmake
-    DESTINATION lib/cmake/scilib
+    DESTINATION ${INSTALL_CMAKE_DIR}
 )
 
 export(TARGETS scilib
     FILE ScilibTargets.cmake
 )
 
-install(DIRECTORY include/scilib DESTINATION include)
+install(DIRECTORY include/scilib DESTINATION ${INCLUDE_INSTALL_DIR})
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(cmake/ScilibConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake
-  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/cmake/scilib
+  INSTALL_DESTINATION ${INSTALL_CMAKE_DIR}
   PATH_VARS INCLUDE_INSTALL_DIR
 )
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake
@@ -211,7 +221,7 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion
 )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake
-    DESTINATION ${LIB_INSTALL_DIR}/cmake/scilib
+    DESTINATION ${INSTALL_CMAKE_DIR}
 )
 
 ################################################################################

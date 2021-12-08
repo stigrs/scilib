@@ -1,5 +1,16 @@
+# - Config file for the Scilib package
+#
+# It defines the following variables
+#  Scilib_INCLUDE_DIRS - include directories for Scilib
+#  Scilib_LIBRARIES    - libraries to link against
+
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/scilibTargets.cmake")
-set_and_check(Scilib_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
+get_filename_component(Scilib_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(Scilib_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
 set(Scilib_LIBRARIES sci)
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET scilib AND NOT Scilib_BINARY_DIR)
+    include("${CMAKE_CURRENT_LIST_DIR}/scilibTargets.cmake")
+endif()
