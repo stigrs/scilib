@@ -79,13 +79,12 @@ using Array4D = MDArray<T,
 } // namespace Scilib
 
 #include <scilib/mdarray_impl/copy.h>
+#include <scilib/mdarray_impl/copy_n.h>
 #include <scilib/mdarray_impl/sort.h>
 #include <scilib/mdarray_impl/swap_elements.h>
 #include <scilib/mdarray_impl/slice.h>
 #include <scilib/mdarray_impl/support.h>
 #include <scilib/mdarray_impl/mdarray_bits.h>
 #include <scilib/mdarray_impl/operations.h>
-
-namespace Sci = Scilib;
 
 #endif // SCILIB_MDARRAY_H
