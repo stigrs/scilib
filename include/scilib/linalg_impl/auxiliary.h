@@ -101,7 +101,7 @@ argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     size_type max_idx = 0;
     T max_val = v(0);
     for (size_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) < max_val) {
+        if (v(i) > max_val) {
             max_val = v(i);
             max_idx = i;
         }
@@ -139,7 +139,7 @@ inline T max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 
     T result = v(0);
     for (size_type i = 0; i < v.extent(0); ++i) {
-        if (result < v(i)) {
+        if (v(i) > result) {
             result = v(i);
         }
     }
