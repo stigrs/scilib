@@ -79,7 +79,7 @@ clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
             if (a(i, j) < a_min) {
                 a(i, j) = a_min;
             }
-            if (a_max < a(i)) {
+            if (a_max < a(i, j)) {
                 a(i, j) = a_max;
             }
         }
