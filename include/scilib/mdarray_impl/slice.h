@@ -15,6 +15,30 @@ namespace Scilib {
 namespace stdex = std::experimental;
 
 template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline auto first(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
+                  stdex::extents<>::size_type count)
+{
+    using size_type = stdex::extents<>::size_type;
+    std::pair<size_type, size_type> slice{0, count};
+    return stdex::submdspan(v, slice);
+}
+
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline auto last(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
+                 stdex::extents<>::size_type count)
+{
+    using size_type = stdex::extents<>::size_type;
+    std::pair<size_type, size_type> slice{v.extent(0) - count, v.extent(0)};
+    return stdex::submdspan(v, slice);
+}
+
+template <class T,
           stdex::extents<>::size_type nrows,
           stdex::extents<>::size_type ncols,
           class Layout,

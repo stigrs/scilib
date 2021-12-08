@@ -170,3 +170,25 @@ TEST(TestVector, TestSort)
         EXPECT_EQ(x(i), i + 1);
     }
 }
+
+TEST(TestVector, TestFirst)
+{
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    Scilib::Vector<int> a(v, v.size());
+
+    auto v_slice = Scilib::first(a.view(), v.size());
+    for (std::size_t i = 0; i < v_slice.size(); ++i) {
+        EXPECT_EQ(v_slice(i), a(i));
+    }
+}
+
+TEST(TestVector, TestLast)
+{
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    Scilib::Vector<int> a(v, v.size());
+
+    auto v_slice = Scilib::last(a.view(), 3);
+    for (std::size_t i = 0; i < v_slice.size(); ++i) {
+        EXPECT_EQ(v_slice(i), a(i + 2));
+    }
+}
