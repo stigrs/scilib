@@ -23,16 +23,16 @@ template <class T,
           class Accessor_y>
 inline void
 copy_n(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-       stdex::extents<>::size_type start,
        stdex::extents<>::size_type count,
-       stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+       stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y,
+       stdex::extents<>::size_type offset = 0)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    assert(start >= 0 && start < count);
-    assert(count > 0 && count <= y.extent(0));
+    assert(count <= x.extent(0));
+    assert(offset >= 0 && offset < count);
+    assert(count > 0 && offset + count <= y.extent(0));
     using size_type = stdex::extents<>::size_type;
-    for (size_type i = start; i < count; ++i) {
-        y(i) = x(i);
+    for (size_type i = 0; i < count; ++i) {
+        y(i + offset) = x(i);
     }
 }
 
