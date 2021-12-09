@@ -106,31 +106,10 @@ public:
 
     template <class Extents_m, class Layout_m, class Accessor_m>
     MDArray(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
-        : storage(m.size())
+        : storage(m.size()), span(storage.data(), m.extents())
     {
         static_assert(m.rank() == N_dim);
         static_assert(m.rank() <= 4);
-
-        if constexpr (m.rank() == 1) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(), std::array<size_type, N_dim>{m.extent(0)});
-        }
-        else if constexpr (m.rank() == 2) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(),
-                std::array<size_type, N_dim>{m.extent(0), m.extent(1)});
-        }
-        else if constexpr (m.rank() == 3) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(), std::array<size_type, N_dim>{
-                                    m.extent(0), m.extent(1), m.extent(2)});
-        }
-        else if constexpr (m.rank() == 4) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(),
-                std::array<size_type, N_dim>{m.extent(0), m.extent(1),
-                                             m.extent(2), m.extent(3)});
-        }
         copy(m, span);
     }
 
@@ -148,26 +127,8 @@ public:
         static_assert(m.rank() <= 4);
 
         storage = std::vector<T>(m.size());
-        if constexpr (m.rank() == 1) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(), std::array<size_type, N_dim>{m.extent(0)});
-        }
-        else if constexpr (m.rank() == 2) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(),
-                std::array<size_type, N_dim>{m.extent(0), m.extent(1)});
-        }
-        else if constexpr (m.rank() == 3) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(), std::array<size_type, N_dim>{
-                                    m.extent(0), m.extent(1), m.extent(2)});
-        }
-        else if constexpr (m.rank() == 4) {
-            span = stdex::mdspan<T, Extents>(
-                storage.data(),
-                std::array<size_type, N_dim>{m.extent(0), m.extent(1),
-                                             m.extent(2), m.extent(3)});
-        }
+        span = stdex::mdspan<T, Extents>(storage.data(), m.extents());
+
         copy(m, span);
         return *this;
     }
