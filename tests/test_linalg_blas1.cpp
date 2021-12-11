@@ -21,7 +21,7 @@ TEST(TestLinalg, TestAxpy)
     Scilib::Vector<int> x(std::vector<int>{1, 2, 3, 4, 5}, 5);
     Scilib::Vector<int> y(std::vector<int>{2, 4, 6, 8, 10}, 5);
 
-    Scilib::Linalg::axpy(2, x, y);
+    Scilib::Linalg::axpy(2, x.view(), y.view());
     for (std::size_t i = 0; i < x.size(); ++i) {
         EXPECT_EQ(y(i), ans[i]);
     }
