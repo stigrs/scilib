@@ -85,6 +85,8 @@ void Scilib::Integrate::__Detail::dormand_prince(
     constexpr int max_iter = 100;
     int iter = 0;
 
+    // Algorithm: Runge-Kutta-Fehlberg method from Wikipedia
+
     while (x <= xf - h) {
         // clang-format off
         auto k1 = f(x + c1 * h, y);
