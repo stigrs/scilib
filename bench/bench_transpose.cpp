@@ -6,27 +6,34 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
-#include <armadillo>
 #include <chrono>
 #include <iostream>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 5054)
+#include <Eigen/Dense>
+#pragma warning(pop)
+#endif
+
 using Timer = std::chrono::duration<double, std::milli>;
 
-void print(int n, int m, const Timer& t_arma, const Timer& t_sci)
+void print(int n, int m, const Timer& t_eigen, const Timer& t_sci)
 {
     std::cout << "Matrix transpose:\n"
               << "-----------------\n"
               << "size =     " << n << " x " << m << '\n'
-              << "scilib/arma = " << t_sci.count() / t_arma.count() << "\n\n";
+              << "scilib/eigen = " << t_sci.count() / t_eigen.count() << "\n\n";
 }
 
 void benchmark(int n, int m)
 {
-    arma::mat m1 = arma::ones<arma::mat>(n, m);
+    Eigen::MatrixXd m1(n, m);
+    m1.fill(1.0);
     auto t1 = std::chrono::high_resolution_clock::now();
-    m1.t();
+    m1.transpose();
     auto t2 = std::chrono::high_resolution_clock::now();
-    Timer t_arma = t2 - t1;
+    Timer t_eigen = t2 - t1;
 
     Scilib::Matrix<double> m2(n, m);
     m2 = 1.0;
@@ -35,7 +42,7 @@ void benchmark(int n, int m)
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;
 
-    print(n, m, t_arma, t_sci);
+    print(n, m, t_eigen, t_sci);
 }
 
 int main()

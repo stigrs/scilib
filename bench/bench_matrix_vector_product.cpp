@@ -6,30 +6,39 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
-#include <armadillo>
 #include <chrono>
 #include <iostream>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4305)
+#pragma warning(disable : 5054)
+#include <Eigen/Dense>
+#pragma warning(pop)
+#endif
+
 using Timer = std::chrono::duration<double, std::milli>;
 
-void print(int n, int m, const Timer& t_arma, const Timer& t_sci)
+void print(int n, int m, const Timer& t_eigen, const Timer& t_sci)
 {
     std::cout << "Matrix-vector multiplication:\n"
               << "-----------------------------\n"
               << "size =        " << n << " x " << m << '\n'
-              << "scilib/arma = " << t_sci.count() / t_arma.count() << "\n\n";
+              << "scilib/eigen = " << t_sci.count() / t_eigen.count() << "\n\n";
 }
 
 void benchmark(int n, int m)
 {
-    arma::mat a1 = arma::ones<arma::mat>(n, m);
-    arma::mat a2 = arma::ones<arma::mat>(m);
+    Eigen::MatrixXd a1(n, m);
+    Eigen::VectorXd a2(m);
+    a1.fill(1.0);
+    a2.fill(1.0);
     auto t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10; ++it) {
-        arma::vec a3 = a1 * a2;
+        Eigen::VectorXd a3 = a1 * a2;
     }
     auto t2 = std::chrono::high_resolution_clock::now();
-    Timer t_arma = t2 - t1;
+    Timer t_eigen = t2 - t1;
 
     Scilib::Matrix<double> b1(n, m);
     b1 = 1.0;
@@ -42,7 +51,7 @@ void benchmark(int n, int m)
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;
 
-    print(n, m, t_arma, t_sci);
+    print(n, m, t_eigen, t_sci);
 }
 
 int main()

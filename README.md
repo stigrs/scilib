@@ -33,7 +33,7 @@ licensing of GoogleTest and stdBLAS.
 * [CMake](https://cmake.org) 3.14
 * [mdspan](https://github.com/kokkos/mdspan)
 * [OpenBLAS](https://www.openblas.net/) (Intel MKL is recommended)
-* [Armadillo](http://arma.sourceforge.net) (for benchmarking)
+* [Eigen3](https://gitlab.com/libeigen/eigen) (for benchmarking)
 
 ### Supported Compilers
 
@@ -80,7 +80,4 @@ into a directory called `scilib`.
 
    All tests should pass, indicating that your platform is fully supported.
 
-6. Benchmarks can be built by setting the option BUILD_BENCH to ON. Please
-   make sure BLAS run on the same number of threads in Armadillo and Scilib
-   before comparing the benchmark results. If OpenBLAS is used, this can be
-   controlled by setting the OPENBLAS_NUM_THREADS environmental variable.
+6. Benchmarks can be built by setting the option BUILD_BENCH to ON. 

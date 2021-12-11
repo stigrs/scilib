@@ -6,18 +6,25 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
-#include <armadillo>
 #include <chrono>
 #include <iostream>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4305)
+#pragma warning(disable : 5054)
+#include <Eigen/Dense>
+#pragma warning(pop)
+#endif
+
 using Timer = std::chrono::duration<double, std::milli>;
 
-void print(int n, const Timer& t_arma, const Timer& t_eigs)
+void print(int n, const Timer& t_eigen, const Timer& t_sci)
 {
     std::cout << "Eigenvalues for symmetric matrix:\n"
               << "---------------------------------\n"
               << "size =      " << n << " x " << n << '\n'
-              << "eigs/arma = " << t_eigs.count() / t_arma.count() << "\n\n";
+              << "sci/eigen = " << t_sci.count() / t_eigen.count() << "\n\n";
 }
 
 void benchmark(int n)
@@ -25,14 +32,13 @@ void benchmark(int n)
     using namespace Scilib;
     using namespace Scilib::Linalg;
 
-    arma::mat a1 = arma::randu<arma::mat>(n, n);
-    arma::mat a2 = a1.t() * a1;
-    arma::mat eigvec(n, n);
-    arma::vec eigval(n);
+    Eigen::MatrixXd a1 = Eigen::MatrixXd::Random(n, n);
+    Eigen::MatrixXd a2 = a1 + a1.transpose();
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es;
     auto t1 = std::chrono::high_resolution_clock::now();
-    arma::eig_sym(eigval, eigvec, a2);
+    es.compute(a2);
     auto t2 = std::chrono::high_resolution_clock::now();
-    Timer t_arma = t2 - t1;
+    Timer t_eigen = t2 - t1;
 
     Matrix<double> b1 = randu(n, n);
     Matrix<double> b1_t = b1;
@@ -42,9 +48,9 @@ void benchmark(int n)
     t1 = std::chrono::high_resolution_clock::now();
     eigs(b2.view(), wr.view());
     t2 = std::chrono::high_resolution_clock::now();
-    Timer t_eigs = t2 - t1;
+    Timer t_sci = t2 - t1;
 
-    print(n, t_arma, t_eigs);
+    print(n, t_eigen, t_sci);
 }
 
 int main()

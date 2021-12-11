@@ -6,57 +6,66 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
-#include <armadillo>
 #include <chrono>
 #include <iostream>
 #include <valarray>
 #include <numeric>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 5054)
+#include <Eigen/Dense>
+#pragma warning(pop)
+#endif
+
 using Timer = std::chrono::duration<double, std::micro>;
 
-void print(int n, const Timer& t_arma, const Timer& t_sci, const Timer& t_val)
+void print(int n, const Timer& t_eigen, const Timer& t_sci, const Timer& t_val)
 {
     std::cout << "Dot product:\n"
               << "------------\n"
               << "size =            " << n << '\n'
-              << "scilib/arma =     " << t_sci.count() / t_arma.count() << "\n"
+              << "scilib/eigen =     " << t_sci.count() / t_eigen.count()
+              << "\n"
               << "scilib/valarray = " << t_sci.count() / t_val.count()
               << "\n\n";
 }
 
 void benchmark(int n)
 {
-    arma::vec aa(n);
-    arma::vec ab(n);
+    Eigen::VectorXd aa(n);
+    Eigen::VectorXd ab(n);
+
     aa.fill(1.0);
     ab.fill(2.0);
+
     auto t1 = std::chrono::high_resolution_clock::now();
-    double dot_arma;
-    for (int it = 0; it < 10; ++it) {
-        dot_arma = arma::dot(aa, ab);
+    double dot_eigen;
+    for (int it = 0; it < 10000; ++it) {
+        dot_eigen = aa.dot(ab);
     }
     auto t2 = std::chrono::high_resolution_clock::now();
-    Timer t_arma = t2 - t1;
-    (void) dot_arma; // ignore unused result
+    Timer t_eigen = t2 - t1;
+    (void) dot_eigen; // ignore unused result
 
     Scilib::Vector<double> na(n);
     Scilib::Vector<double> nb(n);
     na = 1.0;
     nb = 2.0;
     t1 = std::chrono::high_resolution_clock::now();
-    double num;
-    for (int it = 0; it < 10; ++it) {
-        num = Scilib::Linalg::dot(na.view(), nb.view());
+    double sci;
+    for (int it = 0; it < 10000; ++it) {
+        sci = Scilib::Linalg::dot(na.view(), nb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;
-    (void) num;
+    (void) sci;
 
     std::valarray<double> va(1.0, n);
     std::valarray<double> vb(2.0, n);
     t1 = std::chrono::high_resolution_clock::now();
     double val;
-    for (int it = 0; it < 10; ++it) {
+    for (int it = 0; it < 10000; ++it) {
         val = std::inner_product(std::begin(va), std::end(va), std::begin(vb),
                                  0.0);
     }
@@ -64,7 +73,7 @@ void benchmark(int n)
     Timer t_val = t2 - t1;
     (void) val;
 
-    print(n, t_arma, t_sci, t_val);
+    print(n, t_eigen, t_sci, t_val);
 }
 
 int main()

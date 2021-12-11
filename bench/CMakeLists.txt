@@ -1,16 +1,17 @@
 cmake_minimum_required(VERSION 3.14)
 project(Scilib_bench CXX)
 
-if(WIN32)
-    include_directories(${ARMADILLO_INCLUDE_DIRS})
-endif()
 include_directories(${Scilib_SOURCE_DIR}/include)
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
 
 if(NOT TARGET std::mdspan)
-  find_package(mdspan REQUIRED)
+    find_package(mdspan REQUIRED)
+endif()
+
+if(NOT TARGET Eigen3::Eigen)
+    find_package(Eigen3 REQUIRED)
 endif()
 
 set(PROGRAMS 
@@ -29,7 +30,7 @@ foreach(program ${PROGRAMS})
         sci
 	    ${BLAS_LIBRARIES}
 	    ${LAPACK_LIBRARIES}
-	    ${ARMADILLO_LIBRARIES} 
         std::mdspan
+        Eigen3::Eigen
 	) 
 endforeach()

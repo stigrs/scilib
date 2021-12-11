@@ -6,25 +6,32 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
-#include <armadillo>
 #include <chrono>
 #include <iostream>
 #include <valarray>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 5054)
+#include <Eigen/Dense>
+#pragma warning(pop)
+#endif
+
 typedef std::chrono::duration<double, std::milli> Timer;
 
 void print(int n,
-           const Timer& t_arma,
-           const Timer& t_scilib,
+           const Timer& t_eigen,
+           const Timer& t_sci,
            const Timer& t_val,
            const Timer& t_axpy)
 {
     std::cout << "Vector addition:\n"
               << "----------------\n"
-              << "size =        " << n << '\n'
-              << "scilib/arma = " << t_scilib.count() / t_arma.count() << "\n"
-              << "scilib/val =  " << t_scilib.count() / t_val.count() << "\n"
-              << "axpy/arma =  " << t_axpy.count() / t_arma.count() << "\n\n";
+              << "size =         " << n << '\n'
+              << "scilib/eigen = " << t_sci.count() / t_eigen.count() << "\n"
+              << "scilib/val =   " << t_sci.count() / t_val.count() << "\n"
+              << "axpy/eigen =   " << t_axpy.count() / t_eigen.count()
+              << "\n\n";
 }
 
 void benchmark(int n)
@@ -32,19 +39,31 @@ void benchmark(int n)
     using namespace Scilib;
     using namespace Scilib::Linalg;
 
-    arma::vec aa(n);
-    arma::vec ab(n);
+    Eigen::VectorXd aa(n);
+    Eigen::VectorXd ab(n);
+
     aa.fill(1.0);
     ab.fill(1.0);
+
     auto t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 10; ++it) {
+    for (int it = 0; it < 1000; ++it) {
         ab = 2.0 * aa + ab;
     }
     auto t2 = std::chrono::high_resolution_clock::now();
-    Timer t_arma = t2 - t1;
+    Timer t_eigen = t2 - t1;
 
     Vector<double> va(n);
     Vector<double> vb(n);
+
+    va = 1.0;
+    vb = 1.0;
+
+    t1 = std::chrono::high_resolution_clock::now();
+    for (int it = 0; it < 1000; ++it) {
+        ab = 2.0 * aa + ab;
+    }
+    t2 = std::chrono::high_resolution_clock::now();
+    Timer t_sci = t2 - t1;
 
     va = 1.0;
     vb = 1.0;
@@ -54,28 +73,18 @@ void benchmark(int n)
         add(scaled(2.0, va.view()), vb.view(), vb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
-    Timer t_scilib = t2 - t1;
-
-    va = 1.0;
-    vb = 1.0;
-
-    t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 10; ++it) {
-        axpy(2.0, va.view(), vb.view());
-    }
-    t2 = std::chrono::high_resolution_clock::now();
     Timer t_axpy = t2 - t1;
 
     std::valarray<double> wa(1.0, n);
     std::valarray<double> wb(1.0, n);
     t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 10; ++it) {
+    for (int it = 0; it < 1000; ++it) {
         wb = 2.0 * wa + wb;
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_val = t2 - t1;
 
-    print(n, t_arma, t_scilib, t_val, t_axpy);
+    print(n, t_eigen, t_sci, t_val, t_axpy);
 }
 
 int main()
