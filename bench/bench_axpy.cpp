@@ -4,18 +4,17 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 5054)
+#endif
+
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
 #include <chrono>
 #include <iostream>
 #include <valarray>
-
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 5054)
 #include <Eigen/Dense>
-#pragma warning(pop)
-#endif
 
 typedef std::chrono::duration<double, std::milli> Timer;
 
@@ -104,3 +103,7 @@ int main()
     n = 100000;
     benchmark(n);
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
