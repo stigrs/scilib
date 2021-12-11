@@ -24,8 +24,7 @@ void print(int n, const Timer& t_eigen, const Timer& t_sci, const Timer& t_val)
     std::cout << "Dot product:\n"
               << "------------\n"
               << "size =            " << n << '\n'
-              << "scilib/eigen =     " << t_sci.count() / t_eigen.count()
-              << "\n"
+              << "scilib/eigen =    " << t_sci.count() / t_eigen.count() << "\n"
               << "scilib/valarray = " << t_sci.count() / t_val.count()
               << "\n\n";
 }
