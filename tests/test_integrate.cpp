@@ -26,6 +26,18 @@ Scilib::Vector<double> lorentz(double /* t */, const Scilib::Vector<double>& y)
     return ydot;
 }
 
+Scilib::Vector<double> fsys_stiff(double /* t */,
+                                  const Scilib::Vector<double>& y)
+{
+    Scilib::Vector<double> ydot(3);
+
+    ydot(0) = -0.04 * y(0) + 1.0e4 * y(1) * y(2);
+    ydot(2) = 3.0e7 * y(1) * y(1);
+    ydot(1) = -ydot(0) - ydot(2);
+
+    return ydot;
+}
+
 TEST(TestIntegrate, TestTrapz)
 {
     std::vector<double> y_data = {3.2, 2.7, 2.9, 3.5, 4.1, 5.2};
@@ -85,5 +97,38 @@ TEST(TestIntegrate, TestDormandPrince)
             EXPECT_NEAR(y(j), ans(i, j), 1.0e-5);
         }
         tf += 0.1;
+    }
+}
+
+TEST(TestIntegrate, TestStiff)
+{
+    using namespace Scilib;
+    using namespace Scilib::Integrate;
+
+    // clang-format off
+    std::vector<double> ans_data = { // result from Lsoda
+        9.851712e-01, 3.386380e-05, 1.479493e-02,
+        9.055333e-01, 2.240655e-05, 9.444430e-02,
+        7.158403e-01, 9.186334e-06, 2.841505e-01,
+    };
+    // clang-format on
+    Matrix<double> ans(ans_data, 3, 3);
+
+    std::vector<double> y0 = {1.0, 0.0, 0.0};
+    Vector<double> y(y0, 3);
+
+    double t0 = 0.0;
+    double tf = 0.4;
+
+    int i = 0;
+    for (int it = 0; it < 100; ++it) {
+        solve_ivp(fsys_stiff, t0, tf, y);
+        if (it == 0 || it == 9 || it == 99) {
+            for (std::size_t j = 0; j < y.extent(0); ++j) {
+                EXPECT_NEAR(y(j), ans(i, j), 5.0e-3);
+            }
+            ++i;
+        }
+        tf += 0.4;
     }
 }
