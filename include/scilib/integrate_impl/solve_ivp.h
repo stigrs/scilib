@@ -39,7 +39,7 @@ inline void solve_ivp(
     double xf,
     Scilib::Vector<double>& y,
     double atol = 1.0e-6,
-    double rtol = 1.0e-4)
+    double rtol = 1.0e-6)
 {
     __Detail::dormand_prince(f, x, xf, y, atol, rtol);
 }

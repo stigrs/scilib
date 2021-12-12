@@ -108,21 +108,21 @@ void Scilib::Integrate::__Detail::dormand_prince(
 
         auto err_vec = h * (e1 * k1 + e2 * k2 + e3 * k3 + e4 * k4 + e5 * k5 + e6 * k6 + e7 * k7);
 
-        double epsilon = std::min(atol, Scilib::Linalg::norm2(y.view()) * rtol);
-        double trunc_err = Scilib::Linalg::norm2(err_vec.view());
+        double tolerance = atol + Scilib::Linalg::norm2(y.view()) * rtol;
+        double trunc_error = Scilib::Linalg::norm2(err_vec.view());
 
-        if (trunc_err > epsilon) { // reject the step
-            double scale = std::pow(epsilon / trunc_err, 0.2); 
+        if (trunc_error > tolerance) { // reject the step
+            double scale = std::pow(tolerance / trunc_error, 0.2); 
             h *= safety * std::min(std::max(scale, min_scale), max_scale);
+            ++iter;
         }
         else { // accept the step
             x += h;
             y += h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
-            if (trunc_err <= 1.0e-3 * epsilon) { 
+            if (trunc_error <= 1.0e-3 * tolerance) { 
                 h *= max_scale; // error too small; increase step size
             }
         }
-        ++iter;
         if (iter > max_iter) {
             std::runtime_error("dormand_prince failed to converge");
         }
