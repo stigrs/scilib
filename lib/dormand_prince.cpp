@@ -8,6 +8,7 @@
 #include <scilib/linalg.h>
 #include <exception>
 #include <cmath>
+#include <limits>
 
 void Scilib::Integrate::__Detail::dormand_prince(
     std::function<Scilib::Vector<double>(double, const Scilib::Vector<double>&)>
@@ -18,6 +19,8 @@ void Scilib::Integrate::__Detail::dormand_prince(
     double atol,
     double rtol)
 {
+    namespace Sci = Scilib::Linalg;
+
     // Butcher tableau for Dormand-Prince method:
     // Source: https://en.wikipedia.org/wiki/Dormand-Prince_method
 
@@ -106,20 +109,22 @@ void Scilib::Integrate::__Detail::dormand_prince(
         auto k6 = f(x + c6 * h, y + h * (a61 * k1 + a62 * k2 + a63 * k3 + a64 * k4 + a65 * k5));
         auto k7 = f(x + c7 * h, y + h * (a71 * k1 + a72 * k2 + a73 * k3 + a74 * k4 + a75 * k5 + a76 * k6));
         auto err_vec = h * (e1 * k1 + e2 * k2 + e3 * k3 + e4 * k4 + e5 * k5 + e6 * k6 + e7 * k7);
+        auto ynew = y + h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
         // clang-format on
-        double tolerance = atol + Scilib::Linalg::norm2(y.view()) * rtol;
-        double trunc_error = Scilib::Linalg::norm2(err_vec.view());
+        double y_max = Sci::max(Sci::abs(y).view());
+        double ynew_max = Sci::max(Sci::abs(ynew).view());
+        double tolerance = atol + std::max(y_max, ynew_max) * rtol;
+        double error_norm = Sci::norm2((err_vec / tolerance).view());
 
-        if (trunc_error > tolerance) { // reject the step
-            double scale = std::pow(tolerance / trunc_error, 0.2);
-            h *= safety * std::min(std::max(scale, min_scale), max_scale);
+        if (error_norm > 1.0) { // reject the step
+            double scale = safety * std::pow(1.0 / error_norm, 0.2);
+            h *= std::min(std::max(scale, min_scale), max_scale);
             ++iter;
         }
         else { // accept the step
             x += h;
-            y += h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 +
-                      b6 * k6 + b7 * k7);
-            if (trunc_error <= 1.0e-3 * tolerance) {
+            y = ynew;
+            if (error_norm <= std::numeric_limits<double>::epsilon()) {
                 h *= max_scale; // error too small; increase step size
             }
         }
