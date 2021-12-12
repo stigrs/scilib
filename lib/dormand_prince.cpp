@@ -76,19 +76,28 @@ void Scilib::Integrate::__Detail::dormand_prince(
     constexpr double e7 = b7 - bs7;
 
     constexpr double safety = 0.9;
+    constexpr double max_scale = 2.0;
+    constexpr double min_scale = 0.3;
 
     const double hmax = safety * (xf - x);
     const double hmin = 1.0e-12 * hmax;
-
     double h = hmax;
 
     constexpr int max_iter = 100;
     int iter = 0;
 
     // Algorithm: Runge-Kutta-Fehlberg method from Wikipedia
-
-    while (x <= xf - h) {
-        // clang-format off
+    // clang-format off
+    while (x < xf) {
+        if (h < hmin) {
+            h = hmin;
+        }
+        if (h > hmax) {
+            h = hmax;
+        }
+        if (x + h > xf) {
+            h = xf - x;
+        }
         auto k1 = f(x + c1 * h, y);
         auto k2 = f(x + c2 * h, y + h * (a21 * k1));
         auto k3 = f(x + c3 * h, y + h * (a31 * k1 + a32 * k2));
@@ -102,24 +111,21 @@ void Scilib::Integrate::__Detail::dormand_prince(
         double epsilon = std::min(atol, Scilib::Linalg::norm2(y.view()) * rtol);
         double trunc_err = Scilib::Linalg::norm2(err_vec.view());
 
-        if (trunc_err <= epsilon) { // accept step
+        if (trunc_err > epsilon) { // reject the step
+            double scale = std::pow(epsilon / trunc_err, 0.2); 
+            h *= safety * std::min(std::max(scale, min_scale), max_scale);
+        }
+        else { // accept the step
             x += h;
             y += h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
-        }
-        // clang-format on
-        h *= safety * std::pow(epsilon / trunc_err, 0.2); // may become infinite
-        if (h < hmin) {
-            h = hmin;
-        }
-        if (h > hmax) { // ... fix it here
-            h = hmax;
-        }
-        if (x + h > xf) {
-            h = xf - x;
+            if (trunc_err <= 1.0e-3 * epsilon) { 
+                h *= max_scale; // error too small; increase step size
+            }
         }
         ++iter;
         if (iter > max_iter) {
             std::runtime_error("dormand_prince failed to converge");
         }
     }
+    // clang-format on
 }

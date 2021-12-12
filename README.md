@@ -6,12 +6,12 @@ and Intel MKL are supported.
 
 ## Features
 
-* N-dimensional dense arrays using [mdspan](https://github.com/kokkos/mdspan) 
-  for views (row-major storage order)
+* Multidimensional dense arrays using [mdspan](https://github.com/kokkos/mdspan) 
+  for views and std::vector for storage (row-major storage order)
 * Linear algebra methods
 * Integration methods
-* ODE solver (Dormand-Prince)
-* Statistical methods
+* Simple solver for initial value problems (Dormand-Prince)
+* Common statistical methods
 * Mathematical constants, metric prefixes, physical constants, and
   conversion factors
 
