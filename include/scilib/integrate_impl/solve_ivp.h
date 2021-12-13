@@ -25,6 +25,13 @@ void dormand_prince(
     double atol,
     double rtol);
 
+// Compute error norm.
+double error_norm(const Scilib::Vector<double>& y,
+                  const Scilib::Vector<double>& ynew,
+                  const Scilib::Vector<double>& err_vec,
+                  double atol,
+                  double rtol);
+
 } // namespace __Detail
 
 // Solve an inital value problem for a system of ODEs.
@@ -38,8 +45,8 @@ inline void solve_ivp(
     double& x,
     double xf,
     Scilib::Vector<double>& y,
-    double atol = 1.0e-6,
-    double rtol = 1.0e-6)
+    double atol = 1.0e-7,
+    double rtol = 1.0e-7)
 {
     __Detail::dormand_prince(f, x, xf, y, atol, rtol);
 }
