@@ -140,7 +140,8 @@ Scilib::Integrate::__Detail::error_norm(const Scilib::Vector<double>& y,
                                         double atol,
                                         double rtol)
 {
-    assert(y.size() == ynew.size() == err_vec.size());
+    assert(y.size() == ynew.size());
+    assert(y.size() == err_vec.size());
 
     double max_norm =
         std::abs(err_vec(0)) / (atol + std::max(y(0), ynew(0)) * rtol);
