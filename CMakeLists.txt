@@ -174,6 +174,7 @@ install(TARGETS scilib EXPORT ScilibTargets
 
 install(EXPORT ScilibTargets
     FILE ScilibTargets.cmake
+    NAMESPACE Sci::
     DESTINATION ${CMAKE_INSTALL_DIR}
 )
 
