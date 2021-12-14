@@ -152,7 +152,7 @@ else()
 	endif()
 endif()
 
-add_subdirectory(lib)
+add_subdirectory(src)
 
 add_library(scilib INTERFACE)
 target_link_libraries(scilib INTERFACE std::mdspan)
