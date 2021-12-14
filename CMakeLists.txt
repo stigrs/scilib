@@ -155,6 +155,7 @@ endif()
 add_subdirectory(src)
 
 add_library(scilib INTERFACE)
+add_library(Sci::Scilib ALIAS scilib)
 target_link_libraries(scilib INTERFACE std::mdspan)
 
 target_include_directories(scilib INTERFACE
@@ -179,6 +180,7 @@ install(EXPORT ScilibTargets
 )
 
 export(TARGETS scilib
+    NAMESPACE Sci::
     FILE ScilibTargets.cmake
 )
 
