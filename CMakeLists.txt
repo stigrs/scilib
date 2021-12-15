@@ -168,6 +168,7 @@ add_library(scilib STATIC ${SRC_FILES})
 add_library(Scilib::Scilib ALIAS scilib)
 target_link_libraries(
     scilib 
+    PRIVATE
     std::mdspan
     ${BLAS_LIBRARIES}
 )
