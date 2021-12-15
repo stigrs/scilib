@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.17)
 project(Scilib_tests CXX)
 
 include_directories(${BLAS_INCLUDE_DIRS})
@@ -7,16 +7,20 @@ link_directories(${BLAS_LIBRARY_DIRS})
 
 include(FetchContent)
 FetchContent_Declare(
-  googletest
-  # Specify the commit you depend on and update it regularly.
-  URL https://github.com/google/googletest/archive/refs/heads/main.zip
+    googletest
+    # Specify the commit you depend on and update it regularly.
+    URL https://github.com/google/googletest/archive/refs/heads/main.zip
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+if(NOT TARGET std::mdspan)
+    find_package(mdspan REQUIRED)
+endif()
+
 if(NOT TARGET Scilib::Scilib)
-  find_package(scilib REQUIRED)
+    find_package(scilib REQUIRED)
 endif()
 
 function(add_scilib_test name)
@@ -25,11 +29,9 @@ function(add_scilib_test name)
         ${name} 
         Scilib::Scilib
         gtest_main
-	      ${BLAS_LIBRARIES}
+        std::mdspan
+	    ${BLAS_LIBRARIES}
     ) 
-    target_include_directories(scilib PUBLIC
-        $<BUILD_INTERFACE:${mdspan_SOURCE_DIR}>
-    )
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
 
@@ -59,11 +61,11 @@ foreach(program ${PROGRAMS})
     add_scilib_test(${program})
 	if(WIN32)
 	    if(NOT MKL_FOUND)
-            set_tests_properties(${program} PROPERTIES ENVIRONMENT "PATH=${BLAS_BINARY_DIRS};$ENV{PATH}")
+          set_tests_properties(${program} PROPERTIES ENVIRONMENT "PATH=${BLAS_BINARY_DIRS};$ENV{PATH}")
 	    endif()
-    else()
+  else()
 	    if(NOT MKL_FOUND)
-            set_tests_properties(${program} PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BLAS_BINARY_DIRS}")
+          set_tests_properties(${program} PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BLAS_BINARY_DIRS}")
 	    endif()
 	endif()
 endforeach()

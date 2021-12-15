@@ -1,9 +1,13 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.17)
 project(Scilib_bench CXX)
 
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
+
+if(NOT TARGET std::mdspan)
+    find_package(mdspan REQUIRED)
+endif()
 
 if(NOT TARGET Eigen3::Eigen)
     find_package(Eigen3 REQUIRED)
@@ -31,7 +35,4 @@ foreach(program ${PROGRAMS})
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}
 	) 
-    target_include_directories(scilib PUBLIC
-        $<BUILD_INTERFACE:${mdspan_SOURCE_DIR}>
-    )
 endforeach()

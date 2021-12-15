@@ -1,12 +1,16 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.17)
 project(Scilib_examples CXX)
 
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
 
+if(NOT TARGET std::mdspan)
+    find_package(mdspan REQUIRED)
+endif()
+
 if(NOT TARGET Scilib::Scilib)
-  find_package(scilib REQUIRED)
+    find_package(scilib REQUIRED)
 endif()
 
 set(PROGRAMS 
@@ -25,7 +29,4 @@ foreach(program ${PROGRAMS})
         std::mdspan
 	      ${BLAS_LIBRARIES}
 	  ) 
-    target_include_directories(scilib PUBLIC
-        $<BUILD_INTERFACE:${mdspan_SOURCE_DIR}>
-    )
 endforeach()
