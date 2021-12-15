@@ -15,10 +15,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-if(NOT TARGET std::mdspan)
-  find_package(mdspan REQUIRED)
-endif()
-
 if(NOT TARGET Scilib::Scilib)
   find_package(scilib REQUIRED)
 endif()
@@ -29,9 +25,11 @@ function(add_scilib_test name)
         ${name} 
         Scilib::Scilib
         gtest_main
-        std::mdspan
-	    ${BLAS_LIBRARIES}
+	      ${BLAS_LIBRARIES}
     ) 
+    target_include_directories(scilib PUBLIC
+        $<BUILD_INTERFACE:${mdspan_SOURCE_DIR}>
+    )
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
 

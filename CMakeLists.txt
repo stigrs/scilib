@@ -130,14 +130,14 @@ if (NOT mdspan_FOUND)
     include(FetchContent)
     FetchContent_Declare(
         mdspan
-        GIT_REPOSITORY https://github.com/kokkos/mdspan.git
-        GIT_TAG        stable
+        URL https://github.com/kokkos/mdspan/blob/single-header/mdspan.hpp
+        DOWNLOAD_NO_EXTRACT TRUE
     )
-    FetchContent_MakeAvailable(mdspan)
-endif()
-
-if(NOT TARGET std::mdspan)
-  find_package(mdspan REQUIRED)
+    FetchContent_GetProperties(mdspan)
+    if(mdspan_POPULATED)
+        return()
+    endif()
+    FetchContent_Populate(mdspan)
 endif()
 
 # BLAS and LAPACKE are required.
@@ -174,6 +174,7 @@ target_link_libraries(
 
 target_include_directories(scilib PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${mdspan_SOURCE_DIR}>
     $<BUILD_INTERFACE:${BLAS_INCLUDE_DIRS}>
     $<BUILD_INTERFACE:${LAPACKE_INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
