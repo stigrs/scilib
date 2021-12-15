@@ -6,6 +6,10 @@ project(Scilib
 
 ################################################################################
 
+include(GNUInstallDirs)
+
+################################################################################
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ################################################################################
@@ -129,15 +133,14 @@ if (NOT mdspan_FOUND)
         GIT_REPOSITORY https://github.com/kokkos/mdspan.git
         GIT_TAG        stable
     )
-    FetchContent_GetProperties(mdspan)
-    if(NOT mdspan_POPULATED)
-        FetchContent_Populate(mdspan)
-        add_subdirectory(${mdspan_SOURCE_DIR} ${mdspan_BINARY_DIR} EXCLUDE_FROM_ALL)
-    endif()
+    FetchContent_MakeAvailable(mdspan)
+endif()
+
+if(NOT TARGET std::mdspan)
+  find_package(mdspan REQUIRED)
 endif()
 
 # BLAS and LAPACKE are required.
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 if(DEFINED ENV{MKLROOT})
 	find_package(MKL)
 	if(MKL_FOUND)
@@ -152,52 +155,61 @@ else()
 	endif()
 endif()
 
-add_subdirectory(src)
-
-add_library(scilib INTERFACE)
-add_library(Sci::Scilib ALIAS scilib)
-target_link_libraries(scilib INTERFACE std::mdspan)
-
-target_include_directories(scilib INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
-)
-
 ################################################################################
 
-set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for header files")
-set(LIB_INSTALL_DIR lib CACHE PATH "Installation directory for libraries")
-set(CMAKE_INSTALL_DIR lib/cmake/scilib CACHE PATH "Installation directory for CMake files")
-
-install(TARGETS scilib EXPORT ScilibTargets
-  INCLUDES DESTINATION ${INCLUDE_INSTALL_DIR}
+set(SRC_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/det.cpp    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dormand_prince.cpp    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/eigenvalue.cpp    
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/expm.cpp    
 )
+
+add_library(scilib ${SRC_FILES})
+add_library(Scilib::Scilib ALIAS scilib)
+target_link_libraries(
+    scilib 
+    std::mdspan
+    ${BLAS_LIBRARIES}
+)
+
+target_include_directories(scilib PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${BLAS_INCLUDE_DIRS}>
+    $<BUILD_INTERFACE:${LAPACKE_INCLUDE_DIRS}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+install(TARGETS scilib
+    EXPORT ScilibTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}    
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}    
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}    
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/scilib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT ScilibTargets
     FILE ScilibTargets.cmake
-    NAMESPACE Sci::
-    DESTINATION ${CMAKE_INSTALL_DIR}
+    NAMESPACE Scilib::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scilib
 )
-
-export(TARGETS scilib
-    NAMESPACE Sci::
-    FILE ScilibTargets.cmake
-)
-
-install(DIRECTORY include/scilib DESTINATION ${INCLUDE_INSTALL_DIR})
 
 include(CMakePackageConfigHelpers)
-configure_package_config_file(cmake/ScilibConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
-  PATH_VARS INCLUDE_INSTALL_DIR
-)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake
-  COMPATIBILITY SameMajorVersion
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake"
+    COMPATIBILITY AnyNewerVersion
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_DIR}
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ScilibConfig.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scilib
+)
+install(FILES 
+    "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake" 
+    "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scilib
 )
 
 ################################################################################
@@ -217,11 +229,7 @@ if(BUILD_BENCH)
             GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
             GIT_TAG        master
         )
-        FetchContent_GetProperties(eigen)
-        if(NOT eigen_POPULATED)
-            FetchContent_Populate(eigen)
-            add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR} EXCLUDE_FROM_ALL)
-        endif()
+        FetchContent_MakeAvailable(eigen)
     endif()
 	add_subdirectory(bench)
 endif()

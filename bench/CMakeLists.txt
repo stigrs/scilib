@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(Scilib_bench CXX)
 
-include_directories(${Scilib_SOURCE_DIR}/include)
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
@@ -12,6 +11,10 @@ endif()
 
 if(NOT TARGET Eigen3::Eigen)
     find_package(Eigen3 REQUIRED)
+endif()
+
+if(NOT TARGET Scilib::Scilib)
+  find_package(scilib REQUIRED)
 endif()
 
 set(PROGRAMS 
@@ -27,10 +30,9 @@ foreach(program ${PROGRAMS})
     add_executable(${program} ${program}.cpp)
 	target_link_libraries (
 	    ${program} 
-        sci
-	    ${BLAS_LIBRARIES}
-	    ${LAPACK_LIBRARIES}
+        Scilib::Scilib
         std::mdspan
         Eigen3::Eigen
+	    ${BLAS_LIBRARIES}
 	) 
 endforeach()

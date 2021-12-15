@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 project(Scilib_tests CXX)
 
-include_directories(${Scilib_SOURCE_DIR}/include)
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
-link_directories(${Scilib_BINARY_DIR})
 link_directories(${BLAS_LIBRARY_DIRS})
 
 include(FetchContent)
@@ -21,15 +19,18 @@ if(NOT TARGET std::mdspan)
   find_package(mdspan REQUIRED)
 endif()
 
+if(NOT TARGET Scilib::Scilib)
+  find_package(scilib REQUIRED)
+endif()
+
 function(add_scilib_test name)
     add_executable(${name} ${name}.cpp)
     target_link_libraries (
         ${name} 
-        sci
-	    ${BLAS_LIBRARIES}
-	    ${LAPACK_LIBRARIES}
+        Scilib::Scilib
         gtest_main
         std::mdspan
+	    ${BLAS_LIBRARIES}
     ) 
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
