@@ -130,7 +130,7 @@ if (NOT mdspan_FOUND)
     include(FetchContent)
     FetchContent_Declare(
         mdspan
-        URL https://github.com/kokkos/mdspan.git
+        GIT_REPOSITORY https://github.com/kokkos/mdspan.git
         GIT_TAG        stable
     )
     FetchContent_MakeAvailable(mdspan)
@@ -164,7 +164,7 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/expm.cpp    
 )
 
-add_library(scilib ${SRC_FILES})
+add_library(scilib STATIC ${SRC_FILES})
 add_library(Scilib::Scilib ALIAS scilib)
 target_link_libraries(
     scilib 
