@@ -30,6 +30,7 @@ foreach(program ${PROGRAMS})
     add_executable(${program} ${program}.cpp)
 	target_link_libraries (
 	    ${program} 
+        PRIVATE
         Scilib::Scilib
         std::mdspan
         Eigen3::Eigen

@@ -107,7 +107,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow")
 endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /W4 /WX /wd4100 /GR /EHsc /MT /O2")
+    set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /W4 /WX /wd4100 /wd4267 /GR /EHsc /MT /O2")
 endif()
 
 # Set debugging compiler options.
@@ -118,7 +118,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow")
 endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_DEBUG "/EHsc /W4 /WX /wd4100 /MT /GR /Zi /Od")
+    set(CMAKE_CXX_FLAGS_DEBUG "/EHsc /W4 /WX /wd4100 /wd4267 /MT /GR /Zi /Od")
 endif()
 
 ################################################################################
@@ -130,14 +130,13 @@ if (NOT mdspan_FOUND)
     include(FetchContent)
     FetchContent_Declare(
         mdspan
-        GIT_REPOSITORY https://github.com/kokkos/mdspan.git
-        GIT_TAG        stable
+        URL https://github.com/kokkos/mdspan/archive/refs/tags/mdspan-0.2.0.zip
     )
     FetchContent_MakeAvailable(mdspan)
 endif()
 
 if(NOT TARGET std::mdspan)
-  find_package(mdspan REQUIRED)
+    find_package(mdspan REQUIRED)
 endif()
 
 # BLAS and LAPACKE are required.
@@ -145,13 +144,13 @@ if(DEFINED ENV{MKLROOT})
 	find_package(MKL)
 	if(MKL_FOUND)
 	    message(STATUS "Intel MKL found")
-		add_definitions(${MKL_DEFINITIONS})
+	    add_definitions(${MKL_DEFINITIONS})
 	endif()
 else()
     find_package(OpenBLAS)
 	if(BLAS_FOUND)
         MESSAGE(STATUS "OpenBLAS found")
-		add_definitions(${BLAS_DEFINITIONS})
+	    add_definitions(${BLAS_DEFINITIONS})
 	endif()
 endif()
 
@@ -232,9 +231,10 @@ if(BUILD_BENCH)
         )
         FetchContent_MakeAvailable(eigen)
     endif()
-	add_subdirectory(bench)
+    add_subdirectory(bench)
 endif()
 
 if(BUILD_EXAMPLES) 
     add_subdirectory(examples)
 endif()
+

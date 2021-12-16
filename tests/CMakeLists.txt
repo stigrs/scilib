@@ -27,10 +27,11 @@ function(add_scilib_test name)
     add_executable(${name} ${name}.cpp)
     target_link_libraries (
         ${name} 
+        PRIVATE
         Scilib::Scilib
         gtest_main
         std::mdspan
-	    ${BLAS_LIBRARIES}
+	      ${BLAS_LIBRARIES}
     ) 
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
@@ -59,13 +60,13 @@ set(PROGRAMS
 
 foreach(program ${PROGRAMS})
     add_scilib_test(${program})
-	if(WIN32)
-	    if(NOT MKL_FOUND)
-          set_tests_properties(${program} PROPERTIES ENVIRONMENT "PATH=${BLAS_BINARY_DIRS};$ENV{PATH}")
-	    endif()
-  else()
-	    if(NOT MKL_FOUND)
-          set_tests_properties(${program} PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BLAS_BINARY_DIRS}")
-	    endif()
-	endif()
+	  if(WIN32)
+	      if(NOT MKL_FOUND)
+            set_tests_properties(${program} PROPERTIES ENVIRONMENT "PATH=${BLAS_BINARY_DIRS};$ENV{PATH}")
+	      endif()
+    else()
+	      if(NOT MKL_FOUND)
+            set_tests_properties(${program} PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BLAS_BINARY_DIRS}")
+	      endif()
+	  endif()
 endforeach()

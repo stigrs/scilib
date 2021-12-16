@@ -34,7 +34,11 @@ template <class T, class Extents>
 inline bool operator!=(const MDArray<T, Extents>& a,
                        const MDArray<T, Extents>& b)
 {
-    return !(a == b);
+    bool result = true;
+    if (a.view().extents() == b.view().extents()) {
+        result = !(a == b);
+    }
+    return result;
 }
 
 template <class T, class Extents>
