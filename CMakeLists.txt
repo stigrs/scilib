@@ -130,7 +130,7 @@ if (NOT mdspan_FOUND)
     include(FetchContent)
     FetchContent_Declare(
         mdspan
-        URL https://github.com/kokkos/mdspan/archive/refs/tags/mdspan-0.2.0.zip
+        URL https://github.com/kokkos/mdspan/archive/9ffce0d2a3c4439d3112b06c7d3e0036b61b0ef2.zip
     )
     FetchContent_MakeAvailable(mdspan)
 endif()
