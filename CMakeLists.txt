@@ -107,7 +107,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow")
 endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /W4 /WX /wd4100 /wd4267 /GR /EHsc /MT /O2")
+    set(CMAKE_CXX_FLAGS_RELEASE "/DNDEBUG /W4 /WX /wd4100 /GR /EHsc /MT /O2")
 endif()
 
 # Set debugging compiler options.
@@ -118,7 +118,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow")
 endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_DEBUG "/EHsc /W4 /WX /wd4100 /wd4267 /MT /GR /Zi /Od")
+    set(CMAKE_CXX_FLAGS_DEBUG "/EHsc /W4 /WX /wd4100 /MT /GR /Zi /Od")
 endif()
 
 ################################################################################
@@ -164,7 +164,7 @@ set(SRC_FILES
 )
 
 add_library(scilib ${SRC_FILES})
-add_library(Scilib::Scilib ALIAS scilib)
+add_library(scilib::scilib ALIAS scilib)
 target_link_libraries(
     scilib 
     PRIVATE
@@ -180,7 +180,7 @@ target_include_directories(scilib PUBLIC
 )
 
 install(TARGETS scilib
-    EXPORT ScilibTargets
+    EXPORT scilibTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}    
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}    
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}    
@@ -189,26 +189,26 @@ install(TARGETS scilib
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/scilib DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-install(EXPORT ScilibTargets
-    FILE ScilibTargets.cmake
-    NAMESPACE Scilib::
+install(EXPORT scilibTargets
+    FILE scilibTargets.cmake
+    NAMESPACE scilib::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scilib
 )
 
 include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/scilibConfigVersion.cmake"
     COMPATIBILITY AnyNewerVersion
 )
 
-configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ScilibConfig.cmake.in
-  "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake"
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/scilibConfig.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/scilibConfig.cmake"
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scilib
 )
 install(FILES 
-    "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfig.cmake" 
-    "${CMAKE_CURRENT_BINARY_DIR}/ScilibConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/scilibConfig.cmake" 
+    "${CMAKE_CURRENT_BINARY_DIR}/scilibConfigVersion.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scilib
 )
 

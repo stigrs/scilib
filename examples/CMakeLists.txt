@@ -9,7 +9,7 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
-if(NOT TARGET Scilib::Scilib)
+if(NOT TARGET scilib::scilib)
     find_package(scilib REQUIRED)
 endif()
 
@@ -26,7 +26,7 @@ foreach(program ${PROGRAMS})
 	  target_link_libraries (
 	      ${program} 
         PRIVATE
-        Scilib::Scilib
+        scilib::scilib
         std::mdspan
 	      ${BLAS_LIBRARIES}
 	  ) 

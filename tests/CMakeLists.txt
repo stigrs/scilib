@@ -19,7 +19,7 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
-if(NOT TARGET Scilib::Scilib)
+if(NOT TARGET scilib::scilib)
     find_package(scilib REQUIRED)
 endif()
 
@@ -28,7 +28,7 @@ function(add_scilib_test name)
     target_link_libraries (
         ${name} 
         PRIVATE
-        Scilib::Scilib
+        scilib::scilib
         gtest_main
         std::mdspan
 	      ${BLAS_LIBRARIES}

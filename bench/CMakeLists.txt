@@ -13,7 +13,7 @@ if(NOT TARGET Eigen3::Eigen)
     find_package(Eigen3 REQUIRED)
 endif()
 
-if(NOT TARGET Scilib::Scilib)
+if(NOT TARGET scilib::scilib)
   find_package(scilib REQUIRED)
 endif()
 
@@ -31,7 +31,7 @@ foreach(program ${PROGRAMS})
 	target_link_libraries (
 	    ${program} 
         PRIVATE
-        Scilib::Scilib
+        scilib::scilib
         std::mdspan
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}
