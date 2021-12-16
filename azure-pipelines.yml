@@ -42,8 +42,8 @@ stages:
   jobs:
   - template: ./pipelines/jobs-windows.yml
     parameters:
-      jobName: 'Validate MSVC latest'
-      imageName: windows-latest
+      jobName: 'Validate MSVC previous'
+      imageName: windows-previous
 
 # Apple-Clang
 - stage: Apple_Clang

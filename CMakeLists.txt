@@ -164,10 +164,11 @@ set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/expm.cpp    
 )
 
-add_library(scilib STATIC ${SRC_FILES})
+add_library(scilib ${SRC_FILES})
 add_library(Scilib::Scilib ALIAS scilib)
 target_link_libraries(
     scilib 
+    PRIVATE
     std::mdspan
     ${BLAS_LIBRARIES}
 )
