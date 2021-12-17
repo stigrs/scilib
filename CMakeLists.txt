@@ -38,6 +38,12 @@ endif()
 
 ################################################################################
 
+if(WIN32)
+    option(BUILD_SHARED_LIBS "Compile shared libraries." OFF)
+else()
+    option(BUILD_SHARED_LIBS "Compile shared libraries." ON)
+endif()
+
 # Check if C++20 standard is available.
 if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
     message(STATUS "Using C++20 standard")
@@ -46,10 +52,23 @@ else()
     message(FATAL_ERROR "Requested Scilib_CXX_STANDARD \"20\" not supported by provided C++ compiler")
 endif()
 
-if(WIN32)
-    option(BUILD_SHARED_LIBS "Compile shared libraries." OFF)
-else()
-    option(BUILD_SHARED_LIBS "Compile shared libraries." ON)
+option(Scilib_ENABLE_CONCEPTS "Try to enable concepts support by giving extra flags." ON)
+
+if(Scilib_ENABLE_CONCEPTS)
+    if(CMAKE_CXX_STANDARD STREQUAL "20")
+        include(CheckCXXCompilerFlag)
+        CHECK_CXX_COMPILER_FLAG("-fconcepts" COMPILER_SUPPORTS_FCONCEPTS)
+        if(COMPILER_SUPPORTS_FCONCEPTS)
+            message(STATUS "-- Using \"-fconcepts\" to enable concepts support")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts")
+        else()
+            CHECK_CXX_COMPILER_FLAG("-fconcepts-ts" COMPILER_SUPPORTS_FCONCEPTS_TS)
+            if(COMPILER_SUPPORTS_FCONCEPTS)
+                message(STATUS "-- Using \"-fconcepts-ts\" to enable concepts support")
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts-ts")
+            endif()
+        endif()
+    endif()
 endif()
 
 # Set release compiler options.
