@@ -91,8 +91,7 @@ public:
     MDArray(const std::array<T, N>& a, const std::array<size_type, N_dim>& exts)
         : storage(a.begin(), a.end()), span(storage.data(), exts)
     {
-        constexpr size_type one = 1;
-        assert(N == std::accumulate(exts.begin(), exts.end(), one,
+        assert(N == std::accumulate(exts.begin(), exts.end(), 1,
                                     std::multiplies<std::size_t>()));
     }
 

@@ -30,7 +30,7 @@ TEST(TestVector, TestView)
         v(i) = i;
     }
     auto vv = v.view();
-    EXPECT_EQ(v(0), 0);
+    EXPECT_EQ(vv(0), 0);
 }
 
 TEST(TestVector, TestCopy)

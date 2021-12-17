@@ -39,6 +39,7 @@ void benchmark(int n, int m)
     t1 = std::chrono::high_resolution_clock::now();
     auto mt = Scilib::Linalg::transposed(m2.view());
     t2 = std::chrono::high_resolution_clock::now();
+    (void)mt;
     Timer t_sci = t2 - t1;
 
     print(n, m, t_eigen, t_sci);
