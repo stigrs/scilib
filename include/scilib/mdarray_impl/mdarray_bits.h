@@ -201,8 +201,8 @@ public:
     }
 
     // Apply f(x, val) for every element x.
-    template <class F>
-    MDArray& apply(F f, const T& val) noexcept
+    template <class F, class U>
+    MDArray& apply(F f, const U& val) noexcept
     {
         for (size_type i = 0; i < size(); ++i) {
             f(storage[i], val);
