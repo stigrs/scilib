@@ -73,7 +73,7 @@ endif()
 
 # Set compiler options.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    set(Stdutils_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-maybe-uninitialized -Wno-unused-variable -std=c++2a)
+    set(Stdutils_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-maybe-uninitialized -std=c++2a)
     set(Stdutils_CXX_FLAGS_DEBUG ${Stdutils_CXX_FLAGS} -g)
     set(Stdutils_CXX_FLAGS_RELEASE ${Stdutils_CXX_FLAGS} -O3)
 endif()
