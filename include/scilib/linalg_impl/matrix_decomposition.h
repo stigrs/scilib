@@ -32,7 +32,7 @@ inline void lu(Scilib::Matrix_view<double> a,
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT lda = n;
 
-    assert(ipiv.size() >= std::min(m, n));
+    assert(static_cast<BLAS_INT>(ipiv.size()) >= std::min(m, n));
 
     BLAS_INT info =
         LAPACKE_dgetrf(LAPACK_ROW_MAJOR, m, n, a.data(), lda, ipiv.data());
@@ -53,8 +53,8 @@ inline void qr(Scilib::Matrix_view<double> a,
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT lda = n;
 
-    assert(q.extent(0) == m && q.extent(1) == n);
-    assert(r.extent(0) == m && r.extent(1) == n);
+    assert(q.extent(0) == a.extent(0) && q.extent(1) == a.extent(1));
+    assert(r.extent(0) == a.extent(0) && r.extent(1) == a.extent(1));
 
     // Compute QR factorization:
 
@@ -92,11 +92,11 @@ inline void svd(Scilib::Matrix_view<double> a,
     BLAS_INT ldu = m;
     BLAS_INT ldvt = n;
 
-    assert(s.extent(0) == std::min(m, n));
-    assert(u.extent(0) == m);
-    assert(u.extent(1) == ldu);
-    assert(vt.extent(0) == n);
-    assert(vt.extent(1) == ldvt);
+    assert(static_cast<BLAS_INT>(s.extent(0)) == std::min(m, n));
+    assert(static_cast<BLAS_INT>(u.extent(0)) == m);
+    assert(static_cast<BLAS_INT>(u.extent(1)) == ldu);
+    assert(static_cast<BLAS_INT>(vt.extent(0)) == n);
+    assert(static_cast<BLAS_INT>(vt.extent(1)) == ldvt);
 
     Scilib::Vector<double> superb(std::min(m, n) - 1);
 
