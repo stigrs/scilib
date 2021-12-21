@@ -7,12 +7,7 @@
 #ifndef SCILIB_MDARRAY_SLICE_H
 #define SCILIB_MDARRAY_SLICE_H
 
-#ifdef __GNUG__
-#pragma GCC diagnostics push
-#pragma GCC diagnostics ignored "-Werror=unused-parameter"
 #include <experimental/mdspan>
-#pragma GCC diagnostics pop
-#endif
 #include <array>
 #include <utility>
 
