@@ -103,7 +103,7 @@ if (NOT mdspan_FOUND)
     FetchContent_Declare(
         mdspan
         GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-        GIT_TAG         main
+        GIT_TAG         stable
     )
     FetchContent_MakeAvailable(mdspan)
 endif()
