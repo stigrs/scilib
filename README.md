@@ -30,10 +30,8 @@ licensing of GoogleTest and stdBLAS.
 
 ### Requirements
 
-* [CMake](https://cmake.org) 3.14
-* [mdspan](https://github.com/kokkos/mdspan)
+* [CMake](https://cmake.org) 3.13
 * [OpenBLAS](https://www.openblas.net/) (Intel MKL is recommended)
-* [Eigen3](https://gitlab.com/libeigen/eigen) (for benchmarking)
 
 ### Supported Compilers
 
