@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.13)
 project(Scilib 
     VERSION 0.1
     LANGUAGES CXX
@@ -19,9 +19,9 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(Scilib_STANDALONE_PROJECT ON)
 endif()
 
-option(BUILD_TESTS "Build tests." ${Scilib_STANDALONE_PROJECT})
-option(BUILD_BENCH "Build benchmarks." ${Scilib_STANDALONE_PROJECT})
-option(BUILD_EXAMPLES "Build examples." ${Scilib_STANDALONE_PROJECT})
+option(Scilib_BUILD_TESTS "Build tests." ${Scilib_STANDALONE_PROJECT})
+option(Scilib_BUILD_BENCH "Build benchmarks." ${Scilib_STANDALONE_PROJECT})
+option(Scilib_BUILD_EXAMPLES "Build examples." ${Scilib_STANDALONE_PROJECT})
 
 ################################################################################
 
@@ -102,7 +102,8 @@ if (NOT mdspan_FOUND)
     include(FetchContent)
     FetchContent_Declare(
         mdspan
-        URL https://github.com/kokkos/mdspan/archive/9ffce0d2a3c4439d3112b06c7d3e0036b61b0ef2.zip
+        GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
+        GIT_TAG         main
     )
     FetchContent_MakeAvailable(mdspan)
 endif()
@@ -186,12 +187,12 @@ install(FILES
 
 ################################################################################
 
-if(BUILD_TESTS)
+if(Scilib_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
 
-if(BUILD_BENCH)
+if(Scilib_BUILD_BENCH)
     find_package(Eigen3 3.4 QUIET)
     if (NOT TARGET Eigen3::Eigen)
         message(STATUS "No installed Eigen found, fetching from GitLab")
@@ -206,7 +207,7 @@ if(BUILD_BENCH)
     add_subdirectory(bench)
 endif()
 
-if(BUILD_EXAMPLES) 
+if(Scilib_BUILD_EXAMPLES) 
     add_subdirectory(examples)
 endif()
 

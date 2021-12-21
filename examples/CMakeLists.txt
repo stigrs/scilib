@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.13)
 project(Scilib_examples CXX)
 
 include_directories(${BLAS_INCLUDE_DIRS})
