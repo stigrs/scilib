@@ -71,27 +71,23 @@ if(Scilib_ENABLE_CONCEPTS)
     endif()
 endif()
 
-# Set release compiler options.
+# Set compiler options.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-maybe-uninitialized -std=c++2a")
+    set(Stdutils_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-maybe-uninitialized -std=c++2a)
+    set(Stdutils_CXX_FLAGS_DEBUG ${Stdutils_CXX_FLAGS} -g)
+    set(Stdutils_CXX_FLAGS_RELEASE ${Stdutils_CXX_FLAGS} -O3)
 endif()
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -std=c++2a")
+    set(Stdutils_CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -std=c++2a)
+    set(Stdutils_CXX_FLAGS_DEBUG ${Stdutils_CXX_FLAGS} -g)
+    set(Stdutils_CXX_FLAGS_RELEASE ${Stdutils_CXX_FLAGS} -O3)
 endif()
 if(MSVC)
-    set(CMAKE_CXX_FLAGS_RELEASE "/DWIN32 /D_WINDOWS /DNDEBUG /W4 /WX /wd4100 /GR /EHsc /MT /O2 /std:c++latest")
+    set(Stdutils_CXX_FLAGS ${CMAKE_CXX_FLAGS} /W4 /WX /wd4100)
+    set(Stdutils_CXX_FLAGS_DEBUG ${Stdutils_CXX_FLAGS} /Zi /Od)
+    set(Stdutils_CXX_FLAGS_RELEASE ${Stdutils_CXX_FLAGS} /O2)
 endif()
-
-# Set debugging compiler options.
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-maybe-uninitialized -std=c++2a")
-endif()
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -std=c++2a")
-endif()
-if(MSVC)
-    set(CMAKE_CXX_FLAGS_DEBUG "/DWIN32 /D_WINDOWS /EHsc /W4 /WX /wd4100 /MT /GR /Zi /Od /std:c++latest")
-endif()
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ################################################################################
 
@@ -138,11 +134,19 @@ set(SRC_FILES
 
 add_library(scilib ${SRC_FILES})
 add_library(scilib::scilib ALIAS scilib)
+
 target_link_libraries(
     scilib 
     PRIVATE
     std::mdspan
     ${BLAS_LIBRARIES}
+)
+
+target_compile_options(
+    scilib
+    PRIVATE
+    "$<$<CONFIG:Debug>:${Stdutils_CXX_FLAGS_DEBUG}>"
+    "$<$<CONFIG:Release>:${Stdutils_CXX_FLAGS_RELEASE}>"
 )
 
 target_include_directories(scilib PUBLIC

@@ -23,11 +23,17 @@ set(PROGRAMS
 
 foreach(program ${PROGRAMS})
     add_executable(${program} ${program}.cpp)
-	  target_link_libraries (
-	      ${program} 
+	target_link_libraries (
+	    ${program} 
         PRIVATE
         scilib::scilib
         std::mdspan
-	      ${BLAS_LIBRARIES}
-	  ) 
+	    ${BLAS_LIBRARIES}
+	) 
+    target_compile_options(
+        ${program}
+        PRIVATE
+        "$<$<CONFIG:Debug>:${Stdutils_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${Stdutils_CXX_FLAGS_RELEASE}>"
+    )
 endforeach()

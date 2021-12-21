@@ -36,4 +36,10 @@ foreach(program ${PROGRAMS})
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}
 	) 
+    target_compile_options(
+        ${program}
+        PRIVATE
+        "$<$<CONFIG:Debug>:${Stdutils_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${Stdutils_CXX_FLAGS_RELEASE}>"
+    )
 endforeach()
