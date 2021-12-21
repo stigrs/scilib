@@ -39,7 +39,7 @@ foreach(program ${PROGRAMS})
     target_compile_options(
         ${program}
         PRIVATE
-        "$<$<CONFIG:Debug>:${Stdutils_CXX_FLAGS_DEBUG}>"
-        "$<$<CONFIG:Release>:${Stdutils_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:Debug>:${Scilib_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${Scilib_CXX_FLAGS_RELEASE}>"
     )
 endforeach()

@@ -36,8 +36,8 @@ function(add_scilib_test name)
     target_compile_options(
         ${name}
         PRIVATE
-        "$<$<CONFIG:Debug>:${Stdutils_CXX_FLAGS_DEBUG}>"
-        "$<$<CONFIG:Release>:${Stdutils_CXX_FLAGS_RELEASE}>"
+        "$<$<CONFIG:Debug>:${Scilib_CXX_FLAGS_DEBUG}>"
+        "$<$<CONFIG:Release>:${Scilib_CXX_FLAGS_RELEASE}>"
     )
     add_test(NAME ${name} COMMAND ${name})
 endfunction()
