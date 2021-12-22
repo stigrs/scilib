@@ -21,7 +21,7 @@ namespace stdex = std::experimental;
 namespace __Detail {
 
 template <class... Exts>
-constexpr stdex::extents<>::size_type __compute_size(Exts... exts)
+inline stdex::extents<>::size_type __compute_size(Exts... exts)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -31,7 +31,7 @@ constexpr stdex::extents<>::size_type __compute_size(Exts... exts)
 }
 
 template <class Extents, class... Dims>
-constexpr bool __check_bounds(const Extents& exts, Dims... dims)
+inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
     using size_type = stdex::extents<>::size_type;
 
