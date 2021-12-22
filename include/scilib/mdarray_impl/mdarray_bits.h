@@ -100,7 +100,7 @@ public:
                                     std::multiplies<std::size_t>()));
     }
 
-    MDArray(MDArray&&) = default;
+    constexpr MDArray(MDArray&&) = default;
     constexpr MDArray& operator=(MDArray&&) = default;
 
     constexpr MDArray(const MDArray& m)
