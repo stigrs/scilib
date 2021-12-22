@@ -21,18 +21,17 @@ namespace stdex = std::experimental;
 namespace __Detail {
 
 template <class... Exts>
-inline auto __compute_size(Exts... exts)
+constexpr stdex::extents<>::size_type __compute_size(Exts... exts)
 {
     using size_type = stdex::extents<>::size_type;
 
     std::vector<size_type> storage{static_cast<size_type>(exts)...};
-    constexpr size_type one = 1;
-    return std::accumulate(storage.begin(), storage.end(), one,
+    return std::accumulate(storage.begin(), storage.end(), size_type{1},
                            std::multiplies<size_type>());
 }
 
 template <class Extents, class... Dims>
-inline bool __check_bounds(const Extents& exts, Dims... dims)
+constexpr bool __check_bounds(const Extents& exts, Dims... dims)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -60,15 +59,20 @@ public:
     using value_type = T;
     using size_type = stdex::extents<>::size_type;
     using difference_type = std::ptrdiff_t;
+    using reference = value_type&;
+    using const_reference = const value_type&;
     using iterator = typename std::vector<T>::iterator;
     using const_iterator = typename std::vector<T>::const_iterator;
+    using reverse_iterator = typename std::vector<T>::reverse_iterator;
+    using const_reverse_iterator =
+        typename std::vector<T>::const_reverse_iterator;
 
     constexpr static size_type N_dim = Extents::rank();
 
-    MDArray() = default;
+    constexpr MDArray() = default;
 
     template <class... Exts>
-    explicit MDArray(Exts... exts)
+    constexpr explicit MDArray(Exts... exts)
         : storage(__Detail::__compute_size(static_cast<size_type>(exts)...)),
           span(storage.data(),
                std::array<size_type, N_dim>{static_cast<size_type>(exts)...})
@@ -77,7 +81,7 @@ public:
     }
 
     template <class... Exts>
-    MDArray(const std::vector<T>& m, Exts... exts)
+    constexpr MDArray(const std::vector<T>& m, Exts... exts)
         : storage(m),
           span(storage.data(),
                std::array<size_type, N_dim>{static_cast<size_type>(exts)...})
@@ -88,7 +92,8 @@ public:
     }
 
     template <std::size_t N>
-    MDArray(const std::array<T, N>& a, const std::array<size_type, N_dim>& exts)
+    constexpr MDArray(const std::array<T, N>& a,
+                      const std::array<size_type, N_dim>& exts)
         : storage(a.begin(), a.end()), span(storage.data(), exts)
     {
         assert(N == std::accumulate(exts.begin(), exts.end(), std::size_t{1},
@@ -96,15 +101,15 @@ public:
     }
 
     MDArray(MDArray&&) = default;
-    MDArray& operator=(MDArray&&) = default;
+    constexpr MDArray& operator=(MDArray&&) = default;
 
-    MDArray(const MDArray& m)
+    constexpr MDArray(const MDArray& m)
         : storage(m.storage), span(storage.data(), m.view().extents())
     {
     }
 
     template <class Extents_m, class Layout_m, class Accessor_m>
-    MDArray(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
+    constexpr MDArray(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
         : storage(m.size()), span(storage.data(), m.extents())
     {
         static_assert(m.rank() == N_dim);
@@ -112,7 +117,7 @@ public:
         copy(m, span);
     }
 
-    MDArray& operator=(const MDArray& m)
+    constexpr MDArray& operator=(const MDArray& m)
     {
         storage = m.storage;
         span = stdex::mdspan<T, Extents>(storage.data(), m.view().extents());
@@ -120,7 +125,8 @@ public:
     }
 
     template <class Extents_m, class Layout_m, class Accessor_m>
-    MDArray& operator=(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
+    constexpr MDArray&
+    operator=(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
     {
         static_assert(m.rank() == N_dim);
         static_assert(m.rank() <= 4);
@@ -132,10 +138,10 @@ public:
         return *this;
     }
 
-    ~MDArray() = default;
+    constexpr ~MDArray() = default;
 
     template <class... Indices>
-    constexpr auto& operator()(Indices... indices) noexcept
+    constexpr reference operator()(Indices... indices) noexcept
     {
         static_assert(sizeof...(indices) == N_dim);
         assert(__Detail::__check_bounds(span.extents(), indices...));
@@ -143,7 +149,7 @@ public:
     }
 
     template <class... Indices>
-    constexpr const auto& operator()(Indices... indices) const noexcept
+    constexpr const_reference operator()(Indices... indices) const noexcept
     {
         static_assert(sizeof...(indices) == N_dim);
         assert(__Detail::__check_bounds(span.extents(), indices...));
@@ -157,9 +163,29 @@ public:
         return storage.cbegin();
     }
 
+    constexpr reverse_iterator rbegin() noexcept { return storage.rbegin(); }
+    constexpr const_reverse_iterator rbegin() const noexcept
+    {
+        return storage.rbegin();
+    }
+    constexpr const_reverse_iterator crbegin() const noexcept
+    {
+        return storage.crbegin();
+    }
+
     constexpr iterator end() noexcept { return storage.end(); }
     constexpr const_iterator end() const noexcept { return storage.end(); }
     constexpr const_iterator cend() const noexcept { return storage.cend(); }
+
+    constexpr reverse_iterator rend() noexcept { return storage.rend(); }
+    constexpr const_reverse_iterator rend() const noexcept
+    {
+        return storage.rend();
+    }
+    constexpr const_reverse_iterator crend() const noexcept
+    {
+        return storage.crend();
+    }
 
     constexpr T* data() noexcept { return storage.data(); }
     constexpr const T* data() const noexcept { return storage.data(); }
@@ -170,20 +196,22 @@ public:
         return stdex::mdspan<T, Extents>(span);
     }
 
-    constexpr auto rank() const noexcept { return span.rank(); }
+    constexpr size_type rank() const noexcept { return span.rank(); }
 
     constexpr bool empty() const noexcept { return storage.empty(); }
 
-    constexpr auto size() const noexcept { return span.size(); }
+    constexpr size_type size() const noexcept { return storage.size(); }
 
-    constexpr auto extent(size_type dim) const noexcept
+    constexpr size_type max_size() const noexcept { return storage.max_size(); }
+
+    constexpr size_type extent(size_type dim) const noexcept
     {
         assert(dim >= 0 && dim < N_dim);
         return span.extent(dim);
     }
 
     template <class... Exts>
-    void resize(Exts... exts) noexcept
+    constexpr void resize(Exts... exts) noexcept
     {
         static_assert(sizeof...(exts) == N_dim);
         storage = std::vector<T>(
@@ -193,15 +221,14 @@ public:
             std::array<size_type, N_dim>{static_cast<size_type>(exts)...});
     }
 
-    void swap(MDArray& m) noexcept
+    constexpr void swap(MDArray& m) noexcept
     {
         std::swap(storage, m.storage);
         std::swap(span, m.span);
     }
 
-    // Apply f(x) for every element x.
     template <class F>
-    MDArray& apply(F f) noexcept
+    constexpr MDArray& apply(F f) noexcept
     {
         for (size_type i = 0; i < size(); ++i) {
             f(storage[i]);
@@ -209,9 +236,8 @@ public:
         return *this;
     }
 
-    // Apply f(x, val) for every element x.
     template <class F, class U>
-    MDArray& apply(F f, const U& val) noexcept
+    constexpr MDArray& apply(F f, const U& val) noexcept
     {
         for (size_type i = 0; i < size(); ++i) {
             f(storage[i], val);
@@ -220,7 +246,7 @@ public:
     }
 
     template <class F>
-    MDArray& apply(const MDArray& m, F f) noexcept
+    constexpr MDArray& apply(const MDArray& m, F f) noexcept
     {
         assert(view().extents() == m.view().extents());
 
@@ -234,42 +260,42 @@ public:
         return *this;
     }
 
-    MDArray& operator=(const T& value) noexcept
+    constexpr MDArray& operator=(const T& value) noexcept
     {
         return apply([&](T& a) { a = value; });
     }
 
-    MDArray& operator+=(const T& value) noexcept
+    constexpr MDArray& operator+=(const T& value) noexcept
     {
         return apply([&](T& a) { a += value; });
     }
 
-    MDArray& operator-=(const T& value) noexcept
+    constexpr MDArray& operator-=(const T& value) noexcept
     {
         return apply([&](T& a) { a -= value; });
     }
 
-    MDArray& operator*=(const T& value) noexcept
+    constexpr MDArray& operator*=(const T& value) noexcept
     {
         return apply([&](T& a) { a *= value; });
     }
 
-    MDArray& operator/=(const T& value) noexcept
+    constexpr MDArray& operator/=(const T& value) noexcept
     {
         return apply([&](T& a) { a /= value; });
     }
 
-    MDArray& operator%=(const T& value) noexcept
+    constexpr MDArray& operator%=(const T& value) noexcept
     {
         return apply([&](T& a) { a %= value; });
     }
 
-    MDArray& operator+=(const MDArray& m) noexcept
+    constexpr MDArray& operator+=(const MDArray& m) noexcept
     {
         return apply(m, [](T& a, const T& b) { a += b; });
     }
 
-    MDArray& operator-=(const MDArray& m) noexcept
+    constexpr MDArray& operator-=(const MDArray& m) noexcept
     {
         return apply(m, [](T& a, const T& b) { a -= b; });
     }

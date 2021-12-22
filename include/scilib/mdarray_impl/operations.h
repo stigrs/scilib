@@ -24,15 +24,15 @@ namespace stdex = std::experimental;
 // Equality comparisons:
 
 template <class T, class Extents>
-inline bool operator==(const MDArray<T, Extents>& a,
-                       const MDArray<T, Extents>& b)
+constexpr bool operator==(const MDArray<T, Extents>& a,
+                          const MDArray<T, Extents>& b)
 {
     return std::equal(a.begin(), a.end(), b.begin());
 }
 
 template <class T, class Extents>
-inline bool operator!=(const MDArray<T, Extents>& a,
-                       const MDArray<T, Extents>& b)
+constexpr bool operator!=(const MDArray<T, Extents>& a,
+                          const MDArray<T, Extents>& b)
 {
     bool result = true;
     if (a.view().extents() == b.view().extents()) {
@@ -42,29 +42,29 @@ inline bool operator!=(const MDArray<T, Extents>& a,
 }
 
 template <class T, class Extents>
-inline bool operator<(const MDArray<T, Extents>& a,
-                      const MDArray<T, Extents>& b)
+constexpr bool operator<(const MDArray<T, Extents>& a,
+                         const MDArray<T, Extents>& b)
 {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
 }
 
 template <class T, class Extents>
-inline bool operator>(const MDArray<T, Extents>& a,
-                      const MDArray<T, Extents>& b)
+constexpr bool operator>(const MDArray<T, Extents>& a,
+                         const MDArray<T, Extents>& b)
 {
     return b < a;
 }
 
 template <class T, class Extents>
-inline bool operator<=(const MDArray<T, Extents>& a,
-                       const MDArray<T, Extents>& b)
+constexpr bool operator<=(const MDArray<T, Extents>& a,
+                          const MDArray<T, Extents>& b)
 {
     return !(a > b);
 }
 
 template <class T, class Extents>
-inline bool operator>=(const MDArray<T, Extents>& a,
-                       const MDArray<T, Extents>& b)
+constexpr bool operator>=(const MDArray<T, Extents>& a,
+                          const MDArray<T, Extents>& b)
 {
     return !(a < b);
 }
@@ -73,71 +73,71 @@ inline bool operator>=(const MDArray<T, Extents>& a,
 // Arithmetic operations:
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator-(const MDArray<T, Extents>& v)
+constexpr MDArray<T, Extents> operator-(const MDArray<T, Extents>& v)
 {
     MDArray<T, Extents> res = v;
     return res *= -T{1};
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator+(const MDArray<T, Extents>& a,
-                                     const MDArray<T, Extents>& b)
+constexpr MDArray<T, Extents> operator+(const MDArray<T, Extents>& a,
+                                        const MDArray<T, Extents>& b)
 {
     MDArray<T, Extents> res = a;
     return res += b;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator-(const MDArray<T, Extents>& a,
-                                     const MDArray<T, Extents>& b)
+constexpr MDArray<T, Extents> operator-(const MDArray<T, Extents>& a,
+                                        const MDArray<T, Extents>& b)
 {
     MDArray<T, Extents> res = a;
     return res -= b;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator+(const MDArray<T, Extents>& v,
-                                     const T& scalar)
+constexpr MDArray<T, Extents> operator+(const MDArray<T, Extents>& v,
+                                        const T& scalar)
 {
     MDArray<T, Extents> res = v;
     return res += scalar;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator-(const MDArray<T, Extents>& v,
-                                     const T& scalar)
+constexpr MDArray<T, Extents> operator-(const MDArray<T, Extents>& v,
+                                        const T& scalar)
 {
     MDArray<T, Extents> res = v;
     return res -= scalar;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator*(const MDArray<T, Extents>& v,
-                                     const T& scalar)
+constexpr MDArray<T, Extents> operator*(const MDArray<T, Extents>& v,
+                                        const T& scalar)
 {
     MDArray<T, Extents> res = v;
     return res *= scalar;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator*(const T& scalar,
-                                     const MDArray<T, Extents>& v)
+constexpr MDArray<T, Extents> operator*(const T& scalar,
+                                        const MDArray<T, Extents>& v)
 {
     MDArray<T, Extents> res = v;
     return res *= scalar;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator/(const MDArray<T, Extents>& v,
-                                     const T& scalar)
+constexpr MDArray<T, Extents> operator/(const MDArray<T, Extents>& v,
+                                        const T& scalar)
 {
     MDArray<T, Extents> res = v;
     return res /= scalar;
 }
 
 template <class T, class Extents>
-inline MDArray<T, Extents> operator%(const MDArray<T, Extents>& v,
-                                     const T& scalar)
+constexpr MDArray<T, Extents> operator%(const MDArray<T, Extents>& v,
+                                        const T& scalar)
 {
     MDArray<T, Extents> res = v;
     return res %= scalar;
@@ -147,7 +147,7 @@ inline MDArray<T, Extents> operator%(const MDArray<T, Extents>& v,
 // Matrix-matrix product:
 
 template <class T>
-inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
+constexpr Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 {
     return Scilib::Linalg::matrix_product(a.view(), b.view());
 }
@@ -156,7 +156,7 @@ inline Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 // Matrix-vector product:
 
 template <class T>
-inline Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
+constexpr Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
 {
     return Scilib::Linalg::matrix_vector_product(a.view(), x.view());
 }
@@ -170,7 +170,7 @@ template <class T,
           class Accessor,
           class F>
 // clang-format off
-inline void 
+constexpr void 
 apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v, F f)
 {
     using size_type = stdex::extents<>::size_type;
@@ -186,7 +186,7 @@ template <class T,
           class Layout,
           class Accessor,
           class F>
-inline void
+constexpr void
 apply(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m, F f)
 {
     using size_type = stdex::extents<>::size_type;
