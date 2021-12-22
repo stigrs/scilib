@@ -138,7 +138,7 @@ public:
         return *this;
     }
 
-    constexpr ~MDArray() = default;
+    ~MDArray() = default;
 
     template <class... Indices>
     constexpr reference operator()(Indices... indices) noexcept
