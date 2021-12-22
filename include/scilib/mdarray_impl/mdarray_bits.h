@@ -151,20 +151,30 @@ public:
     }
 
     constexpr iterator begin() noexcept { return storage.begin(); }
-    constexpr iterator end() noexcept { return storage.end(); }
-
     constexpr const_iterator begin() const noexcept { return storage.begin(); }
+    constexpr const_iterator cbegin() const noexcept
+    {
+        return storage.cbegin();
+    }
+
+    constexpr iterator end() noexcept { return storage.end(); }
     constexpr const_iterator end() const noexcept { return storage.end(); }
+    constexpr const_iterator cend() const noexcept { return storage.cend(); }
 
     constexpr T* data() noexcept { return storage.data(); }
     constexpr const T* data() const noexcept { return storage.data(); }
 
-    constexpr auto view() const noexcept { return stdex::mdspan<T, Extents>(span); }
-
-    constexpr bool empty() const noexcept { return storage.empty(); }
-    constexpr auto size() const noexcept { return span.size(); }
+    // Note: view() does not propagate const.
+    constexpr auto view() const noexcept
+    {
+        return stdex::mdspan<T, Extents>(span);
+    }
 
     constexpr auto rank() const noexcept { return span.rank(); }
+
+    constexpr bool empty() const noexcept { return storage.empty(); }
+
+    constexpr auto size() const noexcept { return span.size(); }
 
     constexpr auto extent(size_type dim) const noexcept
     {
