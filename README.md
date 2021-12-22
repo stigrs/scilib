@@ -41,6 +41,7 @@ licensing of GoogleTest and stdBLAS.
 | Clang         | 11              |
 | Visual Studio | VS2019          |
 | XCode         | 13.0            |
+| Intel         | 2021            |
 
 ### Obtaining the Source Code
 

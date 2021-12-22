@@ -160,7 +160,7 @@ public:
     constexpr const T* data() const noexcept { return storage.data(); }
 
     constexpr auto view() noexcept { return span; }
-    constexpr const auto view() const noexcept { return span; }
+    constexpr auto view() const noexcept { return span; }
 
     constexpr bool empty() const noexcept { return storage.empty(); }
     constexpr auto size() const noexcept { return span.size(); }

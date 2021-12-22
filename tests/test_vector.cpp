@@ -10,8 +10,9 @@
 
 TEST(TestVector, TestSize)
 {
-    Scilib::Vector<int> v(5);
-    EXPECT_EQ(v.size(), 5);
+    std::size_t sz = 5;
+    Scilib::Vector<int> v(sz);
+    EXPECT_EQ(v.size(), sz);
 }
 
 TEST(TestVector, TestElementAccesss)
@@ -78,18 +79,22 @@ TEST(TestVector, TestCopyVector)
 TEST(TestVector, TestResize)
 {
     Scilib::Vector<int> v(5);
-    v.resize(10);
-    EXPECT_EQ(v.size(), 10);
+    std::size_t sz = 10;
+    v.resize(sz);
+    EXPECT_EQ(v.size(), sz);
 }
 
 TEST(TestVector, TestSwap)
 {
-    Scilib::Vector<int> a(5);
-    Scilib::Vector<int> b(10);
+    std::size_t n1 = 5;
+    std::size_t n2 = 10;
+
+    Scilib::Vector<int> a(n1);
+    Scilib::Vector<int> b(n2);
 
     std::swap(a, b);
-    EXPECT_EQ(a.size(), 10);
-    EXPECT_EQ(b.size(), 5);
+    EXPECT_EQ(a.size(), n2);
+    EXPECT_EQ(b.size(), n1);
 }
 
 TEST(TestVector, TestEmpty)
@@ -166,8 +171,8 @@ TEST(TestVector, TestSort)
     std::vector<int> data = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     Scilib::Vector<int> x(data, data.size());
     Scilib::sort(x.view());
-    for (std::size_t i = 0; i < x.size(); ++i) {
-        EXPECT_EQ(x(i), i + 1);
+    for (size_t i = 0; i < x.size(); ++i) {
+        EXPECT_EQ(x(i), static_cast<int>(i + 1));
     }
 }
 

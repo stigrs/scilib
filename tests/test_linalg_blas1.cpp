@@ -38,13 +38,13 @@ TEST(TestLinalg, TestDot)
 TEST(TestLinalg, TestIdxAbsMax)
 {
     Scilib::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
-    EXPECT_EQ(Scilib::Linalg::idx_abs_max(v.view()), 2);
+    EXPECT_EQ(Scilib::Linalg::idx_abs_max(v.view()), 2UL);
 }
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
     Scilib::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
-    EXPECT_EQ(Scilib::Linalg::idx_abs_min(v.view()), 0);
+    EXPECT_EQ(Scilib::Linalg::idx_abs_min(v.view()), 0UL);
 }
 
 TEST(TestLinalg, TestNorm2)

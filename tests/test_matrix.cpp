@@ -9,10 +9,14 @@
 
 TEST(TestMatrix, TestSize)
 {
-    Scilib::Matrix<int> m(5, 3);
-    EXPECT_EQ(m.size(), 5 * 3);
-    EXPECT_EQ(m.extent(0), 5);
-    EXPECT_EQ(m.extent(1), 3);
+    std::size_t nrows = 5;
+    std::size_t ncols = 3;
+
+    Scilib::Matrix<int> m(nrows, ncols);
+
+    EXPECT_EQ(m.size(), nrows * ncols);
+    EXPECT_EQ(m.extent(0), nrows);
+    EXPECT_EQ(m.extent(1), ncols);
 }
 
 TEST(TestMatrix, TestElementAccess)
@@ -74,21 +78,25 @@ TEST(TestMatrix, TestAssignSpan)
 
 TEST(TestMatrix, TestResize)
 {
-    Scilib::Matrix<int> a(5, 3);
+    std::size_t nrows = 5;
+    std::size_t ncols = 3;
+    Scilib::Matrix<int> a(nrows, ncols);
     a.resize(3, 5);
-    EXPECT_EQ(a.extent(0), 3);
-    EXPECT_EQ(a.extent(1), 5);
+    EXPECT_EQ(a.extent(0), ncols);
+    EXPECT_EQ(a.extent(1), nrows);
 }
 
 TEST(TestMatrix, TestSwap)
 {
-    Scilib::Matrix<int> a(5, 3);
-    Scilib::Matrix<int> b(3, 5);
+    std::size_t n1 = 5;
+    std::size_t n2 = 3;
+    Scilib::Matrix<int> a(n1, n2);
+    Scilib::Matrix<int> b(n2, n1);
     std::swap(a, b);
-    EXPECT_EQ(a.extent(0), 3);
-    EXPECT_EQ(a.extent(1), 5);
-    EXPECT_EQ(b.extent(0), 5);
-    EXPECT_EQ(b.extent(1), 3);
+    EXPECT_EQ(a.extent(0), n2);
+    EXPECT_EQ(a.extent(1), n1);
+    EXPECT_EQ(b.extent(0), n1);
+    EXPECT_EQ(b.extent(1), n2);
 }
 
 TEST(TestMatrix, TestInitializer)
@@ -151,10 +159,10 @@ TEST(TestMatrix, TestRow)
     const auto r1 = Scilib::row(ma.view(), 1);
 
     for (std::size_t i = 0; i < r0.size(); ++i) {
-        EXPECT_EQ(r0(i), i + 1);
+        EXPECT_EQ(r0(i), static_cast<int>(i + 1));
     }
     for (std::size_t i = 0; i < r1.size(); ++i) {
-        EXPECT_EQ(r1(i), i + 4);
+        EXPECT_EQ(r1(i), static_cast<int>(i + 4));
     }
 }
 
