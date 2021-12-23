@@ -51,4 +51,17 @@ int main()
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
     std::cout << "m2 = " << m2 << "\n\n";
+
+    using const_view_type = Scilib::Matrix<int>::const_view_type;
+
+    const_view_type m2_view = m2.view();
+    std::cout << "m2_view.size() =    " << m2_view.size() << '\n';
+    std::cout << "m2_view.extent(0) = " << m2_view.extent(0) << '\n';
+    std::cout << "m2_view.extent(1) = " << m2_view.extent(1) << "\n\n";
+    std::cout << "m2_view = ";
+    Scilib::print(std::cout, m2_view);
+    std::cout << "\n\n";
+
+    // This should not compile:
+    // m2_view(0, 0) = 1;
 }

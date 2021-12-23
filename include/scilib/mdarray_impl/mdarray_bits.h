@@ -64,13 +64,14 @@ public:
     using size_type = stdex::extents<>::size_type;
     using difference_type = std::ptrdiff_t;
     using pointer = value_type*;
+    using const_pointer = const value_type*;
     using reference = value_type&;
     using const_reference = const value_type&;
-    using iterator = typename std::vector<T>::iterator;
-    using const_iterator = typename std::vector<T>::const_iterator;
-    using reverse_iterator = typename std::vector<T>::reverse_iterator;
+    using iterator = typename container_type::iterator;
+    using const_iterator = typename container_type::const_iterator;
+    using reverse_iterator = typename container_type::reverse_iterator;
     using const_reverse_iterator =
-        typename std::vector<T>::const_reverse_iterator;
+        typename container_type::const_reverse_iterator;
 
     constexpr MDArray() = default;
 
@@ -199,9 +200,13 @@ public:
     }
 
     constexpr pointer data() noexcept { return c_.data(); }
+    constexpr const_pointer data() const noexcept { return c_.data(); }
 
-    // Note: view() does not propagate const.
-    constexpr view_type view() const noexcept { return view_type(v_); }
+    constexpr view_type view() noexcept { return view_type(v_); }
+    constexpr const_view_type view() const noexcept
+    {
+        return const_view_type(v_);
+    }
 
     constexpr static size_type rank() noexcept { return Extents::rank(); }
 

@@ -17,33 +17,40 @@
 #include <scilib/linalg_impl/lapack_types.h>
 #include <experimental/mdspan>
 #include <complex>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T,
+template <class T_a,
           stdex::extents<>::size_type nrows_a,
           stdex::extents<>::size_type ncols_a,
           class Layout_a,
           class Accessor_a,
+          class T_x,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
           class Accessor_x,
+          class T_y,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
+// clang-format off
+    requires !std::is_const_v<T_y>
 inline void matrix_vector_product(
-    stdex::mdspan<T, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-    stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+    // clang-format on
+    stdex::mdspan<T_a, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a>
+        a,
+    stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
     using size_type = stdex::extents<>::size_type;
 
     for (size_type i = 0; i < a.extent(0); ++i) {
-        y(i) = T{0};
+        y(i) = T_y{0};
         for (size_type j = 0; j < a.extent(1); ++j) {
             y(i) += a(i, j) * x(j);
         }
@@ -96,6 +103,15 @@ inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
 template <class T>
 inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<T> a,
                                                Scilib::Vector_view<T> x)
+{
+    Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
+    matrix_vector_product(a, x, res.view());
+    return res;
+}
+
+template <class T>
+inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<const T> a,
+                                               Scilib::Vector_view<const T> x)
 {
     Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
