@@ -38,7 +38,7 @@ template <class T_a,
           class Layout_y,
           class Accessor_y>
 // clang-format off
-    requires !std::is_const_v<T_y>
+    requires (!std::is_const_v<T_y>)
 inline void matrix_vector_product(
     // clang-format on
     stdex::mdspan<T_a, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a>
