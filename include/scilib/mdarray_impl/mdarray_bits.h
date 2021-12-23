@@ -60,6 +60,7 @@ public:
     using layout_type = stdex::layout_right;
     using container_type = std::vector<T>;
     using view_type = stdex::mdspan<T, Extents, layout_type>;
+    using const_view_type = stdex::mdspan<const T, Extents, layout_type>;
     using size_type = stdex::extents<>::size_type;
     using difference_type = std::ptrdiff_t;
     using pointer = value_type*;
