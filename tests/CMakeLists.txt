@@ -32,6 +32,7 @@ function(add_scilib_test name)
         gtest_main
         std::mdspan
 	    ${BLAS_LIBRARIES}
+        OpenMP::OpenMP_CXX
     ) 
     target_compile_options(
         ${name}

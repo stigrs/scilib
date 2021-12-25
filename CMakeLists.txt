@@ -44,6 +44,9 @@ else()
     option(BUILD_SHARED_LIBS "Compile shared libraries." ON)
 endif()
 
+# Check if OpenMP is available.
+find_package(OpenMP)
+
 # Check if C++20 standard is available.
 if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
     message(STATUS "Using C++20 standard")
@@ -146,6 +149,7 @@ target_link_libraries(
     PRIVATE
     std::mdspan
     ${BLAS_LIBRARIES}
+    OpenMP::OpenMP_CXX
 )
 
 target_compile_options(

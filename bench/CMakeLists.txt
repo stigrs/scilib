@@ -35,6 +35,7 @@ foreach(program ${PROGRAMS})
         std::mdspan
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}
+        OpenMP::OpenMP_CXX
 	) 
     target_compile_options(
         ${program}

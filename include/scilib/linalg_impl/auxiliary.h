@@ -202,7 +202,7 @@ template <class M, class... Args>
 inline M zeros(Args... args)
 // clang-format on
 {
-    static_assert(M::N_dim == sizeof...(Args));
+    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     M res(args...);
@@ -216,7 +216,7 @@ template <class M, class... Args>
 inline M ones(Args... args)
 // clang-format on
 {
-    static_assert(M::N_dim == sizeof...(Args));
+    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     M res(args...);

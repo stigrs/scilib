@@ -51,14 +51,14 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // storage order and using mdspan for views.
 //
 // clang-format off
-template <class T, class Extents>
+template <class T, class Extents, class Layout, class ContainerType>
     requires Extents_has_rank<Extents> 
 class MDArray {
 public:
     // clang-format on
     using value_type = T;
-    using layout_type = stdex::layout_right;
-    using container_type = std::vector<T>;
+    using layout_type = Layout;
+    using container_type = ContainerType;
     using view_type = stdex::mdspan<T, Extents, layout_type>;
     using const_view_type = stdex::mdspan<const T, Extents, layout_type>;
     using size_type = stdex::extents<>::size_type;

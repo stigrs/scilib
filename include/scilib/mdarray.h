@@ -9,6 +9,7 @@
 
 #include <experimental/mdspan>
 #include <scilib/mdarray_impl/support.h>
+#include <vector>
 
 #if _MSC_VER >= 1927
 #include <concepts>
@@ -51,7 +52,7 @@ concept MDArray_type =
     requires (M /* m */) { { M::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
 };
 
-template <class T, class Extents>
+template <class T, class Extents, class Layout = stdex::layout_right, class ContainerType = std::vector<T>>
     requires Extents_has_rank<Extents> 
 class MDArray;
 // clang-format on

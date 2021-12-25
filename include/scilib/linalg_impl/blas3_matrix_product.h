@@ -87,9 +87,47 @@ inline void matrix_product(Scilib::Matrix_view<double> a,
                 a.data(), lda, b.data(), ldb, beta, c.data(), ldc);
 }
 
+inline void matrix_product(Scilib::Matrix_view<const double> a,
+                           Scilib::Matrix_view<const double> b,
+                           Scilib::Matrix_view<double> c)
+{
+    constexpr double alpha = 1.0;
+    constexpr double beta = 0.0;
+
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
+
+    const BLAS_INT lda = k;
+    const BLAS_INT ldb = n;
+    const BLAS_INT ldc = n;
+
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
+                a.data(), lda, b.data(), ldb, beta, c.data(), ldc);
+}
+
 #ifdef USE_MKL
 inline void matrix_product(Scilib::Matrix_view<std::complex<double>> a,
                            Scilib::Matrix_view<std::complex<double>> b,
+                           Scilib::Matrix_view<std::complex<double>> c)
+{
+    constexpr std::complex<double> alpha = {1.0, 0.0};
+    constexpr std::complex<double> beta = {0.0, 0.0};
+
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
+
+    const BLAS_INT lda = k;
+    const BLAS_INT ldb = n;
+    const BLAS_INT ldc = n;
+
+    cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
+                a.data(), lda, b.data(), ldb, &beta, c.data(), ldc);
+}
+
+inline void matrix_product(Scilib::Matrix_view<const std::complex<double>> a,
+                           Scilib::Matrix_view<const std::complex<double>> b,
                            Scilib::Matrix_view<std::complex<double>> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};

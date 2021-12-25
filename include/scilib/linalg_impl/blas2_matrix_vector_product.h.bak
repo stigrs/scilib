@@ -57,9 +57,22 @@ inline void matrix_vector_product(
     }
 }
 
-inline void matrix_vector_product(Scilib::Matrix_view<double> a,
-                                  Scilib::Vector_view<double> x,
-                                  Scilib::Vector_view<double> y)
+template <stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::
+        mdspan<double, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a>
+            a,
+    stdex::mdspan<double, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<double, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -77,9 +90,23 @@ inline void matrix_vector_product(Scilib::Matrix_view<double> a,
                 x.data(), incx, beta, y.data(), incy);
 }
 
-inline void matrix_vector_product(Scilib::Matrix_view<const double> a,
-                                  Scilib::Vector_view<const double> x,
-                                  Scilib::Vector_view<double> y)
+template <stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::mdspan<const double,
+                  stdex::extents<nrows_a, ncols_a>,
+                  Layout_a,
+                  Accessor_a> a,
+    stdex::mdspan<const double, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<double, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -99,9 +126,29 @@ inline void matrix_vector_product(Scilib::Matrix_view<const double> a,
 
 #ifdef USE_MKL
 // Does not work with OpenBLAS version 0.2.14.1
-inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
-                                  Scilib::Vector_view<std::complex<double>> x,
-                                  Scilib::Vector_view<std::complex<double>> y)
+template <stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
+inline void
+matrix_vector_product(stdex::mdspan<std::complex<double>,
+                                    stdex::extents<nrows_a, ncols_a>,
+                                    Layout_a,
+                                    Accessor_a> a,
+                      stdex::mdspan<std::complex<double>,
+                                    stdex::extents<ext_x>,
+                                    Layout_x,
+                                    Accessor_x> x,
+                      stdex::mdspan<std::complex<double>,
+                                    stdex::extents<ext_y>,
+                                    Layout_y,
+                                    Accessor_y> y)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -119,10 +166,29 @@ inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
                 x.data(), incx, &beta, y.data(), incy);
 }
 
+template <stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x,
+          stdex::extents<>::size_type ext_y,
+          class Layout_y,
+          class Accessor_y>
 inline void
-matrix_vector_product(Scilib::Matrix_view<const std::complex<double>> a,
-                      Scilib::Vector_view<const std::complex<double>> x,
-                      Scilib::Vector_view<std::complex<double>> y)
+matrix_vector_product(stdex::mdspan<const std::complex<double>,
+                                    stdex::extents<nrows_a, ncols_a>,
+                                    Layout_a,
+                                    Accessor_a> a,
+                      stdex::mdspan<const std::complex<double>,
+                                    stdex::extents<ext_x>,
+                                    Layout_x,
+                                    Accessor_x> x,
+                      stdex::mdspan<std::complex<double>,
+                                    stdex::extents<ext_y>,
+                                    Layout_y,
+                                    Accessor_y> y)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -141,18 +207,36 @@ matrix_vector_product(Scilib::Matrix_view<const std::complex<double>> a,
 }
 #endif
 
-template <class T>
-inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<T> a,
-                                               Scilib::Vector_view<T> x)
+template <class T,
+          stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x>
+inline Scilib::Vector<T> matrix_vector_product(
+    stdex::mdspan<T, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
     Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
     return res;
 }
 
-template <class T>
-inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<const T> a,
-                                               Scilib::Vector_view<const T> x)
+template <class T,
+          stdex::extents<>::size_type nrows_a,
+          stdex::extents<>::size_type ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          stdex::extents<>::size_type ext_x,
+          class Layout_x,
+          class Accessor_x>
+inline Scilib::Vector<T> matrix_vector_product(
+    stdex::
+        mdspan<const T, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a>
+            a,
+    stdex::mdspan<const T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
     Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());

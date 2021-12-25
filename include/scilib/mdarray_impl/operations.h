@@ -23,16 +23,16 @@ namespace stdex = std::experimental;
 //------------------------------------------------------------------------------
 // Equality comparisons:
 
-template <class T, class Extents>
-constexpr bool operator==(const MDArray<T, Extents>& a,
-                          const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr bool operator==(const MDArray<T, Extents, Layout, ContainerType>& a,
+                          const MDArray<T, Extents, Layout, ContainerType>& b)
 {
     return std::equal(a.begin(), a.end(), b.begin());
 }
 
-template <class T, class Extents>
-constexpr bool operator!=(const MDArray<T, Extents>& a,
-                          const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr bool operator!=(const MDArray<T, Extents, Layout, ContainerType>& a,
+                          const MDArray<T, Extents, Layout, ContainerType>& b)
 {
     bool result = true;
     if (a.view().extents() == b.view().extents()) {
@@ -41,30 +41,30 @@ constexpr bool operator!=(const MDArray<T, Extents>& a,
     return result;
 }
 
-template <class T, class Extents>
-constexpr bool operator<(const MDArray<T, Extents>& a,
-                         const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr bool operator<(const MDArray<T, Extents, Layout, ContainerType>& a,
+                         const MDArray<T, Extents, Layout, ContainerType>& b)
 {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
 }
 
-template <class T, class Extents>
-constexpr bool operator>(const MDArray<T, Extents>& a,
-                         const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr bool operator>(const MDArray<T, Extents, Layout, ContainerType>& a,
+                         const MDArray<T, Extents, Layout, ContainerType>& b)
 {
     return b < a;
 }
 
-template <class T, class Extents>
-constexpr bool operator<=(const MDArray<T, Extents>& a,
-                          const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr bool operator<=(const MDArray<T, Extents, Layout, ContainerType>& a,
+                          const MDArray<T, Extents, Layout, ContainerType>& b)
 {
     return !(a > b);
 }
 
-template <class T, class Extents>
-constexpr bool operator>=(const MDArray<T, Extents>& a,
-                          const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr bool operator>=(const MDArray<T, Extents, Layout, ContainerType>& a,
+                          const MDArray<T, Extents, Layout, ContainerType>& b)
 {
     return !(a < b);
 }
@@ -72,74 +72,77 @@ constexpr bool operator>=(const MDArray<T, Extents>& a,
 //------------------------------------------------------------------------------
 // Arithmetic operations:
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator-(const MDArray<T, Extents>& v)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator-(const MDArray<T, Extents, Layout, ContainerType>& v)
 {
-    MDArray<T, Extents> res = v;
+    MDArray<T, Extents, Layout, ContainerType> res = v;
     return res *= -T{1};
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator+(const MDArray<T, Extents>& a,
-                                        const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator+(const MDArray<T, Extents, Layout, ContainerType>& a,
+          const MDArray<T, Extents, Layout, ContainerType>& b)
 {
-    MDArray<T, Extents> res = a;
+    MDArray<T, Extents, Layout, ContainerType> res = a;
     return res += b;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator-(const MDArray<T, Extents>& a,
-                                        const MDArray<T, Extents>& b)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator-(const MDArray<T, Extents, Layout, ContainerType>& a,
+          const MDArray<T, Extents, Layout, ContainerType>& b)
 {
-    MDArray<T, Extents> res = a;
+    MDArray<T, Extents, Layout, ContainerType> res = a;
     return res -= b;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator+(const MDArray<T, Extents>& v,
-                                        const T& scalar)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator+(const MDArray<T, Extents, Layout, ContainerType>& v, const T& scalar)
 {
-    MDArray<T, Extents> res = v;
+    MDArray<T, Extents, Layout, ContainerType> res = v;
     return res += scalar;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator-(const MDArray<T, Extents>& v,
-                                        const T& scalar)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator-(const MDArray<T, Extents, Layout, ContainerType>& v, const T& scalar)
 {
-    MDArray<T, Extents> res = v;
+    MDArray<T, Extents, Layout, ContainerType> res = v;
     return res -= scalar;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator*(const MDArray<T, Extents>& v,
-                                        const T& scalar)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator*(const MDArray<T, Extents, Layout, ContainerType>& v, const T& scalar)
 {
     MDArray<T, Extents> res = v;
     return res *= scalar;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator*(const T& scalar,
-                                        const MDArray<T, Extents>& v)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator*(const T& scalar, const MDArray<T, Extents, Layout, ContainerType>& v)
 {
-    MDArray<T, Extents> res = v;
+    MDArray<T, Extents, Layout, ContainerType> res = v;
     return res *= scalar;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator/(const MDArray<T, Extents>& v,
-                                        const T& scalar)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator/(const MDArray<T, Extents, Layout, ContainerType>& v, const T& scalar)
 {
-    MDArray<T, Extents> res = v;
+    MDArray<T, Extents, Layout, ContainerType> res = v;
     return res /= scalar;
 }
 
-template <class T, class Extents>
-constexpr MDArray<T, Extents> operator%(const MDArray<T, Extents>& v,
-                                        const T& scalar)
+template <class T, class Extents, class Layout, class ContainerType>
+constexpr MDArray<T, Extents, Layout, ContainerType>
+operator%(const MDArray<T, Extents, Layout, ContainerType>& v, const T& scalar)
 {
-    MDArray<T, Extents> res = v;
+    MDArray<T, Extents, Layout, ContainerType> res = v;
     return res %= scalar;
 }
 
