@@ -45,7 +45,9 @@ else()
 endif()
 
 # Check if OpenMP is available.
-find_package(OpenMP)
+if(NOT APPLE)
+    find_package(OpenMP)
+endif()
 
 # Check if C++20 standard is available.
 if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
@@ -88,8 +90,8 @@ endif()
 if(MSVC)
     if (CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
         set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /Qstd:c++20)
-        set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od)
-        set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O3)
+        set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od /Qopenmp)
+        set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O3 /Qopenmp)
     else()
         set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /WX /wd4100)
         set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od)

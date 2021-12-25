@@ -16,7 +16,7 @@ jobs:
   continueOnError: false
 
   steps:
-  - script: brew install openblas
+  - script: brew install openblas libomp
     name: Prepare
 
   - task: CMake@1
