@@ -45,9 +45,7 @@ else()
 endif()
 
 # Check if OpenMP is available.
-if(NOT APPLE)
-    find_package(OpenMP)
-endif()
+find_package(OpenMP)
 
 # Check if C++20 standard is available.
 if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
