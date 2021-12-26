@@ -23,6 +23,7 @@ set(PROGRAMS
     bench_eigs
     bench_matrix_product
     bench_matrix_vector_product
+    bench_mkl_dgemm
     bench_transpose
 )
 

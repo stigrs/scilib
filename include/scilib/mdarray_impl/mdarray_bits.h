@@ -51,14 +51,14 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // storage order and using mdspan for views.
 //
 // clang-format off
-template <class T, class Extents, class Layout, class ContainerType>
+template <class T, class Extents, class Layout, class Allocator>
     requires Extents_has_rank<Extents> 
 class MDArray {
 public:
     // clang-format on
     using value_type = T;
     using layout_type = Layout;
-    using container_type = ContainerType;
+    using container_type = std::vector<T, Allocator>;
     using view_type = stdex::mdspan<T, Extents, layout_type>;
     using const_view_type = stdex::mdspan<const T, Extents, layout_type>;
     using size_type = stdex::extents<>::size_type;
@@ -87,7 +87,7 @@ public:
 
     template <class... Exts>
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
-        : c_(m),
+        : c_(m.begin(), m.end()),
           v_(c_.data(),
              std::array<size_type, Extents::rank()>{
                  static_cast<size_type>(exts)...})

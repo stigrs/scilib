@@ -18,6 +18,14 @@
 #define STD_CONVERTIBLE_TO(X) Scilib::__Detail::convertible_to<X>
 #endif
 
+#ifdef USE_MKL_ALLOCATOR
+#include <scilib/mdarray_impl/mkl_allocator.h>
+#define MDARRAY_ALLOCATOR(X) Scilib::MKL_allocator<X>
+#else
+#include <memory>
+#define MDARRAY_ALLOCATOR(X) std::allocator<X>
+#endif
+
 namespace stdex = std::experimental;
 
 namespace Scilib {
@@ -55,30 +63,46 @@ concept MDArray_type =
 template <class T, 
           class Extents, 
           class Layout = stdex::layout_right, 
-          class ContainerType = std::vector<T>>
+          class Allocator = MDARRAY_ALLOCATOR(T)>
     requires Extents_has_rank<Extents> 
 class MDArray;
 // clang-format on
 
-template <class T>
-using Vector = MDArray<T, stdex::extents<stdex::dynamic_extent>>;
+template <class T,
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
+using Vector =
+    MDArray<T, stdex::extents<stdex::dynamic_extent>, Layout, Allocator>;
 
-template <class T>
+template <class T,
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Matrix =
-    MDArray<T, stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>>;
+    MDArray<T,
+            stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
+            Layout,
+            Allocator>;
 
-template <class T>
+template <class T,
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array3D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
-                                       stdex::dynamic_extent>>;
+                                       stdex::dynamic_extent>,
+                        Layout,
+                        Allocator>;
 
-template <class T>
+template <class T,
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array4D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
-                                       stdex::dynamic_extent>>;
+                                       stdex::dynamic_extent>,
+                        Layout,
+                        Allocator>;
 
 } // namespace Scilib
 
