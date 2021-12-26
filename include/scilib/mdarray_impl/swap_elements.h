@@ -113,7 +113,7 @@ inline void swap_elements(
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
     static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(4));
+    static_assert(x.static_extent(3) == y.static_extent(3));
 
     using size_type = stdex::extents<>::size_type;
 
