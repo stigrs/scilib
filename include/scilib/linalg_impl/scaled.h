@@ -103,20 +103,18 @@ private:
     S scale_factor_;
 };
 
-template <class ElementType,
+template <class T,
           class Extents,
           class Layout,
           class Accessor,
           class ScalingFactorType>
-inline stdex::mdspan<ElementType,
-                     Extents,
-                     Layout,
-                     accessor_scaled<Accessor, ScalingFactorType>>
-scaled(ScalingFactorType scalingFactor,
-       const stdex::mdspan<ElementType, Extents, Layout, Accessor>& a)
+inline stdex::
+    mdspan<T, Extents, Layout, accessor_scaled<Accessor, ScalingFactorType>>
+    scaled(ScalingFactorType scalingFactor,
+           const stdex::mdspan<T, Extents, Layout, Accessor>& a)
 {
     using accessor_t = accessor_scaled<Accessor, ScalingFactorType>;
-    return stdex::mdspan<ElementType, Extents, Layout, accessor_t>(
+    return stdex::mdspan<T, Extents, Layout, accessor_t>(
         a.data(), a.mapping(), accessor_t(a.accessor(), scalingFactor));
 }
 

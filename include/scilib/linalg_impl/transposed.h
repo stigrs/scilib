@@ -109,14 +109,14 @@ public:
     };
 };
 
-template <class EltType, class Extents, class Layout, class Accessor>
-stdex::mdspan<EltType, Extents, layout_transpose<Layout>, Accessor>
-transposed(stdex::mdspan<EltType, Extents, Layout, Accessor> a)
+template <class T, class Extents, class Layout, class Accessor>
+stdex::mdspan<T, Extents, layout_transpose<Layout>, Accessor>
+transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
     static_assert(a.rank() == 2);
     using layout_type = layout_transpose<Layout>;
     using mapping_type = typename layout_type::template mapping<Extents>;
-    return stdex::mdspan<EltType, Extents, layout_type, Accessor>(
+    return stdex::mdspan<T, Extents, layout_type, Accessor>(
         a.data(), mapping_type(a.mapping()), a.accessor());
 }
 

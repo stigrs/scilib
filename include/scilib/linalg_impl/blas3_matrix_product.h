@@ -146,30 +146,32 @@ inline void matrix_product(Scilib::Matrix_view<const std::complex<double>> a,
 }
 #endif
 
-template <class T>
-inline Scilib::Matrix<T> matrix_product(Scilib::Matrix_view<T> a,
-                                        Scilib::Matrix_view<T> b)
+template <class T, class Layout>
+inline Scilib::Matrix<T, Layout>
+matrix_product(Scilib::Matrix_view<T, Layout> a,
+               Scilib::Matrix_view<T, Layout> b)
 {
     using size_type = stdex::extents<>::size_type;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);
 
-    Scilib::Matrix<T> res(n, p);
+    Scilib::Matrix<T, Layout> res(n, p);
     matrix_product(a, b, res.view());
     return res;
 }
 
-template <class T>
-inline Scilib::Matrix<T> matrix_product(Scilib::Matrix_view<const T> a,
-                                        Scilib::Matrix_view<const T> b)
+template <class T, class Layout>
+inline Scilib::Matrix<T, Layout>
+matrix_product(Scilib::Matrix_view<const T, Layout> a,
+               Scilib::Matrix_view<const T, Layout> b)
 {
     using size_type = stdex::extents<>::size_type;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);
 
-    Scilib::Matrix<T> res(n, p);
+    Scilib::Matrix<T, Layout> res(n, p);
     matrix_product(a, b, res.view());
     return res;
 }

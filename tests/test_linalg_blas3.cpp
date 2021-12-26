@@ -50,6 +50,28 @@ TEST(TestLinalg, TestMatrixMatrixProductDouble)
     EXPECT_EQ(ans, res);
 }
 
+TEST(TestLinalg, TestMatrixMatrixProductDoubleColMajor)
+{
+    // clang-format off
+    std::vector<double> aa = {1, 4, 
+                              2, 5,
+                              3, 6};
+    std::vector<double> bb = { 7, 9, 11,
+                               8, 10, 12};
+    std::vector<double> rr = { 58,  139, 
+                               64, 154};
+    // clang-format on
+
+    Scilib::Matrix<double, stdex::layout_left> ma(aa, 2, 3);
+    Scilib::Matrix<double, stdex::layout_left> mb(bb, 3, 2);
+    Scilib::Matrix<double, stdex::layout_left> ans(rr, 2, 2);
+    Scilib::Matrix<double, stdex::layout_left> res(2, 2);
+
+    Scilib::Linalg::matrix_product(ma.view(), mb.view(), res.view());
+
+    EXPECT_EQ(ans, res);
+}
+
 TEST(TestLinalg, TestMatrixMatrixProductComplex)
 {
     // clang-format off

@@ -186,3 +186,21 @@ TEST(TestMatrix, TestDiag)
     Scilib::apply(d, [&](int& i) { i = 0; });
     EXPECT_EQ(m, ans);
 }
+
+TEST(TestMatrix, TestColMajor)
+{
+    // clang-format off
+    std::vector<int> v = {1, 4,  
+                          2, 5,
+                          3, 6};
+    // clang-format on
+    Scilib::Matrix<int, stdex::layout_left> m(v, 2, 3);
+
+    int val = 1;
+    for (std::size_t i = 0; i < m.extent(0); ++i) {
+        for (std::size_t j = 0; j < m.extent(1); ++j) {
+            EXPECT_EQ(m(i, j), val);
+            ++val;
+        }
+    }
+}

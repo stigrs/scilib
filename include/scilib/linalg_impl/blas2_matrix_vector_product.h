@@ -141,20 +141,22 @@ matrix_vector_product(Scilib::Matrix_view<const std::complex<double>> a,
 }
 #endif
 
-template <class T>
-inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<T> a,
-                                               Scilib::Vector_view<T> x)
+template <class T, class Layout>
+inline Scilib::Vector<T, Layout>
+matrix_vector_product(Scilib::Matrix_view<T, Layout> a,
+                      Scilib::Vector_view<T, Layout> x)
 {
-    Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
+    Scilib::Vector<T, Layout> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
     return res;
 }
 
-template <class T>
-inline Scilib::Vector<T> matrix_vector_product(Scilib::Matrix_view<const T> a,
-                                               Scilib::Vector_view<const T> x)
+template <class T, class Layout>
+inline Scilib::Vector<T, Layout>
+matrix_vector_product(Scilib::Matrix_view<const T, Layout> a,
+                      Scilib::Vector_view<const T, Layout> x)
 {
-    Scilib::Vector<T> res(static_cast<BLAS_INT>(a.extent(0)));
+    Scilib::Vector<T, Layout> res(static_cast<BLAS_INT>(a.extent(0)));
     matrix_vector_product(a, x, res.view());
     return res;
 }

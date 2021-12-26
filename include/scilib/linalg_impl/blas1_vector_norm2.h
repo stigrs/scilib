@@ -13,12 +13,16 @@
 #include <cblas.h>
 #endif
 
-#include <scilib/mdarray.h>
+#include <experimental/mdspan>
 
 namespace Scilib {
 namespace Linalg {
 
-inline double norm2(Scilib::Vector_view<double> x)
+namespace stdex = std::experimental;
+
+template <stdex::extents<>::size_type ext_x, class Layout_x, class Accessor_x>
+inline double
+norm2(stdex::mdspan<double, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
     const BLAS_INT n = static_cast<BLAS_INT>(x.size());
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
