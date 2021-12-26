@@ -50,7 +50,8 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // Dense multidimensional array class for numerical computing using mdspan
 // for views.
 //
-// Storage order can be either row-major or column-major (default is row-major).
+// Storage order can be either row-major (layout_right; default) or
+// column-major (layout_left).
 //
 // clang-format off
 template <class T, class Extents, class Layout>
@@ -89,7 +90,7 @@ public:
 
     template <class... Exts>
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
-        : c_(m.begin(), m.end()),
+        : c_(m),
           v_(c_.data(),
              std::array<size_type, Extents::rank()>{
                  static_cast<size_type>(exts)...})
