@@ -47,22 +47,24 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 
 } // namespace __Detail
 
-// Dense multidimensional array class for numerical computing with row-major
-// storage order and using mdspan for views.
+// Dense multidimensional array class for numerical computing using mdspan
+// for views.
+//
+// Storage order can be either row-major or column-major (default is row-major).
 //
 // clang-format off
-template <class T, class Extents, class Layout, class Allocator>
+template <class T, class Extents, class Layout>
     requires Extents_has_rank<Extents> 
 class MDArray {
 public:
     // clang-format on
     using value_type = T;
     using layout_type = Layout;
-    using container_type = std::vector<T, Allocator>;
+    using container_type = std::vector<T>;
     using view_type = stdex::mdspan<T, Extents, layout_type>;
     using const_view_type = stdex::mdspan<const T, Extents, layout_type>;
     using size_type = stdex::extents<>::size_type;
-    using difference_type = std::ptrdiff_t;
+    using difference_type = typename container_type::difference_type;
     using pointer = value_type*;
     using const_pointer = const value_type*;
     using reference = value_type&;

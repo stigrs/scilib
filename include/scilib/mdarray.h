@@ -18,30 +18,23 @@
 #define STD_CONVERTIBLE_TO(X) Scilib::__Detail::convertible_to<X>
 #endif
 
-#ifdef USE_MKL_ALLOCATOR
-#include <scilib/mdarray_impl/mkl_allocator.h>
-#define MDARRAY_ALLOCATOR(X) Scilib::MKL_allocator<X>
-#else
-#include <memory>
-#define MDARRAY_ALLOCATOR(X) std::allocator<X>
-#endif
-
 namespace stdex = std::experimental;
 
 namespace Scilib {
 
-template <class T>
-using Vector_view = stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>>;
+template <class T, class Layout = stdex::layout_right>
+using Vector_view =
+    stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>, Layout>;
 
 template <class T>
 using Subvector_view = stdex::
     mdspan<T, stdex::extents<stdex::dynamic_extent>, stdex::layout_stride>;
 
-template <class T>
+template <class T, class Layout = stdex::layout_right>
 using Matrix_view =
     stdex::mdspan<T,
                   stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-                  stdex::layout_right>;
+                  Layout>;
 
 template <class T>
 using Submatrix_view =
@@ -60,49 +53,34 @@ concept MDArray_type =
     requires (M /* m */) { { M::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
 };
 
-template <class T, 
-          class Extents, 
-          class Layout = stdex::layout_right, 
-          class Allocator = MDARRAY_ALLOCATOR(T)>
+template <class T, class Extents, class Layout = stdex::layout_right> 
     requires Extents_has_rank<Extents> 
 class MDArray;
 // clang-format on
 
-template <class T,
-          class Layout = stdex::layout_right,
-          class Allocator = MDARRAY_ALLOCATOR(T)>
-using Vector =
-    MDArray<T, stdex::extents<stdex::dynamic_extent>, Layout, Allocator>;
+template <class T, class Layout = stdex::layout_right>
+using Vector = MDArray<T, stdex::extents<stdex::dynamic_extent>, Layout>;
 
-template <class T,
-          class Layout = stdex::layout_right,
-          class Allocator = MDARRAY_ALLOCATOR(T)>
+template <class T, class Layout = stdex::layout_right>
 using Matrix =
     MDArray<T,
             stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-            Layout,
-            Allocator>;
+            Layout>;
 
-template <class T,
-          class Layout = stdex::layout_right,
-          class Allocator = MDARRAY_ALLOCATOR(T)>
+template <class T, class Layout = stdex::layout_right>
 using Array3D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+                        Layout>;
 
-template <class T,
-          class Layout = stdex::layout_right,
-          class Allocator = MDARRAY_ALLOCATOR(T)>
+template <class T, class Layout = stdex::layout_right>
 using Array4D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+                        Layout>;
 
 } // namespace Scilib
 

@@ -89,13 +89,5 @@ int main()
     m = 2000;
     n = 2048;
     benchmark(m, n);
-
-    // Check for memory leaks:
-    MKL_INT64 allocated_bytes;
-    int n_allocated_buffers;
-
-    allocated_bytes = mkl_mem_stat(&n_allocated_buffers);
-    std::cout << "There are " << allocated_bytes << " bytes in "
-              << n_allocated_buffers << " buffers\n";
 #endif
 }
