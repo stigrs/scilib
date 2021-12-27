@@ -66,7 +66,6 @@ TEST(TestLinalg, TestQR)
     }
 }
 
-#if 0
 TEST(TestLinalg, TestSVD)
 {
     using namespace Scilib;
@@ -97,7 +96,7 @@ TEST(TestLinalg, TestSVD)
 
     Matrix<double> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());
-    sigma_diag = s;
+    copy(s.view(), sigma_diag);
 
     auto res = u * sigma * vt;
     for (std::size_t i = 0; i < ans.extent(0); ++i) {
@@ -106,4 +105,3 @@ TEST(TestLinalg, TestSVD)
         }
     }
 }
-#endif
