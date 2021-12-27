@@ -19,6 +19,40 @@ TEST(TestLinalg, TestMatrixVectorProduct)
     EXPECT_EQ((a * x), y);
 }
 
+TEST(TestLinalg, TestMatrixVectorProductRowMajor)
+{
+    // clang-format off
+    std::vector<double> a_data = {
+         1.0, -1.0, 2.0,
+         0.0, -3.0, 1.0};
+    std::vector<double> x_data{2.0, 1.0, 0.0};
+    std::vector<double> y_data{1.0, -3.0};
+    // clang-format on
+    Scilib::Matrix<double> a(a_data, 2, 3);
+    Scilib::Vector<double> x(x_data, x_data.size());
+    Scilib::Vector<double> y(y_data, y_data.size());
+    Scilib::Vector<double> res(y.size());
+
+    Scilib::Linalg::matrix_vector_product(a.view(), x.view(), res.view());
+    EXPECT_EQ(res, y);
+}
+
+TEST(TestLinalg, TestMatrixVectorProductColMajor)
+{
+    // clang-format off
+    std::vector<double> a_data = {
+         1.0, 0.0,
+        -1.0, -3.0,
+         2.0, 1.0};
+    std::vector<double> x_data{2.0, 1.0, 0.0};
+    std::vector<double> y_data{1.0, -3.0};
+    // clang-format on
+    Scilib::Matrix<double, stdex::layout_left> a(a_data, 2, 3);
+    Scilib::Vector<double, stdex::layout_left> x(x_data, x_data.size());
+    Scilib::Vector<double, stdex::layout_left> y(y_data, y_data.size());
+    EXPECT_EQ((a * x), y);
+}
+
 #ifdef USE_MKL
 // Does not work with OpenBLAS version 0.2.14.1
 TEST(TestLinalg, TestComplexMatrixVectorProduct)

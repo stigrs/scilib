@@ -18,6 +18,7 @@
 #include <experimental/mdspan>
 #include <complex>
 #include <type_traits>
+#include <iostream>
 
 namespace Scilib {
 namespace Linalg {
@@ -57,86 +58,115 @@ inline void matrix_vector_product(
     }
 }
 
-inline void matrix_vector_product(Scilib::Matrix_view<double> a,
-                                  Scilib::Vector_view<double> x,
-                                  Scilib::Vector_view<double> y)
+template <class Layout>
+inline void matrix_vector_product(Scilib::Matrix_view<double, Layout> a,
+                                  Scilib::Vector_view<double, Layout> x,
+                                  Scilib::Vector_view<double, Layout> y)
 {
+    static_assert(x.static_extent(0) == a.static_extent(1));
+
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    static_assert(x.static_extent(0) == a.static_extent(1));
-
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-
-    const BLAS_INT lda = n;
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, a.data(), lda,
+    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
+
+    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+    }
+    cblas_dgemv(matrix_layout, CblasNoTrans, m, n, alpha, a.data(), lda,
                 x.data(), incx, beta, y.data(), incy);
 }
 
-inline void matrix_vector_product(Scilib::Matrix_view<const double> a,
-                                  Scilib::Vector_view<const double> x,
-                                  Scilib::Vector_view<double> y)
+template <class Layout>
+inline void matrix_vector_product(Scilib::Matrix_view<const double, Layout> a,
+                                  Scilib::Vector_view<const double, Layout> x,
+                                  Scilib::Vector_view<double, Layout> y)
 {
+    static_assert(x.static_extent(0) == a.static_extent(1));
+
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    static_assert(x.static_extent(0) == a.static_extent(1));
-
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-
-    const BLAS_INT lda = n;
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, a.data(), lda,
+    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
+
+    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+    }
+    cblas_dgemv(matrix_layout, CblasNoTrans, m, n, alpha, a.data(), lda,
                 x.data(), incx, beta, y.data(), incy);
 }
 
 #ifdef USE_MKL
 // Does not work with OpenBLAS version 0.2.14.1
-inline void matrix_vector_product(Scilib::Matrix_view<std::complex<double>> a,
-                                  Scilib::Vector_view<std::complex<double>> x,
-                                  Scilib::Vector_view<std::complex<double>> y)
+template <class Layout>
+inline void
+matrix_vector_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
+                      Scilib::Vector_view<std::complex<double>, Layout> x,
+                      Scilib::Vector_view<std::complex<double>, Layout> y)
 {
+    static_assert(x.static_extent(0) == a.static_extent(1));
+
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    static_assert(x.static_extent(0) == a.static_extent(1));
-
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-
-    const BLAS_INT lda = n;
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    cblas_zgemv(CblasRowMajor, CblasNoTrans, m, n, &alpha, a.data(), lda,
+    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
+
+    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+    }
+    cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data(), lda,
                 x.data(), incx, &beta, y.data(), incy);
 }
 
+template <class Layout>
 inline void
-matrix_vector_product(Scilib::Matrix_view<const std::complex<double>> a,
-                      Scilib::Vector_view<const std::complex<double>> x,
-                      Scilib::Vector_view<std::complex<double>> y)
+matrix_vector_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
+                      Scilib::Vector_view<const std::complex<double>, Layout> x,
+                      Scilib::Vector_view<std::complex<double>, Layout> y)
 {
+    static_assert(x.static_extent(0) == a.static_extent(1));
+
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    static_assert(x.static_extent(0) == a.static_extent(1));
-
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-
-    const BLAS_INT lda = n;
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    cblas_zgemv(CblasRowMajor, CblasNoTrans, m, n, &alpha, a.data(), lda,
+    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
+
+    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+    }
+    cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data(), lda,
                 x.data(), incx, &beta, y.data(), incy);
 }
 #endif
@@ -146,7 +176,7 @@ inline Scilib::Vector<T, Layout>
 matrix_vector_product(Scilib::Matrix_view<T, Layout> a,
                       Scilib::Vector_view<T, Layout> x)
 {
-    Scilib::Vector<T, Layout> res(static_cast<BLAS_INT>(a.extent(0)));
+    Scilib::Vector<T, Layout> res(a.extent(0));
     matrix_vector_product(a, x, res.view());
     return res;
 }
@@ -156,7 +186,7 @@ inline Scilib::Vector<T, Layout>
 matrix_vector_product(Scilib::Matrix_view<const T, Layout> a,
                       Scilib::Vector_view<const T, Layout> x)
 {
-    Scilib::Vector<T, Layout> res(static_cast<BLAS_INT>(a.extent(0)));
+    Scilib::Vector<T, Layout> res(a.extent(0));
     matrix_vector_product(a, x, res.view());
     return res;
 }
