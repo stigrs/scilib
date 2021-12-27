@@ -149,8 +149,9 @@ operator%(const MDArray<T, Extents, Layout>& v, const T& scalar)
 //------------------------------------------------------------------------------
 // Matrix-matrix product:
 
-template <class T>
-constexpr Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
+template <class T, class Layout>
+constexpr Matrix<T, Layout> operator*(const Matrix<T, Layout>& a,
+                                      const Matrix<T, Layout>& b)
 {
     return Scilib::Linalg::matrix_product(a.view(), b.view());
 }
@@ -158,8 +159,9 @@ constexpr Matrix<T> operator*(const Matrix<T>& a, const Matrix<T>& b)
 //------------------------------------------------------------------------------
 // Matrix-vector product:
 
-template <class T>
-constexpr Vector<T> operator*(const Matrix<T>& a, const Vector<T>& x)
+template <class T, class Layout>
+constexpr Vector<T, Layout> operator*(const Matrix<T, Layout>& a,
+                                      const Vector<T, Layout>& x)
 {
     return Scilib::Linalg::matrix_vector_product(a.view(), x.view());
 }
