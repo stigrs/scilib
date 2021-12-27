@@ -99,3 +99,57 @@ TEST(TestLinalg, TestEig)
         }
     }
 }
+
+TEST(TestLinalg, TestEigColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // Numpy:
+    std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813,
+                                   7.50500862};
+
+    std::vector<double> eval_im = {1.12844169, -1.12844169, 0.0, 0.0};
+
+    // clang-format off
+    std::vector<double> evec_re_data = {
+        -0.16889612, 0.61501958, -0.19838031, -0.72497646, 
+        -0.16889612, 0.61501958, -0.19838031, -0.72497646, 
+        -0.19514446, 0.08601687, -0.58764782,  0.78050610, 
+         0.70845976, 0.46590401,  0.52110625,  0.09729590
+    };
+    std::vector<double> evec_im_data = {
+        -0.11229493, -0.03942734,  0.11880544, 0.0,       
+         0.11229493,  0.03942734, -0.11880544, 0.0,        
+         0.0,         0.0,         0.0,        0.0,
+         0.0,         0.0,         0.0,        0.0
+    };
+    std::vector<double> a_data = {
+         1.0, -2.0,  5.0,  2.0, 
+         5.0,  3.0,  1.0,  3.0,
+         4.0,  6.0,  0.0, -4.0,
+         2.0,  4.0, -1.0,  0.0
+    };
+    // clang-format on
+
+    Matrix<double, stdex::layout_left> evec_re(evec_re_data, 4, 4);
+    Matrix<double, stdex::layout_left> evec_im(evec_im_data, 4, 4);
+    Matrix<double, stdex::layout_left> a(a_data, 4, 4);
+
+    Vector<std::complex<double>, stdex::layout_left> eval(4);
+    Matrix<std::complex<double>, stdex::layout_left> evec(4, 4);
+
+    eig(a.view(), evec.view(), eval.view());
+
+    for (std::size_t i = 0; i < eval.size(); ++i) {
+        EXPECT_NEAR(eval(i).real(), eval_re[i], 5.0e-8);
+        EXPECT_NEAR(eval(i).imag(), eval_im[i], 5.0e-8);
+    }
+
+    for (std::size_t j = 0; j < evec.extent(1); ++j) {
+        for (std::size_t i = 0; i < evec.extent(0); ++i) {
+            EXPECT_NEAR(evec(i, j).real(), evec_re(i, j), 5.0e-9);
+            EXPECT_NEAR(evec(i, j).imag(), evec_im(i, j), 5.0e-9);
+        }
+    }
+}
