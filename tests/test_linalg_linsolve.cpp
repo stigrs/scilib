@@ -36,3 +36,31 @@ TEST(TestLinalg, TestLinsolve)
         EXPECT_NEAR(B(i, 0), x[i], 1.0e-12);
     }
 }
+
+TEST(TestLinalg, TestLinsolveColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // clang-format off
+    std::vector<double> A_data = {
+        1.0, 2.0, 3.0, 
+        2.0, 3.0, 4.0, 
+        3.0, 4.0, 1.0
+    };
+    std::vector<double> B_data = {
+        14.0, 
+        20.0, 
+        14.0
+    };
+    std::vector<double> x = {1.0, 2.0, 3.0};
+    // clang-format on
+    Matrix<double, stdex::layout_left> A(A_data, 3, 3);
+    Matrix<double, stdex::layout_left> B(B_data, 3, 1);
+
+    linsolve(A.view(), B.view());
+
+    for (std::size_t i = 0; i < x.size(); ++i) {
+        EXPECT_NEAR(B(i, 0), x[i], 1.0e-12);
+    }
+}

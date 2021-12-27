@@ -14,24 +14,25 @@ namespace Linalg {
 #include <cmath>
 
 // Raise a square matrix to the (integer) power n.
-template <class T>
-inline Scilib::Matrix<T> matrix_power(Scilib::Matrix_view<T> m, int n)
+template <class T, class Layout>
+inline Scilib::Matrix<T, Layout> matrix_power(Scilib::Matrix_view<T, Layout> m,
+                                              int n)
 {
     using namespace Scilib;
 
     assert(m.extent(0) == m.extent(1));
 
-    Scilib::Matrix<T> tmp(m);
+    Matrix<T, Layout> tmp(m);
 
     if (n < 0) {
         inv(tmp.view(), tmp.view());
     }
     int nn = std::abs(n);
 
-    Scilib::Matrix<T> res(m.extent(0), m.extent(1));
+    Matrix<T, Layout> res(m.extent(0), m.extent(1));
 
     if (nn == 0) {
-        res = identity(m.extent(0));
+        res = identity<Matrix<T, Layout>>(m.extent(0));
     }
     else if (nn == 1) {
         res = tmp;
