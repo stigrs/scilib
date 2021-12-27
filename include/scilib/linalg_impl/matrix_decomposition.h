@@ -57,31 +57,38 @@ inline void lu(Scilib::Matrix_view<double, Layout> a,
 }
 
 // QR factorization.
-inline void qr(Scilib::Matrix_view<double> a,
-               Scilib::Matrix_view<double> q,
-               Scilib::Matrix_view<double> r)
+template <class Layout>
+inline void qr(Scilib::Matrix_view<double, Layout> a,
+               Scilib::Matrix_view<double, Layout> q,
+               Scilib::Matrix_view<double, Layout> r)
 {
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT lda = n;
-
     assert(q.extent(0) == a.extent(0) && q.extent(1) == a.extent(1));
     assert(r.extent(0) == a.extent(0) && r.extent(1) == a.extent(1));
 
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+
+    auto matrix_layout = LAPACK_ROW_MAJOR;
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+        lda = m;
+    }
+    Scilib::copy(a, q);
+    Scilib::Vector<double, Layout> tau(std::min(m, n));
+
     // Compute QR factorization:
 
-    Scilib::copy(a, q);
-    Scilib::Vector<double> tau(std::min(m, n));
-
     BLAS_INT info =
-        LAPACKE_dgeqrf(LAPACK_ROW_MAJOR, m, n, q.data(), lda, tau.data());
+        LAPACKE_dgeqrf(matrix_layout, m, n, q.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dgeqrf failed");
     }
 
     // Compute Q:
 
-    info = LAPACKE_dorgqr(LAPACK_ROW_MAJOR, m, n, n, q.data(), lda, tau.data());
+    info = LAPACKE_dorgqr(matrix_layout, m, n, n, q.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dorgqr failed");
     }
@@ -93,16 +100,16 @@ inline void qr(Scilib::Matrix_view<double> a,
 }
 
 // Singular value decomposition.
-inline void svd(Scilib::Matrix_view<double> a,
-                Scilib::Vector_view<double> s,
-                Scilib::Matrix_view<double> u,
-                Scilib::Matrix_view<double> vt)
+template <class Layout>
+inline void svd(Scilib::Matrix_view<double, Layout> a,
+                Scilib::Vector_view<double, Layout> s,
+                Scilib::Matrix_view<double, Layout> u,
+                Scilib::Matrix_view<double, Layout> vt)
 {
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    BLAS_INT lda = n;
-    BLAS_INT ldu = m;
-    BLAS_INT ldvt = n;
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT ldu = m;
+    const BLAS_INT ldvt = n;
 
     assert(static_cast<BLAS_INT>(s.extent(0)) == std::min(m, n));
     assert(static_cast<BLAS_INT>(u.extent(0)) == m);
@@ -110,11 +117,19 @@ inline void svd(Scilib::Matrix_view<double> a,
     assert(static_cast<BLAS_INT>(vt.extent(0)) == n);
     assert(static_cast<BLAS_INT>(vt.extent(1)) == ldvt);
 
-    Scilib::Vector<double> superb(std::min(m, n) - 1);
+    auto matrix_layout = LAPACK_ROW_MAJOR;
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+        lda = m;
+    }
+
+    Scilib::Vector<double, Layout> superb(std::min(m, n) - 1);
 
     BLAS_INT info =
-        LAPACKE_dgesvd(LAPACK_ROW_MAJOR, 'A', 'A', m, n, a.data(), lda,
-                       s.data(), u.data(), ldu, vt.data(), ldvt, superb.data());
+        LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data(), lda, s.data(),
+                       u.data(), ldu, vt.data(), ldvt, superb.data());
     if (info != 0) {
         throw std::runtime_error("dgesvd failed");
     }

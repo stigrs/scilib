@@ -15,29 +15,42 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg_impl/lapack_types.h>
+#include <experimental/mdspan>
 #include <exception>
 #include <algorithm>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
 
 // Compute the minimum norm-solution to a real linear least squares problem.
-inline void lstsq(Scilib::Matrix_view<double> a, Scilib::Matrix_view<double> b)
+template <class Layout>
+inline void lstsq(Scilib::Matrix_view<double, Layout> a,
+                  Scilib::Matrix_view<double, Layout> b)
 {
+    namespace stdex = std::experimental;
+
     static_assert(a.is_contiguous());
     static_assert(b.is_contiguous());
 
     BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
-    BLAS_INT lda = n;
-    BLAS_INT ldb = nrhs;
     BLAS_INT rank;
 
-    double rcond = -1.0;                      // use machine epsilon
-    Scilib::Vector<double> s(std::min(m, n)); // singular values of a
+    double rcond = -1.0;                              // use machine epsilon
+    Scilib::Vector<double, Layout> s(std::min(m, n)); // singular values of a
 
-    BLAS_INT info = LAPACKE_dgelsd(LAPACK_ROW_MAJOR, m, n, nrhs, a.data(), lda,
+    auto matrix_layout = LAPACK_ROW_MAJOR;
+    BLAS_INT lda = n;
+    BLAS_INT ldb = nrhs;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+        lda = m;
+        ldb = n;
+    }
+    BLAS_INT info = LAPACKE_dgelsd(matrix_layout, m, n, nrhs, a.data(), lda,
                                    b.data(), ldb, s.data(), rcond, &rank);
     if (info != 0) {
         throw std::runtime_error("dgelsd failed");

@@ -66,6 +66,32 @@ TEST(TestLinalg, TestQR)
     }
 }
 
+TEST(TestLinalg, TestQRColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // clang-format off
+    std::vector<double> data = {
+         12.0,  6.0,  -4.0,
+        -51.0, 167.0, 24.0,
+          4.0, -68.0, -41.0
+    }; // clang-format on
+
+    Matrix<double, stdex::layout_left> ans(data, 3, 3);
+    Matrix<double, stdex::layout_left> a(data, 3, 3);
+    Matrix<double, stdex::layout_left> q(a.extent(0), a.extent(1));
+    Matrix<double, stdex::layout_left> r(a.extent(0), a.extent(1));
+
+    qr(a.view(), q.view(), r.view());
+    auto res = q * r;
+    for (std::size_t i = 0; i < ans.extent(0); ++i) {
+        for (std::size_t j = 0; j < ans.extent(1); ++j) {
+            EXPECT_DOUBLE_EQ(res(i, j), ans(i, j));
+        }
+    }
+}
+
 TEST(TestLinalg, TestSVD)
 {
     using namespace Scilib;
@@ -101,6 +127,46 @@ TEST(TestLinalg, TestSVD)
     auto res = u * sigma * vt;
     for (std::size_t i = 0; i < ans.extent(0); ++i) {
         for (std::size_t j = 0; j < ans.extent(1); ++j) {
+            EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-6);
+        }
+    }
+}
+
+TEST(TestLinalg, TestSVDColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // clang-format off
+    std::vector<double> data = {
+          8.79,  6.11, -9.15,  9.57, -3.49,  9.84,
+          9.93,  6.91, -7.93,  1.64,  4.02,  0.15,
+          9.83,  5.04,  4.86,  8.83,  9.80, -8.99,
+          5.45, -0.27,  4.85,  0.74, 10.00, -6.02,
+          3.16,  7.98,  3.01,  5.8,   4.27, -5.31
+    };
+    // clang-format on
+
+    int m = 6;
+    int n = 5;
+    int ldu = m;
+    int ldvt = n;
+
+    Matrix<double, stdex::layout_left> ans(data, m, n);
+    Matrix<double, stdex::layout_left> a(data, m, n);
+    Vector<double, stdex::layout_left> s(std::min(m, n));
+    Matrix<double, stdex::layout_left> u(m, ldu);
+    Matrix<double, stdex::layout_left> vt(n, ldvt);
+
+    svd(a.view(), s.view(), u.view(), vt.view());
+
+    Matrix<double, stdex::layout_left> sigma(a.extent(0), a.extent(1));
+    auto sigma_diag = diag(sigma.view());
+    copy(s.view(), sigma_diag);
+
+    auto res = u * sigma * vt;
+    for (std::size_t j = 0; j < ans.extent(1); ++j) {
+        for (std::size_t i = 0; i < ans.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-6);
         }
     }

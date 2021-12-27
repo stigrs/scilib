@@ -49,3 +49,41 @@ TEST(TestLinalg, TestLstsq)
         }
     }
 }
+
+TEST(TestLinalg, TestLstsqColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // Example from Intel MKL:
+    // clang-format off
+    std::vector<double> xans_data = {
+        -0.69, -0.80,  0.38,  0.29,  0.29, 
+        -0.24, -0.08,  0.12, -0.24,  0.35,
+         0.06,  0.21, -0.65,  0.42, -0.30
+    };
+    std::vector<double> a_data = {
+         0.12, -6.91, -3.33,  3.97,
+        -8.19,  2.22, -8.94,  3.33,
+         7.69, -5.12, -6.72, -2.74,
+        -2.26, -9.08, -4.40, -7.92,
+        -4.71,  9.96, -9.98, -3.20
+    };
+    std::vector<double> b_data = {
+         7.30,  1.33,  2.68, -9.62,  0.00,
+         0.47,  6.58, -1.71, -0.79,  0.00,
+        -6.28, -3.42,  3.46,  0.41,  0.00
+    };
+    // clang-format on
+    Matrix<double, stdex::layout_left> xans(xans_data, 5, 3);
+    Matrix<double, stdex::layout_left> a(a_data, 4, 5);
+    Matrix<double, stdex::layout_left> b(b_data, 5, 3);
+
+    lstsq(a.view(), b.view());
+
+    for (std::size_t j = 0; j < b.extent(1); ++j) {
+        for (std::size_t i = 0; i < b.extent(0); ++i) {
+            EXPECT_NEAR(b(i, j), xans(i, j), 5.0e-3);
+        }
+    }
+}
