@@ -15,6 +15,7 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg_impl/lapack_types.h>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
@@ -29,7 +30,8 @@ namespace stdex = std::experimental;
 // - I, i:       infinity norm of the matrix (maximum row sum)
 // - F, f, E, e: Frobenius norm of the matrix (square root of sum of squares)
 //
-inline double matrix_norm(Scilib::Matrix_view<double> a, char norm)
+template <class Layout>
+inline double matrix_norm(Scilib::Matrix_view<double, Layout> a, char norm)
 {
     static_assert(a.is_contiguous());
 
@@ -37,11 +39,16 @@ inline double matrix_norm(Scilib::Matrix_view<double> a, char norm)
            norm == 'o' || norm == 'I' || norm == 'i' || norm == 'F' ||
            norm == 'f' || norm == 'E' || norm == 'e');
 
+    auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
 
-    return LAPACKE_dlange(LAPACK_ROW_MAJOR, norm, m, n, a.data(), lda);
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+        lda = m;
+    }
+    return LAPACKE_dlange(matrix_layout, norm, m, n, a.data(), lda);
 }
 
 } // namespace Linalg

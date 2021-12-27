@@ -224,14 +224,21 @@ inline M ones(Args... args)
     return res;
 }
 
-template <class T = double>
-inline Scilib::Matrix<T> identity(std::size_t n)
+// clang-format off
+template <class M = Scilib::Matrix<double>>
+    requires MDArray_type<M>
+inline M identity(std::size_t n)
+// clang-format on
 {
-    Scilib::Matrix<T> res(n, n);
-    res = T{0};
+    static_assert(M::rank() == 2);
+
+    using value_type = typename M::value_type;
+    using size_type = typename M::size_type;
+
+    M res(n, n);
     auto res_diag = Scilib::diag(res.view());
-    for (std::size_t i = 0; i < res_diag.extent(0); ++i) {
-        res_diag(i) = T{1};
+    for (size_type i = 0; i < res_diag.extent(0); ++i) {
+        res_diag(i) = value_type{1};
     }
     return res;
 }

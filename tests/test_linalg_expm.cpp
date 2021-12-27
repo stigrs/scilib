@@ -39,3 +39,33 @@ TEST(TestLinalg, TestExpm)
         }
     }
 }
+
+TEST(TestLinalg, TestExpmColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // Example from Matlab:
+    // clang-format off
+    std::vector<double> ans_data = {
+        2.7183, 0.0000, 0.0000,
+        1.7183, 1.0000, 0.0000,
+        1.0862, 1.2642, 0.3679
+    };
+    std::vector<double> A_data = {
+        1.0, 0.0,  0.0,
+        1.0, 0.0,  0.0,
+        0.0, 2.0, -1.0
+    };
+    // clang-format off
+    Matrix<double, stdex::layout_left> ans(ans_data, 3, 3);
+    Matrix<double, stdex::layout_left> A(A_data, 3, 3);
+
+    auto res = expm(A.view());
+
+    for (std::size_t j = 0; j < res.extent(1); ++j) {
+        for (std::size_t i = 0; i < res.extent(0); ++i) {
+            EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-4);
+        }
+    }
+}

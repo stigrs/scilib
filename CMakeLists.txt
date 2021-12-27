@@ -136,7 +136,6 @@ endif()
 
 set(SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dormand_prince.cpp    
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/expm.cpp    
 )
 
 add_library(scilib ${SRC_FILES})
