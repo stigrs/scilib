@@ -32,7 +32,6 @@ TEST(TestLinalg, TestExpm)
     Matrix<double> A(A_data, 3, 3);
 
     auto res = expm(A.view());
-    std::cout << res << '\n';
 
     for (std::size_t i = 0; i < res.extent(0); ++i) {
         for (std::size_t j = 0; j < res.extent(1); ++j) {
