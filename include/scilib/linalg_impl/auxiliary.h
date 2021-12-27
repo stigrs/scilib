@@ -248,7 +248,7 @@ inline M identity(std::size_t n)
 // variance.
 // clang-format off
 template <class M, class... Args>
-    requires MDArray_type<M>
+    requires (MDArray_type<M> && std::is_floating_point_v<typename M::value_type>)
 inline M randn(Args... args)
 // clang-format on
 {
