@@ -15,15 +15,21 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg_impl/lapack_types.h>
+#include <experimental/mdspan>
 #include <exception>
 #include <cassert>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
 
 // Matrix inversion.
-inline void inv(Scilib::Matrix_view<double> a, Scilib::Matrix_view<double> res)
+template <class Layout>
+inline void inv(Scilib::Matrix_view<double, Layout> a,
+                Scilib::Matrix_view<double, Layout> res)
 {
+    namespace stdex = std::experimental;
+
     static_assert(a.is_contiguous());
     static_assert(res.is_contiguous());
 
@@ -33,23 +39,30 @@ inline void inv(Scilib::Matrix_view<double> a, Scilib::Matrix_view<double> res)
         throw std::runtime_error("inv: matrix not invertible");
     }
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT lda = n;
+
+    auto matrix_layout = LAPACK_ROW_MAJOR;
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+    }
 
     Scilib::copy(a, res);
 
-    Scilib::Vector<BLAS_INT> ipiv(n);
+    Scilib::Vector<BLAS_INT, Layout> ipiv(n);
     lu(res, ipiv.view()); // perform LU factorization
 
     BLAS_INT info =
-        LAPACKE_dgetri(LAPACK_ROW_MAJOR, n, res.data(), lda, ipiv.data());
+        LAPACKE_dgetri(matrix_layout, n, res.data(), lda, ipiv.data());
     if (info != 0) {
         throw std::runtime_error("dgetri: matrix inversion failed");
     }
 }
 
-inline Scilib::Matrix<double> inv(Scilib::Matrix_view<double> a)
+template <class Layout>
+inline Scilib::Matrix<double, Layout> inv(Scilib::Matrix_view<double, Layout> a)
 {
-    Scilib::Matrix<double> res(a.extent(0), a.extent(1));
+    Scilib::Matrix<double, Layout> res(a.extent(0), a.extent(1));
     inv(a, res.view());
     return res;
 }

@@ -43,3 +43,37 @@ TEST(TestLinalg, TestInv)
         }
     }
 }
+
+TEST(TestLinalg, TestInvColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    // clang-format off
+    std::vector<double> a_data = {
+         1.0, 5.0,  4.0,  2.0,
+        -2.0, 3.0,  6.0,  4.0,
+         5.0, 1.0,  0.0, -1.0,
+         2.0, 3.0, -4.0,  0.0};
+
+    // Numpy:
+    std::vector<double> ainv_data = {
+        -0.19008264,  0.16528926,  0.28099174,  0.05785124,
+         0.34710744, -0.21487603, -0.16528926,  0.02479339,
+         0.16528926, -0.0785124,   0.01652893, -0.20247934,
+        -0.60330579,  0.61157025,  0.23966942,  0.31404959
+    };
+    // clang-format on
+
+    Matrix<double, stdex::layout_left> a(a_data, 4, 4);
+    Matrix<double> ans_t(ainv_data, 4, 4);
+    Matrix<double, stdex::layout_left> ans(transposed(ans_t.view()));
+
+    auto res = inv(a.view());
+
+    for (std::size_t j = 0; j < res.extent(1); ++j) {
+        for (std::size_t i = 0; i < res.extent(0); ++i) {
+            EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-8);
+        }
+    }
+}
