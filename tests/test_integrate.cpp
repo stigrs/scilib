@@ -11,7 +11,7 @@
 #include <vector>
 #include <limits>
 
-Scilib::Vector<double> lorentz(double /* t */, const Scilib::Vector<double>& y)
+Scilib::Vector<double> lorentz(double, const Scilib::Vector<double>& y)
 {
     const double sigma = 10.0;
     const double R = 28.0;
@@ -26,8 +26,7 @@ Scilib::Vector<double> lorentz(double /* t */, const Scilib::Vector<double>& y)
     return ydot;
 }
 
-Scilib::Vector<double> fsys_stiff(double /* t */,
-                                  const Scilib::Vector<double>& y)
+Scilib::Vector<double> fsys_stiff(double, const Scilib::Vector<double>& y)
 {
     Scilib::Vector<double> ydot(3);
 

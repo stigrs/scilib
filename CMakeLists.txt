@@ -134,29 +134,10 @@ endif()
 
 ################################################################################
 
-set(SRC_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/dormand_prince.cpp    
-)
-
-add_library(scilib ${SRC_FILES})
+add_library(scilib INTERFACE)
 add_library(scilib::scilib ALIAS scilib)
 
-target_link_libraries(
-    scilib 
-    PRIVATE
-    std::mdspan
-    ${BLAS_LIBRARIES}
-    OpenMP::OpenMP_CXX
-)
-
-target_compile_options(
-    scilib
-    PRIVATE
-    "$<$<CONFIG:Debug>:${Scilib_CXX_FLAGS_DEBUG}>"
-    "$<$<CONFIG:Release>:${Scilib_CXX_FLAGS_RELEASE}>"
-)
-
-target_include_directories(scilib PUBLIC
+target_include_directories(scilib INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${BLAS_INCLUDE_DIRS}>
     $<BUILD_INTERFACE:${LAPACKE_INCLUDE_DIRS}>
@@ -165,9 +146,6 @@ target_include_directories(scilib PUBLIC
 
 install(TARGETS scilib
     EXPORT scilibTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}    
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}    
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}    
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
 )
 
@@ -221,4 +199,3 @@ endif()
 if(Scilib_BUILD_EXAMPLES) 
     add_subdirectory(examples)
 endif()
-
