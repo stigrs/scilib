@@ -68,9 +68,10 @@ inline void matrix_product(
     }
 }
 
-inline void matrix_product(Scilib::Matrix_view<double> a,
-                           Scilib::Matrix_view<double> b,
-                           Scilib::Matrix_view<double> c)
+template <class Layout>
+inline void matrix_product(Scilib::Matrix_view<double, Layout> a,
+                           Scilib::Matrix_view<double, Layout> b,
+                           Scilib::Matrix_view<double, Layout> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -79,17 +80,25 @@ inline void matrix_product(Scilib::Matrix_view<double> a,
     const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
 
-    const BLAS_INT lda = k;
-    const BLAS_INT ldb = n;
-    const BLAS_INT ldc = n;
+    auto matrix_layout = CblasRowMajor;
+    BLAS_INT lda = k;
+    BLAS_INT ldb = n;
+    BLAS_INT ldc = n;
 
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+        ldb = k;
+        ldc = m;
+    }
+    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
                 a.data(), lda, b.data(), ldb, beta, c.data(), ldc);
 }
 
-inline void matrix_product(Scilib::Matrix_view<const double> a,
-                           Scilib::Matrix_view<const double> b,
-                           Scilib::Matrix_view<double> c)
+template <class Layout>
+inline void matrix_product(Scilib::Matrix_view<const double, Layout> a,
+                           Scilib::Matrix_view<const double, Layout> b,
+                           Scilib::Matrix_view<double, Layout> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -98,18 +107,26 @@ inline void matrix_product(Scilib::Matrix_view<const double> a,
     const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
 
-    const BLAS_INT lda = k;
-    const BLAS_INT ldb = n;
-    const BLAS_INT ldc = n;
+    auto matrix_layout = CblasRowMajor;
+    BLAS_INT lda = k;
+    BLAS_INT ldb = n;
+    BLAS_INT ldc = n;
 
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+        ldb = k;
+        ldc = m;
+    }
+    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
                 a.data(), lda, b.data(), ldb, beta, c.data(), ldc);
 }
 
 #ifdef USE_MKL
-inline void matrix_product(Scilib::Matrix_view<std::complex<double>> a,
-                           Scilib::Matrix_view<std::complex<double>> b,
-                           Scilib::Matrix_view<std::complex<double>> c)
+template <class Layout>
+inline void matrix_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
+                           Scilib::Matrix_view<std::complex<double>, Layout> b,
+                           Scilib::Matrix_view<std::complex<double>, Layout> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -118,17 +135,26 @@ inline void matrix_product(Scilib::Matrix_view<std::complex<double>> a,
     const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
 
-    const BLAS_INT lda = k;
-    const BLAS_INT ldb = n;
-    const BLAS_INT ldc = n;
+    auto matrix_layout = CblasRowMajor;
+    BLAS_INT lda = k;
+    BLAS_INT ldb = n;
+    BLAS_INT ldc = n;
 
-    cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+        ldb = k;
+        ldc = m;
+    }
+    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
                 a.data(), lda, b.data(), ldb, &beta, c.data(), ldc);
 }
 
-inline void matrix_product(Scilib::Matrix_view<const std::complex<double>> a,
-                           Scilib::Matrix_view<const std::complex<double>> b,
-                           Scilib::Matrix_view<std::complex<double>> c)
+template <class Layout>
+inline void
+matrix_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
+               Scilib::Matrix_view<const std::complex<double>, Layout> b,
+               Scilib::Matrix_view<std::complex<double>, Layout> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -137,11 +163,18 @@ inline void matrix_product(Scilib::Matrix_view<const std::complex<double>> a,
     const BLAS_INT n = static_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT k = static_cast<BLAS_INT>(a.extent(1));
 
-    const BLAS_INT lda = k;
-    const BLAS_INT ldb = n;
-    const BLAS_INT ldc = n;
+    auto matrix_layout = CblasRowMajor;
+    BLAS_INT lda = k;
+    BLAS_INT ldb = n;
+    BLAS_INT ldc = n;
 
-    cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = CblasColMajor;
+        lda = m;
+        ldb = k;
+        ldc = m;
+    }
+    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
                 a.data(), lda, b.data(), ldb, &beta, c.data(), ldc);
 }
 #endif

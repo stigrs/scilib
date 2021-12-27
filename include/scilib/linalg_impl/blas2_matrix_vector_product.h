@@ -68,13 +68,12 @@ inline void matrix_vector_product(Scilib::Matrix_view<double, Layout> a,
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
-
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
@@ -95,13 +94,12 @@ inline void matrix_vector_product(Scilib::Matrix_view<const double, Layout> a,
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
-
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
@@ -125,13 +123,12 @@ matrix_vector_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
-
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
@@ -153,13 +150,12 @@ matrix_vector_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
+    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
     const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
 
-    CBLAS_LAYOUT matrix_layout = CblasRowMajor;
-
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
