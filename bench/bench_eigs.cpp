@@ -39,7 +39,7 @@ void benchmark(int n)
     auto t2 = std::chrono::high_resolution_clock::now();
     Timer t_eigen = t2 - t1;
 
-    Matrix<double> b1 = randu(n, n);
+    Matrix<double> b1 = randu<Matrix<double>>(n, n);
     Matrix<double> b1_t = b1;
     Matrix<double> b2(n, n);
     matrix_product(transposed(b1_t.view()), b1.view(), b2.view());

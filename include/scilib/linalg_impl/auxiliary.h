@@ -10,6 +10,7 @@
 #include <scilib/mdarray.h>
 #include <experimental/mdspan>
 #include <random>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
@@ -243,16 +244,22 @@ inline M identity(std::size_t n)
     return res;
 }
 
-// Create a random vector from a normal distribution with zero mean and unit
+// Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
-template <class T = double>
-inline Scilib::Vector<T> randn(std::size_t n)
+// clang-format off
+template <class M, class... Args>
+    requires MDArray_type<M>
+inline M randn(Args... args)
+// clang-format on
 {
-    Scilib::Vector<T> res(n);
+    static_assert(M::rank() == sizeof...(Args));
+    using value_type = typename M::value_type;
+
+    M res(args...);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
-    std::normal_distribution<T> nd{};
+    std::normal_distribution<value_type> nd{};
 
     for (auto& x : res) {
         x = nd(gen);
@@ -260,32 +267,22 @@ inline Scilib::Vector<T> randn(std::size_t n)
     return res;
 }
 
-// Create a random matrix from a normal distribution with zero mean and unit
-// variance.
-template <class T = double>
-inline Scilib::Matrix<T> randn(std::size_t nr, std::size_t nc)
-{
-    Scilib::Matrix<T> res(nr, nc);
-
-    std::random_device rd{};
-    std::mt19937_64 gen{rd()};
-    std::normal_distribution<T> nd{};
-
-    for (auto& x : res) {
-        x = nd(gen);
-    }
-    return res;
-}
-
-// Create a random vector from a uniform real distribution on the
+// Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
-inline Scilib::Vector<double> randu(std::size_t n)
+// clang-format off
+template <class M, class... Args>
+    requires (MDArray_type<M> && std::is_floating_point_v<typename M::value_type>)
+inline M randu(Args... args)
+// clang-format on
 {
-    Scilib::Vector<double> res(n);
+    static_assert(M::rank() == sizeof...(Args));
+    using value_type = typename M::value_type;
+
+    M res(args...);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
-    std::uniform_real_distribution<> ur{};
+    std::uniform_real_distribution<value_type> ur{};
 
     for (auto& x : res) {
         x = ur(gen);
@@ -293,47 +290,22 @@ inline Scilib::Vector<double> randu(std::size_t n)
     return res;
 }
 
-// Create a random matrix from a uniform real distribution on the
-// interval [0, 1).
-inline Scilib::Matrix<double> randu(std::size_t nr, std::size_t nc)
-{
-    Scilib::Matrix<double> res(nr, nc);
-
-    std::random_device rd{};
-    std::mt19937_64 gen{rd()};
-    std::uniform_real_distribution<> ur{};
-
-    for (auto& x : res) {
-        x = ur(gen);
-    }
-    return res;
-}
-
-// Create a random vector from a uniform integer distribution on the
+// Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
-inline Scilib::Vector<int> randi(std::size_t n)
+// clang-format off
+template <class M, class... Args>
+    requires (MDArray_type<M> && std::is_integral_v<typename M::value_type>)
+inline M randi(Args... args)
+// clang-format on
 {
-    Scilib::Vector<int> res(n);
+    static_assert(M::rank() == sizeof...(Args));
+    using value_type = typename M::value_type;
+
+    M res(args...);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
-    std::uniform_int_distribution<> ui{};
-
-    for (auto& x : res) {
-        x = ui(gen);
-    }
-    return res;
-}
-
-// Create a random matrix from a uniform integer distribution on the
-// interval [0, 1].
-inline Scilib::Matrix<int> randi(std::size_t nr, std::size_t nc)
-{
-    Scilib::Matrix<int> res(nr, nc);
-
-    std::random_device rd{};
-    std::mt19937_64 gen{rd()};
-    std::uniform_int_distribution<> ui{};
+    std::uniform_int_distribution<value_type> ui{};
 
     for (auto& x : res) {
         x = ui(gen);
