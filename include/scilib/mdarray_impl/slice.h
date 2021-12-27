@@ -10,6 +10,7 @@
 #include <experimental/mdspan>
 #include <array>
 #include <utility>
+#include <type_traits>
 
 namespace Scilib {
 namespace stdex = std::experimental;
@@ -68,10 +69,16 @@ template <class T,
           class Accessor>
 inline auto diag(stdex::mdspan<T, stdex::extents<ext, ext>, Layout, Accessor> m)
 {
-
-    return Subvector_view<T>{m.data(),
-                             {stdex::dextents<1>{m.extent(0)},
-                              std::array<std::size_t, 1>{m.stride(0) + 1}}};
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        return Subvector_view<T>{m.data(),
+                                 {stdex::dextents<1>{m.extent(0)},
+                                  std::array<std::size_t, 1>{m.stride(1) + 1}}};
+    }
+    else {
+        return Subvector_view<T>{m.data(),
+                                 {stdex::dextents<1>{m.extent(0)},
+                                  std::array<std::size_t, 1>{m.stride(0) + 1}}};
+    }
 }
 
 template <class T,

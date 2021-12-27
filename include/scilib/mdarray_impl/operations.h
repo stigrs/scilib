@@ -225,8 +225,8 @@ inline void print(std::ostream& ostrm,
     ostrm << "}\n";
 }
 
-template <class T>
-inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T>& v)
+template <class T, class Layout>
+inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout>& v)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -283,8 +283,8 @@ print(std::ostream& ostrm,
     ostrm << "}\n";
 }
 
-template <class T>
-inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T>& m)
+template <class T, class Layout>
+inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout>& m)
 {
     using size_type = stdex::extents<>::size_type;
 

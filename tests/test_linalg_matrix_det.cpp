@@ -45,3 +45,22 @@ TEST(TestLinalg, TestDet)
     EXPECT_NEAR(det(a3.view()), ans3, 1.0e-12);
     EXPECT_NEAR(det(a4.view()), ans4, 1.0e-12);
 }
+
+TEST(TestLinalg, TestDetColMajor)
+{
+    using namespace Scilib;
+    using namespace Scilib::Linalg;
+
+    const double ans4 = 242.0; // armadillo
+
+    // clang-format off
+    std::vector<double> a4_data = {
+         1.0, -2.0,  5.0,  2.0,
+         5.0,  3.0,  1.0,  3.0,
+         4.0,  6.0,  0.0, -4.0,
+         2.0,  4.0, -1.0,  0.0};
+    // clang-format on
+
+    Matrix<double, stdex::layout_left> a4(a4_data, 4, 4);
+    EXPECT_NEAR(det(a4.view()), ans4, 1.0e-12);
+}

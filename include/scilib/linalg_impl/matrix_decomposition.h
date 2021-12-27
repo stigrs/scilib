@@ -15,27 +15,39 @@
 
 #include <scilib/mdarray.h>
 #include <scilib/linalg_impl/lapack_types.h>
+#include <experimental/mdspan>
 #include <exception>
 #include <cassert>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
 
+namespace stdex = std::experimental;
+
 // LU factorization.
-inline void lu(Scilib::Matrix_view<double> a,
-               Scilib::Vector_view<BLAS_INT> ipiv)
+template <class Layout>
+inline void lu(Scilib::Matrix_view<double, Layout> a,
+               Scilib::Vector_view<BLAS_INT, Layout> ipiv)
 {
     static_assert(a.is_contiguous());
     static_assert(ipiv.is_contiguous());
 
     const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT lda = n;
 
     assert(static_cast<BLAS_INT>(ipiv.size()) >= std::min(m, n));
 
+    auto matrix_layout = LAPACK_ROW_MAJOR;
+    BLAS_INT lda = n;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+        lda = m;
+    }
+
     BLAS_INT info =
-        LAPACKE_dgetrf(LAPACK_ROW_MAJOR, m, n, a.data(), lda, ipiv.data());
+        LAPACKE_dgetrf(matrix_layout, m, n, a.data(), lda, ipiv.data());
     if (info < 0) {
         throw std::runtime_error("dgetrf: illegal input parameter");
     }
