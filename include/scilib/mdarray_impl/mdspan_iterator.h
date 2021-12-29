@@ -45,13 +45,13 @@ public:
     MDSpan_iterator() = default;
 
     constexpr explicit MDSpan_iterator(mdspan_t x)
-        : x_(x), current_(0), end_(x.extent(0))
+        : x_(x), current_(0), size_(x.extent(0))
     {
         static_assert(Extents::rank() == 1);
     }
 
     constexpr explicit MDSpan_iterator(mdspan_t x, difference_type curr_index)
-        : x_(x), current_(curr_index), end_(x.extent(0))
+        : x_(x), current_(curr_index), size_(x.extent(0))
     {
         static_assert(Extents::rank() == 1);
     }
@@ -85,7 +85,7 @@ public:
     constexpr iterator& operator+=(difference_type n) noexcept
     {
         if (n > 0) {
-            assert(end_ - current_ >= n);
+            assert(size_ - current_ >= n);
         }
         if (n < 0) {
             assert(current_ >= -n);
@@ -100,7 +100,7 @@ public:
             assert(current_ >= n);
         }
         if (n < 0) {
-            assert(end_ - current_ >= -n);
+            assert(size_ - current_ >= -n);
         }
         current_ -= n;
         return *this;
@@ -164,26 +164,26 @@ public:
 
     constexpr reference operator[](difference_type i) const noexcept
     {
-        assert(0 <= i && i < end_);
+        assert(0 <= i && i < size_);
         return x_(i);
     }
 
     constexpr reference operator*() const noexcept
     {
-        assert(0 <= current_ && current_ < end_);
+        assert(0 <= current_ && current_ < size_);
         return x_(current_);
     }
 
     constexpr pointer operator->() const noexcept
     {
-        assert(0 <= current_ && current_ < end_);
+        assert(0 <= current_ && current_ < size_);
         return x_.accessor().offset(x_.data(), x_.mapping()(current_));
     }
 
 private:
     mdspan_t x_;
     difference_type current_ = 0;
-    difference_type end_ = 0;
+    difference_type size_ = 0;
 };
 
 template <class T, class Extents, class Layout, class Accessor>
