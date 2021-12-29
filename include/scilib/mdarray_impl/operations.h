@@ -320,14 +320,8 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    auto mtmp = Matrix<T>(tmp, nr, nc);
-    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
-        m.resize(nr, nc);
-        Scilib::copy(mtmp.view(), m.view());
-    }
-    else {
-        m = mtmp;
-    }
+    auto mtmp = Matrix<T, stdex::layout_right>(tmp, nr, nc);
+    m = mtmp.view();
     return istrm;
 }
 // clang-format on

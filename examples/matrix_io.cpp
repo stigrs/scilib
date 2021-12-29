@@ -19,10 +19,8 @@ int main()
           5  6  7  8\n \
           9 10 11 12 }";
 
-    std::cout << buf << '\n';
-
     Matrix<int, layout_left> m_col_major;
-    Matrix<int, layout_left> m_row_major;
+    Matrix<int, layout_right> m_row_major;
 
     std::stringstream ss(buf);
     ss >> m_col_major;
