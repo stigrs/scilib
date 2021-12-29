@@ -14,7 +14,12 @@
 #include <mkl.h>
 #define BLAS_INT MKL_INT
 #else
+#include <cblas.h>
+#ifdef blasint
+#define BLAS_INT blasint
+#else
 #define BLAS_INT int
+#endif
 #endif
 
 //------------------------------------------------------------------------------
