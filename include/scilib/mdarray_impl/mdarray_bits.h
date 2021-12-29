@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <functional>
 #include <cassert>
+#include <type_traits>
 
 namespace Scilib {
 namespace stdex = std::experimental;
@@ -59,9 +60,9 @@ template <class T, class Extents, class Layout>
 class MDArray {
 public:
     // clang-format on
-    using value_type = T;
+    using value_type = std::remove_cv_t<T>;
     using layout_type = Layout;
-    using container_type = std::vector<T>;
+    using container_type = std::vector<value_type>;
     using view_type = stdex::mdspan<T, Extents, layout_type>;
     using const_view_type = stdex::mdspan<const T, Extents, layout_type>;
     using size_type = stdex::extents<>::size_type;

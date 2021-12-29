@@ -46,6 +46,7 @@ endfunction()
 set(PROGRAMS 
     test_vector
     test_matrix
+    test_mdspan_iterator
     test_array3d
     test_array4d
     test_integrate

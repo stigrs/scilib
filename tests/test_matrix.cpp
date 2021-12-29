@@ -204,3 +204,61 @@ TEST(TestMatrix, TestColMajor)
         }
     }
 }
+
+TEST(TestMatrix, TestRowIterator)
+{
+    // clang-format off
+    std::vector<int> aa = {1, 2, 3, 
+                           4, 5, 6};
+    // clang-format on
+    Scilib::Matrix<int> ma(aa, 2, 3);
+
+    auto r0 = Scilib::row(ma.view(), 0);
+
+    int i = 1;
+    for (auto it = Scilib::cbegin(r0); it != Scilib::cend(r0); ++it) {
+        EXPECT_EQ((*it), i);
+        ++i;
+    }
+}
+
+TEST(TestMatrix, TestColIterator)
+{
+    // clang-format off
+    std::vector<int> aa = {1, 2, 3, 
+                           4, 5, 6};
+    // clang-format on
+    Scilib::Matrix<int> ma(aa, 2, 3);
+
+    auto c1 = Scilib::column(ma.view(), 1);
+
+    int i = 2;
+    for (auto it = Scilib::cbegin(c1); it != Scilib::cend(c1); ++it) {
+        EXPECT_EQ((*it), i);
+        i += 3;
+    }
+}
+
+TEST(TestMatrix, TestDiagIterator)
+{
+    // clang-format off
+    std::vector<int> data = {
+        1,  2,  3, 
+        4,  5,  6, 
+        7,  8,  9
+    };
+    std::vector<int> ans_data = {
+        1, 5, 9
+    };
+    // clang-format on
+    Scilib::Vector<int, stdex::layout_left> ans(ans_data, 3);
+    Scilib::Matrix<int, stdex::layout_left> m(data, 3, 3);
+
+    auto d = Scilib::diag(m.view());
+
+    int i = 0;
+    for (auto it = Scilib::begin(d); it != Scilib::end(d); ++it) {
+        EXPECT_EQ((*it), ans(i));
+        ++i;
+    }
+}

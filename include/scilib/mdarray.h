@@ -84,6 +84,7 @@ using Array4D = MDArray<T,
 
 } // namespace Scilib
 
+#include <scilib/mdarray_impl/mdspan_iterator.h>
 #include <scilib/mdarray_impl/copy.h>
 #include <scilib/mdarray_impl/copy_n.h>
 #include <scilib/mdarray_impl/sort.h>
