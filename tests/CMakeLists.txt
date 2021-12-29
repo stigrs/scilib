@@ -63,6 +63,7 @@ set(PROGRAMS
     test_linalg_matrix_inv
     test_linalg_matrix_norm
     test_linalg_matrix_power
+    test_linalg_trace
     test_linalg_transposed
     test_stats
 )

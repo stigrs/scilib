@@ -27,6 +27,7 @@
 #include <scilib/linalg_impl/blas3_matrix_product.h>
 
 #include <scilib/linalg_impl/scaled.h>
+#include <scilib/linalg_impl/trace.h>
 #include <scilib/linalg_impl/transposed.h>
 #include <scilib/linalg_impl/matrix_decomposition.h>
 #include <scilib/linalg_impl/matrix_norm.h>
