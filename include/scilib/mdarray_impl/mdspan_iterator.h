@@ -162,19 +162,21 @@ public:
 
     constexpr reference operator[](difference_type i) const noexcept
     {
-        assert(0 <= i && i < x_.extent(0));
+        assert(0 <= i && i < static_cast<difference_type>(x_.extent(0)));
         return x_(i);
     }
 
     constexpr reference operator*() const noexcept
     {
-        assert(0 <= current_ && current_ < x_.extent(0));
+        assert(0 <= current_ &&
+               current_ < static_cast<difference_type>(x_.extent(0)));
         return x_(current_);
     }
 
     constexpr pointer operator->() const noexcept
     {
-        assert(0 <= current_ && current_ < x_.extent(0));
+        assert(0 <= current_ &&
+               current_ < static_cast<difference_type>(x_.extent(0)));
         return x_.accessor().offset(x_.data(), x_.mapping()(current_));
     }
 
