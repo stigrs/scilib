@@ -50,7 +50,7 @@ inline void inv(Scilib::Matrix_view<double, Layout> a,
     Scilib::copy(a, res);
 
     Scilib::Vector<BLAS_INT, Layout> ipiv(n);
-    lu(res, ipiv.view()); // perform LU factorization
+    Scilib::Linalg::lu(res, ipiv.view()); // perform LU factorization
 
     BLAS_INT info =
         LAPACKE_dgetri(matrix_layout, n, res.data(), lda, ipiv.data());

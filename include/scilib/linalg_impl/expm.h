@@ -26,6 +26,8 @@ Scilib::Matrix<double, Layout> expm(Scilib::Matrix_view<double, Layout> a)
     // SIAM Review, 45, 3-000.
 
     using namespace Scilib;
+    using namespace Scilib::Linalg;
+
     assert(a.extent(0) == a.extent(1));
 
     int e = static_cast<int>(std::log2(matrix_norm(a, 'I')));

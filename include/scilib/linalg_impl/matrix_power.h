@@ -19,6 +19,7 @@ inline Scilib::Matrix<T, Layout> matrix_power(Scilib::Matrix_view<T, Layout> m,
                                               int n)
 {
     using namespace Scilib;
+    using namespace Scilib::Linalg;
 
     assert(m.extent(0) == m.extent(1));
 

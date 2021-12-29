@@ -36,7 +36,7 @@ double det(Scilib::Matrix_view<double, Layout> a)
         Scilib::Matrix<double, Layout> tmp(a);
         Scilib::Vector<BLAS_INT, Layout> ipiv(n);
 
-        lu(tmp.view(), ipiv.view());
+        Scilib::Linalg::lu(tmp.view(), ipiv.view());
 
         BLAS_INT permut = 0;
         for (BLAS_INT i = 1; i <= n; ++i) {
