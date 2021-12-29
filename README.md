@@ -7,7 +7,8 @@ and Intel MKL are supported.
 ## Features
 
 * Multidimensional dense arrays using [mdspan](https://github.com/kokkos/mdspan) 
-  for views and std::vector for storage (row-major storage order)
+  for views and std::vector for storage (row-major or column-major storage 
+  order; default is row-major)
 * Linear algebra methods
 * Integration methods
 * Simple solver for initial value problems (Dormand-Prince)
