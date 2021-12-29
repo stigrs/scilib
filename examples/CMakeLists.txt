@@ -15,6 +15,7 @@ endif()
 
 set(PROGRAMS 
     matrix_diag
+    matrix_io
     mdarray_properties
     solve_ivp
     submatrix_views 

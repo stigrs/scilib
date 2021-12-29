@@ -82,6 +82,36 @@ using Array4D = MDArray<T,
                                        stdex::dynamic_extent>,
                         Layout>;
 
+template <class T, class Layout = stdex::layout_right>
+using Array5D = MDArray<T,
+                        stdex::extents<stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent>,
+                        Layout>;
+
+template <class T, class Layout = stdex::layout_right>
+using Array6D = MDArray<T,
+                        stdex::extents<stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent>,
+                        Layout>;
+
+template <class T, class Layout = stdex::layout_right>
+using Array7D = MDArray<T,
+                        stdex::extents<stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent>,
+                        Layout>;
+
 } // namespace Scilib
 
 #include <scilib/mdarray_impl/mdspan_iterator.h>

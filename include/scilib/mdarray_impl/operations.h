@@ -12,9 +12,11 @@
 #include <scilib/mdarray_impl/support.h>
 #include <scilib/linalg_impl/blas2_matrix_vector_product.h>
 #include <scilib/linalg_impl/blas3_matrix_product.h>
+#include <scilib/linalg_impl/transposed.h>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <type_traits>
 
 namespace Scilib {
 
@@ -241,8 +243,8 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout>& v)
     return ostrm;
 }
 
-template <class T>
-inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
+template <class T, class Layout>
+inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout>& v)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -256,7 +258,7 @@ inline std::istream& operator>>(std::istream& istrm, Vector<T>& v)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    v = Vector<T>(tmp, tmp.size());
+    v = Vector<T, Layout>(tmp, tmp.size());
     return istrm;
 }
 
@@ -301,8 +303,8 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout>& m)
     return ostrm;
 }
 
-template <class T>
-inline std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
+template <class T, class Layout>
+inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -318,7 +320,14 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T>& m)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    m = Matrix<T>(tmp, nr, nc);
+    auto mtmp = Matrix<T>(tmp, nr, nc);
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        m.resize(nr, nc);
+        Scilib::copy(mtmp.view(), m.view());
+    }
+    else {
+        m = mtmp;
+    }
     return istrm;
 }
 // clang-format on

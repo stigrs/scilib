@@ -123,7 +123,7 @@ public:
         : c_(m.size()), v_(c_.data(), m.extents())
     {
         static_assert(m.rank() == Extents::rank());
-        static_assert(m.rank() <= 4);
+        static_assert(m.rank() <= 7);
         copy(m, v_);
     }
 
@@ -139,7 +139,7 @@ public:
     operator=(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
     {
         static_assert(m.rank() == Extents::rank());
-        static_assert(m.rank() <= 4);
+        static_assert(m.rank() <= 7);
 
         c_ = container_type(m.size());
         v_ = view_type(c_.data(), m.extents());
