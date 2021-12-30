@@ -20,13 +20,13 @@ int main()
     Scilib::Matrix<int> m(data, 3, 4);
     std::cout << "matrix:\n" << m << '\n';
 
-    Scilib::Vector<int> r = Scilib::row(m.view(), 1);
+    Scilib::Vector<int> r = Scilib::row(m, 1);
     std::cout << "m.row(1):\n" << r << '\n';
 
-    Scilib::Vector<int> c = Scilib::column(m.view(), 2);
+    Scilib::Vector<int> c = Scilib::column(m, 2);
     std::cout << "m.column(2):\n" << c << '\n';
 
-    auto sub = Scilib::submatrix(m.view(), {1, 3}, {1, 4});
+    auto sub = Scilib::submatrix(m, {1, 3}, {1, 4});
     std::cout << "m.sub:\n";
     Scilib::print(std::cout, sub);
     std::cout << '\n';

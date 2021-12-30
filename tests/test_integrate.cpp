@@ -44,7 +44,7 @@ TEST(TestIntegrate, TestTrapz)
 
     double xlo = 2.1;
     double xup = 3.6;
-    double ft = Scilib::Integrate::trapz(xlo, xup, y.view());
+    double ft = Scilib::Integrate::trapz(xlo, xup, y);
 
     EXPECT_NEAR(ft, 5.22, 1.0e-8);
 }

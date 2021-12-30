@@ -9,23 +9,28 @@
 
 #include <experimental/mdspan>
 #include <cassert>
+#include <type_traits>
 
 namespace Scilib {
 
 namespace stdex = std::experimental;
 
-template <class T,
+// clang-format off
+template <class T_x,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
           class Accessor_x,
+          class T_y,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
+    requires (!std::is_const_v<T_y>)
 inline void
-copy_n(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+copy_n(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
        stdex::extents<>::size_type count,
-       stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y,
+       stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y,
        stdex::extents<>::size_type offset = 0)
+// clang-format on
 {
     assert(count <= x.extent(0));
     assert(offset >= 0 && offset < count);
@@ -34,6 +39,15 @@ copy_n(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
     for (size_type i = 0; i < count; ++i) {
         y(i + offset) = x(i);
     }
+}
+
+template <class T, class Layout>
+inline void copy_n(const Vector<T, Layout>& x,
+                   stdex::extents<>::size_type count,
+                   Vector<T, Layout>& y,
+                   stdex::extents<>::size_type offset = 0)
+{
+    copy_n(x.view(), count, y.view(), offset);
 }
 
 } // namespace Scilib

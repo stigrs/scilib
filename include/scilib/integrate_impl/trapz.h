@@ -18,25 +18,31 @@ namespace stdex = std::experimental;
 
 // Integrate function values over a non-uniform grid using the
 // trapezoidal rule.
-// clang-format off
-template <class T,
+template <class T_scalar,
+          class T_x,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-    requires std::is_floating_point_v<T> 
-inline T
-trapz(T xlo, T xup, stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
-// clang-format on
+inline auto trapz(T_scalar xlo,
+                  T_scalar xup,
+                  stdex::mdspan<T_x, stdex::extents<ext>, Layout, Accessor> x)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T_x>;
 
-    const T step = std::abs(xup - xlo) / (x.extent(0) - 1);
-    T ans = T{0};
+    const value_type step = std::abs(xup - xlo) / (x.extent(0) - 1);
+    value_type ans = value_type{0};
 
     for (size_type i = 1; i < x.extent(0); ++i) {
         ans += 0.5 * (x(i) + x(i - 1));
     }
     return ans *= step;
+}
+
+template <class T, class Layout>
+inline auto trapz(T xlo, T xup, const Scilib::Vector<T, Layout>& x)
+{
+    return trapz(xlo, xup, x.view());
 }
 
 } // namespace Integrate
