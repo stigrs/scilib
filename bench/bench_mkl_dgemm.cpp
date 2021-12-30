@@ -31,7 +31,7 @@ void benchmark(BLAS_INT m, BLAS_INT n)
 
     time_start = dsecnd();
     for (int it = 0; it < loop_count; ++it) {
-        Scilib::Linalg::matrix_product(A.view(), B.view(), C.view());
+        Scilib::Linalg::matrix_product(A, B, C);
     }
     double time_end = dsecnd();
     double time_avg = (time_end - time_start) / loop_count;
