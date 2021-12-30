@@ -40,10 +40,13 @@ fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
     Scilib::apply(m, [&](T& mi) { mi = value; });
 }
 
+// clang-format off
 template <class T, class Extents, class Layout>
+    requires Extents_has_rank<Extents>
 inline void fill(Scilib::MDArray<T, Extents, Layout>& m, const T& value)
+// clang-format on
 {
-    static_assert(m.rank() <= 2);
+    static_assert(Extents::rank() <= 2);
     fill(m.view(), value);
 }
 

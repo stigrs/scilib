@@ -18,35 +18,39 @@ namespace Stats {
 namespace stdex = std::experimental;
 
 // Arithmetic mean.
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-    requires std::is_floating_point_v<T> 
-inline T mean(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
-// clang-format on
+inline auto mean(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
-    return Scilib::Linalg::sum(x) / static_cast<T>(x.extent(0));
+    using value_type = std::remove_cv_t<T>;
+    value_type result =
+        Scilib::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
+    return result;
+}
+
+template <class T, class Layout>
+inline T mean(const Scilib::Vector<T, Layout>& x)
+{
+    return mean(x.view());
 }
 
 // Median.
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-    requires std::is_floating_point_v<T> 
-inline T median(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
-// clang-format on
+inline auto median(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
-    Scilib::Vector<T> xcopy(x);
+    Scilib::Vector<value_type> xcopy(x);
     Scilib::sort(xcopy.view());
 
     size_type n = (xcopy.extent(0) + 1) / 2;
-    T med = xcopy(n);
+    value_type med = xcopy(n);
     if (xcopy.extent(0) % 2 == 0) { // even
         n = (xcopy.extent(0) + 1) / 2 - 1;
         med = (med + xcopy(n)) / 2.0;
@@ -54,22 +58,26 @@ inline T median(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
     return med;
 }
 
+template <class T, class Layout>
+inline T median(const Scilib::Vector<T, Layout>& x)
+{
+    return median(x.view());
+}
+
 // Variance.
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-    requires std::is_floating_point_v<T> 
-inline T var(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
-// clang-format on
+inline auto var(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
     // Two-pass algorithm:
-    T n = static_cast<T>(x.extent(0));
-    T xmean = mean(x);
-    T sum2 = T{0};
+    value_type n = static_cast<value_type>(x.extent(0));
+    value_type xmean = mean(x);
+    value_type sum2 = value_type{0};
 
     for (size_type i = 0; i < x.extent(0); ++i) {
         sum2 += std::pow(x(i) - xmean, 2);
@@ -77,40 +85,52 @@ inline T var(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
     return sum2 / (n - 1.0);
 }
 
+template <class T, class Layout>
+inline T var(const Scilib::Vector<T, Layout>& x)
+{
+    return var(x.view());
+}
+
 // Standard deviation.
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-    requires std::is_floating_point_v<T> 
-inline T stddev(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
-// clang-format on
+inline auto stddev(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
     return std::sqrt(var(x));
 }
 
+template <class T, class Layout>
+inline T stddev(const Scilib::Vector<T, Layout>& x)
+{
+    return stddev(x.view());
+}
+
 // Root-mean-square deviation.
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-    requires std::is_floating_point_v<T> 
-inline T rms(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
-// clang-format on
+inline auto rms(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
-    T sum2 = T{0};
+    value_type sum2 = value_type{0};
     for (size_type i = 0; i < x.extent(0); ++i) {
         sum2 += x(i) * x(i);
     }
     return std::sqrt(sum2 / x.extent(0));
 }
 
+template <class T, class Layout>
+inline T rms(const Scilib::Vector<T, Layout>& x)
+{
+    return rms(x.view());
+}
+
 // Covariance.
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
@@ -118,25 +138,31 @@ template <class T,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
-    requires std::is_floating_point_v<T> 
-inline T cov(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x, 
-             stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
-// clang-format on
+inline auto cov(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
 {
-    using size_type = stdex::extents<>::size_type;
-
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    T xmean = mean(x);
-    T ymean = mean(y);
-    T res = T{0};
+    using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
+
+    value_type xmean = mean(x);
+    value_type ymean = mean(y);
+    value_type res = value_type{0};
 
     for (size_type i = 0; i < x.extent(0); ++i) {
-        T a = x(i) - xmean;
-        T b = y(i) - ymean;
+        value_type a = x(i) - xmean;
+        value_type b = y(i) - ymean;
         res += a * b / (x.extent(0) - T{1});
     }
     return res;
+}
+
+template <class T, class Layout>
+inline T cov(const Scilib::Vector<T, Layout>& x,
+             const Scilib::Vector<T, Layout>& y)
+{
+    return cov(x.view(), y.view());
 }
 
 } // namespace Stats

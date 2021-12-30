@@ -19,7 +19,7 @@ TEST(TestStats, TestMean)
     // clang-format on
     Scilib::Vector<double> v(data, data.size());
 
-    EXPECT_NEAR(Scilib::Stats::mean(v.view()), 22.066666666666666, 1.0e-8);
+    EXPECT_NEAR(Scilib::Stats::mean(v), 22.066666666666666, 1.0e-8);
 }
 
 TEST(TestStats, TestMedianOdd)
@@ -31,7 +31,7 @@ TEST(TestStats, TestMedianOdd)
     };
     // clang-format on
     Scilib::Vector<double> v(data, data.size());
-    EXPECT_EQ(Scilib::Stats::median(v.view()), 23.0);
+    EXPECT_EQ(Scilib::Stats::median(v), 23.0);
 }
 
 TEST(TestStats, TestMedianEven)
@@ -42,7 +42,7 @@ TEST(TestStats, TestMedianEven)
     };
     // clang-format on
     Scilib::Vector<double> v(data, data.size());
-    EXPECT_EQ(Scilib::Stats::median(v.view()), 17.5);
+    EXPECT_EQ(Scilib::Stats::median(v), 17.5);
 }
 
 TEST(TestStats, TestStddev)
@@ -55,7 +55,7 @@ TEST(TestStats, TestStddev)
     // clang-format on
     Scilib::Vector<double> v(data, data.size());
 
-    EXPECT_NEAR(Scilib::Stats::stddev(v.view()), 14.49860420211283, 1.0e-8);
+    EXPECT_NEAR(Scilib::Stats::stddev(v), 14.49860420211283, 1.0e-8);
 }
 
 TEST(TestStats, TestRMS)
@@ -68,7 +68,7 @@ TEST(TestStats, TestRMS)
     // clang-format on
     Scilib::Vector<double> v(data, data.size());
 
-    EXPECT_NEAR(Scilib::Stats::rms(v.view()), 26.136819495365792, 1.0e-8);
+    EXPECT_NEAR(Scilib::Stats::rms(v), 26.136819495365792, 1.0e-8);
 }
 
 TEST(TestStats, TestCov)
@@ -86,5 +86,5 @@ TEST(TestStats, TestCov)
     Scilib::Vector<double> b(b_data, b_data.size());
     Scilib::Vector<double> c(c_data, c_data.size());
 
-    EXPECT_NEAR(Scilib::Stats::cov(b.view(), c.view()), 59.78021978, 1.0e-8);
+    EXPECT_NEAR(Scilib::Stats::cov(b, c), 59.78021978, 1.0e-8);
 }
