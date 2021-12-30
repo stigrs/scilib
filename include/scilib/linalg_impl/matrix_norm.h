@@ -30,8 +30,11 @@ namespace stdex = std::experimental;
 // - I, i:       infinity norm of the matrix (maximum row sum)
 // - F, f, E, e: Frobenius norm of the matrix (square root of sum of squares)
 //
-template <class Layout>
-inline double matrix_norm(Scilib::Matrix_view<double, Layout> a, char norm)
+// clang-format off
+template <class T, class Layout>
+    requires std::is_same_v<std::remove_cv_t<T>, double>
+inline auto matrix_norm(Scilib::Matrix_view<T, Layout> a, char norm)
+// clang-format on
 {
     static_assert(a.is_contiguous());
 
@@ -49,6 +52,12 @@ inline double matrix_norm(Scilib::Matrix_view<double, Layout> a, char norm)
         lda = m;
     }
     return LAPACKE_dlange(matrix_layout, norm, m, n, a.data(), lda);
+}
+
+template <class Layout>
+inline double matrix_norm(const Scilib::Matrix<double, Layout>& a, char norm)
+{
+    return matrix_norm(a.view(), norm);
 }
 
 } // namespace Linalg

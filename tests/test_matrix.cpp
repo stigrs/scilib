@@ -155,8 +155,8 @@ TEST(TestMatrix, TestRow)
     // clang-format on
     Scilib::Matrix<int> ma(aa, 2, 3);
 
-    const auto r0 = Scilib::row(ma.view(), 0);
-    const auto r1 = Scilib::row(ma.view(), 1);
+    auto r0 = Scilib::row(ma, 0);
+    auto r1 = Scilib::row(ma, 1);
 
     for (std::size_t i = 0; i < r0.size(); ++i) {
         EXPECT_EQ(r0(i), static_cast<int>(i + 1));
@@ -182,7 +182,7 @@ TEST(TestMatrix, TestDiag)
     // clang-format on
     Scilib::Matrix<int> ans(ans_data, 3, 3);
     Scilib::Matrix<int> m(data, 3, 3);
-    auto d = Scilib::diag(m.view());
+    auto d = Scilib::diag(m);
     Scilib::apply(d, [&](int& i) { i = 0; });
     EXPECT_EQ(m, ans);
 }
@@ -213,7 +213,7 @@ TEST(TestMatrix, TestRowIterator)
     // clang-format on
     Scilib::Matrix<int> ma(aa, 2, 3);
 
-    auto r0 = Scilib::row(ma.view(), 0);
+    auto r0 = Scilib::row(ma, 0);
 
     int i = 1;
     for (auto it = Scilib::cbegin(r0); it != Scilib::cend(r0); ++it) {
@@ -230,7 +230,7 @@ TEST(TestMatrix, TestColIterator)
     // clang-format on
     Scilib::Matrix<int> ma(aa, 2, 3);
 
-    auto c1 = Scilib::column(ma.view(), 1);
+    auto c1 = Scilib::column(ma, 1);
 
     int i = 2;
     for (auto it = Scilib::cbegin(c1); it != Scilib::cend(c1); ++it) {
@@ -254,7 +254,7 @@ TEST(TestMatrix, TestDiagIterator)
     Scilib::Vector<int, stdex::layout_left> ans(ans_data, 3);
     Scilib::Matrix<int, stdex::layout_left> m(data, 3, 3);
 
-    auto d = Scilib::diag(m.view());
+    auto d = Scilib::diag(m);
 
     int i = 0;
     for (auto it = Scilib::begin(d); it != Scilib::end(d); ++it) {

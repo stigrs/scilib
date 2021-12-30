@@ -24,7 +24,7 @@ TEST(TestMatrix, TestTransposed)
     // clang-format on
     Scilib::Matrix<int> a(data, 2, 4);
     Scilib::Matrix<int> ans(t_data, 4, 2);
-    auto at = Scilib::Linalg::transposed(a.view());
+    auto at = Scilib::Linalg::transposed(a);
 
     for (std::size_t i = 0; i < at.extent(0); ++i) {
         for (std::size_t j = 0; j < at.extent(1); ++j) {
@@ -49,7 +49,7 @@ TEST(TestMatrix, TestTransposedColMajor)
     // clang-format on
     Scilib::Matrix<int, stdex::layout_left> a(data, 4, 2);
     Scilib::Matrix<int, stdex::layout_left> ans(t_data, 2, 4);
-    auto at = Scilib::Linalg::transposed(a.view());
+    auto at = Scilib::Linalg::transposed(a);
 
     for (std::size_t j = 0; j < at.extent(1); ++j) {
         for (std::size_t i = 0; i < at.extent(0); ++i) {

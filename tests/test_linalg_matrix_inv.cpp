@@ -35,7 +35,7 @@ TEST(TestLinalg, TestInv)
     Matrix<double> a(a_data, 4, 4);
     Matrix<double> ans(ainv_data, 4, 4);
 
-    auto res = inv(a.view());
+    auto res = inv(a);
 
     for (std::size_t i = 0; i < res.extent(0); ++i) {
         for (std::size_t j = 0; j < res.extent(1); ++j) {
@@ -69,7 +69,7 @@ TEST(TestLinalg, TestInvColMajor)
     Matrix<double> ans_t(ainv_data, 4, 4);
     Matrix<double, stdex::layout_left> ans(transposed(ans_t.view()));
 
-    auto res = inv(a.view());
+    auto res = inv(a);
 
     for (std::size_t j = 0; j < res.extent(1); ++j) {
         for (std::size_t i = 0; i < res.extent(0); ++i) {

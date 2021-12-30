@@ -22,6 +22,6 @@ int main()
     Scilib::Matrix<int> m(data, 3, 3);
     std::cout << "matrix:\n" << m << '\n';
 
-    Scilib::Linalg::fill(Scilib::diag(m.view()), 10);
+    Scilib::Linalg::fill(Scilib::diag(m), 10);
     std::cout << "matrix:\n" << m << '\n';
 }

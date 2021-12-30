@@ -8,6 +8,7 @@
 #define SCILIB_LINALG_TRACE_H
 
 #include <experimental/mdspan>
+#include <cassert>
 #include <type_traits>
 
 namespace Scilib {
@@ -20,12 +21,19 @@ template <class T,
           stdex::extents<>::size_type ext,
           class Layout_m,
           class Accessor_m>
-    requires (std::is_integral_v<T> || std::is_floating_point_v<T>)
-inline T
+    requires std::is_arithmetic_v<std::remove_cv_t<T>>
+inline auto
 trace(stdex::mdspan<T, stdex::extents<ext, ext>, Layout_m, Accessor_m> m)
 // clang-format on
 {
     return Scilib::Linalg::sum(Scilib::diag(m));
+}
+
+template <class T, class Layout>
+inline T trace(const Scilib::Matrix<T, Layout>& m)
+{
+    assert(m.extent(0) == m.extent(1));
+    return trace(m.view());
 }
 
 } // namespace Linalg

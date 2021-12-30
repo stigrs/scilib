@@ -40,6 +40,13 @@ fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
     Scilib::apply(m, [&](T& mi) { mi = value; });
 }
 
+template <class T, class Extents, class Layout>
+inline void fill(Scilib::MDArray<T, Extents, Layout>& m, const T& value)
+{
+    static_assert(m.rank() <= 2);
+    fill(m.view(), value);
+}
+
 //------------------------------------------------------------------------------
 // Limit array values:
 
@@ -87,6 +94,13 @@ clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
     }
 }
 
+template <class T, class Extents, class Layout>
+inline void
+clip(Scilib::MDArray<T, Extents, Layout>& a, const T& a_min, const T& a_max)
+{
+    clip(a.view(), a_min, a_max);
+}
+
 //------------------------------------------------------------------------------
 // Find argmax, argmin, max, min, sum, and product of elements:
 
@@ -98,9 +112,10 @@ inline stdex::extents<>::size_type
 argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
     size_type max_idx = 0;
-    T max_val = v(0);
+    value_type max_val = v(0);
     for (size_type i = 0; i < v.extent(0); ++i) {
         if (v(i) > max_val) {
             max_val = v(i);
@@ -108,6 +123,12 @@ argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
         }
     }
     return max_idx;
+}
+
+template <class T, class Layout>
+inline stdex::extents<>::size_type argmax(const Scilib::Vector<T, Layout>& v)
+{
+    return argmax(v.view());
 }
 
 template <class T,
@@ -118,11 +139,12 @@ inline stdex::extents<>::size_type
 argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
     size_type min_idx = 0;
-    T min_val = v(0);
+    value_type min_val = v(0);
     for (size_type i = 0; i < v.extent(0); ++i) {
-        if (min_val < v(i)) {
+        if (v(i) < min_val) {
             min_val = v(i);
             min_idx = i;
         }
@@ -130,15 +152,22 @@ argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return min_idx;
 }
 
+template <class T, class Layout>
+inline stdex::extents<>::size_type argmin(const Scilib::Vector<T, Layout>& v)
+{
+    return argmin(v.view());
+}
+
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-inline T max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+inline auto max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
-    T result = v(0);
+    value_type result = v(0);
     for (size_type i = 0; i < v.extent(0); ++i) {
         if (v(i) > result) {
             result = v(i);
@@ -147,15 +176,22 @@ inline T max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return result;
 }
 
+template <class T, class Layout>
+inline T max(const Scilib::Vector<T, Layout>& v)
+{
+    return max(v.view());
+}
+
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-inline T min(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+inline auto min(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
-    T result = v(0);
+    value_type result = v(0);
     for (size_type i = 0; i < v.extent(0); ++i) {
         if (v(i) < result) {
             result = v(i);
@@ -164,34 +200,54 @@ inline T min(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return result;
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline T sum(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, class Layout>
+inline T min(const Scilib::Vector<T, Layout>& v)
 {
-    using size_type = stdex::extents<>::size_type;
-
-    T result = 0;
-    for (size_type i = 0; i < v.extent(0); ++i) {
-        result += v(i);
-    }
-    return result;
+    return min(v.view());
 }
 
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
           class Accessor>
-inline T prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+inline auto sum(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 {
     using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
 
-    T result = 1;
+    value_type result = 0;
+    for (size_type i = 0; i < v.extent(0); ++i) {
+        result += v(i);
+    }
+    return result;
+}
+
+template <class T, class Layout>
+inline T sum(const Scilib::Vector<T, Layout>& v)
+{
+    return sum(v.view());
+}
+
+template <class T,
+          stdex::extents<>::size_type ext,
+          class Layout,
+          class Accessor>
+inline auto prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+{
+    using size_type = stdex::extents<>::size_type;
+    using value_type = std::remove_cv_t<T>;
+
+    value_type result = 1;
     for (size_type i = 0; i < v.extent(0); ++i) {
         result *= v(i);
     }
     return result;
+}
+
+template <class T, class Layout>
+inline T prod(const Scilib::Vector<T, Layout>& v)
+{
+    return prod(v.view());
 }
 
 //------------------------------------------------------------------------------

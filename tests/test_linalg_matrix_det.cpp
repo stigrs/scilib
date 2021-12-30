@@ -41,9 +41,9 @@ TEST(TestLinalg, TestDet)
     Matrix<double> a3(a3_data, 3, 3);
     Matrix<double> a4(a4_data, 4, 4);
 
-    EXPECT_NEAR(det(a2.view()), ans2, 1.0e-12);
-    EXPECT_NEAR(det(a3.view()), ans3, 1.0e-12);
-    EXPECT_NEAR(det(a4.view()), ans4, 1.0e-12);
+    EXPECT_NEAR(det(a2), ans2, 1.0e-12);
+    EXPECT_NEAR(det(a3), ans3, 1.0e-12);
+    EXPECT_NEAR(det(a4), ans4, 1.0e-12);
 }
 
 TEST(TestLinalg, TestDetColMajor)
@@ -62,5 +62,5 @@ TEST(TestLinalg, TestDetColMajor)
     // clang-format on
 
     Matrix<double, stdex::layout_left> a4(a4_data, 4, 4);
-    EXPECT_NEAR(det(a4.view()), ans4, 1.0e-12);
+    EXPECT_NEAR(det(a4), ans4, 1.0e-12);
 }

@@ -11,19 +11,24 @@
 #include <scilib/linalg_impl/auxiliary.h>
 #include <scilib/linalg_impl/matrix_decomposition.h>
 #include <cassert>
-#include <iostream>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
 
 // Determinant of square matrix.
-template <class Layout>
-double det(Scilib::Matrix_view<double, Layout> a)
+// clang-format off
+template <class T, class Layout>
+    requires std::is_same_v<std::remove_cv_t<T>, double>
+auto det(Scilib::Matrix_view<T, Layout> a)
+// clang-format on
 {
     static_assert(a.is_contiguous());
     assert(a.extent(0) == a.extent(1));
 
-    double ddet = 0.0;
+    using value_type = std::remove_cv_t<T>;
+
+    value_type ddet = 0.0;
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
 
     if (n == 1) {
@@ -33,7 +38,7 @@ double det(Scilib::Matrix_view<double, Layout> a)
         ddet = a(0, 0) * a(1, 1) - a(1, 0) * a(0, 1);
     }
     else { // use LU decomposition
-        Scilib::Matrix<double, Layout> tmp(a);
+        Scilib::Matrix<value_type, Layout> tmp(a);
         Scilib::Vector<BLAS_INT, Layout> ipiv(n);
 
         Scilib::Linalg::lu(tmp.view(), ipiv.view());
@@ -45,9 +50,18 @@ double det(Scilib::Matrix_view<double, Layout> a)
             }
         }
         ddet = Scilib::Linalg::prod(Scilib::diag(tmp.view()));
-        ddet *= std::pow(-1.0, static_cast<double>(permut));
+        ddet *= std::pow(-1.0, static_cast<value_type>(permut));
     }
     return ddet;
+}
+
+// clang-format off
+template <class T, class Layout>
+    requires std::is_same_v<std::remove_cv_t<T>, double>
+inline T det(const Scilib::Matrix<T, Layout>& a)
+// clang-format on
+{
+    return det(a.view());
 }
 
 } // namespace Linalg

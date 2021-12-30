@@ -45,6 +45,13 @@ scale(const T& scalar,
     }
 }
 
+template <class T, class Extents, class Layout>
+inline void scale(const T& scalar, Scilib::MDArray<T, Extents, Layout>& m)
+{
+    static_assert(m.rank() <= 2);
+    scale(scalar, m.view());
+}
+
 } // namespace Linalg
 } // namespace Scilib
 

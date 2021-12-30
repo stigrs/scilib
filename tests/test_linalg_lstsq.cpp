@@ -41,7 +41,7 @@ TEST(TestLinalg, TestLstsq)
     Matrix<double> a(a_data, 4, 5);
     Matrix<double> b(b_data, 5, 3);
 
-    lstsq(a.view(), b.view());
+    lstsq(a, b);
 
     for (std::size_t i = 0; i < b.extent(0); ++i) {
         for (std::size_t j = 0; j < b.extent(1); ++j) {
@@ -79,7 +79,7 @@ TEST(TestLinalg, TestLstsqColMajor)
     Matrix<double, stdex::layout_left> a(a_data, 4, 5);
     Matrix<double, stdex::layout_left> b(b_data, 5, 3);
 
-    lstsq(a.view(), b.view());
+    lstsq(a, b);
 
     for (std::size_t j = 0; j < b.extent(1); ++j) {
         for (std::size_t i = 0; i < b.extent(0); ++i) {

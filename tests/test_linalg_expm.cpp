@@ -31,7 +31,7 @@ TEST(TestLinalg, TestExpm)
     Matrix<double> ans(ans_data, 3, 3);
     Matrix<double> A(A_data, 3, 3);
 
-    auto res = expm(A.view());
+    auto res = expm(A);
 
     for (std::size_t i = 0; i < res.extent(0); ++i) {
         for (std::size_t j = 0; j < res.extent(1); ++j) {
@@ -61,7 +61,7 @@ TEST(TestLinalg, TestExpmColMajor)
     Matrix<double, stdex::layout_left> ans(ans_data, 3, 3);
     Matrix<double, stdex::layout_left> A(A_data, 3, 3);
 
-    auto res = expm(A.view());
+    auto res = expm(A);
 
     for (std::size_t j = 0; j < res.extent(1); ++j) {
         for (std::size_t i = 0; i < res.extent(0); ++i) {

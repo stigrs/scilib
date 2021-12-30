@@ -30,6 +30,22 @@ norm2(stdex::mdspan<double, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
     return cblas_dnrm2(n, x.data(), incx);
 }
 
+template <stdex::extents<>::size_type ext_x, class Layout_x, class Accessor_x>
+inline double norm2(
+    stdex::mdspan<const double, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
+{
+    const BLAS_INT n = static_cast<BLAS_INT>(x.size());
+    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
+
+    return cblas_dnrm2(n, x.data(), incx);
+}
+
+template <class Layout>
+inline double norm2(const Scilib::Vector<double, Layout>& x)
+{
+    return norm2(x.view());
+}
+
 } // namespace Linalg
 } // namespace Scilib
 

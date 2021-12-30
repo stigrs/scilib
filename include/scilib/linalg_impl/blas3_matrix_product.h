@@ -209,6 +209,22 @@ matrix_product(Scilib::Matrix_view<const T, Layout> a,
     return res;
 }
 
+template <class T, class Layout>
+inline Scilib::Matrix<T, Layout>
+matrix_product(const Scilib::Matrix<T, Layout>& a,
+               const Scilib::Matrix<T, Layout>& b)
+{
+    return matrix_product(a.view(), b.view());
+}
+
+template <class T, class Layout>
+inline void matrix_product(const Scilib::Matrix<T, Layout>& a,
+                           const Scilib::Matrix<T, Layout>& b,
+                           Scilib::Matrix<T, Layout>& c)
+{
+    matrix_product(a.view(), b.view(), c.view());
+}
+
 } // namespace Linalg
 } // namespace Scilib
 

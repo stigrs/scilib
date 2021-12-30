@@ -120,6 +120,13 @@ transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
         a.data(), mapping_type(a.mapping()), a.accessor());
 }
 
+template <class T, class Layout>
+inline Scilib::Matrix<T, Layout> transposed(const Scilib::Matrix<T, Layout>& a)
+{
+    Scilib::Matrix<T, Layout> tmp = transposed(a.view());
+    return tmp;
+}
+
 } // namespace Linalg
 } // namespace Scilib
 

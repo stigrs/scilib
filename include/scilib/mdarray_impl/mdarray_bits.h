@@ -118,8 +118,8 @@ public:
     {
     }
 
-    template <class Extents_m, class Layout_m, class Accessor_m>
-    constexpr MDArray(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
+    template <class T_m, class Extents_m, class Layout_m, class Accessor_m>
+    constexpr MDArray(stdex::mdspan<T_m, Extents_m, Layout_m, Accessor_m> m)
         : c_(m.size()), v_(c_.data(), m.extents())
     {
         static_assert(m.rank() == Extents::rank());
@@ -134,9 +134,9 @@ public:
         return *this;
     }
 
-    template <class Extents_m, class Layout_m, class Accessor_m>
+    template <class T_m, class Extents_m, class Layout_m, class Accessor_m>
     constexpr MDArray&
-    operator=(stdex::mdspan<T, Extents_m, Layout_m, Accessor_m> m)
+    operator=(stdex::mdspan<T_m, Extents_m, Layout_m, Accessor_m> m)
     {
         static_assert(m.rank() == Extents::rank());
         static_assert(m.rank() <= 7);

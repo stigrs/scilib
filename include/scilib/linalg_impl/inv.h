@@ -24,9 +24,12 @@ namespace Scilib {
 namespace Linalg {
 
 // Matrix inversion.
-template <class Layout>
-inline void inv(Scilib::Matrix_view<double, Layout> a,
-                Scilib::Matrix_view<double, Layout> res)
+// clang-format off
+template <class T_a, class T_res, class Layout>
+    requires std::is_same_v<std::remove_cv_t<T_a>, double>
+inline void inv(Scilib::Matrix_view<T_a, Layout> a,
+                Scilib::Matrix_view<T_res, Layout> res)
+// clang-format on
 {
     namespace stdex = std::experimental;
 
@@ -59,12 +62,24 @@ inline void inv(Scilib::Matrix_view<double, Layout> a,
     }
 }
 
-template <class Layout>
-inline Scilib::Matrix<double, Layout> inv(Scilib::Matrix_view<double, Layout> a)
+// clang-format off
+template <class T, class Layout>
+    requires std::is_same_v<std::remove_cv_t<T>, double>
+inline auto inv(Scilib::Matrix_view<T, Layout> a)
+// clang-format on
 {
-    Scilib::Matrix<double, Layout> res(a.extent(0), a.extent(1));
+    using value_type = std::remove_cv_t<T>;
+
+    Scilib::Matrix<value_type, Layout> res(a.extent(0), a.extent(1));
     inv(a, res.view());
     return res;
+}
+
+template <class Layout>
+inline Scilib::Matrix<double, Layout>
+inv(const Scilib::Matrix<double, Layout>& a)
+{
+    return inv(a.view());
 }
 
 } // namespace Linalg

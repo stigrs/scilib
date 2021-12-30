@@ -12,28 +12,30 @@ namespace Linalg {
 
 #include <scilib/mdarray.h>
 #include <cmath>
+#include <type_traits>
 
 // Raise a square matrix to the (integer) power n.
 template <class T, class Layout>
-inline Scilib::Matrix<T, Layout> matrix_power(Scilib::Matrix_view<T, Layout> m,
-                                              int n)
+inline auto matrix_power(Scilib::Matrix_view<T, Layout> m, int n)
 {
     using namespace Scilib;
     using namespace Scilib::Linalg;
 
+    using value_type = std::remove_cv_t<T>;
+
     assert(m.extent(0) == m.extent(1));
 
-    Matrix<T, Layout> tmp(m);
+    Matrix<value_type, Layout> tmp(m);
 
     if (n < 0) {
         inv(tmp.view(), tmp.view());
     }
     int nn = std::abs(n);
 
-    Matrix<T, Layout> res(m.extent(0), m.extent(1));
+    Matrix<value_type, Layout> res(m.extent(0), m.extent(1));
 
     if (nn == 0) {
-        res = identity<Matrix<T, Layout>>(m.extent(0));
+        res = identity<Matrix<value_type, Layout>>(m.extent(0));
     }
     else if (nn == 1) {
         res = tmp;
@@ -56,6 +58,13 @@ inline Scilib::Matrix<T, Layout> matrix_power(Scilib::Matrix_view<T, Layout> m,
         }
     }
     return res;
+}
+
+template <class T, class Layout>
+inline Scilib::Matrix<T, Layout>
+matrix_power(const Scilib::Matrix<T, Layout>& m, int n)
+{
+    return matrix_power(m.view(), n);
 }
 
 } // namespace Linalg

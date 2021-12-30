@@ -110,12 +110,21 @@ template <class T,
           class ScalingFactorType>
 inline stdex::
     mdspan<T, Extents, Layout, accessor_scaled<Accessor, ScalingFactorType>>
-    scaled(ScalingFactorType scalingFactor,
-           const stdex::mdspan<T, Extents, Layout, Accessor>& a)
+    scaled(ScalingFactorType scaling_factor,
+           stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
     using accessor_t = accessor_scaled<Accessor, ScalingFactorType>;
     return stdex::mdspan<T, Extents, Layout, accessor_t>(
-        a.data(), a.mapping(), accessor_t(a.accessor(), scalingFactor));
+        a.data(), a.mapping(), accessor_t(a.accessor(), scaling_factor));
+}
+
+template <class T, class Extents, class Layout, class ScalingFactorType>
+inline Scilib::MDArray<T, Extents, Layout>
+scaled(ScalingFactorType scaling_factor,
+       const Scilib::MDArray<T, Extents, Layout>& a)
+{
+    Scilib::MDArray<T, Extents, Layout> tmp = scaled(scaling_factor, a.view());
+    return tmp;
 }
 
 } // namespace Linalg

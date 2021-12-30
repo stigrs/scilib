@@ -30,7 +30,7 @@ TEST(TestLinalg, TestLinsolve)
     Matrix<double> A(A_data, 3, 3);
     Matrix<double> B(B_data, 3, 1);
 
-    linsolve(A.view(), B.view());
+    linsolve(A, B);
 
     for (std::size_t i = 0; i < x.size(); ++i) {
         EXPECT_NEAR(B(i, 0), x[i], 1.0e-12);
@@ -58,7 +58,7 @@ TEST(TestLinalg, TestLinsolveColMajor)
     Matrix<double, stdex::layout_left> A(A_data, 3, 3);
     Matrix<double, stdex::layout_left> B(B_data, 3, 1);
 
-    linsolve(A.view(), B.view());
+    linsolve(A, B);
 
     for (std::size_t i = 0; i < x.size(); ++i) {
         EXPECT_NEAR(B(i, 0), x[i], 1.0e-12);

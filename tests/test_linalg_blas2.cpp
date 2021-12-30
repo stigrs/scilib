@@ -33,7 +33,7 @@ TEST(TestLinalg, TestMatrixVectorProductRowMajor)
     Scilib::Vector<double> y(y_data, y_data.size());
     Scilib::Vector<double> res(y.size());
 
-    Scilib::Linalg::matrix_vector_product(a.view(), x.view(), res.view());
+    Scilib::Linalg::matrix_vector_product(a, x, res);
     EXPECT_EQ(res, y);
 }
 

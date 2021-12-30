@@ -23,8 +23,8 @@ TEST(TestLinalg, TestMatrixNorm)
     // clang-format on
     Matrix<double> A(a_data, 2, 3);
 
-    EXPECT_EQ(matrix_norm(A.view(), '1'), 15.0);
-    EXPECT_EQ(matrix_norm(A.view(), 'I'), 15.0);
+    EXPECT_EQ(matrix_norm(A, '1'), 15.0);
+    EXPECT_EQ(matrix_norm(A, 'I'), 15.0);
 }
 
 TEST(TestLinalg, TestMatrixNormColMajor)
@@ -41,6 +41,6 @@ TEST(TestLinalg, TestMatrixNormColMajor)
     // clang-format on
     Matrix<double, stdex::layout_left> A(a_data, 2, 3);
 
-    EXPECT_EQ(matrix_norm(A.view(), '1'), 15.0);
-    EXPECT_EQ(matrix_norm(A.view(), 'I'), 15.0);
+    EXPECT_EQ(matrix_norm(A, '1'), 15.0);
+    EXPECT_EQ(matrix_norm(A, 'I'), 15.0);
 }

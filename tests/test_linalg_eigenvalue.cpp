@@ -36,7 +36,7 @@ TEST(TestLinalg, TestEigs)
 
     Scilib::Matrix<double> a(a_data, 5, 5);
     Scilib::Vector<double> w(5);
-    Scilib::Linalg::eigs(a.view(), w.view());
+    Scilib::Linalg::eigs(a, w);
 
     for (int i = 0; i < 5; ++i) {
         EXPECT_NEAR(w(i), eval[i], 1.0e-6);
@@ -85,7 +85,7 @@ TEST(TestLinalg, TestEig)
     Scilib::Vector<std::complex<double>> eval(4);
     Scilib::Matrix<std::complex<double>> evec(4, 4);
 
-    Scilib::Linalg::eig(a.view(), evec.view(), eval.view());
+    Scilib::Linalg::eig(a, evec, eval);
 
     for (std::size_t i = 0; i < eval.size(); ++i) {
         EXPECT_NEAR(eval(i).real(), eval_re[i], 5.0e-8);
@@ -139,7 +139,7 @@ TEST(TestLinalg, TestEigColMajor)
     Vector<std::complex<double>, stdex::layout_left> eval(4);
     Matrix<std::complex<double>, stdex::layout_left> evec(4, 4);
 
-    eig(a.view(), evec.view(), eval.view());
+    eig(a, evec, eval);
 
     for (std::size_t i = 0; i < eval.size(); ++i) {
         EXPECT_NEAR(eval(i).real(), eval_re[i], 5.0e-8);

@@ -16,7 +16,7 @@ int main()
     std::cout << "v1 = " << v1 << "\n\n";
 
     Scilib::Vector<int> v2(5);
-    Scilib::Linalg::fill(v2.view(), 1);
+    Scilib::Linalg::fill(v2, 1);
     std::cout << "v2 = " << v2 << '\n';
 
     // clang-format off
@@ -32,7 +32,7 @@ int main()
     std::cout << "m1.extent(1) = " << m1.extent(1) << "\n\n";
     std::cout << "m1 = " << m1 << '\n';
 
-    Scilib::Matrix<int> m2(m1.view());
+    Scilib::Matrix<int> m2(m1);
     m2(0, 0) = 0;
     std::cout << "m2.size() =    " << m2.size() << '\n';
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
@@ -46,7 +46,7 @@ int main()
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
     std::cout << "m2 = " << m2 << "\n\n";
 
-    Scilib::Linalg::fill(Scilib::diag(m2.view()), 0);
+    Scilib::Linalg::fill(Scilib::diag(m2), 0);
     std::cout << "m2.size() =    " << m2.size() << '\n';
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";

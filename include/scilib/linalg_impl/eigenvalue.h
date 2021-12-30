@@ -65,6 +65,14 @@ inline void eigs(Scilib::Matrix_view<double, Layout> a,
     Scilib::copy(z.view(), a);
 }
 
+template <class Layout>
+inline void eigs(Scilib::Matrix<double, Layout>& a,
+                 Scilib::Vector<double, Layout>& w,
+                 double abstol = -1.0 /* use default value */)
+{
+    eigs(a.view(), w.view(), abstol);
+}
+
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
 template <class Layout>
 void eig(Scilib::Matrix_view<double, Layout> a,
@@ -115,6 +123,14 @@ void eig(Scilib::Matrix_view<double, Layout> a,
             }
         }
     }
+}
+
+template <class Layout>
+void eig(Scilib::Matrix<double, Layout>& a,
+         Scilib::Matrix<std::complex<double>, Layout>& evec,
+         Scilib::Vector<std::complex<double>, Layout>& eval)
+{
+    eig(a.view(), evec.view(), eval.view());
 }
 
 } // namespace Linalg

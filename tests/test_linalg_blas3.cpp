@@ -45,7 +45,7 @@ TEST(TestLinalg, TestMatrixMatrixProductDouble)
     Scilib::Matrix<double> ans(rr, 2, 2);
     Scilib::Matrix<double> res(2, 2);
 
-    Scilib::Linalg::matrix_product(ma.view(), mb.view(), res.view());
+    Scilib::Linalg::matrix_product(ma, mb, res);
 
     EXPECT_EQ(ans, res);
 }
@@ -67,7 +67,7 @@ TEST(TestLinalg, TestMatrixMatrixProductDoubleColMajor)
     Scilib::Matrix<double, stdex::layout_left> ans(rr, 2, 2);
     Scilib::Matrix<double, stdex::layout_left> res(2, 2);
 
-    Scilib::Linalg::matrix_product(ma.view(), mb.view(), res.view());
+    Scilib::Linalg::matrix_product(ma, mb, res);
 
     EXPECT_EQ(ans, res);
 }
@@ -88,7 +88,7 @@ TEST(TestLinalg, TestMatrixMatrixProductComplex)
     Scilib::Matrix<std::complex<double>> ans(rr, 2, 2);
     Scilib::Matrix<std::complex<double>> res(2, 2);
 
-    Scilib::Linalg::matrix_product(ma.view(), mb.view(), res.view());
+    Scilib::Linalg::matrix_product(ma, mb, res);
 
     EXPECT_EQ(ans, res);
 }

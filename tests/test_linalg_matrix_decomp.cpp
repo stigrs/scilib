@@ -32,7 +32,9 @@ TEST(TestLinalg, TestLU)
     Matrix<double> ans(ans_data, 4, 4);
     Matrix<double> a(a_data, 4, 4);
     Vector<BLAS_INT> ipiv(4);
-    lu(a.view(), ipiv.view());
+
+    lu(a, ipiv);
+
     for (std::size_t i = 0; i < ans.extent(0); ++i) {
         for (std::size_t j = 0; j < ans.extent(1); ++j) {
             EXPECT_NEAR(a(i, j), ans(i, j), 1.0e-5);
@@ -57,7 +59,7 @@ TEST(TestLinalg, TestQR)
     Matrix<double> q(a.extent(0), a.extent(1));
     Matrix<double> r(a.extent(0), a.extent(1));
 
-    qr(a.view(), q.view(), r.view());
+    qr(a, q, r);
     auto res = q * r;
     for (std::size_t i = 0; i < ans.extent(0); ++i) {
         for (std::size_t j = 0; j < ans.extent(1); ++j) {
@@ -83,7 +85,7 @@ TEST(TestLinalg, TestQRColMajor)
     Matrix<double, stdex::layout_left> q(a.extent(0), a.extent(1));
     Matrix<double, stdex::layout_left> r(a.extent(0), a.extent(1));
 
-    qr(a.view(), q.view(), r.view());
+    qr(a, q, r);
     auto res = q * r;
     for (std::size_t i = 0; i < ans.extent(0); ++i) {
         for (std::size_t j = 0; j < ans.extent(1); ++j) {
@@ -118,7 +120,7 @@ TEST(TestLinalg, TestSVD)
     Matrix<double> u(m, ldu);
     Matrix<double> vt(n, ldvt);
 
-    svd(a.view(), s.view(), u.view(), vt.view());
+    svd(a, s, u, vt);
 
     Matrix<double> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());
@@ -158,7 +160,7 @@ TEST(TestLinalg, TestSVDColMajor)
     Matrix<double, stdex::layout_left> u(m, ldu);
     Matrix<double, stdex::layout_left> vt(n, ldvt);
 
-    svd(a.view(), s.view(), u.view(), vt.view());
+    svd(a, s, u, vt);
 
     Matrix<double, stdex::layout_left> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());

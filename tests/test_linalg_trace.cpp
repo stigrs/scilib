@@ -11,5 +11,5 @@
 TEST(TestMatrix, TestTrace)
 {
     auto m_sym = Scilib::Linalg::identity<Scilib::Matrix<int>>(4);
-    EXPECT_EQ(Scilib::Linalg::trace(m_sym.view()), 4);
+    EXPECT_EQ(Scilib::Linalg::trace(m_sym), 4);
 }

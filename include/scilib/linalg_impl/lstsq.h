@@ -57,6 +57,13 @@ inline void lstsq(Scilib::Matrix_view<double, Layout> a,
     }
 }
 
+template <class Layout>
+inline void lstsq(Scilib::Matrix<double, Layout>& a,
+                  Scilib::Matrix<double, Layout>& b)
+{
+    lstsq(a.view(), b.view());
+}
+
 } // namespace Linalg
 } // namespace Scilib
 

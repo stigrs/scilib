@@ -16,6 +16,7 @@
 #include <scilib/mdarray.h>
 #include <scilib/linalg_impl/lapack_types.h>
 #include <experimental/mdspan>
+#include <cassert>
 #include <complex>
 #include <type_traits>
 #include <iostream>
@@ -185,6 +186,23 @@ matrix_vector_product(Scilib::Matrix_view<const T, Layout> a,
     Scilib::Vector<T, Layout> res(a.extent(0));
     matrix_vector_product(a, x, res.view());
     return res;
+}
+
+template <class T, class Layout>
+inline Scilib::Vector<T, Layout>
+matrix_vector_product(const Scilib::Matrix<T, Layout>& a,
+                      const Scilib::Vector<T, Layout>& x)
+{
+    return matrix_vector_product(a.view(), x.view());
+}
+
+template <class T, class Layout>
+inline void matrix_vector_product(const Scilib::Matrix<T, Layout>& a,
+                                  const Scilib::Vector<T, Layout>& x,
+                                  Scilib::Vector<T, Layout>& res)
+{
+    assert(res.size() == a.extent(0));
+    matrix_vector_product(a.view(), x.view(), res.view());
 }
 
 } // namespace Linalg

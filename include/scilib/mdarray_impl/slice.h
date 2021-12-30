@@ -27,6 +27,12 @@ inline auto first(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
     return stdex::submdspan(v, slice);
 }
 
+template <class T, class Layout>
+inline auto first(Vector<T, Layout>& v, stdex::extents<>::size_type count)
+{
+    return first(v.view(), count);
+}
+
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
@@ -37,6 +43,12 @@ inline auto last(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
     using size_type = stdex::extents<>::size_type;
     std::pair<size_type, size_type> slice{v.extent(0) - count, v.extent(0)};
     return stdex::submdspan(v, slice);
+}
+
+template <class T, class Layout>
+inline auto last(Vector<T, Layout>& x, stdex::extents<>::size_type count)
+{
+    return last(x.view(), count);
 }
 
 template <class T,
@@ -51,6 +63,12 @@ row(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
     return stdex::submdspan(m, i, stdex::full_extent);
 }
 
+template <class T, class Layout>
+inline auto row(Matrix<T, Layout>& m, stdex::extents<>::size_type i)
+{
+    return row(m.view(), i);
+}
+
 template <class T,
           stdex::extents<>::size_type nrows,
           stdex::extents<>::size_type ncols,
@@ -61,6 +79,12 @@ column(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
        stdex::extents<>::size_type j)
 {
     return stdex::submdspan(m, stdex::full_extent, j);
+}
+
+template <class T, class Layout>
+inline auto column(Matrix<T, Layout>& m, stdex::extents<>::size_type i)
+{
+    return column(m.view(), i);
 }
 
 template <class T,
@@ -81,6 +105,12 @@ inline auto diag(stdex::mdspan<T, stdex::extents<ext, ext>, Layout, Accessor> m)
     }
 }
 
+template <class T, class Layout>
+inline auto diag(Matrix<T, Layout>& m)
+{
+    return diag(m.view());
+}
+
 template <class T,
           stdex::extents<>::size_type nrows,
           stdex::extents<>::size_type ncols,
@@ -94,6 +124,16 @@ inline auto submatrix(
         col_slice)
 {
     return stdex::submdspan(m, row_slice, col_slice);
+}
+
+template <class T, class Layout>
+inline auto submatrix(Matrix<T, Layout>& m,
+                      const std::pair<stdex::extents<>::size_type,
+                                      stdex::extents<>::size_type>& row_slice,
+                      const std::pair<stdex::extents<>::size_type,
+                                      stdex::extents<>::size_type>& col_slice)
+{
+    return submatrix(m.view(), row_slice, col_slice);
 }
 
 } // namespace Scilib

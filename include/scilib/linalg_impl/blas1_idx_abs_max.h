@@ -9,6 +9,7 @@
 
 #include <experimental/mdspan>
 #include <cmath>
+#include <type_traits>
 
 namespace Scilib {
 namespace Linalg {
@@ -23,7 +24,7 @@ inline stdex::extents<>::size_type
 idx_abs_max(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 {
     using size_type = stdex::extents<>::size_type;
-    using magn_type = decltype(std::abs(x(0)));
+    using magn_type = std::remove_cv_t<decltype(std::abs(x(0)))>;
 
     size_type max_idx = 0;
     magn_type max_val = std::abs(x(0));
@@ -34,6 +35,13 @@ idx_abs_max(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
         }
     }
     return max_idx;
+}
+
+template <class T, class Layout>
+inline stdex::extents<>::size_type
+idx_abs_max(const Scilib::Vector<T, Layout>& x)
+{
+    return idx_abs_max(x.view());
 }
 
 } // namespace Linalg

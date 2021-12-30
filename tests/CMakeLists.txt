@@ -50,6 +50,7 @@ set(PROGRAMS
     test_array3d
     test_array4d
     test_integrate
+    test_linalg_aux
     test_linalg_blas1
     test_linalg_blas2
     test_linalg_blas3

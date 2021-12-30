@@ -56,6 +56,13 @@ inline void lu(Scilib::Matrix_view<double, Layout> a,
     }
 }
 
+template <class Layout>
+inline void lu(Scilib::Matrix<double, Layout>& a,
+               Scilib::Vector<BLAS_INT, Layout>& ipiv)
+{
+    lu(a.view(), ipiv.view());
+}
+
 // QR factorization.
 template <class Layout>
 inline void qr(Scilib::Matrix_view<double, Layout> a,
@@ -99,6 +106,14 @@ inline void qr(Scilib::Matrix_view<double, Layout> a,
     transposed(q);
 }
 
+template <class Layout>
+inline void qr(Scilib::Matrix<double, Layout>& a,
+               Scilib::Matrix<double, Layout>& q,
+               Scilib::Matrix<double, Layout>& r)
+{
+    qr(a.view(), q.view(), r.view());
+}
+
 // Singular value decomposition.
 template <class Layout>
 inline void svd(Scilib::Matrix_view<double, Layout> a,
@@ -133,6 +148,15 @@ inline void svd(Scilib::Matrix_view<double, Layout> a,
     if (info != 0) {
         throw std::runtime_error("dgesvd failed");
     }
+}
+
+template <class Layout>
+inline void svd(Scilib::Matrix<double, Layout>& a,
+                Scilib::Vector<double, Layout>& s,
+                Scilib::Matrix<double, Layout>& u,
+                Scilib::Matrix<double, Layout>& vt)
+{
+    svd(a.view(), s.view(), u.view(), vt.view());
 }
 
 } // namespace Linalg
