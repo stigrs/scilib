@@ -22,6 +22,10 @@ namespace stdex = std::experimental;
 
 namespace Scilib {
 
+using layout_left = stdex::layout_left;
+using layout_right = stdex::layout_right;
+using layout_stride = stdex::layout_stride;
+
 template <class T, class Layout = stdex::layout_right>
 using Vector_view =
     stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>, Layout>;
