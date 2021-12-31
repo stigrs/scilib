@@ -9,6 +9,7 @@
 
 #include <scilib/mdarray.h>
 #include <experimental/mdspan>
+#include <cassert>
 #include <random>
 #include <type_traits>
 
@@ -368,6 +369,26 @@ inline M randi(Args... args)
 
     for (auto& x : res) {
         x = ui(gen);
+    }
+    return res;
+}
+
+// clang-format off
+template <class T = double, class Layout = stdex::layout_right>
+    requires std::is_floating_point_v<T>
+Scilib::Vector<T, Layout> linspace(T start, T stop, int num = 50)
+// clang-format on
+{
+    assert(stop > start);
+    T step_size = (stop - start) / (num - 1);
+    T value = start;
+
+    Scilib::Vector<T, Layout> res(num);
+
+    res(0) = start;
+    for (int i = 1; i < num; ++i) {
+        value += step_size;
+        res(i) = value;
     }
     return res;
 }
