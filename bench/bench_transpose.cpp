@@ -34,10 +34,10 @@ void benchmark(int n, int m)
     auto t2 = std::chrono::high_resolution_clock::now();
     Timer t_eigen = t2 - t1;
 
-    Scilib::Matrix<double> m2(n, m);
+    Sci::Matrix<double> m2(n, m);
     m2 = 1.0;
     t1 = std::chrono::high_resolution_clock::now();
-    auto mt = Scilib::Linalg::transposed(m2.view());
+    auto mt = Sci::Linalg::transposed(m2.view());
     t2 = std::chrono::high_resolution_clock::now();
     (void) mt;
     Timer t_sci = t2 - t1;

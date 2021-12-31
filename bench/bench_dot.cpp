@@ -46,14 +46,14 @@ void benchmark(int n)
     Timer t_eigen = t2 - t1;
     (void) dot_eigen; // ignore unused result
 
-    Scilib::Vector<double> na(n);
-    Scilib::Vector<double> nb(n);
+    Sci::Vector<double> na(n);
+    Sci::Vector<double> nb(n);
     na = 1.0;
     nb = 2.0;
     t1 = std::chrono::high_resolution_clock::now();
     double sci;
     for (int it = 0; it < 10000; ++it) {
-        sci = Scilib::Linalg::dot(na.view(), nb.view());
+        sci = Sci::Linalg::dot(na.view(), nb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;

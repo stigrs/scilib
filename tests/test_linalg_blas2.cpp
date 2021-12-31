@@ -13,9 +13,9 @@
 TEST(TestLinalg, TestMatrixVectorProduct)
 {
     std::vector<int> va = {1, -1, 2, 0, -3, 1};
-    Scilib::Matrix<int> a(va, 2, 3);
-    Scilib::Vector<int> x(std::vector<int>{2, 1, 0}, 3);
-    Scilib::Vector<int> y(std::vector<int>{1, -3}, 2);
+    Sci::Matrix<int> a(va, 2, 3);
+    Sci::Vector<int> x(std::vector<int>{2, 1, 0}, 3);
+    Sci::Vector<int> y(std::vector<int>{1, -3}, 2);
     EXPECT_EQ((a * x), y);
 }
 
@@ -28,12 +28,12 @@ TEST(TestLinalg, TestMatrixVectorProductRowMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Scilib::Matrix<double> a(a_data, 2, 3);
-    Scilib::Vector<double> x(x_data, x_data.size());
-    Scilib::Vector<double> y(y_data, y_data.size());
-    Scilib::Vector<double> res(y.size());
+    Sci::Matrix<double> a(a_data, 2, 3);
+    Sci::Vector<double> x(x_data, x_data.size());
+    Sci::Vector<double> y(y_data, y_data.size());
+    Sci::Vector<double> res(y.size());
 
-    Scilib::Linalg::matrix_vector_product(a, x, res);
+    Sci::Linalg::matrix_vector_product(a, x, res);
     EXPECT_EQ(res, y);
 }
 
@@ -47,9 +47,9 @@ TEST(TestLinalg, TestMatrixVectorProductColMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Scilib::Matrix<double, stdex::layout_left> a(a_data, 2, 3);
-    Scilib::Vector<double, stdex::layout_left> x(x_data, x_data.size());
-    Scilib::Vector<double, stdex::layout_left> y(y_data, y_data.size());
+    Sci::Matrix<double, stdex::layout_left> a(a_data, 2, 3);
+    Sci::Vector<double, stdex::layout_left> x(x_data, x_data.size());
+    Sci::Vector<double, stdex::layout_left> y(y_data, y_data.size());
     EXPECT_EQ((a * x), y);
 }
 
@@ -68,9 +68,9 @@ TEST(TestLinalg, TestComplexMatrixVectorProduct)
         {-15.0, 87.0}, {-15.0, 139.0}
     };
     // clang-format on
-    Scilib::Matrix<std::complex<double>> A(A_data, 2, 2);
-    Scilib::Vector<std::complex<double>> x(x_data, 2);
-    Scilib::Vector<std::complex<double>> z(z_data, 2);
+    Sci::Matrix<std::complex<double>> A(A_data, 2, 2);
+    Sci::Vector<std::complex<double>> x(x_data, 2);
+    Sci::Vector<std::complex<double>> z(z_data, 2);
 
     EXPECT_EQ((A * x), z);
 }

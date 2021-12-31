@@ -12,8 +12,8 @@
 
 TEST(TestLinalg, TestMatrixNorm)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> a_data = {
@@ -29,8 +29,8 @@ TEST(TestLinalg, TestMatrixNorm)
 
 TEST(TestLinalg, TestMatrixNormColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> a_data = {

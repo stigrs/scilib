@@ -28,8 +28,8 @@ void print(int n, const Timer& t_eigen, const Timer& t_sci)
 
 void benchmark(int n)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     Eigen::MatrixXd a1 = Eigen::MatrixXd::Random(n, n);
     Eigen::MatrixXd a2 = a1 + a1.transpose();

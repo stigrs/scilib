@@ -19,7 +19,7 @@
 #include <iterator>
 #include <iostream>
 
-namespace Scilib {
+namespace Sci {
 
 namespace stdex = std::experimental;
 
@@ -218,6 +218,6 @@ cend(stdex::mdspan<T, Extents, Layout, Accessor> x)
     return iterator(x, x.extent(0));
 }
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_MDSPAN_ITERATOR_H

@@ -13,15 +13,15 @@
 #include <limits>
 #include <cassert>
 
-namespace Scilib {
+namespace Sci {
 namespace Integrate {
 namespace __Detail {
 
 // Compute error norm.
 template <class Layout>
-double error_norm(const Scilib::Vector<double, Layout>& y,
-                  const Scilib::Vector<double, Layout>& ynew,
-                  const Scilib::Vector<double, Layout>& err_vec,
+double error_norm(const Sci::Vector<double, Layout>& y,
+                  const Sci::Vector<double, Layout>& ynew,
+                  const Sci::Vector<double, Layout>& err_vec,
                   double atol,
                   double rtol)
 {
@@ -45,7 +45,7 @@ template <class F, class Layout>
 void dormand_prince(F f,
                     double& x,
                     double xf,
-                    Scilib::Vector<double, Layout>& y,
+                    Sci::Vector<double, Layout>& y,
                     double atol,
                     double rtol)
 {
@@ -139,8 +139,8 @@ void dormand_prince(F f,
         auto err_vec = h * (e1 * k1 + e2 * k2 + e3 * k3 + e4 * k4 + e5 * k5 + e6 * k6 + e7 * k7);
         auto ynew = y + h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
         // clang-format on
-        double error_norm = Scilib::Integrate::__Detail::error_norm(
-            y, ynew, err_vec, atol, rtol);
+        double error_norm =
+            Sci::Integrate::__Detail::error_norm(y, ynew, err_vec, atol, rtol);
 
         if (error_norm > 1.0) { // reject the step
             double scale = safety * std::pow(1.0 / error_norm, 0.2);
@@ -171,7 +171,7 @@ template <class F, class Layout>
 inline void solve_ivp(F f,
                       double& x,
                       double xf,
-                      Scilib::Vector<double, Layout>& y,
+                      Sci::Vector<double, Layout>& y,
                       double atol = 1.0e-7,
                       double rtol = 1.0e-7)
 {
@@ -179,6 +179,6 @@ inline void solve_ivp(F f,
 }
 
 } // namespace Integrate
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_INTEGRATE_SOLVE_IVP_H

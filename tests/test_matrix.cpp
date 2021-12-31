@@ -12,7 +12,7 @@ TEST(TestMatrix, TestSize)
     std::size_t nrows = 5;
     std::size_t ncols = 3;
 
-    Scilib::Matrix<int> m(nrows, ncols);
+    Sci::Matrix<int> m(nrows, ncols);
 
     EXPECT_EQ(m.size(), nrows * ncols);
     EXPECT_EQ(m.extent(0), nrows);
@@ -21,7 +21,7 @@ TEST(TestMatrix, TestSize)
 
 TEST(TestMatrix, TestElementAccess)
 {
-    Scilib::Matrix<int> m(5, 3);
+    Sci::Matrix<int> m(5, 3);
     m = 2;
     for (std::size_t i = 0; i < m.extent(0); ++i) {
         for (std::size_t j = 0; j < m.extent(1); ++j) {
@@ -35,7 +35,7 @@ TEST(TestMatrix, TestElementAccess)
 
 TEST(TestMatrix, TestView)
 {
-    Scilib::Matrix<int> m(5, 3);
+    Sci::Matrix<int> m(5, 3);
     m = 2;
     auto mm = m.view();
     EXPECT_EQ(mm(0, 0), 2);
@@ -43,17 +43,17 @@ TEST(TestMatrix, TestView)
 
 TEST(TestMatrix, TestCopy)
 {
-    Scilib::Matrix<int> a(5, 3);
+    Sci::Matrix<int> a(5, 3);
     a = 2;
-    Scilib::Matrix<int> b(a);
+    Sci::Matrix<int> b(a);
     EXPECT_EQ(a(0, 0), b(0, 0));
 }
 
 TEST(TestMatrix, TestCopySpan)
 {
-    Scilib::Matrix<int> a(5, 3);
+    Sci::Matrix<int> a(5, 3);
     a = 2;
-    Scilib::Matrix<int> b(a.view());
+    Sci::Matrix<int> b(a.view());
     b(0, 0) = 3;
     EXPECT_EQ(a(0, 0), 2);
     EXPECT_EQ(b(0, 0), 3);
@@ -62,13 +62,13 @@ TEST(TestMatrix, TestCopySpan)
 
 TEST(TestMatrix, TestAssignSpan)
 {
-    Scilib::Matrix<int> a(5, 3);
+    Sci::Matrix<int> a(5, 3);
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 3; ++j) {
             a(i, j) = i + j;
         }
     }
-    Scilib::Matrix<int> b = a.view();
+    Sci::Matrix<int> b = a.view();
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 3; ++j) {
             EXPECT_EQ(a(i, j), b(i, j));
@@ -80,7 +80,7 @@ TEST(TestMatrix, TestResize)
 {
     std::size_t nrows = 5;
     std::size_t ncols = 3;
-    Scilib::Matrix<int> a(nrows, ncols);
+    Sci::Matrix<int> a(nrows, ncols);
     a.resize(3, 5);
     EXPECT_EQ(a.extent(0), ncols);
     EXPECT_EQ(a.extent(1), nrows);
@@ -90,8 +90,8 @@ TEST(TestMatrix, TestSwap)
 {
     std::size_t n1 = 5;
     std::size_t n2 = 3;
-    Scilib::Matrix<int> a(n1, n2);
-    Scilib::Matrix<int> b(n2, n1);
+    Sci::Matrix<int> a(n1, n2);
+    Sci::Matrix<int> b(n2, n1);
     std::swap(a, b);
     EXPECT_EQ(a.extent(0), n2);
     EXPECT_EQ(a.extent(1), n1);
@@ -105,7 +105,7 @@ TEST(TestMatrix, TestInitializer)
     std::vector<int> v = {1, 2, 3,  
                           4, 5, 6};
     // clang-format on
-    Scilib::Matrix<int> m(v, 2, 3);
+    Sci::Matrix<int> m(v, 2, 3);
 
     int val = 1;
     for (std::size_t i = 0; i < m.extent(0); ++i) {
@@ -118,7 +118,7 @@ TEST(TestMatrix, TestInitializer)
 
 TEST(TestMatrix, TestSetValue)
 {
-    Scilib::Matrix<int> m(5, 3);
+    Sci::Matrix<int> m(5, 3);
     m = 3;
     for (const auto& mi : m) {
         EXPECT_EQ(mi, 3);
@@ -127,7 +127,7 @@ TEST(TestMatrix, TestSetValue)
 
 TEST(TestMatrix, TestAddValue)
 {
-    Scilib::Matrix<int> m(5, 3);
+    Sci::Matrix<int> m(5, 3);
     m = 1;
     m += 4;
     for (const auto& mi : m) {
@@ -137,11 +137,11 @@ TEST(TestMatrix, TestAddValue)
 
 TEST(TestMatrix, TestAddMatrix)
 {
-    Scilib::Matrix<int> a(5, 3);
+    Sci::Matrix<int> a(5, 3);
     a = 1;
-    Scilib::Matrix<int> b(5, 3);
+    Sci::Matrix<int> b(5, 3);
     b = 4;
-    Scilib::Matrix<int> c = a + b;
+    Sci::Matrix<int> c = a + b;
     for (const auto& ci : c) {
         EXPECT_EQ(ci, 5);
     }
@@ -153,10 +153,10 @@ TEST(TestMatrix, TestRow)
     std::vector<int> aa = {1, 2, 3, 
                            4, 5, 6};
     // clang-format on
-    Scilib::Matrix<int> ma(aa, 2, 3);
+    Sci::Matrix<int> ma(aa, 2, 3);
 
-    auto r0 = Scilib::row(ma, 0);
-    auto r1 = Scilib::row(ma, 1);
+    auto r0 = Sci::row(ma, 0);
+    auto r1 = Sci::row(ma, 1);
 
     for (std::size_t i = 0; i < r0.size(); ++i) {
         EXPECT_EQ(r0(i), static_cast<int>(i + 1));
@@ -180,10 +180,10 @@ TEST(TestMatrix, TestDiag)
         7,  8,  0
     };
     // clang-format on
-    Scilib::Matrix<int> ans(ans_data, 3, 3);
-    Scilib::Matrix<int> m(data, 3, 3);
-    auto d = Scilib::diag(m);
-    Scilib::apply(d, [&](int& i) { i = 0; });
+    Sci::Matrix<int> ans(ans_data, 3, 3);
+    Sci::Matrix<int> m(data, 3, 3);
+    auto d = Sci::diag(m);
+    Sci::apply(d, [&](int& i) { i = 0; });
     EXPECT_EQ(m, ans);
 }
 
@@ -194,7 +194,7 @@ TEST(TestMatrix, TestColMajor)
                           2, 5,
                           3, 6};
     // clang-format on
-    Scilib::Matrix<int, stdex::layout_left> m(v, 2, 3);
+    Sci::Matrix<int, stdex::layout_left> m(v, 2, 3);
 
     int val = 1;
     for (std::size_t i = 0; i < m.extent(0); ++i) {
@@ -211,12 +211,12 @@ TEST(TestMatrix, TestRowIterator)
     std::vector<int> aa = {1, 2, 3, 
                            4, 5, 6};
     // clang-format on
-    Scilib::Matrix<int> ma(aa, 2, 3);
+    Sci::Matrix<int> ma(aa, 2, 3);
 
-    auto r0 = Scilib::row(ma, 0);
+    auto r0 = Sci::row(ma, 0);
 
     int i = 1;
-    for (auto it = Scilib::cbegin(r0); it != Scilib::cend(r0); ++it) {
+    for (auto it = Sci::cbegin(r0); it != Sci::cend(r0); ++it) {
         EXPECT_EQ((*it), i);
         ++i;
     }
@@ -228,12 +228,12 @@ TEST(TestMatrix, TestColIterator)
     std::vector<int> aa = {1, 2, 3, 
                            4, 5, 6};
     // clang-format on
-    Scilib::Matrix<int> ma(aa, 2, 3);
+    Sci::Matrix<int> ma(aa, 2, 3);
 
-    auto c1 = Scilib::column(ma, 1);
+    auto c1 = Sci::column(ma, 1);
 
     int i = 2;
-    for (auto it = Scilib::cbegin(c1); it != Scilib::cend(c1); ++it) {
+    for (auto it = Sci::cbegin(c1); it != Sci::cend(c1); ++it) {
         EXPECT_EQ((*it), i);
         i += 3;
     }
@@ -251,13 +251,13 @@ TEST(TestMatrix, TestDiagIterator)
         1, 5, 9
     };
     // clang-format on
-    Scilib::Vector<int, stdex::layout_left> ans(ans_data, 3);
-    Scilib::Matrix<int, stdex::layout_left> m(data, 3, 3);
+    Sci::Vector<int, stdex::layout_left> ans(ans_data, 3);
+    Sci::Matrix<int, stdex::layout_left> m(data, 3, 3);
 
-    auto d = Scilib::diag(m);
+    auto d = Sci::diag(m);
 
     int i = 0;
-    for (auto it = Scilib::begin(d); it != Scilib::end(d); ++it) {
+    for (auto it = Sci::begin(d); it != Sci::end(d); ++it) {
         EXPECT_EQ((*it), ans(i));
         ++i;
     }

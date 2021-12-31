@@ -11,13 +11,13 @@
 TEST(TestVector, TestSize)
 {
     std::size_t sz = 5;
-    Scilib::Vector<int> v(sz);
+    Sci::Vector<int> v(sz);
     EXPECT_EQ(v.size(), sz);
 }
 
 TEST(TestVector, TestElementAccesss)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
         EXPECT_EQ(v(i), i);
@@ -26,7 +26,7 @@ TEST(TestVector, TestElementAccesss)
 
 TEST(TestVector, TestView)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
     }
@@ -36,12 +36,12 @@ TEST(TestVector, TestView)
 
 TEST(TestVector, TestCopy)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
     }
 
-    Scilib::Vector<int> a(v);
+    Sci::Vector<int> a(v);
     a(0) = 10;
     EXPECT_EQ(v(0), 0);
     EXPECT_EQ(a(0), 10);
@@ -50,12 +50,12 @@ TEST(TestVector, TestCopy)
 
 TEST(TestVector, TestCopySpan)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
     }
 
-    Scilib::Vector<int> a(v.view());
+    Sci::Vector<int> a(v.view());
     a(0) = 10;
     EXPECT_EQ(v(0), 0);
     EXPECT_EQ(a(0), 10);
@@ -65,7 +65,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Scilib::Vector<int> a(v, std::array<std::size_t, 1>{v.size()});
+    Sci::Vector<int> a(v, std::array<std::size_t, 1>{v.size()});
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));
@@ -78,7 +78,7 @@ TEST(TestVector, TestCopyVector)
 
 TEST(TestVector, TestResize)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     std::size_t sz = 10;
     v.resize(sz);
     EXPECT_EQ(v.size(), sz);
@@ -89,8 +89,8 @@ TEST(TestVector, TestSwap)
     std::size_t n1 = 5;
     std::size_t n2 = 10;
 
-    Scilib::Vector<int> a(n1);
-    Scilib::Vector<int> b(n2);
+    Sci::Vector<int> a(n1);
+    Sci::Vector<int> b(n2);
 
     std::swap(a, b);
     EXPECT_EQ(a.size(), n2);
@@ -99,14 +99,14 @@ TEST(TestVector, TestSwap)
 
 TEST(TestVector, TestEmpty)
 {
-    Scilib::Vector<int> a;
+    Sci::Vector<int> a;
     EXPECT_TRUE(a.empty());
 }
 
 TEST(TestVector, TestInitializer)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Scilib::Vector<int> a(v, v.size());
+    Sci::Vector<int> a(v, v.size());
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -116,7 +116,7 @@ TEST(TestVector, TestInitializer)
 
 TEST(TestVector, TestSetValue)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     v = 4;
     for (const auto& vi : v) {
         EXPECT_EQ(vi, 4);
@@ -125,7 +125,7 @@ TEST(TestVector, TestSetValue)
 
 TEST(TestVector, TestAddValue)
 {
-    Scilib::Vector<int> v(5);
+    Sci::Vector<int> v(5);
     v = 2;
     v += 4;
     for (const auto& vi : v) {
@@ -135,9 +135,9 @@ TEST(TestVector, TestAddValue)
 
 TEST(TestVector, TestAddVector)
 {
-    Scilib::Vector<int> a(5);
+    Sci::Vector<int> a(5);
     a = 1;
-    Scilib::Vector<int> b(5);
+    Sci::Vector<int> b(5);
     b = 1;
     a += b;
     for (const auto& ai : a) {
@@ -150,18 +150,18 @@ TEST(TestVector, TestAddVector)
 
 TEST(TestVector, TestAequalB)
 {
-    Scilib::Vector<int> a(5);
+    Sci::Vector<int> a(5);
     a = 1;
-    Scilib::Vector<int> b(5);
+    Sci::Vector<int> b(5);
     b = 1;
     EXPECT_TRUE(a == b);
 }
 
 TEST(TestVector, TestAnotequalB)
 {
-    Scilib::Vector<int> a(5);
+    Sci::Vector<int> a(5);
     a = 1;
-    Scilib::Vector<int> b(4);
+    Sci::Vector<int> b(4);
     b = 2;
     EXPECT_TRUE(a != b);
 }
@@ -169,8 +169,8 @@ TEST(TestVector, TestAnotequalB)
 TEST(TestVector, TestSort)
 {
     std::vector<int> data = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    Scilib::Vector<int> x(data, data.size());
-    Scilib::sort(x.view());
+    Sci::Vector<int> x(data, data.size());
+    Sci::sort(x.view());
     for (size_t i = 0; i < x.size(); ++i) {
         EXPECT_EQ(x(i), static_cast<int>(i + 1));
     }
@@ -179,9 +179,9 @@ TEST(TestVector, TestSort)
 TEST(TestVector, TestFirst)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Scilib::Vector<int> a(v, v.size());
+    Sci::Vector<int> a(v, v.size());
 
-    auto v_slice = Scilib::first(a.view(), v.size());
+    auto v_slice = Sci::first(a.view(), v.size());
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
         EXPECT_EQ(v_slice(i), a(i));
     }
@@ -190,9 +190,9 @@ TEST(TestVector, TestFirst)
 TEST(TestVector, TestLast)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Scilib::Vector<int> a(v, v.size());
+    Sci::Vector<int> a(v, v.size());
 
-    auto v_slice = Scilib::last(a.view(), 3);
+    auto v_slice = Sci::last(a.view(), 3);
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
         EXPECT_EQ(v_slice(i), a(i + 2));
     }

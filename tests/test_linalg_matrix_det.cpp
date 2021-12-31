@@ -12,8 +12,8 @@
 
 TEST(TestLinalg, TestDet)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     const double ans2 = 13.0;
     const double ans3 = 76.0;
@@ -48,8 +48,8 @@ TEST(TestLinalg, TestDet)
 
 TEST(TestLinalg, TestDetColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     const double ans4 = 242.0; // armadillo
 

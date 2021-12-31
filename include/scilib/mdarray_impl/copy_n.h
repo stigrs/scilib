@@ -11,7 +11,7 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 
 namespace stdex = std::experimental;
 
@@ -50,6 +50,6 @@ inline void copy_n(const Vector<T, Layout>& x,
     copy_n(x.view(), count, y.view(), offset);
 }
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_COPY_N_H

@@ -48,7 +48,7 @@
 
 #include <experimental/mdspan>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -121,13 +121,13 @@ transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
 }
 
 template <class T, class Layout>
-inline Scilib::Matrix<T, Layout> transposed(const Scilib::Matrix<T, Layout>& a)
+inline Sci::Matrix<T, Layout> transposed(const Sci::Matrix<T, Layout>& a)
 {
-    Scilib::Matrix<T, Layout> tmp = transposed(a.view());
+    Sci::Matrix<T, Layout> tmp = transposed(a.view());
     return tmp;
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_TRANSPOSED_H

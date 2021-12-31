@@ -48,7 +48,7 @@
 
 #include <experimental/mdspan>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -119,15 +119,15 @@ inline stdex::
 }
 
 template <class T, class Extents, class Layout, class ScalingFactorType>
-inline Scilib::MDArray<T, Extents, Layout>
+inline Sci::MDArray<T, Extents, Layout>
 scaled(ScalingFactorType scaling_factor,
-       const Scilib::MDArray<T, Extents, Layout>& a)
+       const Sci::MDArray<T, Extents, Layout>& a)
 {
-    Scilib::MDArray<T, Extents, Layout> tmp = scaled(scaling_factor, a.view());
+    Sci::MDArray<T, Extents, Layout> tmp = scaled(scaling_factor, a.view());
     return tmp;
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_SCALED_H

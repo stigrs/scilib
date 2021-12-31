@@ -20,13 +20,13 @@
 #include <algorithm>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 // Compute the minimum norm-solution to a real linear least squares problem.
 template <class Layout>
-inline void lstsq(Scilib::Matrix_view<double, Layout> a,
-                  Scilib::Matrix_view<double, Layout> b)
+inline void lstsq(Sci::Matrix_view<double, Layout> a,
+                  Sci::Matrix_view<double, Layout> b)
 {
     namespace stdex = std::experimental;
 
@@ -38,8 +38,8 @@ inline void lstsq(Scilib::Matrix_view<double, Layout> a,
     BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
     BLAS_INT rank;
 
-    double rcond = -1.0;                              // use machine epsilon
-    Scilib::Vector<double, Layout> s(std::min(m, n)); // singular values of a
+    double rcond = -1.0;                           // use machine epsilon
+    Sci::Vector<double, Layout> s(std::min(m, n)); // singular values of a
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
@@ -58,13 +58,13 @@ inline void lstsq(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void lstsq(Scilib::Matrix<double, Layout>& a,
-                  Scilib::Matrix<double, Layout>& b)
+inline void lstsq(Sci::Matrix<double, Layout>& a,
+                  Sci::Matrix<double, Layout>& b)
 {
     lstsq(a.view(), b.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_LSTSQ_H

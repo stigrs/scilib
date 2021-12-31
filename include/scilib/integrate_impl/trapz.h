@@ -11,7 +11,7 @@
 #include <type_traits>
 #include <cmath>
 
-namespace Scilib {
+namespace Sci {
 namespace Integrate {
 
 namespace stdex = std::experimental;
@@ -40,12 +40,12 @@ inline auto trapz(T_scalar xlo,
 }
 
 template <class T, class Layout>
-inline auto trapz(T xlo, T xup, const Scilib::Vector<T, Layout>& x)
+inline auto trapz(T xlo, T xup, const Sci::Vector<T, Layout>& x)
 {
     return trapz(xlo, xup, x.view());
 }
 
 } // namespace Integrate
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_INTEGRATE_IMPL_TRAPZ_H

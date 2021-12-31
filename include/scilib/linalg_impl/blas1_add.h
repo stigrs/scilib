@@ -9,7 +9,7 @@
 
 #include <experimental/mdspan>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -53,14 +53,14 @@ template <class T_x,
           class T_z,
           class Layout_z>
     requires (!std::is_const_v<T_z>)
-inline void add(const Scilib::Vector<T_x, Layout_x>& x,
-                const Scilib::Vector<T_y, Layout_y>& y,
-                Scilib::Vector<T_z, Layout_z>& z)
+inline void add(const Sci::Vector<T_x, Layout_x>& x,
+                const Sci::Vector<T_y, Layout_y>& y,
+                Sci::Vector<T_z, Layout_z>& z)
 {
     add(x.view(), y.view(), z.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS1_ADD_H

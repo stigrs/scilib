@@ -7,7 +7,7 @@
 #ifndef SCILIB_LINALG_MATRIX_POWER_H
 #define SCILIB_LINALG_MATRIX_POWER_H
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 #include <scilib/mdarray.h>
@@ -16,10 +16,10 @@ namespace Linalg {
 
 // Raise a square matrix to the (integer) power n.
 template <class T, class Layout>
-inline auto matrix_power(Scilib::Matrix_view<T, Layout> m, int n)
+inline auto matrix_power(Sci::Matrix_view<T, Layout> m, int n)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     using value_type = std::remove_cv_t<T>;
 
@@ -61,13 +61,13 @@ inline auto matrix_power(Scilib::Matrix_view<T, Layout> m, int n)
 }
 
 template <class T, class Layout>
-inline Scilib::Matrix<T, Layout>
-matrix_power(const Scilib::Matrix<T, Layout>& m, int n)
+inline Sci::Matrix<T, Layout> matrix_power(const Sci::Matrix<T, Layout>& m,
+                                           int n)
 {
     return matrix_power(m.view(), n);
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_MATRIX_POWER_H

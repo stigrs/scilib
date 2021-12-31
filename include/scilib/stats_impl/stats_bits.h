@@ -13,7 +13,7 @@
 #include <type_traits>
 #include <cmath>
 
-namespace Scilib {
+namespace Sci {
 namespace Stats {
 namespace stdex = std::experimental;
 
@@ -26,12 +26,12 @@ inline auto mean(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 {
     using value_type = std::remove_cv_t<T>;
     value_type result =
-        Scilib::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
+        Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
     return result;
 }
 
 template <class T, class Layout>
-inline T mean(const Scilib::Vector<T, Layout>& x)
+inline T mean(const Sci::Vector<T, Layout>& x)
 {
     return mean(x.view());
 }
@@ -46,8 +46,8 @@ inline auto median(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
     using size_type = stdex::extents<>::size_type;
     using value_type = std::remove_cv_t<T>;
 
-    Scilib::Vector<value_type> xcopy(x);
-    Scilib::sort(xcopy.view());
+    Sci::Vector<value_type> xcopy(x);
+    Sci::sort(xcopy.view());
 
     size_type n = (xcopy.extent(0) + 1) / 2;
     value_type med = xcopy(n);
@@ -59,7 +59,7 @@ inline auto median(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 }
 
 template <class T, class Layout>
-inline T median(const Scilib::Vector<T, Layout>& x)
+inline T median(const Sci::Vector<T, Layout>& x)
 {
     return median(x.view());
 }
@@ -86,7 +86,7 @@ inline auto var(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 }
 
 template <class T, class Layout>
-inline T var(const Scilib::Vector<T, Layout>& x)
+inline T var(const Sci::Vector<T, Layout>& x)
 {
     return var(x.view());
 }
@@ -102,7 +102,7 @@ inline auto stddev(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 }
 
 template <class T, class Layout>
-inline T stddev(const Scilib::Vector<T, Layout>& x)
+inline T stddev(const Sci::Vector<T, Layout>& x)
 {
     return stddev(x.view());
 }
@@ -125,7 +125,7 @@ inline auto rms(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
 }
 
 template <class T, class Layout>
-inline T rms(const Scilib::Vector<T, Layout>& x)
+inline T rms(const Sci::Vector<T, Layout>& x)
 {
     return rms(x.view());
 }
@@ -159,13 +159,12 @@ inline auto cov(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
 }
 
 template <class T, class Layout>
-inline T cov(const Scilib::Vector<T, Layout>& x,
-             const Scilib::Vector<T, Layout>& y)
+inline T cov(const Sci::Vector<T, Layout>& x, const Sci::Vector<T, Layout>& y)
 {
     return cov(x.view(), y.view());
 }
 
 } // namespace Stats
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_STATS_BITS_H

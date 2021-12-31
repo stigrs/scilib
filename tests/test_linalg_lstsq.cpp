@@ -11,8 +11,8 @@
 
 TEST(TestLinalg, TestLstsq)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Example from Intel MKL:
     // clang-format off
@@ -52,8 +52,8 @@ TEST(TestLinalg, TestLstsq)
 
 TEST(TestLinalg, TestLstsqColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Example from Intel MKL:
     // clang-format off

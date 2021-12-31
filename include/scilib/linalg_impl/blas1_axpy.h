@@ -10,7 +10,7 @@
 #include <experimental/mdspan>
 #include <scilib/mdarray.h>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -45,14 +45,14 @@ axpy(const T_scalar& scalar,
 template <class T_scalar, class T_x, class Layout_x, class T_y, class Layout_y>
     requires (!std::is_const_v<T_y>)
 inline void axpy(const T_scalar& scalar,
-                 const Scilib::Vector<T_x, Layout_x>& x,
-                 Scilib::Vector<T_y, Layout_y>& y)
+                 const Sci::Vector<T_x, Layout_x>& x,
+                 Sci::Vector<T_y, Layout_y>& y)
 // clang-format on
 {
     axpy(scalar, x.view(), y.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS1_AXPY_H

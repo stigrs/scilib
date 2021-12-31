@@ -20,15 +20,15 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 // Matrix inversion.
 // clang-format off
 template <class T_a, class T_res, class Layout>
     requires std::is_same_v<std::remove_cv_t<T_a>, double>
-inline void inv(Scilib::Matrix_view<T_a, Layout> a,
-                Scilib::Matrix_view<T_res, Layout> res)
+inline void inv(Sci::Matrix_view<T_a, Layout> a,
+                Sci::Matrix_view<T_res, Layout> res)
 // clang-format on
 {
     namespace stdex = std::experimental;
@@ -50,10 +50,10 @@ inline void inv(Scilib::Matrix_view<T_a, Layout> a,
         matrix_layout = LAPACK_COL_MAJOR;
     }
 
-    Scilib::copy(a, res);
+    Sci::copy(a, res);
 
-    Scilib::Vector<BLAS_INT, Layout> ipiv(n);
-    Scilib::Linalg::lu(res, ipiv.view()); // perform LU factorization
+    Sci::Vector<BLAS_INT, Layout> ipiv(n);
+    Sci::Linalg::lu(res, ipiv.view()); // perform LU factorization
 
     BLAS_INT info =
         LAPACKE_dgetri(matrix_layout, n, res.data(), lda, ipiv.data());
@@ -65,24 +65,23 @@ inline void inv(Scilib::Matrix_view<T_a, Layout> a,
 // clang-format off
 template <class T, class Layout>
     requires std::is_same_v<std::remove_cv_t<T>, double>
-inline auto inv(Scilib::Matrix_view<T, Layout> a)
+inline auto inv(Sci::Matrix_view<T, Layout> a)
 // clang-format on
 {
     using value_type = std::remove_cv_t<T>;
 
-    Scilib::Matrix<value_type, Layout> res(a.extent(0), a.extent(1));
+    Sci::Matrix<value_type, Layout> res(a.extent(0), a.extent(1));
     inv(a, res.view());
     return res;
 }
 
 template <class Layout>
-inline Scilib::Matrix<double, Layout>
-inv(const Scilib::Matrix<double, Layout>& a)
+inline Sci::Matrix<double, Layout> inv(const Sci::Matrix<double, Layout>& a)
 {
     return inv(a.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_INV_H

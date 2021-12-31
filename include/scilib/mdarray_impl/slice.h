@@ -12,7 +12,7 @@
 #include <utility>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace stdex = std::experimental;
 
 template <class T,
@@ -136,6 +136,6 @@ inline auto submatrix(Matrix<T, Layout>& m,
     return submatrix(m.view(), row_slice, col_slice);
 }
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_SLICE_H

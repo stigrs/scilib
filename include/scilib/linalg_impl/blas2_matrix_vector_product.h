@@ -21,7 +21,7 @@
 #include <type_traits>
 #include <iostream>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -60,9 +60,9 @@ inline void matrix_vector_product(
 }
 
 template <class Layout>
-inline void matrix_vector_product(Scilib::Matrix_view<double, Layout> a,
-                                  Scilib::Vector_view<double, Layout> x,
-                                  Scilib::Vector_view<double, Layout> y)
+inline void matrix_vector_product(Sci::Matrix_view<double, Layout> a,
+                                  Sci::Vector_view<double, Layout> x,
+                                  Sci::Vector_view<double, Layout> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -86,9 +86,9 @@ inline void matrix_vector_product(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void matrix_vector_product(Scilib::Matrix_view<const double, Layout> a,
-                                  Scilib::Vector_view<const double, Layout> x,
-                                  Scilib::Vector_view<double, Layout> y)
+inline void matrix_vector_product(Sci::Matrix_view<const double, Layout> a,
+                                  Sci::Vector_view<const double, Layout> x,
+                                  Sci::Vector_view<double, Layout> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -115,9 +115,9 @@ inline void matrix_vector_product(Scilib::Matrix_view<const double, Layout> a,
 // Does not work with OpenBLAS version 0.2.14.1
 template <class Layout>
 inline void
-matrix_vector_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
-                      Scilib::Vector_view<std::complex<double>, Layout> x,
-                      Scilib::Vector_view<std::complex<double>, Layout> y)
+matrix_vector_product(Sci::Matrix_view<std::complex<double>, Layout> a,
+                      Sci::Vector_view<std::complex<double>, Layout> x,
+                      Sci::Vector_view<std::complex<double>, Layout> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -142,9 +142,9 @@ matrix_vector_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
 
 template <class Layout>
 inline void
-matrix_vector_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
-                      Scilib::Vector_view<const std::complex<double>, Layout> x,
-                      Scilib::Vector_view<std::complex<double>, Layout> y)
+matrix_vector_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
+                      Sci::Vector_view<const std::complex<double>, Layout> x,
+                      Sci::Vector_view<std::complex<double>, Layout> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -169,43 +169,43 @@ matrix_vector_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
 #endif
 
 template <class T, class Layout>
-inline Scilib::Vector<T, Layout>
-matrix_vector_product(Scilib::Matrix_view<T, Layout> a,
-                      Scilib::Vector_view<T, Layout> x)
+inline Sci::Vector<T, Layout>
+matrix_vector_product(Sci::Matrix_view<T, Layout> a,
+                      Sci::Vector_view<T, Layout> x)
 {
-    Scilib::Vector<T, Layout> res(a.extent(0));
+    Sci::Vector<T, Layout> res(a.extent(0));
     matrix_vector_product(a, x, res.view());
     return res;
 }
 
 template <class T, class Layout>
-inline Scilib::Vector<T, Layout>
-matrix_vector_product(Scilib::Matrix_view<const T, Layout> a,
-                      Scilib::Vector_view<const T, Layout> x)
+inline Sci::Vector<T, Layout>
+matrix_vector_product(Sci::Matrix_view<const T, Layout> a,
+                      Sci::Vector_view<const T, Layout> x)
 {
-    Scilib::Vector<T, Layout> res(a.extent(0));
+    Sci::Vector<T, Layout> res(a.extent(0));
     matrix_vector_product(a, x, res.view());
     return res;
 }
 
 template <class T, class Layout>
-inline Scilib::Vector<T, Layout>
-matrix_vector_product(const Scilib::Matrix<T, Layout>& a,
-                      const Scilib::Vector<T, Layout>& x)
+inline Sci::Vector<T, Layout>
+matrix_vector_product(const Sci::Matrix<T, Layout>& a,
+                      const Sci::Vector<T, Layout>& x)
 {
     return matrix_vector_product(a.view(), x.view());
 }
 
 template <class T, class Layout>
-inline void matrix_vector_product(const Scilib::Matrix<T, Layout>& a,
-                                  const Scilib::Vector<T, Layout>& x,
-                                  Scilib::Vector<T, Layout>& res)
+inline void matrix_vector_product(const Sci::Matrix<T, Layout>& a,
+                                  const Sci::Vector<T, Layout>& x,
+                                  Sci::Vector<T, Layout>& res)
 {
     assert(res.size() == a.extent(0));
     matrix_vector_product(a.view(), x.view(), res.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS2_MATRIX_VECTOR_PRODUCT_H

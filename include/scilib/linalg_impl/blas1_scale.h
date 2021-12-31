@@ -9,7 +9,7 @@
 
 #include <experimental/mdspan>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -46,13 +46,13 @@ scale(const T& scalar,
 }
 
 template <class T, class Extents, class Layout>
-inline void scale(const T& scalar, Scilib::MDArray<T, Extents, Layout>& m)
+inline void scale(const T& scalar, Sci::MDArray<T, Extents, Layout>& m)
 {
     static_assert(m.rank() <= 2);
     scale(scalar, m.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS1_SCALE_H

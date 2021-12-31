@@ -11,7 +11,7 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -26,17 +26,17 @@ inline auto
 trace(stdex::mdspan<T, stdex::extents<ext, ext>, Layout_m, Accessor_m> m)
 // clang-format on
 {
-    return Scilib::Linalg::sum(Scilib::diag(m));
+    return Sci::Linalg::sum(Sci::diag(m));
 }
 
 template <class T, class Layout>
-inline T trace(const Scilib::Matrix<T, Layout>& m)
+inline T trace(const Sci::Matrix<T, Layout>& m)
 {
     assert(m.extent(0) == m.extent(1));
     return trace(m.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_TRACE_H

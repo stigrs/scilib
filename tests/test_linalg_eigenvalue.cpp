@@ -32,11 +32,11 @@ TEST(TestLinalg, TestEigs)
         0.46, -0.48,  1.10, -0.98,  3.54
     };
     // clang-format on
-    Scilib::Matrix<double> evec(evec_data, 5, 5);
+    Sci::Matrix<double> evec(evec_data, 5, 5);
 
-    Scilib::Matrix<double> a(a_data, 5, 5);
-    Scilib::Vector<double> w(5);
-    Scilib::Linalg::eigs(a, w);
+    Sci::Matrix<double> a(a_data, 5, 5);
+    Sci::Vector<double> w(5);
+    Sci::Linalg::eigs(a, w);
 
     for (int i = 0; i < 5; ++i) {
         EXPECT_NEAR(w(i), eval[i], 1.0e-6);
@@ -78,14 +78,14 @@ TEST(TestLinalg, TestEig)
     };
     // clang-format on
 
-    Scilib::Matrix<double> evec_re(evec_re_data, 4, 4);
-    Scilib::Matrix<double> evec_im(evec_im_data, 4, 4);
-    Scilib::Matrix<double> a(a_data, 4, 4);
+    Sci::Matrix<double> evec_re(evec_re_data, 4, 4);
+    Sci::Matrix<double> evec_im(evec_im_data, 4, 4);
+    Sci::Matrix<double> a(a_data, 4, 4);
 
-    Scilib::Vector<std::complex<double>> eval(4);
-    Scilib::Matrix<std::complex<double>> evec(4, 4);
+    Sci::Vector<std::complex<double>> eval(4);
+    Sci::Matrix<std::complex<double>> evec(4, 4);
 
-    Scilib::Linalg::eig(a, evec, eval);
+    Sci::Linalg::eig(a, evec, eval);
 
     for (std::size_t i = 0; i < eval.size(); ++i) {
         EXPECT_NEAR(eval(i).real(), eval_re[i], 5.0e-8);
@@ -102,8 +102,8 @@ TEST(TestLinalg, TestEig)
 
 TEST(TestLinalg, TestEigColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Numpy:
     std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813,

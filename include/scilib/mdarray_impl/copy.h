@@ -10,7 +10,7 @@
 #include <experimental/mdspan>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 
 namespace stdex = std::experimental;
 
@@ -319,6 +319,6 @@ copy(stdex::mdspan<T_x,
     }
 }
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_COPY_H

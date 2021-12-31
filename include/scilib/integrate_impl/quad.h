@@ -10,7 +10,7 @@
 #include <array>
 #include <functional>
 
-namespace Scilib {
+namespace Sci {
 namespace Integrate {
 
 // Return tabulated roots and weights for a Gauss-Legendre quadrature
@@ -100,6 +100,6 @@ inline double quad(std::function<double(double)> f, double a, double b)
 }
 
 } // namespace Integrate
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_INTEGRATE_QUAD_H

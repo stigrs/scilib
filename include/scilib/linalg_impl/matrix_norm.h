@@ -17,7 +17,7 @@
 #include <scilib/linalg_impl/lapack_types.h>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -33,7 +33,7 @@ namespace stdex = std::experimental;
 // clang-format off
 template <class T, class Layout>
     requires std::is_same_v<std::remove_cv_t<T>, double>
-inline auto matrix_norm(Scilib::Matrix_view<T, Layout> a, char norm)
+inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
 // clang-format on
 {
     static_assert(a.is_contiguous());
@@ -55,12 +55,12 @@ inline auto matrix_norm(Scilib::Matrix_view<T, Layout> a, char norm)
 }
 
 template <class Layout>
-inline double matrix_norm(const Scilib::Matrix<double, Layout>& a, char norm)
+inline double matrix_norm(const Sci::Matrix<double, Layout>& a, char norm)
 {
     return matrix_norm(a.view(), norm);
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_MATRIX_NORM_H

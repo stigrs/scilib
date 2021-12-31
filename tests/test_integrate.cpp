@@ -11,13 +11,13 @@
 #include <vector>
 #include <limits>
 
-Scilib::Vector<double> lorentz(double, const Scilib::Vector<double>& y)
+Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
 {
     const double sigma = 10.0;
     const double R = 28.0;
     const double b = 8.0 / 3.0;
 
-    Scilib::Vector<double> ydot(3);
+    Sci::Vector<double> ydot(3);
 
     ydot(0) = sigma * (y(1) - y(0));
     ydot(1) = R * y(0) - y(1) - y(0) * y(2);
@@ -26,9 +26,9 @@ Scilib::Vector<double> lorentz(double, const Scilib::Vector<double>& y)
     return ydot;
 }
 
-Scilib::Vector<double> fsys_stiff(double, const Scilib::Vector<double>& y)
+Sci::Vector<double> fsys_stiff(double, const Sci::Vector<double>& y)
 {
-    Scilib::Vector<double> ydot(3);
+    Sci::Vector<double> ydot(3);
 
     ydot(0) = -0.04 * y(0) + 1.0e4 * y(1) * y(2);
     ydot(2) = 3.0e7 * y(1) * y(1);
@@ -40,19 +40,19 @@ Scilib::Vector<double> fsys_stiff(double, const Scilib::Vector<double>& y)
 TEST(TestIntegrate, TestTrapz)
 {
     std::vector<double> y_data = {3.2, 2.7, 2.9, 3.5, 4.1, 5.2};
-    Scilib::Vector<double> y(y_data, y_data.size());
+    Sci::Vector<double> y(y_data, y_data.size());
 
     double xlo = 2.1;
     double xup = 3.6;
-    double ft = Scilib::Integrate::trapz(xlo, xup, y);
+    double ft = Sci::Integrate::trapz(xlo, xup, y);
 
     EXPECT_NEAR(ft, 5.22, 1.0e-8);
 }
 
 TEST(TestIntegrate, TestQuad)
 {
-    using namespace Scilib;
-    using namespace Scilib::Integrate;
+    using namespace Sci;
+    using namespace Sci::Integrate;
 
     double a = 0.0;
     double b = Constants::pi;
@@ -70,8 +70,8 @@ TEST(TestIntegrate, TestQuad)
 
 TEST(TestIntegrate, TestDormandPrince)
 {
-    using namespace Scilib;
-    using namespace Scilib::Integrate;
+    using namespace Sci;
+    using namespace Sci::Integrate;
 
     // clang-format off
     std::vector<double> ans_data = { // result from Matlab
@@ -101,8 +101,8 @@ TEST(TestIntegrate, TestDormandPrince)
 
 TEST(TestIntegrate, TestStiff)
 {
-    using namespace Scilib;
-    using namespace Scilib::Integrate;
+    using namespace Sci;
+    using namespace Sci::Integrate;
 
     // clang-format off
     std::vector<double> ans_data = { // result from Lsoda

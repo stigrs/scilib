@@ -18,9 +18,50 @@
 #include <iomanip>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 
 namespace stdex = std::experimental;
+
+//------------------------------------------------------------------------------
+// Properties:
+
+template <class T, class Extents, class Layout>
+constexpr std::size_t rank(const MDArray<T, Extents, Layout>& m)
+{
+    return m.rank();
+}
+
+template <class T, class Extents, class Layout, class Accessor>
+constexpr std::size_t rank(stdex::mdspan<T, Extents, Layout, Accessor> m)
+{
+    return m.rank();
+}
+
+template <class T, class Extents, class Layout>
+constexpr std::ptrdiff_t ssize(const MDArray<T, Extents, Layout>& m)
+{
+    return m.ssize();
+}
+
+template <class T, class Extents, class Layout, class Accessor>
+constexpr std::ptrdiff_t ssize(stdex::mdspan<T, Extents, Layout, Accessor> m)
+{
+    return static_cast<std::ptrdiff_t>(m.size());
+}
+
+template <class T, class Extents, class Layout>
+constexpr std::ptrdiff_t sextent(const MDArray<T, Extents, Layout>& m,
+                                 std::size_t dim)
+{
+    return m.sextent(dim);
+}
+
+template <class T, class Extents, class Layout, class Accessor>
+constexpr std::ptrdiff_t sextent(stdex::mdspan<T, Extents, Layout, Accessor> m,
+                                 std::size_t dim)
+{
+    return static_cast<std::ptrdiff_t>(m.extent(dim));
+}
 
 //------------------------------------------------------------------------------
 // Equality comparisons:
@@ -155,7 +196,7 @@ template <class T, class Layout>
 constexpr Matrix<T, Layout> operator*(const Matrix<T, Layout>& a,
                                       const Matrix<T, Layout>& b)
 {
-    return Scilib::Linalg::matrix_product(a.view(), b.view());
+    return Sci::Linalg::matrix_product(a.view(), b.view());
 }
 
 //------------------------------------------------------------------------------
@@ -165,7 +206,7 @@ template <class T, class Layout>
 constexpr Vector<T, Layout> operator*(const Matrix<T, Layout>& a,
                                       const Vector<T, Layout>& x)
 {
-    return Scilib::Linalg::matrix_vector_product(a.view(), x.view());
+    return Sci::Linalg::matrix_vector_product(a.view(), x.view());
 }
 
 //------------------------------------------------------------------------------
@@ -326,6 +367,6 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
 }
 // clang-format on
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_OPERATIONS_H

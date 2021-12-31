@@ -35,8 +35,8 @@ void print(int n,
 
 void benchmark(int n)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     Eigen::VectorXd aa(n);
     Eigen::VectorXd ab(n);

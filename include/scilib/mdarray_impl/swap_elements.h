@@ -10,7 +10,7 @@
 #include <experimental/mdspan>
 #include <utility>
 
-namespace Scilib {
+namespace Sci {
 
 namespace stdex = std::experimental;
 
@@ -294,6 +294,6 @@ inline void swap_elements(
     }
 }
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_SWAP_ELEMENTS_H

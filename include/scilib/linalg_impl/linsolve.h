@@ -20,13 +20,13 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 // Solve linear system of equations.
 template <class Layout>
-inline void linsolve(Scilib::Matrix_view<double, Layout> a,
-                     Scilib::Matrix_view<double, Layout> b)
+inline void linsolve(Sci::Matrix_view<double, Layout> a,
+                     Sci::Matrix_view<double, Layout> b)
 {
     namespace stdex = std::experimental;
 
@@ -40,7 +40,7 @@ inline void linsolve(Scilib::Matrix_view<double, Layout> a,
     const BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT lda = n;
 
-    Scilib::Vector<BLAS_INT, Layout> ipiv(n);
+    Sci::Vector<BLAS_INT, Layout> ipiv(n);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT ldb = nrhs;
@@ -57,13 +57,13 @@ inline void linsolve(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void linsolve(Scilib::Matrix<double, Layout>& a,
-                     Scilib::Matrix<double, Layout>& b)
+inline void linsolve(Sci::Matrix<double, Layout>& a,
+                     Sci::Matrix<double, Layout>& b)
 {
     linsolve(a.view(), b.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_LINSOLVE_H

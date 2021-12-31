@@ -11,8 +11,8 @@
 
 TEST(TestLinalg, TestLU)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> a_data = {
@@ -44,8 +44,8 @@ TEST(TestLinalg, TestLU)
 
 TEST(TestLinalg, TestQR)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> data = {
@@ -70,8 +70,8 @@ TEST(TestLinalg, TestQR)
 
 TEST(TestLinalg, TestQRColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> data = {
@@ -96,8 +96,8 @@ TEST(TestLinalg, TestQRColMajor)
 
 TEST(TestLinalg, TestSVD)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> data = {
@@ -136,8 +136,8 @@ TEST(TestLinalg, TestSVD)
 
 TEST(TestLinalg, TestSVDColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> data = {

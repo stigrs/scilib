@@ -12,8 +12,8 @@
 
 TEST(TestLinalg, TestExpm)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Example from Matlab:
     // clang-format off
@@ -42,8 +42,8 @@ TEST(TestLinalg, TestExpm)
 
 TEST(TestLinalg, TestExpmColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Example from Matlab:
     // clang-format off

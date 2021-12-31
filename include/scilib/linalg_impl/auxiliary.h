@@ -13,7 +13,7 @@
 #include <random>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 //------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ template <class T,
 inline void fill(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
                  const T& value)
 {
-    Scilib::apply(v, [&](T& vi) { vi = value; });
+    Sci::apply(v, [&](T& vi) { vi = value; });
 }
 
 template <class T,
@@ -38,13 +38,13 @@ inline void
 fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
      const T& value)
 {
-    Scilib::apply(m, [&](T& mi) { mi = value; });
+    Sci::apply(m, [&](T& mi) { mi = value; });
 }
 
 // clang-format off
 template <class T, class Extents, class Layout>
     requires Extents_has_rank<Extents>
-inline void fill(Scilib::MDArray<T, Extents, Layout>& m, const T& value)
+inline void fill(Sci::MDArray<T, Extents, Layout>& m, const T& value)
 // clang-format on
 {
     static_assert(Extents::rank() <= 2);
@@ -100,7 +100,7 @@ clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
 
 template <class T, class Extents, class Layout>
 inline void
-clip(Scilib::MDArray<T, Extents, Layout>& a, const T& a_min, const T& a_max)
+clip(Sci::MDArray<T, Extents, Layout>& a, const T& a_min, const T& a_max)
 {
     clip(a.view(), a_min, a_max);
 }
@@ -130,7 +130,7 @@ argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout>
-inline stdex::extents<>::size_type argmax(const Scilib::Vector<T, Layout>& v)
+inline stdex::extents<>::size_type argmax(const Sci::Vector<T, Layout>& v)
 {
     return argmax(v.view());
 }
@@ -157,7 +157,7 @@ argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout>
-inline stdex::extents<>::size_type argmin(const Scilib::Vector<T, Layout>& v)
+inline stdex::extents<>::size_type argmin(const Sci::Vector<T, Layout>& v)
 {
     return argmin(v.view());
 }
@@ -181,7 +181,7 @@ inline auto max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout>
-inline T max(const Scilib::Vector<T, Layout>& v)
+inline T max(const Sci::Vector<T, Layout>& v)
 {
     return max(v.view());
 }
@@ -205,7 +205,7 @@ inline auto min(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout>
-inline T min(const Scilib::Vector<T, Layout>& v)
+inline T min(const Sci::Vector<T, Layout>& v)
 {
     return min(v.view());
 }
@@ -227,7 +227,7 @@ inline auto sum(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout>
-inline T sum(const Scilib::Vector<T, Layout>& v)
+inline T sum(const Sci::Vector<T, Layout>& v)
 {
     return sum(v.view());
 }
@@ -249,7 +249,7 @@ inline auto prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout>
-inline T prod(const Scilib::Vector<T, Layout>& v)
+inline T prod(const Sci::Vector<T, Layout>& v)
 {
     return prod(v.view());
 }
@@ -286,7 +286,7 @@ inline M ones(Args... args)
 }
 
 // clang-format off
-template <class M = Scilib::Matrix<double>>
+template <class M = Sci::Matrix<double>>
     requires MDArray_type<M>
 inline M identity(std::size_t n)
 // clang-format on
@@ -297,7 +297,7 @@ inline M identity(std::size_t n)
     using size_type = typename M::size_type;
 
     M res(n, n);
-    auto res_diag = Scilib::diag(res.view());
+    auto res_diag = Sci::diag(res.view());
     for (size_type i = 0; i < res_diag.extent(0); ++i) {
         res_diag(i) = value_type{1};
     }
@@ -376,14 +376,14 @@ inline M randi(Args... args)
 // clang-format off
 template <class T = double, class Layout = stdex::layout_right>
     requires std::is_floating_point_v<T>
-Scilib::Vector<T, Layout> linspace(T start, T stop, int num = 50)
+Sci::Vector<T, Layout> linspace(T start, T stop, int num = 50)
 // clang-format on
 {
     assert(stop > start);
     T step_size = (stop - start) / (num - 1);
     T value = start;
 
-    Scilib::Vector<T, Layout> res(num);
+    Sci::Vector<T, Layout> res(num);
 
     res(0) = start;
     for (int i = 1; i < num; ++i) {
@@ -394,6 +394,6 @@ Scilib::Vector<T, Layout> linspace(T start, T stop, int num = 50)
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_AUXILIARY_H

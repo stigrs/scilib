@@ -12,26 +12,26 @@
 TEST(TestLinalg, TestArgMaxArgMin)
 {
     std::vector<int> data = {1, 2, 3, -4};
-    Scilib::Vector<int> v(data, data.size());
+    Sci::Vector<int> v(data, data.size());
 
-    EXPECT_EQ(Scilib::Linalg::argmax(v), 2);
-    EXPECT_EQ(Scilib::Linalg::argmin(v), 3);
+    EXPECT_EQ(Sci::Linalg::argmax(v), 2);
+    EXPECT_EQ(Sci::Linalg::argmin(v), 3);
 }
 
 TEST(TestLinalg, TestMaxMin)
 {
     std::vector<int> data = {1, 2, 3, -4};
-    Scilib::Vector<int> v(data, data.size());
+    Sci::Vector<int> v(data, data.size());
 
-    EXPECT_EQ(Scilib::Linalg::max(v), 3);
-    EXPECT_EQ(Scilib::Linalg::min(v), -4);
+    EXPECT_EQ(Sci::Linalg::max(v), 3);
+    EXPECT_EQ(Sci::Linalg::min(v), -4);
 }
 
 TEST(TestLinalg, TestSumProd)
 {
     std::vector<int> data = {1, 2, 3, 4};
-    Scilib::Vector<int, stdex::layout_left> v(data, data.size());
+    Sci::Vector<int, stdex::layout_left> v(data, data.size());
 
-    EXPECT_EQ(Scilib::Linalg::sum(v), 10);
-    EXPECT_EQ(Scilib::Linalg::prod(v), 24);
+    EXPECT_EQ(Sci::Linalg::sum(v), 10);
+    EXPECT_EQ(Sci::Linalg::prod(v), 24);
 }

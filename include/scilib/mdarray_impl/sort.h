@@ -10,7 +10,7 @@
 #include <experimental/mdspan>
 #include <algorithm>
 
-namespace Scilib {
+namespace Sci {
 namespace stdex = std::experimental;
 
 namespace __Detail {
@@ -70,6 +70,6 @@ inline void sort(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
     __Detail::quick_sort(x, start, end);
 }
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_SORT_H

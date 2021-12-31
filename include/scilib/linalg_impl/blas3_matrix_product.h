@@ -19,7 +19,7 @@
 #include <complex>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -69,9 +69,9 @@ inline void matrix_product(
 }
 
 template <class Layout>
-inline void matrix_product(Scilib::Matrix_view<double, Layout> a,
-                           Scilib::Matrix_view<double, Layout> b,
-                           Scilib::Matrix_view<double, Layout> c)
+inline void matrix_product(Sci::Matrix_view<double, Layout> a,
+                           Sci::Matrix_view<double, Layout> b,
+                           Sci::Matrix_view<double, Layout> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -96,9 +96,9 @@ inline void matrix_product(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void matrix_product(Scilib::Matrix_view<const double, Layout> a,
-                           Scilib::Matrix_view<const double, Layout> b,
-                           Scilib::Matrix_view<double, Layout> c)
+inline void matrix_product(Sci::Matrix_view<const double, Layout> a,
+                           Sci::Matrix_view<const double, Layout> b,
+                           Sci::Matrix_view<double, Layout> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -124,9 +124,9 @@ inline void matrix_product(Scilib::Matrix_view<const double, Layout> a,
 
 #ifdef USE_MKL
 template <class Layout>
-inline void matrix_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
-                           Scilib::Matrix_view<std::complex<double>, Layout> b,
-                           Scilib::Matrix_view<std::complex<double>, Layout> c)
+inline void matrix_product(Sci::Matrix_view<std::complex<double>, Layout> a,
+                           Sci::Matrix_view<std::complex<double>, Layout> b,
+                           Sci::Matrix_view<std::complex<double>, Layout> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -152,9 +152,9 @@ inline void matrix_product(Scilib::Matrix_view<std::complex<double>, Layout> a,
 
 template <class Layout>
 inline void
-matrix_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
-               Scilib::Matrix_view<const std::complex<double>, Layout> b,
-               Scilib::Matrix_view<std::complex<double>, Layout> c)
+matrix_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
+               Sci::Matrix_view<const std::complex<double>, Layout> b,
+               Sci::Matrix_view<std::complex<double>, Layout> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -180,52 +180,50 @@ matrix_product(Scilib::Matrix_view<const std::complex<double>, Layout> a,
 #endif
 
 template <class T, class Layout>
-inline Scilib::Matrix<T, Layout>
-matrix_product(Scilib::Matrix_view<T, Layout> a,
-               Scilib::Matrix_view<T, Layout> b)
+inline Sci::Matrix<T, Layout> matrix_product(Sci::Matrix_view<T, Layout> a,
+                                             Sci::Matrix_view<T, Layout> b)
 {
     using size_type = stdex::extents<>::size_type;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);
 
-    Scilib::Matrix<T, Layout> res(n, p);
+    Sci::Matrix<T, Layout> res(n, p);
     matrix_product(a, b, res.view());
     return res;
 }
 
 template <class T, class Layout>
-inline Scilib::Matrix<T, Layout>
-matrix_product(Scilib::Matrix_view<const T, Layout> a,
-               Scilib::Matrix_view<const T, Layout> b)
+inline Sci::Matrix<T, Layout>
+matrix_product(Sci::Matrix_view<const T, Layout> a,
+               Sci::Matrix_view<const T, Layout> b)
 {
     using size_type = stdex::extents<>::size_type;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);
 
-    Scilib::Matrix<T, Layout> res(n, p);
+    Sci::Matrix<T, Layout> res(n, p);
     matrix_product(a, b, res.view());
     return res;
 }
 
 template <class T, class Layout>
-inline Scilib::Matrix<T, Layout>
-matrix_product(const Scilib::Matrix<T, Layout>& a,
-               const Scilib::Matrix<T, Layout>& b)
+inline Sci::Matrix<T, Layout> matrix_product(const Sci::Matrix<T, Layout>& a,
+                                             const Sci::Matrix<T, Layout>& b)
 {
     return matrix_product(a.view(), b.view());
 }
 
 template <class T, class Layout>
-inline void matrix_product(const Scilib::Matrix<T, Layout>& a,
-                           const Scilib::Matrix<T, Layout>& b,
-                           Scilib::Matrix<T, Layout>& c)
+inline void matrix_product(const Sci::Matrix<T, Layout>& a,
+                           const Sci::Matrix<T, Layout>& b,
+                           Sci::Matrix<T, Layout>& c)
 {
     matrix_product(a.view(), b.view(), c.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS3_MATRIX_PRODUCT_H

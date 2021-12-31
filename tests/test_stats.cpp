@@ -17,9 +17,9 @@ TEST(TestStats, TestMean)
         40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
     };
     // clang-format on
-    Scilib::Vector<double> v(data, data.size());
+    Sci::Vector<double> v(data, data.size());
 
-    EXPECT_NEAR(Scilib::Stats::mean(v), 22.066666666666666, 1.0e-8);
+    EXPECT_NEAR(Sci::Stats::mean(v), 22.066666666666666, 1.0e-8);
 }
 
 TEST(TestStats, TestMedianOdd)
@@ -30,8 +30,8 @@ TEST(TestStats, TestMedianOdd)
         40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
     };
     // clang-format on
-    Scilib::Vector<double> v(data, data.size());
-    EXPECT_EQ(Scilib::Stats::median(v), 23.0);
+    Sci::Vector<double> v(data, data.size());
+    EXPECT_EQ(Sci::Stats::median(v), 23.0);
 }
 
 TEST(TestStats, TestMedianEven)
@@ -41,8 +41,8 @@ TEST(TestStats, TestMedianEven)
         3.0,  13.0, 7.0,  5.0, 21.0, 39.0, 40.0, 23.0, 14.0, 12.0, 56.0, 29.0
     };
     // clang-format on
-    Scilib::Vector<double> v(data, data.size());
-    EXPECT_EQ(Scilib::Stats::median(v), 17.5);
+    Sci::Vector<double> v(data, data.size());
+    EXPECT_EQ(Sci::Stats::median(v), 17.5);
 }
 
 TEST(TestStats, TestStddev)
@@ -53,9 +53,9 @@ TEST(TestStats, TestStddev)
         40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
     };
     // clang-format on
-    Scilib::Vector<double> v(data, data.size());
+    Sci::Vector<double> v(data, data.size());
 
-    EXPECT_NEAR(Scilib::Stats::stddev(v), 14.49860420211283, 1.0e-8);
+    EXPECT_NEAR(Sci::Stats::stddev(v), 14.49860420211283, 1.0e-8);
 }
 
 TEST(TestStats, TestRMS)
@@ -66,9 +66,9 @@ TEST(TestStats, TestRMS)
         40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
     };
     // clang-format on
-    Scilib::Vector<double> v(data, data.size());
+    Sci::Vector<double> v(data, data.size());
 
-    EXPECT_NEAR(Scilib::Stats::rms(v), 26.136819495365792, 1.0e-8);
+    EXPECT_NEAR(Sci::Stats::rms(v), 26.136819495365792, 1.0e-8);
 }
 
 TEST(TestStats, TestCov)
@@ -83,8 +83,8 @@ TEST(TestStats, TestCov)
         23.0, 40.0, 23.0, 14.0, 12.0, 56.0, 23.0
     };
     // clang-format on
-    Scilib::Vector<double> b(b_data, b_data.size());
-    Scilib::Vector<double> c(c_data, c_data.size());
+    Sci::Vector<double> b(b_data, b_data.size());
+    Sci::Vector<double> c(c_data, c_data.size());
 
-    EXPECT_NEAR(Scilib::Stats::cov(b, c), 59.78021978, 1.0e-8);
+    EXPECT_NEAR(Sci::Stats::cov(b, c), 59.78021978, 1.0e-8);
 }

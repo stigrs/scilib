@@ -7,7 +7,7 @@
 #ifndef SCILIB_MDARRAY_SUPPORT_H
 #define SCILIB_MDARRAY_SUPPORT_H
 
-namespace Scilib {
+namespace Sci {
 namespace __Detail {
 
 // clang-format off
@@ -20,6 +20,6 @@ concept convertible_to =
 // clang-format on
 
 } // namespace __Detail
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_SUPPORT_H

@@ -7,7 +7,7 @@
 #ifndef SCILIB_CONSTANTS_H
 #define SCILIB_CONSTANTS_H
 
-namespace Scilib {
+namespace Sci {
 namespace Constants {
 
 //--------------------------------------------------------------------------
@@ -86,6 +86,6 @@ constexpr double au_to_kgm2 = m_u * a_0 * a_0 * 1.0e-20; // au to kg m^2
 constexpr double GHz_to_K = giga * 4.79924470000e-11;    // GHz to K
 
 } // namespace Constants
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_CONSTANTS_H

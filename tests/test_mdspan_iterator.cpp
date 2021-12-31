@@ -11,55 +11,55 @@
 
 TEST(TestMDSpanIterator, IteratorDefaultInit)
 {
-    Scilib::MDSpan_iterator<int> it1;
-    Scilib::MDSpan_iterator<int> it2;
+    Sci::MDSpan_iterator<int> it1;
+    Sci::MDSpan_iterator<int> it2;
     EXPECT_TRUE(it1 == it2);
 }
 
 TEST(TestMDSpanIterator, IteratorComparisons)
 {
     std::vector<int> a{1, 2, 3, 4};
-    Scilib::Vector<int> va(a, a.size());
+    Sci::Vector<int> va(a, a.size());
 
     auto s = va.view();
 
-    auto it = Scilib::begin(s);
+    auto it = Sci::begin(s);
     auto it2 = it + 1;
 
     EXPECT_TRUE(it == it);
-    EXPECT_TRUE(it == Scilib::begin(s));
-    EXPECT_TRUE(Scilib::begin(s) == it);
+    EXPECT_TRUE(it == Sci::begin(s));
+    EXPECT_TRUE(Sci::begin(s) == it);
 
     EXPECT_TRUE(it != it2);
     EXPECT_TRUE(it2 != it);
-    EXPECT_TRUE(it != Scilib::end(s));
-    EXPECT_TRUE(it2 != Scilib::end(s));
-    EXPECT_TRUE(Scilib::end(s) != it);
+    EXPECT_TRUE(it != Sci::end(s));
+    EXPECT_TRUE(it2 != Sci::end(s));
+    EXPECT_TRUE(Sci::end(s) != it);
 
     EXPECT_TRUE(it < it2);
     EXPECT_TRUE(it <= it2);
-    EXPECT_TRUE(it2 <= Scilib::end(s));
-    EXPECT_TRUE(it < Scilib::end(s));
+    EXPECT_TRUE(it2 <= Sci::end(s));
+    EXPECT_TRUE(it < Sci::end(s));
 
     EXPECT_TRUE(it2 > it);
     EXPECT_TRUE(it2 >= it);
-    EXPECT_TRUE(Scilib::end(s) > it2);
-    EXPECT_TRUE(Scilib::end(s) >= it2);
+    EXPECT_TRUE(Sci::end(s) > it2);
+    EXPECT_TRUE(Sci::end(s) >= it2);
 }
 
 TEST(TestMDSpanIterator, BeginEnd)
 {
     std::vector<int> a{1, 2, 3, 4};
-    Scilib::Vector<int> va(a, a.size());
+    Sci::Vector<int> va(a, a.size());
 
     auto s = va.view();
 
-    auto it = Scilib::begin(s);
+    auto it = Sci::begin(s);
     auto first = it;
     EXPECT_TRUE(it == first);
     EXPECT_TRUE(*it == 1);
 
-    auto beyond = Scilib::end(s);
+    auto beyond = Sci::end(s);
     EXPECT_TRUE(it != beyond);
 
     EXPECT_TRUE(beyond - first == 4);
@@ -75,7 +75,7 @@ TEST(TestMDSpanIterator, BeginEnd)
 
     it = first;
     EXPECT_TRUE(it == first);
-    while (it != Scilib::end(s)) {
+    while (it != Sci::end(s)) {
         *it = 5;
         ++it;
     }
@@ -83,7 +83,7 @@ TEST(TestMDSpanIterator, BeginEnd)
     EXPECT_TRUE(it == beyond);
     EXPECT_TRUE(it - beyond == 0);
 
-    for (auto iter = Scilib::begin(s); iter != Scilib::end(s); ++iter) {
+    for (auto iter = Sci::begin(s); iter != Sci::end(s); ++iter) {
         EXPECT_TRUE((*iter) == 5);
     }
 }

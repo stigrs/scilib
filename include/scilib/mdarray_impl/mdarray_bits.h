@@ -16,7 +16,7 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace stdex = std::experimental;
 
 namespace __Detail {
@@ -60,6 +60,7 @@ template <class T, class Extents, class Layout>
 class MDArray {
 public:
     // clang-format on
+    using element_type = T;
     using value_type = std::remove_cv_t<T>;
     using layout_type = Layout;
     using container_type = std::vector<value_type>;
@@ -218,12 +219,24 @@ public:
 
     constexpr size_type size() const noexcept { return c_.size(); }
 
+    constexpr std::ptrdiff_t ssize() const noexcept
+    {
+        return static_cast<std::ptrdiff_t>(c_.size());
+    }
+
     constexpr size_type max_size() const noexcept { return c_.max_size(); }
 
     constexpr size_type extent(size_type dim) const noexcept
     {
         assert(dim >= 0 && dim < Extents::rank());
         return v_.extent(dim);
+    }
+
+    // Signed extent.
+    constexpr std::ptrdiff_t sextent(size_type dim) const noexcept
+    {
+        assert(dim >= 0 && dim < Extents::rank());
+        return static_cast<std::ptrdiff_t>(v_.extent(dim));
     }
 
     template <class... Exts>
@@ -320,6 +333,6 @@ private:
     view_type v_;
 };
 
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_MDARRAY_BITS_H

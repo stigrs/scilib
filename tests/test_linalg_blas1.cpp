@@ -14,11 +14,11 @@ TEST(TestLinAlg, TestAdd)
     std::vector<int> data = {1, 2, 3};
     std::vector<int> ans = {2, 4, 6};
 
-    Scilib::Vector<int> x(data, data.size());
-    Scilib::Vector<int> y(data, data.size());
-    Scilib::Vector<int> z(data.size());
+    Sci::Vector<int> x(data, data.size());
+    Sci::Vector<int> y(data, data.size());
+    Sci::Vector<int> z(data.size());
 
-    Scilib::Linalg::add(x, y, z);
+    Sci::Linalg::add(x, y, z);
 
     for (std::size_t i = 0; i < z.size(); ++i) {
         EXPECT_EQ(z(i), ans[i]);
@@ -27,17 +27,17 @@ TEST(TestLinAlg, TestAdd)
 
 TEST(TestLinalg, TestAbsSum)
 {
-    Scilib::Vector<int> v(std::vector<int>{1, 2, 3, -4}, 4);
-    EXPECT_EQ(Scilib::Linalg::abs_sum(v), 10);
+    Sci::Vector<int> v(std::vector<int>{1, 2, 3, -4}, 4);
+    EXPECT_EQ(Sci::Linalg::abs_sum(v), 10);
 }
 
 TEST(TestLinalg, TestAxpy)
 {
     std::vector<int> ans = {4, 8, 12, 16, 20};
-    Scilib::Vector<int> x(std::vector<int>{1, 2, 3, 4, 5}, 5);
-    Scilib::Vector<int> y(std::vector<int>{2, 4, 6, 8, 10}, 5);
+    Sci::Vector<int> x(std::vector<int>{1, 2, 3, 4, 5}, 5);
+    Sci::Vector<int> y(std::vector<int>{2, 4, 6, 8, 10}, 5);
 
-    Scilib::Linalg::axpy(2, x, y);
+    Sci::Linalg::axpy(2, x, y);
     for (std::size_t i = 0; i < x.size(); ++i) {
         EXPECT_EQ(y(i), ans[i]);
     }
@@ -45,28 +45,28 @@ TEST(TestLinalg, TestAxpy)
 
 TEST(TestLinalg, TestDot)
 {
-    Scilib::Vector<int> a(std::vector<int>{1, 3, -5}, 3);
-    Scilib::Vector<int> b(std::vector<int>{4, -2, -1}, 3);
+    Sci::Vector<int> a(std::vector<int>{1, 3, -5}, 3);
+    Sci::Vector<int> b(std::vector<int>{4, -2, -1}, 3);
 
-    EXPECT_EQ(Scilib::Linalg::dot(a, b), 3);
+    EXPECT_EQ(Sci::Linalg::dot(a, b), 3);
 }
 
 TEST(TestLinalg, TestIdxAbsMax)
 {
-    Scilib::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
-    EXPECT_EQ(Scilib::Linalg::idx_abs_max(v), 2UL);
+    Sci::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
+    EXPECT_EQ(Sci::Linalg::idx_abs_max(v), 2UL);
 }
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
-    Scilib::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
-    EXPECT_EQ(Scilib::Linalg::idx_abs_min(v), 0UL);
+    Sci::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
+    EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 0UL);
 }
 
 TEST(TestLinalg, TestNorm2)
 {
-    Scilib::Vector<double> v(std::vector<double>{1.0, 2.0, 3.0}, 3);
-    auto ans = Scilib::Linalg::norm2(v);
+    Sci::Vector<double> v(std::vector<double>{1.0, 2.0, 3.0}, 3);
+    auto ans = Sci::Linalg::norm2(v);
     EXPECT_EQ(ans * ans, 14.0);
 }
 
@@ -76,8 +76,8 @@ TEST(TestLinalg, TestNorm2Row)
     std::vector<double> aa = {1, 2, 3, 
                               4, 5, 6};
     // clang-format on
-    Scilib::Matrix<double> ma(aa, 2, 3);
-    auto ans = Scilib::Linalg::norm2(Scilib::row(ma.view(), 0));
+    Sci::Matrix<double> ma(aa, 2, 3);
+    auto ans = Sci::Linalg::norm2(Sci::row(ma.view(), 0));
     EXPECT_EQ(ans * ans, 14.0);
 }
 
@@ -86,8 +86,8 @@ TEST(TestLinalg, TestScaled)
     // clang-format off
     std::vector<double> a_data = {1, 2, 3, 4, 5, 6};
     // clang-format on
-    Scilib::Vector<double> a(a_data, 6);
-    auto ans = Scilib::Linalg::scaled(2.0, a);
+    Sci::Vector<double> a(a_data, 6);
+    auto ans = Sci::Linalg::scaled(2.0, a);
 
     for (std::size_t i = 0; i < ans.size(); ++i) {
         EXPECT_EQ(ans(i), 2.0 * (1.0 + i));

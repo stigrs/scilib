@@ -10,7 +10,7 @@
 #include <experimental/mdspan>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -38,13 +38,13 @@ inline auto dot(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
 }
 
 template <class T, class Layout_x, class Layout_y>
-inline T dot(const Scilib::Vector<T, Layout_x>& x,
-             const Scilib::Vector<T, Layout_y>& y)
+inline T dot(const Sci::Vector<T, Layout_x>& x,
+             const Sci::Vector<T, Layout_y>& y)
 {
     return dot(x.view(), y.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS1_DOT_H

@@ -20,13 +20,13 @@
 #include <complex>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 // Compute eigenvalues and eigenvectors of a real symmetric matrix.
 template <class Layout>
-inline void eigs(Scilib::Matrix_view<double, Layout> a,
-                 Scilib::Vector_view<double, Layout> w,
+inline void eigs(Sci::Matrix_view<double, Layout> a,
+                 Sci::Vector_view<double, Layout> w,
                  double abstol = -1.0 /* use default value */)
 {
     static_assert(a.is_contiguous());
@@ -48,8 +48,8 @@ inline void eigs(Scilib::Matrix_view<double, Layout> a,
     double vl = 0.0;
     double vu = 0.0;
 
-    Scilib::Vector<BLAS_INT, Layout> isuppz(2 * n);
-    Scilib::Matrix<double, Layout> z(ldz, n);
+    Sci::Vector<BLAS_INT, Layout> isuppz(2 * n);
+    Sci::Matrix<double, Layout> z(ldz, n);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
@@ -62,12 +62,12 @@ inline void eigs(Scilib::Matrix_view<double, Layout> a,
     if (info != 0) {
         throw std::runtime_error("dsyevr failed");
     }
-    Scilib::copy(z.view(), a);
+    Sci::copy(z.view(), a);
 }
 
 template <class Layout>
-inline void eigs(Scilib::Matrix<double, Layout>& a,
-                 Scilib::Vector<double, Layout>& w,
+inline void eigs(Sci::Matrix<double, Layout>& a,
+                 Sci::Vector<double, Layout>& w,
                  double abstol = -1.0 /* use default value */)
 {
     eigs(a.view(), w.view(), abstol);
@@ -75,11 +75,11 @@ inline void eigs(Scilib::Matrix<double, Layout>& a,
 
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
 template <class Layout>
-void eig(Scilib::Matrix_view<double, Layout> a,
-         Scilib::Matrix_view<std::complex<double>, Layout> evec,
-         Scilib::Vector_view<std::complex<double>, Layout> eval)
+void eig(Sci::Matrix_view<double, Layout> a,
+         Sci::Matrix_view<std::complex<double>, Layout> evec,
+         Sci::Vector_view<std::complex<double>, Layout> eval)
 {
-    using namespace Scilib;
+    using namespace Sci;
 
     static_assert(a.is_contiguous());
     static_assert(evec.is_contiguous());
@@ -92,10 +92,10 @@ void eig(Scilib::Matrix_view<double, Layout> a,
 
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
 
-    Scilib::Vector<double, Layout> wr(n);
-    Scilib::Vector<double, Layout> wi(n);
-    Scilib::Matrix<double, Layout> vr(n, n);
-    Scilib::Matrix<double, Layout> vl(n, n);
+    Sci::Vector<double, Layout> wr(n);
+    Sci::Vector<double, Layout> wi(n);
+    Sci::Matrix<double, Layout> vr(n, n);
+    Sci::Matrix<double, Layout> vl(n, n);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
@@ -126,14 +126,14 @@ void eig(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-void eig(Scilib::Matrix<double, Layout>& a,
-         Scilib::Matrix<std::complex<double>, Layout>& evec,
-         Scilib::Vector<std::complex<double>, Layout>& eval)
+void eig(Sci::Matrix<double, Layout>& a,
+         Sci::Matrix<std::complex<double>, Layout>& evec,
+         Sci::Vector<std::complex<double>, Layout>& eval)
 {
     eig(a.view(), evec.view(), eval.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_EIGENVALUE_H

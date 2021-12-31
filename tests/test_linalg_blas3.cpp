@@ -20,10 +20,10 @@ TEST(TestLinalg, TestMatrixMatrixProductInt)
                            139, 154};
     // clang-format on
 
-    Scilib::Matrix<int> ma(aa, 2, 3);
-    Scilib::Matrix<int> mb(bb, 3, 2);
-    Scilib::Matrix<int> ans(rr, 2, 2);
-    Scilib::Matrix<int> res = ma * mb;
+    Sci::Matrix<int> ma(aa, 2, 3);
+    Sci::Matrix<int> mb(bb, 3, 2);
+    Sci::Matrix<int> ans(rr, 2, 2);
+    Sci::Matrix<int> res = ma * mb;
 
     EXPECT_EQ(ans, res);
 }
@@ -40,12 +40,12 @@ TEST(TestLinalg, TestMatrixMatrixProductDouble)
                               139, 154};
     // clang-format on
 
-    Scilib::Matrix<double> ma(aa, 2, 3);
-    Scilib::Matrix<double> mb(bb, 3, 2);
-    Scilib::Matrix<double> ans(rr, 2, 2);
-    Scilib::Matrix<double> res(2, 2);
+    Sci::Matrix<double> ma(aa, 2, 3);
+    Sci::Matrix<double> mb(bb, 3, 2);
+    Sci::Matrix<double> ans(rr, 2, 2);
+    Sci::Matrix<double> res(2, 2);
 
-    Scilib::Linalg::matrix_product(ma, mb, res);
+    Sci::Linalg::matrix_product(ma, mb, res);
 
     EXPECT_EQ(ans, res);
 }
@@ -62,12 +62,12 @@ TEST(TestLinalg, TestMatrixMatrixProductDoubleColMajor)
                                64, 154};
     // clang-format on
 
-    Scilib::Matrix<double, stdex::layout_left> ma(aa, 2, 3);
-    Scilib::Matrix<double, stdex::layout_left> mb(bb, 3, 2);
-    Scilib::Matrix<double, stdex::layout_left> ans(rr, 2, 2);
-    Scilib::Matrix<double, stdex::layout_left> res(2, 2);
+    Sci::Matrix<double, stdex::layout_left> ma(aa, 2, 3);
+    Sci::Matrix<double, stdex::layout_left> mb(bb, 3, 2);
+    Sci::Matrix<double, stdex::layout_left> ans(rr, 2, 2);
+    Sci::Matrix<double, stdex::layout_left> res(2, 2);
 
-    Scilib::Linalg::matrix_product(ma, mb, res);
+    Sci::Linalg::matrix_product(ma, mb, res);
 
     EXPECT_EQ(ans, res);
 }
@@ -83,12 +83,12 @@ TEST(TestLinalg, TestMatrixMatrixProductComplex)
                                             {100.0, -6.0}, {152.0, -2.0}};
     // clang-format on
 
-    Scilib::Matrix<std::complex<double>> ma(aa, 2, 2);
-    Scilib::Matrix<std::complex<double>> mb(bb, 2, 2);
-    Scilib::Matrix<std::complex<double>> ans(rr, 2, 2);
-    Scilib::Matrix<std::complex<double>> res(2, 2);
+    Sci::Matrix<std::complex<double>> ma(aa, 2, 2);
+    Sci::Matrix<std::complex<double>> mb(bb, 2, 2);
+    Sci::Matrix<std::complex<double>> ans(rr, 2, 2);
+    Sci::Matrix<std::complex<double>> res(2, 2);
 
-    Scilib::Linalg::matrix_product(ma, mb, res);
+    Sci::Linalg::matrix_product(ma, mb, res);
 
     EXPECT_EQ(ans, res);
 }

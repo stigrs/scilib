@@ -15,7 +15,7 @@
 
 #include <experimental/mdspan>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -41,12 +41,12 @@ inline double norm2(
 }
 
 template <class Layout>
-inline double norm2(const Scilib::Vector<double, Layout>& x)
+inline double norm2(const Sci::Vector<double, Layout>& x)
 {
     return norm2(x.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS1_VECTOR_NORM2_H

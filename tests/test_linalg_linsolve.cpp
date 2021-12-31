@@ -11,8 +11,8 @@
 
 TEST(TestLinalg, TestLinsolve)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> A_data = {
@@ -39,8 +39,8 @@ TEST(TestLinalg, TestLinsolve)
 
 TEST(TestLinalg, TestLinsolveColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // clang-format off
     std::vector<double> A_data = {

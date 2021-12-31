@@ -12,8 +12,8 @@
 
 TEST(TestLinalg, TestMatrixPower)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Example from Numpy:
     // clang-format off
@@ -81,8 +81,8 @@ TEST(TestLinalg, TestMatrixPower)
 
 TEST(TestLinalg, TestMatrixPowerColMajor)
 {
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     // Example from Numpy:
     // clang-format off

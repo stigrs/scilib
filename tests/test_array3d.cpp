@@ -9,7 +9,7 @@
 
 TEST(TestMDArray, TestArray3D)
 {
-    Scilib::Array3D<int> a(3, 4, 5);
+    Sci::Array3D<int> a(3, 4, 5);
     a = 1;
 
     for (std::size_t i = 0; i < a.extent(0); ++i) {

@@ -11,7 +11,7 @@
 #include <cmath>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
@@ -38,13 +38,12 @@ idx_abs_min(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 }
 
 template <class T, class Layout>
-inline stdex::extents<>::size_type
-idx_abs_min(const Scilib::Vector<T, Layout>& x)
+inline stdex::extents<>::size_type idx_abs_min(const Sci::Vector<T, Layout>& x)
 {
     return idx_abs_min(x.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_BLAS1_IDX_ABS_MIN_H

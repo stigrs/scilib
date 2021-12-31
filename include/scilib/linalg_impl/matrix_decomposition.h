@@ -20,15 +20,15 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
 
 // LU factorization.
 template <class Layout>
-inline void lu(Scilib::Matrix_view<double, Layout> a,
-               Scilib::Vector_view<BLAS_INT, Layout> ipiv)
+inline void lu(Sci::Matrix_view<double, Layout> a,
+               Sci::Vector_view<BLAS_INT, Layout> ipiv)
 {
     static_assert(a.is_contiguous());
     static_assert(ipiv.is_contiguous());
@@ -57,17 +57,17 @@ inline void lu(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void lu(Scilib::Matrix<double, Layout>& a,
-               Scilib::Vector<BLAS_INT, Layout>& ipiv)
+inline void lu(Sci::Matrix<double, Layout>& a,
+               Sci::Vector<BLAS_INT, Layout>& ipiv)
 {
     lu(a.view(), ipiv.view());
 }
 
 // QR factorization.
 template <class Layout>
-inline void qr(Scilib::Matrix_view<double, Layout> a,
-               Scilib::Matrix_view<double, Layout> q,
-               Scilib::Matrix_view<double, Layout> r)
+inline void qr(Sci::Matrix_view<double, Layout> a,
+               Sci::Matrix_view<double, Layout> q,
+               Sci::Matrix_view<double, Layout> r)
 {
     assert(q.extent(0) == a.extent(0) && q.extent(1) == a.extent(1));
     assert(r.extent(0) == a.extent(0) && r.extent(1) == a.extent(1));
@@ -82,8 +82,8 @@ inline void qr(Scilib::Matrix_view<double, Layout> a,
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
-    Scilib::copy(a, q);
-    Scilib::Vector<double, Layout> tau(std::min(m, n));
+    Sci::copy(a, q);
+    Sci::Vector<double, Layout> tau(std::min(m, n));
 
     // Compute QR factorization:
 
@@ -107,19 +107,19 @@ inline void qr(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void qr(Scilib::Matrix<double, Layout>& a,
-               Scilib::Matrix<double, Layout>& q,
-               Scilib::Matrix<double, Layout>& r)
+inline void qr(Sci::Matrix<double, Layout>& a,
+               Sci::Matrix<double, Layout>& q,
+               Sci::Matrix<double, Layout>& r)
 {
     qr(a.view(), q.view(), r.view());
 }
 
 // Singular value decomposition.
 template <class Layout>
-inline void svd(Scilib::Matrix_view<double, Layout> a,
-                Scilib::Vector_view<double, Layout> s,
-                Scilib::Matrix_view<double, Layout> u,
-                Scilib::Matrix_view<double, Layout> vt)
+inline void svd(Sci::Matrix_view<double, Layout> a,
+                Sci::Vector_view<double, Layout> s,
+                Sci::Matrix_view<double, Layout> u,
+                Sci::Matrix_view<double, Layout> vt)
 {
     const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
@@ -140,7 +140,7 @@ inline void svd(Scilib::Matrix_view<double, Layout> a,
         lda = m;
     }
 
-    Scilib::Vector<double, Layout> superb(std::min(m, n) - 1);
+    Sci::Vector<double, Layout> superb(std::min(m, n) - 1);
 
     BLAS_INT info =
         LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data(), lda, s.data(),
@@ -151,15 +151,15 @@ inline void svd(Scilib::Matrix_view<double, Layout> a,
 }
 
 template <class Layout>
-inline void svd(Scilib::Matrix<double, Layout>& a,
-                Scilib::Vector<double, Layout>& s,
-                Scilib::Matrix<double, Layout>& u,
-                Scilib::Matrix<double, Layout>& vt)
+inline void svd(Sci::Matrix<double, Layout>& a,
+                Sci::Vector<double, Layout>& s,
+                Sci::Matrix<double, Layout>& u,
+                Sci::Matrix<double, Layout>& vt)
 {
     svd(a.view(), s.view(), u.view(), vt.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_MATRIX_DECOMPOSITION_H

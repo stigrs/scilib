@@ -9,7 +9,7 @@
 
 TEST(TestMDArray, TestArray4D)
 {
-    Scilib::Array4D<int> a(3, 4, 5, 6);
+    Sci::Array4D<int> a(3, 4, 5, 6);
     a = 1;
 
     for (std::size_t i = 0; i < a.extent(0); ++i) {

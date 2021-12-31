@@ -14,13 +14,13 @@
 #include <cassert>
 #include <type_traits>
 
-namespace Scilib {
+namespace Sci {
 namespace Linalg {
 
 // clang-format off
 template <class T, class Layout>
     requires std::is_same_v<std::remove_cv_t<T>, double>
-auto expm(Scilib::Matrix_view<T, Layout> a)
+auto expm(Sci::Matrix_view<T, Layout> a)
 // clang-format on
 {
     // Algorithm: Matlab expm1 (demo directory).
@@ -29,8 +29,8 @@ auto expm(Scilib::Matrix_view<T, Layout> a)
     // compute the exponential of a matrix, twenty-five years later.
     // SIAM Review, 45, 3-000.
 
-    using namespace Scilib;
-    using namespace Scilib::Linalg;
+    using namespace Sci;
+    using namespace Sci::Linalg;
 
     using value_type = std::remove_cv_t<T>;
 
@@ -72,13 +72,12 @@ auto expm(Scilib::Matrix_view<T, Layout> a)
 }
 
 template <class Layout>
-inline Scilib::Matrix<double, Layout>
-expm(const Scilib::Matrix<double, Layout>& a)
+inline Sci::Matrix<double, Layout> expm(const Sci::Matrix<double, Layout>& a)
 {
     return expm(a.view());
 }
 
 } // namespace Linalg
-} // namespace Scilib
+} // namespace Sci
 
 #endif // SCILIB_LINALG_EXPM_H

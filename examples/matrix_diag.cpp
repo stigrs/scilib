@@ -19,9 +19,9 @@ int main()
         7,  8,  9
     };
     // clang-format on
-    Scilib::Matrix<int> m(data, 3, 3);
+    Sci::Matrix<int> m(data, 3, 3);
     std::cout << "matrix:\n" << m << '\n';
 
-    Scilib::Linalg::fill(Scilib::diag(m), 10);
+    Sci::Linalg::fill(Sci::diag(m), 10);
     std::cout << "matrix:\n" << m << '\n';
 }

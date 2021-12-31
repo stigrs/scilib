@@ -20,9 +20,9 @@ void benchmark(BLAS_INT m, BLAS_INT n)
     const BLAS_INT ldb = n;
     const BLAS_INT ldc = n;
 
-    Scilib::Matrix<double> A(m, k);
-    Scilib::Matrix<double> B(k, n);
-    Scilib::Matrix<double> C(m, n);
+    Sci::Matrix<double> A(m, k);
+    Sci::Matrix<double> B(k, n);
+    Sci::Matrix<double> C(m, n);
 
     A = 1.0;
     B = 1.0;
@@ -31,7 +31,7 @@ void benchmark(BLAS_INT m, BLAS_INT n)
 
     time_start = dsecnd();
     for (int it = 0; it < loop_count; ++it) {
-        Scilib::Linalg::matrix_product(A, B, C);
+        Sci::Linalg::matrix_product(A, B, C);
     }
     double time_end = dsecnd();
     double time_avg = (time_end - time_start) / loop_count;

@@ -11,7 +11,7 @@
 
 int main()
 {
-    using namespace Scilib;
+    using namespace Sci;
 
     std::string buf = "3 x 4\n \
         { 1  2  3  4\n \

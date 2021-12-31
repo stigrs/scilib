@@ -9,18 +9,22 @@
 
 #include <experimental/mdspan>
 #include <scilib/mdarray_impl/support.h>
+#include <cstddef>
 #include <vector>
 
 #if _MSC_VER >= 1927
 #include <concepts>
 #define STD_CONVERTIBLE_TO(X) std::convertible_to<X>
 #else
-#define STD_CONVERTIBLE_TO(X) Scilib::__Detail::convertible_to<X>
+#define STD_CONVERTIBLE_TO(X) Sci::__Detail::convertible_to<X>
 #endif
 
 namespace stdex = std::experimental;
 
-namespace Scilib {
+// Signed array index.
+using Index = std::ptrdiff_t;
+
+namespace Sci {
 
 using layout_left = stdex::layout_left;
 using layout_right = stdex::layout_right;
@@ -116,7 +120,7 @@ using Array7D = MDArray<T,
                                        stdex::dynamic_extent>,
                         Layout>;
 
-} // namespace Scilib
+} // namespace Sci
 
 #include <scilib/mdarray_impl/mdspan_iterator.h>
 #include <scilib/mdarray_impl/copy.h>
