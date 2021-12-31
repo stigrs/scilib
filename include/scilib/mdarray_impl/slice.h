@@ -33,6 +33,12 @@ inline auto first(Vector<T, Layout>& v, stdex::extents<>::size_type count)
     return first(v.view(), count);
 }
 
+template <class T, class Layout>
+inline auto first(const Vector<T, Layout>& v, stdex::extents<>::size_type count)
+{
+    return first(v.view(), count);
+}
+
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout,
@@ -47,6 +53,12 @@ inline auto last(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
 
 template <class T, class Layout>
 inline auto last(Vector<T, Layout>& x, stdex::extents<>::size_type count)
+{
+    return last(x.view(), count);
+}
+
+template <class T, class Layout>
+inline auto last(const Vector<T, Layout>& x, stdex::extents<>::size_type count)
 {
     return last(x.view(), count);
 }
@@ -69,6 +81,12 @@ inline auto row(Matrix<T, Layout>& m, stdex::extents<>::size_type i)
     return row(m.view(), i);
 }
 
+template <class T, class Layout>
+inline auto row(const Matrix<T, Layout>& m, stdex::extents<>::size_type i)
+{
+    return row(m.view(), i);
+}
+
 template <class T,
           stdex::extents<>::size_type nrows,
           stdex::extents<>::size_type ncols,
@@ -83,6 +101,12 @@ column(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
 
 template <class T, class Layout>
 inline auto column(Matrix<T, Layout>& m, stdex::extents<>::size_type i)
+{
+    return column(m.view(), i);
+}
+
+template <class T, class Layout>
+inline auto column(const Matrix<T, Layout>& m, stdex::extents<>::size_type i)
 {
     return column(m.view(), i);
 }
@@ -111,6 +135,12 @@ inline auto diag(Matrix<T, Layout>& m)
     return diag(m.view());
 }
 
+template <class T, class Layout>
+inline auto diag(const Matrix<T, Layout>& m)
+{
+    return diag(m.view());
+}
+
 template <class T,
           stdex::extents<>::size_type nrows,
           stdex::extents<>::size_type ncols,
@@ -128,6 +158,16 @@ inline auto submatrix(
 
 template <class T, class Layout>
 inline auto submatrix(Matrix<T, Layout>& m,
+                      const std::pair<stdex::extents<>::size_type,
+                                      stdex::extents<>::size_type>& row_slice,
+                      const std::pair<stdex::extents<>::size_type,
+                                      stdex::extents<>::size_type>& col_slice)
+{
+    return submatrix(m.view(), row_slice, col_slice);
+}
+
+template <class T, class Layout>
+inline auto submatrix(const Matrix<T, Layout>& m,
                       const std::pair<stdex::extents<>::size_type,
                                       stdex::extents<>::size_type>& row_slice,
                       const std::pair<stdex::extents<>::size_type,
