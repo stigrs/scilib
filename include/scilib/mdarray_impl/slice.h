@@ -149,39 +149,34 @@ inline auto diag(const Matrix<T, Layout>& m)
     return diag(m.view());
 }
 
+// clang-format off
 template <class T,
-          stdex::extents<>::size_type nrows,
-          stdex::extents<>::size_type ncols,
+          class Extents,
           class Layout,
-          class Accessor>
-inline auto submatrix(
-    stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
-    const std::pair<stdex::extents<>::size_type, stdex::extents<>::size_type>&
-        row_slice,
-    const std::pair<stdex::extents<>::size_type, stdex::extents<>::size_type>&
-        col_slice)
+          class Accessor,
+          class... SliceSpecs>
+    requires (
+        std::is_convertible_v<SliceSpecs, std::size_t>
+        || std::is_convertible_v<SliceSpecs, 
+                                 std::tuple<std::size_t, std::size_t>> 
+        || std::is_convertible_v<SliceSpecs, stdex::full_extent_t>)
+inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m,
+                  SliceSpecs... slices)
+// clang-format on
 {
-    return stdex::submdspan(m, row_slice, col_slice);
+    return stdex::submdspan(m, slices...);
 }
 
-template <class T, class Layout>
-inline auto submatrix(Matrix<T, Layout>& m,
-                      const std::pair<stdex::extents<>::size_type,
-                                      stdex::extents<>::size_type>& row_slice,
-                      const std::pair<stdex::extents<>::size_type,
-                                      stdex::extents<>::size_type>& col_slice)
+template <class T, class Extents, class Layout, class... SliceSpecs>
+inline auto slice(MDArray<T, Extents, Layout>& m, SliceSpecs... slices)
 {
-    return submatrix(m.view(), row_slice, col_slice);
+    return slice(m.view(), slices...);
 }
 
-template <class T, class Layout>
-inline auto submatrix(const Matrix<T, Layout>& m,
-                      const std::pair<stdex::extents<>::size_type,
-                                      stdex::extents<>::size_type>& row_slice,
-                      const std::pair<stdex::extents<>::size_type,
-                                      stdex::extents<>::size_type>& col_slice)
+template <class T, class Extents, class Layout, class... SliceSpecs>
+inline auto slice(const MDArray<T, Extents, Layout>& m, SliceSpecs... slices)
 {
-    return submatrix(m.view(), row_slice, col_slice);
+    return slice(m.view(), slices...);
 }
 
 } // namespace Sci

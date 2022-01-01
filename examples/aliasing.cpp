@@ -11,16 +11,16 @@ int main()
 
     std::cout << "Before:\n" << mat << '\n';
 
-    auto sub1 = mat.slice(seq(1, 3), seq(1, 3));
-    auto sub2 = mat.slice(seq(0, 2), seq(0, 2));
+    auto sub1 = slice(mat, seq(1, 3), seq(1, 3));
+    auto sub2 = slice(mat, seq(0, 2), seq(0, 2));
     copy(sub2, sub1);
     std::cout << "After:\n" << mat << '\n';
 
     mat = Matrix<int>(data, 3, 3);
     std::cout << "Before:\n" << mat << '\n';
 
-    Matrix<int> bv = mat.slice(seq(0, 2), seq(0, 2));
-    sub1 = mat.slice(seq(1, 3), seq(1, 3));
+    Matrix<int> bv = slice(mat, seq(0, 2), seq(0, 2));
+    sub1 = slice(mat, seq(1, 3), seq(1, 3));
     copy(bv.view(), sub1);
     std::cout << "After:\n" << mat << '\n';
 }

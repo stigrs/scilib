@@ -179,19 +179,6 @@ public:
         return v_(indices...);
     }
 
-    // clang-format off
-    template <class... SliceSpecs>
-        requires (
-            std::is_convertible_v<SliceSpecs, std::size_t>
-            || std::is_convertible_v<SliceSpecs, 
-                                     std::tuple<std::size_t, std::size_t>> 
-            || std::is_convertible_v<SliceSpecs, stdex::full_extent_t>)
-    constexpr auto slice(SliceSpecs... slices) noexcept
-    // clang-format on
-    {
-        return stdex::submdspan(v_, slices...);
-    }
-
     constexpr iterator begin() noexcept { return c_.begin(); }
     constexpr const_iterator begin() const noexcept { return c_.begin(); }
     constexpr const_iterator cbegin() const noexcept { return c_.cbegin(); }

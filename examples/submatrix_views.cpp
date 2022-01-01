@@ -26,7 +26,7 @@ int main()
     Sci::Vector<int> c = Sci::column(m, 2);
     std::cout << "m.column(2):\n" << c << '\n';
 
-    auto sub = Sci::submatrix(m, {1, 3}, {1, 4});
+    auto sub = Sci::slice(m, Sci::seq(1, 3), Sci::seq(1, 4));
     std::cout << "m.sub:\n";
     Sci::print(std::cout, sub);
     std::cout << '\n';
