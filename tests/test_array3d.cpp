@@ -33,9 +33,9 @@ TEST(TestMDArray, TestConstCorrectness)
     Sci::Array3D<int> a(5, 5, 5);
     Sci::Array3D<int> b(5, 5, 5);
 
-    for (std::size_t i = 0; i < a.extent(0); ++i) {
-        for (std::size_t j = 0; j < a.extent(1); ++j) {
-            for (std::size_t k = 0; k < a.extent(2); ++k) {
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            for (int k = 0; k < 5; ++k) {
                 a(i, j, k) = i + j + k;
                 b(i, j, k) = i + j + k;
             }
