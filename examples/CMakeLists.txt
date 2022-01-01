@@ -14,6 +14,7 @@ if(NOT TARGET scilib::scilib)
 endif()
 
 set(PROGRAMS 
+    aliasing
     matrix_diag
     matrix_io
     mdarray_properties
