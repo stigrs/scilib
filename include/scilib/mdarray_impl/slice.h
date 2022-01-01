@@ -9,11 +9,19 @@
 
 #include <experimental/mdspan>
 #include <array>
+#include <cstddef>
 #include <utility>
 #include <type_traits>
 
 namespace Sci {
 namespace stdex = std::experimental;
+
+// Generate a tuple for slicing.
+inline std::tuple<std::size_t, std::size_t> seq(std::size_t first,
+                                                std::size_t last)
+{
+    return std::tuple<std::size_t, std::size_t>{first, last};
+}
 
 template <class T,
           stdex::extents<>::size_type ext,

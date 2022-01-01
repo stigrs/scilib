@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <functional>
 #include <cassert>
-#include <utility>
 #include <type_traits>
 
 namespace Sci {
@@ -48,13 +47,6 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 }
 
 } // namespace __Detail
-
-// Generate a tuple for slicing.
-inline std::tuple<std::size_t, std::size_t> seq(std::size_t first,
-                                                std::size_t last)
-{
-    return std::tuple<std::size_t, std::size_t>{first, last};
-}
 
 // Dense multidimensional array class for numerical computing using mdspan
 // for views.

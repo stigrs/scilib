@@ -15,6 +15,7 @@ endif()
 
 set(PROGRAMS 
     aliasing
+    const_correctness
     matrix_diag
     matrix_io
     mdarray_properties

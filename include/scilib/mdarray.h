@@ -27,9 +27,6 @@ using Index = std::ptrdiff_t;
 
 namespace Sci {
 
-// Generate a tuple for slicing.
-std::tuple<std::size_t, std::size_t> seq(std::size_t first, std::size_t last);
-
 using layout_left = stdex::layout_left;
 using layout_right = stdex::layout_right;
 using layout_stride = stdex::layout_stride;
