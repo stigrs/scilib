@@ -149,20 +149,14 @@ inline auto diag(const Matrix<T, Layout>& m)
     return diag(m.view());
 }
 
-// clang-format off
 template <class T,
           class Extents,
           class Layout,
           class Accessor,
           class... SliceSpecs>
-    requires (
-        std::is_convertible_v<SliceSpecs, std::size_t>
-        || std::is_convertible_v<SliceSpecs, 
-                                 std::tuple<std::size_t, std::size_t>> 
-        || std::is_convertible_v<SliceSpecs, stdex::full_extent_t>)
+    // Check of SliceSpecs is done by submdspan
 inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m,
                   SliceSpecs... slices)
-// clang-format on
 {
     return stdex::submdspan(m, slices...);
 }
