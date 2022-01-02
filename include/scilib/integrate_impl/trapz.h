@@ -39,8 +39,8 @@ inline auto trapz(T_scalar xlo,
     return ans *= step;
 }
 
-template <class T, class Layout>
-inline auto trapz(T xlo, T xup, const Sci::Vector<T, Layout>& x)
+template <class T, class Layout, class Allocator>
+inline auto trapz(T xlo, T xup, const Sci::Vector<T, Layout, Allocator>& x)
 {
     return trapz(xlo, xup, x.view());
 }

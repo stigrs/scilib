@@ -42,11 +42,17 @@ axpy(const T_scalar& scalar,
 }
 
 // clang-format off
-template <class T_scalar, class T_x, class Layout_x, class T_y, class Layout_y>
+template <class T_scalar, 
+          class T_x, 
+          class Layout_x, 
+          class Allocator_x, 
+          class T_y, 
+          class Layout_y,
+          class Allocator_y>
     requires (!std::is_const_v<T_y>)
 inline void axpy(const T_scalar& scalar,
-                 const Sci::Vector<T_x, Layout_x>& x,
-                 Sci::Vector<T_y, Layout_y>& y)
+                 const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
+                 Sci::Vector<T_y, Layout_y, Allocator_y>& y)
 // clang-format on
 {
     axpy(scalar, x.view(), y.view());

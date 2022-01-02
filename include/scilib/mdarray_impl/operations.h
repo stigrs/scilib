@@ -25,8 +25,8 @@ namespace stdex = std::experimental;
 //------------------------------------------------------------------------------
 // Properties:
 
-template <class T, class Extents, class Layout>
-constexpr std::size_t rank(const MDArray<T, Extents, Layout>& m)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr std::size_t rank(const MDArray<T, Extents, Layout, Allocator>& m)
 {
     return m.rank();
 }
@@ -37,8 +37,8 @@ constexpr std::size_t rank(stdex::mdspan<T, Extents, Layout, Accessor> m)
     return m.rank();
 }
 
-template <class T, class Extents, class Layout>
-constexpr std::ptrdiff_t ssize(const MDArray<T, Extents, Layout>& m)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr std::ptrdiff_t ssize(const MDArray<T, Extents, Layout, Allocator>& m)
 {
     return m.ssize();
 }
@@ -49,9 +49,9 @@ constexpr std::ptrdiff_t ssize(stdex::mdspan<T, Extents, Layout, Accessor> m)
     return static_cast<std::ptrdiff_t>(m.size());
 }
 
-template <class T, class Extents, class Layout>
-constexpr std::ptrdiff_t sextent(const MDArray<T, Extents, Layout>& m,
-                                 std::size_t dim)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr std::ptrdiff_t sextent(
+    const MDArray<T, Extents, Layout, Allocator>& m, std::size_t dim)
 {
     return m.sextent(dim);
 }
@@ -66,16 +66,16 @@ constexpr std::ptrdiff_t sextent(stdex::mdspan<T, Extents, Layout, Accessor> m,
 //------------------------------------------------------------------------------
 // Equality comparisons:
 
-template <class T, class Extents, class Layout>
-constexpr bool operator==(const MDArray<T, Extents, Layout>& a,
-                          const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr bool operator==(const MDArray<T, Extents, Layout, Allocator>& a,
+                          const MDArray<T, Extents, Layout, Allocator>& b)
 {
     return std::equal(a.begin(), a.end(), b.begin());
 }
 
-template <class T, class Extents, class Layout>
-constexpr bool operator!=(const MDArray<T, Extents, Layout>& a,
-                          const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr bool operator!=(const MDArray<T, Extents, Layout, Allocator>& a,
+                          const MDArray<T, Extents, Layout, Allocator>& b)
 {
     bool result = true;
     if (a.view().extents() == b.view().extents()) {
@@ -84,30 +84,30 @@ constexpr bool operator!=(const MDArray<T, Extents, Layout>& a,
     return result;
 }
 
-template <class T, class Extents, class Layout>
-constexpr bool operator<(const MDArray<T, Extents, Layout>& a,
-                         const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr bool operator<(const MDArray<T, Extents, Layout, Allocator>& a,
+                         const MDArray<T, Extents, Layout, Allocator>& b)
 {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
 }
 
-template <class T, class Extents, class Layout>
-constexpr bool operator>(const MDArray<T, Extents, Layout>& a,
-                         const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr bool operator>(const MDArray<T, Extents, Layout, Allocator>& a,
+                         const MDArray<T, Extents, Layout, Allocator>& b)
 {
     return b < a;
 }
 
-template <class T, class Extents, class Layout>
-constexpr bool operator<=(const MDArray<T, Extents, Layout>& a,
-                          const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr bool operator<=(const MDArray<T, Extents, Layout, Allocator>& a,
+                          const MDArray<T, Extents, Layout, Allocator>& b)
 {
     return !(a > b);
 }
 
-template <class T, class Extents, class Layout>
-constexpr bool operator>=(const MDArray<T, Extents, Layout>& a,
-                          const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr bool operator>=(const MDArray<T, Extents, Layout, Allocator>& a,
+                          const MDArray<T, Extents, Layout, Allocator>& b)
 {
     return !(a < b);
 }
@@ -115,86 +115,87 @@ constexpr bool operator>=(const MDArray<T, Extents, Layout>& a,
 //------------------------------------------------------------------------------
 // Arithmetic operations:
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator-(const MDArray<T, Extents, Layout>& v)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator-(const MDArray<T, Extents, Layout, Allocator>& v)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res *= -T{1};
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator+(const MDArray<T, Extents, Layout>& a,
-          const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator+(const MDArray<T, Extents, Layout, Allocator>& a,
+          const MDArray<T, Extents, Layout, Allocator>& b)
 {
-    MDArray<T, Extents, Layout> res = a;
+    MDArray<T, Extents, Layout, Allocator> res = a;
     return res += b;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator-(const MDArray<T, Extents, Layout>& a,
-          const MDArray<T, Extents, Layout>& b)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator-(const MDArray<T, Extents, Layout, Allocator>& a,
+          const MDArray<T, Extents, Layout, Allocator>& b)
 {
-    MDArray<T, Extents, Layout> res = a;
+    MDArray<T, Extents, Layout, Allocator> res = a;
     return res -= b;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator+(const MDArray<T, Extents, Layout>& v, const T& scalar)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator+(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res += scalar;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator-(const MDArray<T, Extents, Layout>& v, const T& scalar)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator-(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res -= scalar;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator*(const MDArray<T, Extents, Layout>& v, const T& scalar)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator*(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res *= scalar;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator*(const T& scalar, const MDArray<T, Extents, Layout>& v)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator*(const T& scalar, const MDArray<T, Extents, Layout, Allocator>& v)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res *= scalar;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator/(const MDArray<T, Extents, Layout>& v, const T& scalar)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator/(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res /= scalar;
 }
 
-template <class T, class Extents, class Layout>
-constexpr MDArray<T, Extents, Layout>
-operator%(const MDArray<T, Extents, Layout>& v, const T& scalar)
+template <class T, class Extents, class Layout, class Allocator>
+constexpr MDArray<T, Extents, Layout, Allocator>
+operator%(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout> res = v;
+    MDArray<T, Extents, Layout, Allocator> res = v;
     return res %= scalar;
 }
 
 //------------------------------------------------------------------------------
 // Matrix-matrix product:
 
-template <class T, class Layout>
-constexpr Matrix<T, Layout> operator*(const Matrix<T, Layout>& a,
-                                      const Matrix<T, Layout>& b)
+template <class T, class Layout, class Allocator>
+constexpr Matrix<T, Layout, Allocator> 
+operator*(const Matrix<T, Layout, Allocator>& a, 
+          const Matrix<T, Layout, Allocator>& b)
 {
     return Sci::Linalg::matrix_product(a.view(), b.view());
 }
@@ -202,9 +203,10 @@ constexpr Matrix<T, Layout> operator*(const Matrix<T, Layout>& a,
 //------------------------------------------------------------------------------
 // Matrix-vector product:
 
-template <class T, class Layout>
-constexpr Vector<T, Layout> operator*(const Matrix<T, Layout>& a,
-                                      const Vector<T, Layout>& x)
+template <class T, class Layout, class Allocator>
+constexpr Vector<T, Layout, Allocator> 
+operator*(const Matrix<T, Layout, Allocator>& a,
+          const Vector<T, Layout, Allocator>& x)
 {
     return Sci::Linalg::matrix_vector_product(a.view(), x.view());
 }
@@ -268,8 +270,9 @@ inline void print(std::ostream& ostrm,
     ostrm << "}\n";
 }
 
-template <class T, class Layout>
-inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline std::ostream& 
+operator<<(std::ostream& ostrm, const Vector<T, Layout, Allocator>& v)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -284,8 +287,9 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout>& v)
     return ostrm;
 }
 
-template <class T, class Layout>
-inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline std::istream& 
+operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -326,8 +330,9 @@ print(std::ostream& ostrm,
     ostrm << "}\n";
 }
 
-template <class T, class Layout>
-inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout>& m)
+template <class T, class Layout, class Allocator>
+inline std::ostream& 
+operator<<(std::ostream& ostrm, const Matrix<T, Layout, Allocator>& m)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -344,8 +349,9 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout>& m)
     return ostrm;
 }
 
-template <class T, class Layout>
-inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
+template <class T, class Layout, class Allocator>
+inline std::istream& 
+operator>>(std::istream& istrm, Matrix<T, Layout, Allocator>& m)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -361,7 +367,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    auto mtmp = Matrix<T, stdex::layout_right>(tmp, nr, nc);
+    auto mtmp = Matrix<T, stdex::layout_right, Allocator>(tmp, nr, nc);
     m = mtmp.view();
     return istrm;
 }

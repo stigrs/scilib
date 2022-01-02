@@ -37,9 +37,13 @@ inline auto dot(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
     return result;
 }
 
-template <class T, class Layout_x, class Layout_y>
-inline T dot(const Sci::Vector<T, Layout_x>& x,
-             const Sci::Vector<T, Layout_y>& y)
+template <class T, 
+          class Layout_x, 
+          class Allocator_x, 
+          class Layout_y, 
+          class Allocator_y>
+inline T dot(const Sci::Vector<T, Layout_x, Allocator_x>& x,
+             const Sci::Vector<T, Layout_y, Allocator_y>& y)
 {
     return dot(x.view(), y.view());
 }

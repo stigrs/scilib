@@ -55,7 +55,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // column-major (layout_left).
 //
 // clang-format off
-template <class T, class Extents, class Layout>
+template <class T, class Extents, class Layout, Allocator>
     requires Extents_has_rank<Extents> 
 class MDArray {
 public:
@@ -63,7 +63,7 @@ public:
     using element_type = T;
     using value_type = std::remove_cv_t<T>;
     using layout_type = Layout;
-    using container_type = std::vector<value_type>;
+    using container_type = std::vector<value_type, Allocator>;
     using view_type = stdex::mdspan<T, Extents, layout_type>;
     using const_view_type = stdex::mdspan<const T, Extents, layout_type>;
     using size_type = stdex::extents<>::size_type;
@@ -92,7 +92,7 @@ public:
 
     template <class... Exts>
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
-        : c_(m),
+        : c_(m.begin(), m.end()),
           v_(c_.data(),
              std::array<size_type, Extents::rank()>{
                  static_cast<size_type>(exts)...})

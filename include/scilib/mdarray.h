@@ -20,6 +20,14 @@
 #define STD_CONVERTIBLE_TO(X) Sci::__Detail::convertible_to<X>
 #endif
 
+#ifdef USE_MKL_ALLOCATOR
+#include <mkl.h>
+#define MDARRAY_ALLOCATOR(X) Sci::MKL_allocator<X>
+#else
+#include <memory>
+#define MDARRAY_ALLOCATOR(X) std::allocator<X>
+#endif
+
 namespace stdex = std::experimental;
 
 // Signed array index.
@@ -62,45 +70,67 @@ concept MDArray_type =
     requires (M /* m */) { { M::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
 };
 
-template <class T, class Extents, class Layout = stdex::layout_right> 
+template <class T, 
+          class Extents, 
+          class Layout = stdex::layout_right, 
+          class Allocator = MDARRAY_ALLOCATOR(T)> 
     requires Extents_has_rank<Extents> 
 class MDArray;
 // clang-format on
 
-template <class T, class Layout = stdex::layout_right>
-using Vector = MDArray<T, stdex::extents<stdex::dynamic_extent>, Layout>;
+template <class T, 
+          class Layout = stdex::layout_right, 
+          class Allocator = MDARRAY_ALLOCATOR(T)>
+using Vector = MDArray<T, 
+                       stdex::extents<stdex::dynamic_extent>, 
+                       Layout, 
+                       Allocator>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class T, 
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Matrix =
     MDArray<T,
             stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-            Layout>;
+            Layout,
+            Allocator>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class T, 
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array3D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout>;
+                        Layout,
+                        Allocator>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class T, 
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array4D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout>;
+                        Layout,
+                        Allocator>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class T, 
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array5D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout>;
+                        Layout,
+                        Allocator>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class T, 
+          class Layout = stdex::layout_right
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array6D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -108,9 +138,12 @@ using Array6D = MDArray<T,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout>;
+                        Layout,
+                        Allocator>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class T, 
+          class Layout = stdex::layout_right,
+          class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array7D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -119,7 +152,8 @@ using Array7D = MDArray<T,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout>;
+                        Layout,
+                        Allocator>;
 
 } // namespace Sci
 

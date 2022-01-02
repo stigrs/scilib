@@ -42,9 +42,10 @@ fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
 }
 
 // clang-format off
-template <class T, class Extents, class Layout>
+template <class T, class Extents, class Layout, class Allocator>
     requires Extents_has_rank<Extents>
-inline void fill(Sci::MDArray<T, Extents, Layout>& m, const T& value)
+inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, 
+                 const T& value)
 // clang-format on
 {
     static_assert(Extents::rank() <= 2);
@@ -98,9 +99,11 @@ clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
     }
 }
 
-template <class T, class Extents, class Layout>
+template <class T, class Extents, class Layout, class Allocator>
 inline void
-clip(Sci::MDArray<T, Extents, Layout>& a, const T& a_min, const T& a_max)
+clip(Sci::MDArray<T, Extents, Layout, Allocator>& a, 
+     const T& a_min, 
+     const T& a_max)
 {
     clip(a.view(), a_min, a_max);
 }
@@ -129,8 +132,9 @@ argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return max_idx;
 }
 
-template <class T, class Layout>
-inline stdex::extents<>::size_type argmax(const Sci::Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline stdex::extents<>::size_type 
+argmax(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return argmax(v.view());
 }
@@ -156,8 +160,9 @@ argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return min_idx;
 }
 
-template <class T, class Layout>
-inline stdex::extents<>::size_type argmin(const Sci::Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline stdex::extents<>::size_type 
+argmin(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return argmin(v.view());
 }
@@ -180,8 +185,8 @@ inline auto max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return result;
 }
 
-template <class T, class Layout>
-inline T max(const Sci::Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline T max(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return max(v.view());
 }
@@ -204,8 +209,8 @@ inline auto min(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return result;
 }
 
-template <class T, class Layout>
-inline T min(const Sci::Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline T min(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return min(v.view());
 }
@@ -226,8 +231,8 @@ inline auto sum(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return result;
 }
 
-template <class T, class Layout>
-inline T sum(const Sci::Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline T sum(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return sum(v.view());
 }
@@ -248,8 +253,8 @@ inline auto prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
     return result;
 }
 
-template <class T, class Layout>
-inline T prod(const Sci::Vector<T, Layout>& v)
+template <class T, class Layout, class Allocator>
+inline T prod(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return prod(v.view());
 }
@@ -374,16 +379,16 @@ inline M randi(Args... args)
 }
 
 // clang-format off
-template <class T = double, class Layout = stdex::layout_right>
+template <class T, class Layout, class Allocator>
     requires std::is_floating_point_v<T>
-Sci::Vector<T, Layout> linspace(T start, T stop, int num = 50)
+Sci::Vector<T, Layout, Allocator> linspace(T start, T stop, int num = 50)
 // clang-format on
 {
     assert(stop > start);
     T step_size = (stop - start) / (num - 1);
     T value = start;
 
-    Sci::Vector<T, Layout> res(num);
+    Sci::Vector<T, Layout, Allocator> res(num);
 
     res(0) = start;
     for (int i = 1; i < num; ++i) {

@@ -18,10 +18,10 @@ namespace Integrate {
 namespace __Detail {
 
 // Compute error norm.
-template <class Layout>
-double error_norm(const Sci::Vector<double, Layout>& y,
-                  const Sci::Vector<double, Layout>& ynew,
-                  const Sci::Vector<double, Layout>& err_vec,
+template <class Layout, class Allocator>
+double error_norm(const Sci::Vector<double, Layout, Allocator>& y,
+                  const Sci::Vector<double, Layout, Allocator>& ynew,
+                  const Sci::Vector<double, Layout, Allocator>& err_vec,
                   double atol,
                   double rtol)
 {
@@ -41,11 +41,11 @@ double error_norm(const Sci::Vector<double, Layout>& y,
 }
 
 // Embedded Dormand-Prince method of order 4(5).
-template <class F, class Layout>
+template <class F, class Layout, class Allocator>
 void dormand_prince(F f,
                     double& x,
                     double xf,
-                    Sci::Vector<double, Layout>& y,
+                    Sci::Vector<double, Layout, Allocator>& y,
                     double atol,
                     double rtol)
 {
@@ -167,11 +167,11 @@ void dormand_prince(F f,
 // dy/dx = f(x, y)
 // y(x0) = y0
 //
-template <class F, class Layout>
+template <class F, class Layout, class Allocator>
 inline void solve_ivp(F f,
                       double& x,
                       double xf,
-                      Sci::Vector<double, Layout>& y,
+                      Sci::Vector<double, Layout, Allocator>& y,
                       double atol = 1.0e-7,
                       double rtol = 1.0e-7)
 {
