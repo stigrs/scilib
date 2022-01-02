@@ -33,8 +33,8 @@ abs_sum(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
     return result;
 }
 
-template <class T, class Layout>
-inline T abs_sum(const Sci::Vector<T, Layout>& x)
+template <class T, class Layout, class Allocator>
+inline T abs_sum(const Sci::Vector<T, Layout, Allocator>& x)
 {
     return abs_sum(x.view());
 }

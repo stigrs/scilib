@@ -60,9 +60,9 @@ inline auto matrix_power(Sci::Matrix_view<T, Layout> m, int n)
     return res;
 }
 
-template <class T, class Layout>
-inline Sci::Matrix<T, Layout> matrix_power(const Sci::Matrix<T, Layout>& m,
-                                           int n)
+template <class T, class Layout, class Allocator>
+inline Sci::Matrix<T, Layout, Allocator>
+matrix_power(const Sci::Matrix<T, Layout, Allocator>& m, int n)
 {
     return matrix_power(m.view(), n);
 }

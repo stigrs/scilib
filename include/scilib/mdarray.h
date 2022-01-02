@@ -78,15 +78,13 @@ template <class T,
 class MDArray;
 // clang-format on
 
-template <class T, 
-          class Layout = stdex::layout_right, 
+template <class T,
+          class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
-using Vector = MDArray<T, 
-                       stdex::extents<stdex::dynamic_extent>, 
-                       Layout, 
-                       Allocator>;
+using Vector =
+    MDArray<T, stdex::extents<stdex::dynamic_extent>, Layout, Allocator>;
 
-template <class T, 
+template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Matrix =
@@ -95,7 +93,7 @@ using Matrix =
             Layout,
             Allocator>;
 
-template <class T, 
+template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array3D = MDArray<T,
@@ -105,7 +103,7 @@ using Array3D = MDArray<T,
                         Layout,
                         Allocator>;
 
-template <class T, 
+template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array4D = MDArray<T,
@@ -116,7 +114,7 @@ using Array4D = MDArray<T,
                         Layout,
                         Allocator>;
 
-template <class T, 
+template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array5D = MDArray<T,
@@ -128,8 +126,8 @@ using Array5D = MDArray<T,
                         Layout,
                         Allocator>;
 
-template <class T, 
-          class Layout = stdex::layout_right
+template <class T,
+          class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array6D = MDArray<T,
                         stdex::extents<stdex::dynamic_extent,
@@ -141,7 +139,7 @@ using Array6D = MDArray<T,
                         Layout,
                         Allocator>;
 
-template <class T, 
+template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array7D = MDArray<T,

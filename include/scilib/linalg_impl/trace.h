@@ -29,8 +29,8 @@ trace(stdex::mdspan<T, stdex::extents<ext, ext>, Layout_m, Accessor_m> m)
     return Sci::Linalg::sum(Sci::diag(m));
 }
 
-template <class T, class Layout>
-inline T trace(const Sci::Matrix<T, Layout>& m)
+template <class T, class Layout, class Allocator>
+inline T trace(const Sci::Matrix<T, Layout, Allocator>& m)
 {
     assert(m.extent(0) == m.extent(1));
     return trace(m.view());

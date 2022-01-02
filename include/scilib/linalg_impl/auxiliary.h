@@ -100,10 +100,9 @@ clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-inline void
-clip(Sci::MDArray<T, Extents, Layout, Allocator>& a, 
-     const T& a_min, 
-     const T& a_max)
+inline void clip(Sci::MDArray<T, Extents, Layout, Allocator>& a,
+                 const T& a_min,
+                 const T& a_max)
 {
     clip(a.view(), a_min, a_max);
 }
@@ -133,7 +132,7 @@ argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout, class Allocator>
-inline stdex::extents<>::size_type 
+inline stdex::extents<>::size_type
 argmax(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return argmax(v.view());
@@ -161,7 +160,7 @@ argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout, class Allocator>
-inline stdex::extents<>::size_type 
+inline stdex::extents<>::size_type
 argmin(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return argmin(v.view());

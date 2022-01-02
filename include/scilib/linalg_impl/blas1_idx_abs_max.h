@@ -37,8 +37,9 @@ idx_abs_max(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
     return max_idx;
 }
 
-template <class T, class Layout>
-inline stdex::extents<>::size_type idx_abs_max(const Sci::Vector<T, Layout>& x)
+template <class T, class Layout, class Allocator>
+inline stdex::extents<>::size_type
+idx_abs_max(const Sci::Vector<T, Layout, Allocator>& x)
 {
     return idx_abs_max(x.view());
 }

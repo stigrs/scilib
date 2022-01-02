@@ -50,8 +50,8 @@ constexpr std::ptrdiff_t ssize(stdex::mdspan<T, Extents, Layout, Accessor> m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-constexpr std::ptrdiff_t sextent(
-    const MDArray<T, Extents, Layout, Allocator>& m, std::size_t dim)
+constexpr std::ptrdiff_t
+sextent(const MDArray<T, Extents, Layout, Allocator>& m, std::size_t dim)
 {
     return m.sextent(dim);
 }
@@ -193,22 +193,22 @@ operator%(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
 // Matrix-matrix product:
 
 template <class T, class Layout, class Allocator>
-constexpr Matrix<T, Layout, Allocator> 
-operator*(const Matrix<T, Layout, Allocator>& a, 
+constexpr Matrix<T, Layout, Allocator>
+operator*(const Matrix<T, Layout, Allocator>& a,
           const Matrix<T, Layout, Allocator>& b)
 {
-    return Sci::Linalg::matrix_product(a.view(), b.view());
+    return Sci::Linalg::matrix_product(a, b);
 }
 
 //------------------------------------------------------------------------------
 // Matrix-vector product:
 
 template <class T, class Layout, class Allocator>
-constexpr Vector<T, Layout, Allocator> 
+constexpr Vector<T, Layout, Allocator>
 operator*(const Matrix<T, Layout, Allocator>& a,
           const Vector<T, Layout, Allocator>& x)
 {
-    return Sci::Linalg::matrix_vector_product(a.view(), x.view());
+    return Sci::Linalg::matrix_vector_product(a, x);
 }
 
 //------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
 
     size_type n;
     istrm >> n;
-    std::vector<T> tmp(n);
+    std::vector<T, stdex::layout_right, Allocator> tmp(n);
 
     char ch;
     istrm >> ch; // {

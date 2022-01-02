@@ -40,8 +40,8 @@ inline double norm2(
     return cblas_dnrm2(n, x.data(), incx);
 }
 
-template <class Layout>
-inline double norm2(const Sci::Vector<double, Layout>& x)
+template <class Layout, class Allocator>
+inline double norm2(const Sci::Vector<double, Layout, Allocator>& x)
 {
     return norm2(x.view());
 }

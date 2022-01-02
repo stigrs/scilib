@@ -56,9 +56,9 @@ auto det(Sci::Matrix_view<T, Layout> a)
 }
 
 // clang-format off
-template <class T, class Layout>
+template <class T, class Layout, class Allocator>
     requires std::is_same_v<std::remove_cv_t<T>, double>
-inline T det(const Sci::Matrix<T, Layout>& a)
+inline T det(const Sci::Matrix<T, Layout, Allocator>& a)
 // clang-format on
 {
     return det(a.view());

@@ -56,9 +56,9 @@ inline void lu(Sci::Matrix_view<double, Layout> a,
     }
 }
 
-template <class Layout>
-inline void lu(Sci::Matrix<double, Layout>& a,
-               Sci::Vector<BLAS_INT, Layout>& ipiv)
+template <class Layout, class Allocator_a, class Allocator_ipiv>
+inline void lu(Sci::Matrix<double, Layout, Allocator_a>& a,
+               Sci::Vector<BLAS_INT, Layout, Allocator_ipiv>& ipiv)
 {
     lu(a.view(), ipiv.view());
 }
@@ -106,10 +106,10 @@ inline void qr(Sci::Matrix_view<double, Layout> a,
     transposed(q);
 }
 
-template <class Layout>
-inline void qr(Sci::Matrix<double, Layout>& a,
-               Sci::Matrix<double, Layout>& q,
-               Sci::Matrix<double, Layout>& r)
+template <class Layout, class Allocator>
+inline void qr(Sci::Matrix<double, Layout, Allocator>& a,
+               Sci::Matrix<double, Layout, Allocator>& q,
+               Sci::Matrix<double, Layout, Allocator>& r)
 {
     qr(a.view(), q.view(), r.view());
 }
@@ -150,11 +150,11 @@ inline void svd(Sci::Matrix_view<double, Layout> a,
     }
 }
 
-template <class Layout>
-inline void svd(Sci::Matrix<double, Layout>& a,
-                Sci::Vector<double, Layout>& s,
-                Sci::Matrix<double, Layout>& u,
-                Sci::Matrix<double, Layout>& vt)
+template <class Layout, class Allocator>
+inline void svd(Sci::Matrix<double, Layout, Allocator>& a,
+                Sci::Vector<double, Layout, Allocator>& s,
+                Sci::Matrix<double, Layout, Allocator>& u,
+                Sci::Matrix<double, Layout, Allocator>& vt)
 {
     svd(a.view(), s.view(), u.view(), vt.view());
 }

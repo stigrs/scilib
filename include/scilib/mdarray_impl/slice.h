@@ -36,14 +36,14 @@ inline auto first(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
 }
 
 template <class T, class Layout, class Allocator>
-inline auto first(Vector<T, Layout, Allocator>& v, 
+inline auto first(Vector<T, Layout, Allocator>& v,
                   stdex::extents<>::size_type count)
 {
     return first(v.view(), count);
 }
 
 template <class T, class Layout, class Allocator>
-inline auto first(const Vector<T, Layout, Allocator>& v, 
+inline auto first(const Vector<T, Layout, Allocator>& v,
                   stdex::extents<>::size_type count)
 {
     return first(v.view(), count);
@@ -62,14 +62,14 @@ inline auto last(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
 }
 
 template <class T, class Layout, class Allocator>
-inline auto last(Vector<T, Layout, Allocator>& x, 
+inline auto last(Vector<T, Layout, Allocator>& x,
                  stdex::extents<>::size_type count)
 {
     return last(x.view(), count);
 }
 
 template <class T, class Layout, class Allocator>
-inline auto last(const Vector<T, Layout, Allocator>& x, 
+inline auto last(const Vector<T, Layout, Allocator>& x,
                  stdex::extents<>::size_type count)
 {
     return last(x.view(), count);
@@ -88,14 +88,13 @@ row(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
 }
 
 template <class T, class Layout, class Allocator>
-inline auto row(Matrix<T, Layout, Allocator>& m, 
-                stdex::extents<>::size_type i)
+inline auto row(Matrix<T, Layout, Allocator>& m, stdex::extents<>::size_type i)
 {
     return row(m.view(), i);
 }
 
 template <class T, class Layout, class Allocator>
-inline auto row(const Matrix<T, Layout, Allocator>& m, 
+inline auto row(const Matrix<T, Layout, Allocator>& m,
                 stdex::extents<>::size_type i)
 {
     return row(m.view(), i);
@@ -114,14 +113,14 @@ column(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
 }
 
 template <class T, class Layout, class Allocator>
-inline auto column(Matrix<T, Layout, Allocator>& m, 
+inline auto column(Matrix<T, Layout, Allocator>& m,
                    stdex::extents<>::size_type i)
 {
     return column(m.view(), i);
 }
 
 template <class T, class Layout, class Allocator>
-inline auto column(const Matrix<T, Layout, Allocator>& m, 
+inline auto column(const Matrix<T, Layout, Allocator>& m,
                    stdex::extents<>::size_type i)
 {
     return column(m.view(), i);
@@ -162,31 +161,31 @@ template <class T,
           class Layout,
           class Accessor,
           class... SliceSpecs>
-    // Check of SliceSpecs is done by submdspan
+// Check of SliceSpecs is done by submdspan
 inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m,
                   SliceSpecs... slices)
 {
     return stdex::submdspan(m, slices...);
 }
 
-template <class T, 
-          class Extents, 
-          class Layout, 
-          class Allocator, 
+template <class T,
+          class Extents,
+          class Layout,
+          class Allocator,
           class... SliceSpecs>
-inline auto slice(
-    MDArray<T, Extents, Layout, Allocator>& m, SliceSpecs... slices)
+inline auto slice(MDArray<T, Extents, Layout, Allocator>& m,
+                  SliceSpecs... slices)
 {
     return slice(m.view(), slices...);
 }
 
-template <class T, 
-          class Extents, 
-          class Layout, 
-          class Allocator, 
+template <class T,
+          class Extents,
+          class Layout,
+          class Allocator,
           class... SliceSpecs>
-inline auto slice(
-    const MDArray<T, Extents, Layout, Allocator>& m, SliceSpecs... slices)
+inline auto slice(const MDArray<T, Extents, Layout, Allocator>& m,
+                  SliceSpecs... slices)
 {
     return slice(m.view(), slices...);
 }

@@ -56,9 +56,9 @@ inline void linsolve(Sci::Matrix_view<double, Layout> a,
     }
 }
 
-template <class Layout>
-inline void linsolve(Sci::Matrix<double, Layout>& a,
-                     Sci::Matrix<double, Layout>& b)
+template <class Layout, class Allocator>
+inline void linsolve(Sci::Matrix<double, Layout, Allocator>& a,
+                     Sci::Matrix<double, Layout, Allocator>& b)
 {
     linsolve(a.view(), b.view());
 }

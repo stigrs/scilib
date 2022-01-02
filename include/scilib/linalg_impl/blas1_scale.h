@@ -45,8 +45,9 @@ scale(const T& scalar,
     }
 }
 
-template <class T, class Extents, class Layout>
-inline void scale(const T& scalar, Sci::MDArray<T, Extents, Layout>& m)
+template <class T, class Extents, class Layout, class Allocator>
+inline void scale(const T& scalar,
+                  Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
     static_assert(m.rank() <= 2);
     scale(scalar, m.view());

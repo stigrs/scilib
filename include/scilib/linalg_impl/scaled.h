@@ -118,12 +118,17 @@ inline stdex::
         a.data(), a.mapping(), accessor_t(a.accessor(), scaling_factor));
 }
 
-template <class T, class Extents, class Layout, class ScalingFactorType>
-inline Sci::MDArray<T, Extents, Layout>
+template <class T,
+          class Extents,
+          class Layout,
+          class Allocator,
+          class ScalingFactorType>
+inline Sci::MDArray<T, Extents, Layout, Allocator>
 scaled(ScalingFactorType scaling_factor,
-       const Sci::MDArray<T, Extents, Layout>& a)
+       const Sci::MDArray<T, Extents, Layout, Allocator>& a)
 {
-    Sci::MDArray<T, Extents, Layout> tmp = scaled(scaling_factor, a.view());
+    Sci::MDArray<T, Extents, Layout, Allocator> tmp =
+        scaled(scaling_factor, a.view());
     return tmp;
 }
 

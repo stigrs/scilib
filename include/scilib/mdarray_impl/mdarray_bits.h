@@ -55,7 +55,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // column-major (layout_left).
 //
 // clang-format off
-template <class T, class Extents, class Layout, Allocator>
+template <class T, class Extents, class Layout, class Allocator>
     requires Extents_has_rank<Extents> 
 class MDArray {
 public:

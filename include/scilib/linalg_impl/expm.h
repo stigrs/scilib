@@ -63,7 +63,7 @@ auto expm(Sci::Matrix_view<T, Layout> a)
         }
         p = !p;
     }
-    E = inv(D.view()) * E;
+    E = inv(D) * E;
 
     for (int k = 1; k <= s; ++k) {
         E = E * E;
@@ -71,8 +71,9 @@ auto expm(Sci::Matrix_view<T, Layout> a)
     return E;
 }
 
-template <class Layout>
-inline Sci::Matrix<double, Layout> expm(const Sci::Matrix<double, Layout>& a)
+template <class Layout, class Allocator>
+inline Sci::Matrix<double, Layout, Allocator>
+expm(const Sci::Matrix<double, Layout, Allocator>& a)
 {
     return expm(a.view());
 }

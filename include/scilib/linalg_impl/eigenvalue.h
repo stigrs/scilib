@@ -65,9 +65,9 @@ inline void eigs(Sci::Matrix_view<double, Layout> a,
     Sci::copy(z.view(), a);
 }
 
-template <class Layout>
-inline void eigs(Sci::Matrix<double, Layout>& a,
-                 Sci::Vector<double, Layout>& w,
+template <class Layout, class Allocator>
+inline void eigs(Sci::Matrix<double, Layout, Allocator>& a,
+                 Sci::Vector<double, Layout, Allocator>& w,
                  double abstol = -1.0 /* use default value */)
 {
     eigs(a.view(), w.view(), abstol);
@@ -125,10 +125,13 @@ void eig(Sci::Matrix_view<double, Layout> a,
     }
 }
 
-template <class Layout>
-void eig(Sci::Matrix<double, Layout>& a,
-         Sci::Matrix<std::complex<double>, Layout>& evec,
-         Sci::Vector<std::complex<double>, Layout>& eval)
+template <class Layout,
+          class Allocator_a,
+          class Allocator_evec,
+          class Allocator_eval>
+void eig(Sci::Matrix<double, Layout, Allocator_a>& a,
+         Sci::Matrix<std::complex<double>, Layout, Allocator_evec>& evec,
+         Sci::Vector<std::complex<double>, Layout, Allocator_eval>& eval)
 {
     eig(a.view(), evec.view(), eval.view());
 }

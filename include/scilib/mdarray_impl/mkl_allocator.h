@@ -38,20 +38,19 @@ public:
         return (T*) mkl_calloc(n, sizeof(value_type), MKL_MEM_ALIGNMENT);
     }
 
-    constexpr void deallocate(T* p, size_type /* n */)
-    {
-        mkl_free(p);
-    }    
+    constexpr void deallocate(T* p, size_type /* n */) { mkl_free(p); }
 };
 
 template <class T1, class T2>
-constexpr bool operator==(const MKL_allocator<T1>& const MKL_allocator<T2>&) noexcept
+constexpr bool
+operator==(const MKL_allocator<T1>& const MKL_allocator<T2>&) noexcept
 {
     return true;
 }
 
-template<class T1, class T2>
-constexpr bool operator!=(const MKL_allocator<T1>& lhs, const MKL_allocator<T2>& rhs) noexcept
+template <class T1, class T2>
+constexpr bool operator!=(const MKL_allocator<T1>& lhs,
+                          const MKL_allocator<T2>& rhs) noexcept
 {
     return !(lhs == rhs);
 }

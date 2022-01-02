@@ -37,8 +37,9 @@ idx_abs_min(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
     return min_idx;
 }
 
-template <class T, class Layout>
-inline stdex::extents<>::size_type idx_abs_min(const Sci::Vector<T, Layout>& x)
+template <class T, class Layout, class Allocator>
+inline stdex::extents<>::size_type
+idx_abs_min(const Sci::Vector<T, Layout, Allocator>& x)
 {
     return idx_abs_min(x.view());
 }

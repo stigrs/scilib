@@ -62,23 +62,13 @@ inline void inv(Sci::Matrix_view<T_a, Layout> a,
     }
 }
 
-// clang-format off
-template <class T, class Layout>
-    requires std::is_same_v<std::remove_cv_t<T>, double>
-inline auto inv(Sci::Matrix_view<T, Layout> a)
-// clang-format on
+template <class Layout, class Allocator>
+inline Sci::Matrix<double, Layout, Allocator>
+inv(const Sci::Matrix<double, Layout, Allocator>& a)
 {
-    using value_type = std::remove_cv_t<T>;
-
-    Sci::Matrix<value_type, Layout> res(a.extent(0), a.extent(1));
-    inv(a, res.view());
+    Sci::Matrix<double, Layout, Allocator> res(a.extent(0), a.extent(1));
+    inv(a.view(), res.view());
     return res;
-}
-
-template <class Layout>
-inline Sci::Matrix<double, Layout> inv(const Sci::Matrix<double, Layout>& a)
-{
-    return inv(a.view());
 }
 
 } // namespace Linalg

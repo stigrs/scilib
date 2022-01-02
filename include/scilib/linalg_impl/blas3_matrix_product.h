@@ -179,46 +179,25 @@ matrix_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
 }
 #endif
 
-template <class T, class Layout>
-inline Sci::Matrix<T, Layout> matrix_product(Sci::Matrix_view<T, Layout> a,
-                                             Sci::Matrix_view<T, Layout> b)
+template <class T, class Layout, class Allocator>
+inline Sci::Matrix<T, Layout, Allocator>
+matrix_product(const Sci::Matrix<T, Layout, Allocator>& a,
+               const Sci::Matrix<T, Layout, Allocator>& b)
 {
     using size_type = stdex::extents<>::size_type;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);
 
-    Sci::Matrix<T, Layout> res(n, p);
-    matrix_product(a, b, res.view());
+    Sci::Matrix<T, Layout, Allocator> res(n, p);
+    matrix_product(a.view(), b.view(), res.view());
     return res;
 }
 
-template <class T, class Layout>
-inline Sci::Matrix<T, Layout>
-matrix_product(Sci::Matrix_view<const T, Layout> a,
-               Sci::Matrix_view<const T, Layout> b)
-{
-    using size_type = stdex::extents<>::size_type;
-
-    const size_type n = a.extent(0);
-    const size_type p = b.extent(1);
-
-    Sci::Matrix<T, Layout> res(n, p);
-    matrix_product(a, b, res.view());
-    return res;
-}
-
-template <class T, class Layout>
-inline Sci::Matrix<T, Layout> matrix_product(const Sci::Matrix<T, Layout>& a,
-                                             const Sci::Matrix<T, Layout>& b)
-{
-    return matrix_product(a.view(), b.view());
-}
-
-template <class T, class Layout>
-inline void matrix_product(const Sci::Matrix<T, Layout>& a,
-                           const Sci::Matrix<T, Layout>& b,
-                           Sci::Matrix<T, Layout>& c)
+template <class T, class Layout, class Allocator>
+inline void matrix_product(const Sci::Matrix<T, Layout, Allocator>& a,
+                           const Sci::Matrix<T, Layout, Allocator>& b,
+                           Sci::Matrix<T, Layout, Allocator>& c)
 {
     matrix_product(a.view(), b.view(), c.view());
 }

@@ -120,10 +120,11 @@ transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
         a.data(), mapping_type(a.mapping()), a.accessor());
 }
 
-template <class T, class Layout>
-inline Sci::Matrix<T, Layout> transposed(const Sci::Matrix<T, Layout>& a)
+template <class T, class Layout, class Allocator>
+inline Sci::Matrix<T, Layout, Allocator>
+transposed(const Sci::Matrix<T, Layout, Allocator>& a)
 {
-    Sci::Matrix<T, Layout> tmp = transposed(a.view());
+    Sci::Matrix<T, Layout, Allocator> tmp = transposed(a.view());
     return tmp;
 }
 

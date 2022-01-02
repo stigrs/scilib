@@ -54,8 +54,9 @@ inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
     return LAPACKE_dlange(matrix_layout, norm, m, n, a.data(), lda);
 }
 
-template <class Layout>
-inline double matrix_norm(const Sci::Matrix<double, Layout>& a, char norm)
+template <class Layout, class Allocator>
+inline double matrix_norm(const Sci::Matrix<double, Layout, Allocator>& a,
+                          char norm)
 {
     return matrix_norm(a.view(), norm);
 }

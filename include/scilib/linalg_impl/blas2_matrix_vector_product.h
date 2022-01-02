@@ -168,38 +168,20 @@ matrix_vector_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
 }
 #endif
 
-template <class T, class Layout>
-inline Sci::Vector<T, Layout>
-matrix_vector_product(Sci::Matrix_view<T, Layout> a,
-                      Sci::Vector_view<T, Layout> x)
+template <class T, class Layout, class Allocator>
+inline Sci::Vector<T, Layout, Allocator>
+matrix_vector_product(const Sci::Matrix<T, Layout, Allocator>& a,
+                      const Sci::Vector<T, Layout, Allocator>& x)
 {
-    Sci::Vector<T, Layout> res(a.extent(0));
-    matrix_vector_product(a, x, res.view());
+    Sci::Vector<T, Layout, Allocator> res(a.extent(0));
+    matrix_vector_product(a.view(), x.view(), res.view());
     return res;
 }
 
-template <class T, class Layout>
-inline Sci::Vector<T, Layout>
-matrix_vector_product(Sci::Matrix_view<const T, Layout> a,
-                      Sci::Vector_view<const T, Layout> x)
-{
-    Sci::Vector<T, Layout> res(a.extent(0));
-    matrix_vector_product(a, x, res.view());
-    return res;
-}
-
-template <class T, class Layout>
-inline Sci::Vector<T, Layout>
-matrix_vector_product(const Sci::Matrix<T, Layout>& a,
-                      const Sci::Vector<T, Layout>& x)
-{
-    return matrix_vector_product(a.view(), x.view());
-}
-
-template <class T, class Layout>
-inline void matrix_vector_product(const Sci::Matrix<T, Layout>& a,
-                                  const Sci::Vector<T, Layout>& x,
-                                  Sci::Vector<T, Layout>& res)
+template <class T, class Layout, class Allocator>
+inline void matrix_vector_product(const Sci::Matrix<T, Layout, Allocator>& a,
+                                  const Sci::Vector<T, Layout, Allocator>& x,
+                                  Sci::Vector<T, Layout, Allocator>& res)
 {
     assert(res.size() == a.extent(0));
     matrix_vector_product(a.view(), x.view(), res.view());
