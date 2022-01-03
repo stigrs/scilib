@@ -10,7 +10,14 @@
 #ifdef USE_MKL
 #include <mkl.h>
 #else
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+#endif
 #include <lapacke.h>
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 #endif
 
 #include <scilib/mdarray.h>
