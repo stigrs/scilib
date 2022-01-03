@@ -14,8 +14,8 @@ TEST(TestLinalg, TestArgMaxArgMin)
     std::vector<int> data = {1, 2, 3, -4};
     Sci::Vector<int> v(data, data.size());
 
-    EXPECT_EQ(Sci::Linalg::argmax(v), 2);
-    EXPECT_EQ(Sci::Linalg::argmin(v), 3);
+    EXPECT_EQ(Sci::Linalg::argmax(v), 2UL);
+    EXPECT_EQ(Sci::Linalg::argmin(v), 3UL);
 }
 
 TEST(TestLinalg, TestMaxMin)
