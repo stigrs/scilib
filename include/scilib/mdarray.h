@@ -21,7 +21,7 @@
 #endif
 
 #ifdef USE_MKL_ALLOCATOR
-#include <mkl.h>
+#include <scilib/mdarray_impl/mkl_allocator.h>
 #define MDARRAY_ALLOCATOR(X) Sci::MKL_allocator<X>
 #else
 #include <memory>
