@@ -295,7 +295,7 @@ operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
 
     size_type n;
     istrm >> n;
-    std::vector<T, stdex::layout_right, Allocator> tmp(n);
+    std::vector<T> tmp(n);
 
     char ch;
     istrm >> ch; // {
@@ -303,7 +303,7 @@ operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    v = Vector<T, Layout>(tmp, tmp.size());
+    v = Vector<T, Layout, Allocator>(tmp, tmp.size());
     return istrm;
 }
 
