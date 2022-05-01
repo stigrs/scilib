@@ -23,7 +23,7 @@ jobs:
     name: Configure
     inputs:
       workingDirectory: build
-      cmakeArgs: ' -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) .. '
+      cmakeArgs: ' -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DScilib_BUILD_BENCH=OFF .. '
 
   - task: CMake@1
     name: Build
