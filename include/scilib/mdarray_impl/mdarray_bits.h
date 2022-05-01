@@ -112,7 +112,7 @@ public:
     {
         static_assert(m.rank() == extents_type::rank());
         static_assert(m.rank() <= 7);
-        copy(m, (*this).view());
+        copy(m, view());
     }
 
     constexpr MDArray& operator=(const MDArray& m) = default;
@@ -127,7 +127,7 @@ public:
         map = mapping_type(m.extents());
         ctr = container_type(m.size());
 
-        copy(m, (*this).view());
+        copy(m, view());
         return *this;
     }
 
