@@ -19,9 +19,8 @@ namespace Linalg {
 //
 // Miscellaneous element-wise functions:
 
-// clang-format off
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 abs(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -31,7 +30,7 @@ abs(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires std::is_floating_point_v<T> && Sci::Extents_has_rank<Extents>
+    requires(std::is_floating_point_v<T>&& Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 pow(const Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& val)
 {
@@ -41,7 +40,7 @@ pow(const Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& val)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 sqrt(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -51,7 +50,7 @@ sqrt(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 cbrt(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -61,7 +60,7 @@ cbrt(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 exp(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -71,7 +70,7 @@ exp(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 expm1(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -81,7 +80,7 @@ expm1(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 log(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -91,7 +90,7 @@ log(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 log10(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -101,7 +100,7 @@ log10(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 log2(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -111,7 +110,7 @@ log2(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 erf(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -121,7 +120,7 @@ erf(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 erfc(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -131,7 +130,7 @@ erfc(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 tgamma(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -141,7 +140,7 @@ tgamma(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 lgamma(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -151,7 +150,7 @@ lgamma(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 sin(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -161,7 +160,7 @@ sin(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 cos(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -171,7 +170,7 @@ cos(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 tan(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -181,7 +180,7 @@ tan(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 asin(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -191,7 +190,7 @@ asin(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 acos(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -201,7 +200,7 @@ acos(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 atan(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -211,7 +210,7 @@ atan(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 sinh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -221,7 +220,7 @@ sinh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 cosh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -231,7 +230,7 @@ cosh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 tanh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -241,7 +240,7 @@ tanh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 asinh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -251,7 +250,7 @@ asinh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 acosh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -261,7 +260,7 @@ acosh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 atanh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 {
@@ -272,7 +271,7 @@ atanh(const Sci::MDArray<T, Extents, Layout, Allocator>& m)
 
 // Complex conjugate.
 template <class Extents, class Layout, class Allocator>
-    requires Sci::Extents_has_rank<Extents>
+    requires(Sci::Extents_has_rank<Extents>)
 inline Sci::MDArray<std::complex<double>, Extents, Layout, Allocator>
 conj(const Sci::MDArray<std::complex<double>, Extents, Layout, Allocator>& m)
 {
@@ -280,7 +279,6 @@ conj(const Sci::MDArray<std::complex<double>, Extents, Layout, Allocator>& m)
     res.apply([](std::complex<double>& x) { x = std::conj(x); });
     return res;
 }
-// clang-format on
 
 } // namespace Linalg
 } // namespace Sci

@@ -17,11 +17,9 @@ namespace Sci {
 namespace Linalg {
 
 // Determinant of square matrix.
-// clang-format off
 template <class T, class Layout>
-    requires std::is_same_v<std::remove_cv_t<T>, double>
+    requires(std::is_same_v<std::remove_cv_t<T>, double>)
 auto det(Sci::Matrix_view<T, Layout> a)
-// clang-format on
 {
     static_assert(a.is_contiguous());
     assert(a.extent(0) == a.extent(1));
@@ -55,11 +53,9 @@ auto det(Sci::Matrix_view<T, Layout> a)
     return ddet;
 }
 
-// clang-format off
 template <class T, class Layout, class Allocator>
-    requires std::is_same_v<std::remove_cv_t<T>, double>
+    requires(std::is_same_v<std::remove_cv_t<T>, double>)
 inline T det(const Sci::Matrix<T, Layout, Allocator>& a)
-// clang-format on
 {
     return det(a.view());
 }

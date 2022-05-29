@@ -14,7 +14,6 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
@@ -23,11 +22,10 @@ template <class T_x,
           class T_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y>)
 inline void
 copy(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
      stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
-// clang-format on
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     using size_type = stdex::extents<>::size_type;
@@ -36,7 +34,6 @@ copy(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
     }
 }
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type nrows_x,
           stdex::extents<>::size_type ncols_x,
@@ -47,16 +44,12 @@ template <class T_x,
           class T_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
-inline void copy(stdex::mdspan<T_x, 
-                               stdex::extents<nrows_x, ncols_x>, 
-                               Layout_x, 
-                               Accessor_x> x,
-                 stdex::mdspan<T_y, 
-                               stdex::extents<nrows_y, ncols_y>, 
-                               Layout_y, 
-                               Accessor_y> y)
-// clang-format on
+    requires(!std::is_const_v<T_y>)
+inline void
+copy(stdex::mdspan<T_x, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x>
+         x,
+     stdex::mdspan<T_y, stdex::extents<nrows_y, ncols_y>, Layout_y, Accessor_y>
+         y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -70,7 +63,6 @@ inline void copy(stdex::mdspan<T_x,
     }
 }
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type n1_x,
           stdex::extents<>::size_type n2_x,
@@ -83,16 +75,12 @@ template <class T_x,
           stdex::extents<>::size_type n3_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
-inline void copy(stdex::mdspan<T_x, 
-                               stdex::extents<n1_x, n2_x, n3_x>, 
-                               Layout_x, 
-                               Accessor_x> x,
-                 stdex::mdspan<T_y, 
-                               stdex::extents<n1_y, n2_y, n3_y>, 
-                               Layout_y, 
-                               Accessor_y> y)
-// clang-format on
+    requires(!std::is_const_v<T_y>)
+inline void
+copy(stdex::mdspan<T_x, stdex::extents<n1_x, n2_x, n3_x>, Layout_x, Accessor_x>
+         x,
+     stdex::mdspan<T_y, stdex::extents<n1_y, n2_y, n3_y>, Layout_y, Accessor_y>
+         y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -109,7 +97,6 @@ inline void copy(stdex::mdspan<T_x,
     }
 }
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type n1_x,
           stdex::extents<>::size_type n2_x,
@@ -124,16 +111,15 @@ template <class T_x,
           stdex::extents<>::size_type n4_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
-inline void copy(stdex::mdspan<T_x, 
-                               stdex::extents<n1_x, n2_x, n3_x, n4_x>, 
-                               Layout_x, 
+    requires(!std::is_const_v<T_y>)
+inline void copy(stdex::mdspan<T_x,
+                               stdex::extents<n1_x, n2_x, n3_x, n4_x>,
+                               Layout_x,
                                Accessor_x> x,
-                 stdex::mdspan<T_y, 
-                               stdex::extents<n1_y, n2_y, n3_y, n4_y>, 
-                               Layout_y, 
+                 stdex::mdspan<T_y,
+                               stdex::extents<n1_y, n2_y, n3_y, n4_y>,
+                               Layout_y,
                                Accessor_y> y)
-// clang-format on
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -153,7 +139,6 @@ inline void copy(stdex::mdspan<T_x,
     }
 }
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type n1_x,
           stdex::extents<>::size_type n2_x,
@@ -170,7 +155,7 @@ template <class T_x,
           stdex::extents<>::size_type n5_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y>)
 inline void copy(stdex::mdspan<T_x,
                                stdex::extents<n1_x, n2_x, n3_x, n4_x, n5_x>,
                                Layout_x,
@@ -179,7 +164,6 @@ inline void copy(stdex::mdspan<T_x,
                                stdex::extents<n1_y, n2_y, n3_y, n4_y, n5_x>,
                                Layout_y,
                                Accessor_y> y)
-// clang-format on
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -202,7 +186,6 @@ inline void copy(stdex::mdspan<T_x,
     }
 }
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type n1_x,
           stdex::extents<>::size_type n2_x,
@@ -221,7 +204,7 @@ template <class T_x,
           stdex::extents<>::size_type n6_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y>)
 inline void
 copy(stdex::mdspan<T_x,
                    stdex::extents<n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
@@ -231,7 +214,6 @@ copy(stdex::mdspan<T_x,
                    stdex::extents<n1_y, n2_y, n3_y, n4_y, n5_x, n6_x>,
                    Layout_y,
                    Accessor_y> y)
-// clang-format on
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -258,7 +240,6 @@ copy(stdex::mdspan<T_x,
     }
 }
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type n1_x,
           stdex::extents<>::size_type n2_x,
@@ -279,7 +260,7 @@ template <class T_x,
           stdex::extents<>::size_type n7_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y>)
 inline void
 copy(stdex::mdspan<T_x,
                    stdex::extents<n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
@@ -289,7 +270,6 @@ copy(stdex::mdspan<T_x,
                    stdex::extents<n1_y, n2_y, n3_y, n4_y, n5_x, n6_x, n7_x>,
                    Layout_y,
                    Accessor_y> y)
-// clang-format on
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));

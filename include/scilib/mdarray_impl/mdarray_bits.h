@@ -7,14 +7,14 @@
 #ifndef SCILIB_MDARRAY_BITS_H
 #define SCILIB_MDARRAY_BITS_H
 
-#include <scilib/mdarray_impl/copy.h>
-#include <experimental/mdspan>
-#include <vector>
-#include <array>
 #include <algorithm>
-#include <functional>
+#include <array>
 #include <cassert>
+#include <experimental/mdspan>
+#include <functional>
+#include <scilib/mdarray_impl/copy.h>
 #include <type_traits>
+#include <vector>
 
 namespace Sci {
 namespace stdex = std::experimental;
@@ -44,12 +44,10 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 // Storage order can be either row-major (layout_right; default) or
 // column-major (layout_left).
 //
-// clang-format off
 template <class T, class Extents, class Layout, class Allocator>
-    requires Extents_has_rank<Extents> 
+    requires Extents_has_rank<Extents>
 class MDArray {
 public:
-    // clang-format on
     using element_type = T;
     using value_type = std::remove_cv_t<T>;
     using size_type = stdex::extents<>::size_type;

@@ -41,12 +41,9 @@ fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
     Sci::apply(m, [&](T& mi) { mi = value; });
 }
 
-// clang-format off
 template <class T, class Extents, class Layout, class Allocator>
     requires Extents_has_rank<Extents>
-inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, 
-                 const T& value)
-// clang-format on
+inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& value)
 {
     static_assert(Extents::rank() <= 2);
     fill(m.view(), value);
@@ -261,11 +258,9 @@ inline T prod(const Sci::Vector<T, Layout, Allocator>& v)
 //------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
-// clang-format off
 template <class M, class... Args>
     requires MDArray_type<M>
 inline M zeros(Args... args)
-// clang-format on
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -275,11 +270,9 @@ inline M zeros(Args... args)
     return res;
 }
 
-// clang-format off
 template <class M, class... Args>
     requires MDArray_type<M>
 inline M ones(Args... args)
-// clang-format on
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -289,11 +282,9 @@ inline M ones(Args... args)
     return res;
 }
 
-// clang-format off
 template <class M = Sci::Matrix<double>>
     requires MDArray_type<M>
 inline M identity(std::size_t n)
-// clang-format on
 {
     static_assert(M::rank() == 2);
 
@@ -310,11 +301,9 @@ inline M identity(std::size_t n)
 
 // Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
-// clang-format off
 template <class M, class... Args>
-    requires (MDArray_type<M> && std::is_floating_point_v<typename M::value_type>)
+    requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
 inline M randn(Args... args)
-// clang-format on
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -333,11 +322,9 @@ inline M randn(Args... args)
 
 // Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
-// clang-format off
 template <class M, class... Args>
-    requires (MDArray_type<M> && std::is_floating_point_v<typename M::value_type>)
+    requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
 inline M randu(Args... args)
-// clang-format on
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -356,11 +343,9 @@ inline M randu(Args... args)
 
 // Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
-// clang-format off
 template <class M, class... Args>
-    requires (MDArray_type<M> && std::is_integral_v<typename M::value_type>)
+    requires(MDArray_type<M>&& std::is_integral_v<typename M::value_type>)
 inline M randi(Args... args)
-// clang-format on
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -377,11 +362,9 @@ inline M randi(Args... args)
     return res;
 }
 
-// clang-format off
 template <class T, class Layout, class Allocator>
-    requires std::is_floating_point_v<T>
+    requires(std::is_floating_point_v<T>)
 Sci::Vector<T, Layout, Allocator> linspace(T start, T stop, int num = 50)
-// clang-format on
 {
     assert(stop > start);
     T step_size = (stop - start) / (num - 1);

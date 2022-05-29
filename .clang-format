@@ -1,5 +1,5 @@
 Language: Cpp
-Standard: Cpp11
+Standard: Latest
 ColumnLimit: 80
 
 UseTab: Never
@@ -26,4 +26,4 @@ SpaceAfterCStyleCast: true
 SpaceAfterTemplateKeyword: true
 FixNamespaceComments: true
 IndentCaseLabels: false
-
+IndentRequires: true
