@@ -47,18 +47,23 @@ endif()
 # Check if OpenMP is available.
 find_package(OpenMP)
 
-# Check if C++20 standard is available.
-if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
-    message(STATUS "Using C++20 standard")
-    set(CMAKE_CXX_STANDARD 20)
+# Check if C++23 standard is available.
+if("cxx_std_23" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+    message(STATUS "Using C++23 standard")
+    set(CMAKE_CXX_STANDARD 23)
 else()
-    message(FATAL_ERROR "Requested Scilib_CXX_STANDARD \"20\" not supported by provided C++ compiler")
+    if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+        message(STATUS "Using C++20 standard")
+        set(CMAKE_CXX_STANDARD 20)
+    else()
+        message(FATAL_ERROR "Requested Scilib_CXX_STANDARD not supported by provided C++ compiler")
+    endif()
 endif()
 
 option(Scilib_ENABLE_CONCEPTS "Try to enable concepts support by giving extra flags." ON)
 
 if(Scilib_ENABLE_CONCEPTS)
-    if(CMAKE_CXX_STANDARD STREQUAL "20")
+    if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
         include(CheckCXXCompilerFlag)
         CHECK_CXX_COMPILER_FLAG("-fconcepts" COMPILER_SUPPORTS_FCONCEPTS)
         if(COMPILER_SUPPORTS_FCONCEPTS)
