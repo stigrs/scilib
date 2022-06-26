@@ -10,14 +10,11 @@
 namespace Sci {
 namespace __Detail {
 
-// clang-format off
 template <class From, class To>
-concept convertible_to =
-    std::is_convertible_v<From, To> &&
-    requires {
-        static_cast<To>(std::declval<From>());
+concept convertible_to = std::is_convertible_v<From, To> && requires
+{
+    static_cast<To>(std::declval<From>());
 };
-// clang-format on
 
 } // namespace __Detail
 } // namespace Sci

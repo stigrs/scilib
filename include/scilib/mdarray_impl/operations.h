@@ -219,9 +219,8 @@ template <class T,
           class Layout,
           class Accessor,
           class F>
-// clang-format off
-constexpr void 
-apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v, F f)
+constexpr void apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
+                     F f)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -271,8 +270,8 @@ inline void print(std::ostream& ostrm,
 }
 
 template <class T, class Layout, class Allocator>
-inline std::ostream& 
-operator<<(std::ostream& ostrm, const Vector<T, Layout, Allocator>& v)
+inline std::ostream& operator<<(std::ostream& ostrm,
+                                const Vector<T, Layout, Allocator>& v)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -288,8 +287,8 @@ operator<<(std::ostream& ostrm, const Vector<T, Layout, Allocator>& v)
 }
 
 template <class T, class Layout, class Allocator>
-inline std::istream& 
-operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
+inline std::istream& operator>>(std::istream& istrm,
+                                Vector<T, Layout, Allocator>& v)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -331,8 +330,8 @@ print(std::ostream& ostrm,
 }
 
 template <class T, class Layout, class Allocator>
-inline std::ostream& 
-operator<<(std::ostream& ostrm, const Matrix<T, Layout, Allocator>& m)
+inline std::ostream& operator<<(std::ostream& ostrm,
+                                const Matrix<T, Layout, Allocator>& m)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -350,8 +349,8 @@ operator<<(std::ostream& ostrm, const Matrix<T, Layout, Allocator>& m)
 }
 
 template <class T, class Layout, class Allocator>
-inline std::istream& 
-operator>>(std::istream& istrm, Matrix<T, Layout, Allocator>& m)
+inline std::istream& operator>>(std::istream& istrm,
+                                Matrix<T, Layout, Allocator>& m)
 {
     using size_type = stdex::extents<>::size_type;
 
@@ -371,7 +370,6 @@ operator>>(std::istream& istrm, Matrix<T, Layout, Allocator>& m)
     m = mtmp.view();
     return istrm;
 }
-// clang-format on
 
 } // namespace Sci
 

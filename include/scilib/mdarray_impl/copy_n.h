@@ -15,7 +15,6 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
@@ -24,13 +23,12 @@ template <class T_x,
           stdex::extents<>::size_type ext_y,
           class Layout_y,
           class Accessor_y>
-    requires (!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y>)
 inline void
 copy_n(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
        stdex::extents<>::size_type count,
        stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y,
        stdex::extents<>::size_type offset = 0)
-// clang-format on
 {
     assert(count <= x.extent(0));
     assert(offset >= 0 && offset < count);

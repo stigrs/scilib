@@ -17,11 +17,9 @@
 namespace Sci {
 namespace Linalg {
 
-// clang-format off
 template <class T, class Layout>
-    requires std::is_same_v<std::remove_cv_t<T>, double>
+    requires(std::is_same_v<std::remove_cv_t<T>, double>)
 auto expm(Sci::Matrix_view<T, Layout> a)
-// clang-format on
 {
     // Algorithm: Matlab expm1 (demo directory).
     //

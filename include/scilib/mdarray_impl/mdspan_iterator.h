@@ -23,7 +23,6 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
-// clang-format off
 template <class T,
           class Extents = stdex::extents<stdex::dynamic_extent>,
           class Layout = stdex::layout_right,
@@ -31,7 +30,6 @@ template <class T,
     requires Extents_has_rank<Extents>
 class MDSpan_iterator {
 public:
-    // clang-format on
     using iterator_category = std::random_access_iterator_tag;
     using value_type = std::remove_cv_t<T>;
     using extents_t = Extents;

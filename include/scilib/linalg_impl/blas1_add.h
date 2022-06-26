@@ -14,7 +14,6 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-// clang-format off
 template <class T_x,
           stdex::extents<>::size_type ext_x,
           class Layout_x,
@@ -27,12 +26,11 @@ template <class T_x,
           class T_z,
           class Layout_z,
           class Accessor_z>
-    requires (!std::is_const_v<T_z>)
+    requires(!std::is_const_v<T_z>)
 inline void
 add(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
     stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y,
     stdex::mdspan<T_z, stdex::extents<ext_z>, Layout_z, Accessor_z> z)
-// clang-format on
 {
     static_assert(x.static_extent(0) == z.static_extent(0));
     static_assert(y.static_extent(0) == z.static_extent(0));
@@ -45,7 +43,6 @@ add(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
     }
 }
 
-// clang-format off
 template <class T_x,
           class Layout_x,
           class Allocator_x,
@@ -55,7 +52,7 @@ template <class T_x,
           class T_z,
           class Layout_z,
           class Allocator_z>
-    requires (!std::is_const_v<T_z>)
+    requires(!std::is_const_v<T_z>)
 inline void add(const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
                 const Sci::Vector<T_y, Layout_y, Allocator_y>& y,
                 Sci::Vector<T_z, Layout_z, Allocator_z>& z)

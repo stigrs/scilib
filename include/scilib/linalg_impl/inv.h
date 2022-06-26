@@ -24,12 +24,10 @@ namespace Sci {
 namespace Linalg {
 
 // Matrix inversion.
-// clang-format off
 template <class T_a, class T_res, class Layout>
-    requires std::is_same_v<std::remove_cv_t<T_a>, double>
+    requires(std::is_same_v<std::remove_cv_t<T_a>, double>)
 inline void inv(Sci::Matrix_view<T_a, Layout> a,
                 Sci::Matrix_view<T_res, Layout> res)
-// clang-format on
 {
     namespace stdex = std::experimental;
 

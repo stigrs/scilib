@@ -45,7 +45,7 @@ void benchmark(int n)
     ab.fill(1.0);
 
     auto t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 1000; ++it) {
+    for (int it = 0; it < 10000; ++it) {
         ab = 2.0 * aa + ab;
     }
     auto t2 = std::chrono::high_resolution_clock::now();
@@ -58,7 +58,7 @@ void benchmark(int n)
     vb = 1.0;
 
     t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 1000; ++it) {
+    for (int it = 0; it < 10000; ++it) {
         vb = 2.0 * va + vb;
     }
     t2 = std::chrono::high_resolution_clock::now();
@@ -68,7 +68,7 @@ void benchmark(int n)
     vb = 1.0;
 
     t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 10; ++it) {
+    for (int it = 0; it < 10000; ++it) {
         add(scaled(2.0, va.view()), vb.view(), vb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
@@ -77,7 +77,7 @@ void benchmark(int n)
     std::valarray<double> wa(1.0, n);
     std::valarray<double> wb(1.0, n);
     t1 = std::chrono::high_resolution_clock::now();
-    for (int it = 0; it < 1000; ++it) {
+    for (int it = 0; it < 10000; ++it) {
         wb = 2.0 * wa + wb;
     }
     t2 = std::chrono::high_resolution_clock::now();

@@ -16,15 +16,13 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-// clang-format off
 template <class T,
           stdex::extents<>::size_type ext,
           class Layout_m,
           class Accessor_m>
-    requires std::is_arithmetic_v<std::remove_cv_t<T>>
+    requires(std::is_arithmetic_v<std::remove_cv_t<T>>)
 inline auto
 trace(stdex::mdspan<T, stdex::extents<ext, ext>, Layout_m, Accessor_m> m)
-// clang-format on
 {
     return Sci::Linalg::sum(Sci::diag(m));
 }
