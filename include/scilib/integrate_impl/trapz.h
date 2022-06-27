@@ -20,14 +20,15 @@ namespace stdex = std::experimental;
 // trapezoidal rule.
 template <class T_scalar,
           class T_x,
-          stdex::extents<>::size_type ext,
+          std::size_t ext,
           class Layout,
           class Accessor>
-inline auto trapz(T_scalar xlo,
-                  T_scalar xup,
-                  stdex::mdspan<T_x, stdex::extents<ext>, Layout, Accessor> x)
+inline auto
+trapz(T_scalar xlo,
+      T_scalar xup,
+      stdex::mdspan<T_x, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T_x>;
 
     const value_type step = std::abs(xup - xlo) / (x.extent(0) - 1);

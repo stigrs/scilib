@@ -54,10 +54,11 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 namespace {
-template <stdex::extents<>::size_type ext0, stdex::extents<>::size_type ext1>
-stdex::extents<ext1, ext0> transpose_extents(stdex::extents<ext0, ext1> e)
+template <std::size_t ext0, std::size_t ext1>
+stdex::extents<std::size_t, ext1, ext0>
+transpose_extents(stdex::extents<std::size_t, ext0, ext1> e)
 {
-    return stdex::extents<ext1, ext0>(e.extent(1), e.extent(0));
+    return stdex::extents<std::size_t, ext1, ext0>(e.extent(1), e.extent(0));
 }
 } // namespace
 

@@ -15,46 +15,51 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 template <class T_x,
-          stdex::extents<>::size_type ext_x,
+          std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
-          stdex::extents<>::size_type ext_y,
+          std::size_t ext_y,
           class T_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void
-copy(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-     stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+inline void copy(
+    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
+        x,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
+        y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     for (size_type i = 0; i < y.extent(0); ++i) {
         y(i) = x(i);
     }
 }
 
 template <class T_x,
-          stdex::extents<>::size_type nrows_x,
-          stdex::extents<>::size_type ncols_x,
+          std::size_t nrows_x,
+          std::size_t ncols_x,
           class Layout_x,
           class Accessor_x,
-          stdex::extents<>::size_type nrows_y,
-          stdex::extents<>::size_type ncols_y,
+          std::size_t nrows_y,
+          std::size_t ncols_y,
           class T_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void
-copy(stdex::mdspan<T_x, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x>
-         x,
-     stdex::mdspan<T_y, stdex::extents<nrows_y, ncols_y>, Layout_y, Accessor_y>
-         y)
+inline void copy(stdex::mdspan<T_x,
+                               stdex::extents<std::size_t, nrows_x, ncols_x>,
+                               Layout_x,
+                               Accessor_x> x,
+                 stdex::mdspan<T_y,
+                               stdex::extents<std::size_t, nrows_y, ncols_y>,
+                               Layout_y,
+                               Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < y.extent(0); ++i) {
         for (size_type j = 0; j < y.extent(1); ++j) {
@@ -64,29 +69,32 @@ copy(stdex::mdspan<T_x, stdex::extents<nrows_x, ncols_x>, Layout_x, Accessor_x>
 }
 
 template <class T_x,
-          stdex::extents<>::size_type n1_x,
-          stdex::extents<>::size_type n2_x,
-          stdex::extents<>::size_type n3_x,
+          std::size_t n1_x,
+          std::size_t n2_x,
+          std::size_t n3_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type n1_y,
-          stdex::extents<>::size_type n2_y,
-          stdex::extents<>::size_type n3_y,
+          std::size_t n1_y,
+          std::size_t n2_y,
+          std::size_t n3_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void
-copy(stdex::mdspan<T_x, stdex::extents<n1_x, n2_x, n3_x>, Layout_x, Accessor_x>
-         x,
-     stdex::mdspan<T_y, stdex::extents<n1_y, n2_y, n3_y>, Layout_y, Accessor_y>
-         y)
+inline void copy(stdex::mdspan<T_x,
+                               stdex::extents<std::size_t, n1_x, n2_x, n3_x>,
+                               Layout_x,
+                               Accessor_x> x,
+                 stdex::mdspan<T_y,
+                               stdex::extents<std::size_t, n1_y, n2_y, n3_y>,
+                               Layout_y,
+                               Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
     static_assert(x.static_extent(2) == y.static_extent(2));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < y.extent(0); ++i) {
         for (size_type j = 0; j < y.extent(1); ++j) {
@@ -98,35 +106,36 @@ copy(stdex::mdspan<T_x, stdex::extents<n1_x, n2_x, n3_x>, Layout_x, Accessor_x>
 }
 
 template <class T_x,
-          stdex::extents<>::size_type n1_x,
-          stdex::extents<>::size_type n2_x,
-          stdex::extents<>::size_type n3_x,
-          stdex::extents<>::size_type n4_x,
+          std::size_t n1_x,
+          std::size_t n2_x,
+          std::size_t n3_x,
+          std::size_t n4_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type n1_y,
-          stdex::extents<>::size_type n2_y,
-          stdex::extents<>::size_type n3_y,
-          stdex::extents<>::size_type n4_y,
+          std::size_t n1_y,
+          std::size_t n2_y,
+          std::size_t n3_y,
+          std::size_t n4_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void copy(stdex::mdspan<T_x,
-                               stdex::extents<n1_x, n2_x, n3_x, n4_x>,
-                               Layout_x,
-                               Accessor_x> x,
-                 stdex::mdspan<T_y,
-                               stdex::extents<n1_y, n2_y, n3_y, n4_y>,
-                               Layout_y,
-                               Accessor_y> y)
+inline void
+copy(stdex::mdspan<T_x,
+                   stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x>,
+                   Layout_x,
+                   Accessor_x> x,
+     stdex::mdspan<T_y,
+                   stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y>,
+                   Layout_y,
+                   Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
     static_assert(x.static_extent(2) == y.static_extent(2));
     static_assert(x.static_extent(3) == y.static_extent(3));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < y.extent(0); ++i) {
         for (size_type j = 0; j < y.extent(1); ++j) {
@@ -140,30 +149,31 @@ inline void copy(stdex::mdspan<T_x,
 }
 
 template <class T_x,
-          stdex::extents<>::size_type n1_x,
-          stdex::extents<>::size_type n2_x,
-          stdex::extents<>::size_type n3_x,
-          stdex::extents<>::size_type n4_x,
-          stdex::extents<>::size_type n5_x,
+          std::size_t n1_x,
+          std::size_t n2_x,
+          std::size_t n3_x,
+          std::size_t n4_x,
+          std::size_t n5_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type n1_y,
-          stdex::extents<>::size_type n2_y,
-          stdex::extents<>::size_type n3_y,
-          stdex::extents<>::size_type n4_y,
-          stdex::extents<>::size_type n5_y,
+          std::size_t n1_y,
+          std::size_t n2_y,
+          std::size_t n3_y,
+          std::size_t n4_y,
+          std::size_t n5_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void copy(stdex::mdspan<T_x,
-                               stdex::extents<n1_x, n2_x, n3_x, n4_x, n5_x>,
-                               Layout_x,
-                               Accessor_x> x,
-                 stdex::mdspan<T_y,
-                               stdex::extents<n1_y, n2_y, n3_y, n4_y, n5_x>,
-                               Layout_y,
-                               Accessor_y> y)
+inline void
+copy(stdex::mdspan<T_x,
+                   stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x>,
+                   Layout_x,
+                   Accessor_x> x,
+     stdex::mdspan<T_y,
+                   stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y>,
+                   Layout_y,
+                   Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -171,7 +181,7 @@ inline void copy(stdex::mdspan<T_x,
     static_assert(x.static_extent(3) == y.static_extent(3));
     static_assert(x.static_extent(4) == y.static_extent(4));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i1 = 0; i1 < y.extent(0); ++i1) {
         for (size_type i2 = 0; i2 < y.extent(1); ++i2) {
@@ -187,33 +197,35 @@ inline void copy(stdex::mdspan<T_x,
 }
 
 template <class T_x,
-          stdex::extents<>::size_type n1_x,
-          stdex::extents<>::size_type n2_x,
-          stdex::extents<>::size_type n3_x,
-          stdex::extents<>::size_type n4_x,
-          stdex::extents<>::size_type n5_x,
-          stdex::extents<>::size_type n6_x,
+          std::size_t n1_x,
+          std::size_t n2_x,
+          std::size_t n3_x,
+          std::size_t n4_x,
+          std::size_t n5_x,
+          std::size_t n6_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type n1_y,
-          stdex::extents<>::size_type n2_y,
-          stdex::extents<>::size_type n3_y,
-          stdex::extents<>::size_type n4_y,
-          stdex::extents<>::size_type n5_y,
-          stdex::extents<>::size_type n6_y,
+          std::size_t n1_y,
+          std::size_t n2_y,
+          std::size_t n3_y,
+          std::size_t n4_y,
+          std::size_t n5_y,
+          std::size_t n6_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void
-copy(stdex::mdspan<T_x,
-                   stdex::extents<n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
-                   Layout_x,
-                   Accessor_x> x,
-     stdex::mdspan<T_y,
-                   stdex::extents<n1_y, n2_y, n3_y, n4_y, n5_x, n6_x>,
-                   Layout_y,
-                   Accessor_y> y)
+copy(stdex::mdspan<
+         T_x,
+         stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
+         Layout_x,
+         Accessor_x> x,
+     stdex::mdspan<
+         T_y,
+         stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y>,
+         Layout_y,
+         Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -222,7 +234,7 @@ copy(stdex::mdspan<T_x,
     static_assert(x.static_extent(4) == y.static_extent(4));
     static_assert(x.static_extent(5) == y.static_extent(5));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i1 = 0; i1 < y.extent(0); ++i1) {
         for (size_type i2 = 0; i2 < y.extent(1); ++i2) {
@@ -241,35 +253,37 @@ copy(stdex::mdspan<T_x,
 }
 
 template <class T_x,
-          stdex::extents<>::size_type n1_x,
-          stdex::extents<>::size_type n2_x,
-          stdex::extents<>::size_type n3_x,
-          stdex::extents<>::size_type n4_x,
-          stdex::extents<>::size_type n5_x,
-          stdex::extents<>::size_type n6_x,
-          stdex::extents<>::size_type n7_x,
+          std::size_t n1_x,
+          std::size_t n2_x,
+          std::size_t n3_x,
+          std::size_t n4_x,
+          std::size_t n5_x,
+          std::size_t n6_x,
+          std::size_t n7_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type n1_y,
-          stdex::extents<>::size_type n2_y,
-          stdex::extents<>::size_type n3_y,
-          stdex::extents<>::size_type n4_y,
-          stdex::extents<>::size_type n5_y,
-          stdex::extents<>::size_type n6_y,
-          stdex::extents<>::size_type n7_y,
+          std::size_t n1_y,
+          std::size_t n2_y,
+          std::size_t n3_y,
+          std::size_t n4_y,
+          std::size_t n5_y,
+          std::size_t n6_y,
+          std::size_t n7_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void
-copy(stdex::mdspan<T_x,
-                   stdex::extents<n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
-                   Layout_x,
-                   Accessor_x> x,
-     stdex::mdspan<T_y,
-                   stdex::extents<n1_y, n2_y, n3_y, n4_y, n5_x, n6_x, n7_x>,
-                   Layout_y,
-                   Accessor_y> y)
+copy(stdex::mdspan<
+         T_x,
+         stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
+         Layout_x,
+         Accessor_x> x,
+     stdex::mdspan<
+         T_y,
+         stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
+         Layout_y,
+         Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -279,7 +293,7 @@ copy(stdex::mdspan<T_x,
     static_assert(x.static_extent(5) == y.static_extent(5));
     static_assert(x.static_extent(6) == y.static_extent(6));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i1 = 0; i1 < y.extent(0); ++i1) {
         for (size_type i2 = 0; i2 < y.extent(1); ++i2) {

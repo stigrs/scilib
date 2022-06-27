@@ -24,7 +24,7 @@ namespace __Detail {
 template <class Extents, class... Dims>
 inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     std::vector<size_type> indexes{static_cast<size_type>(dims)...};
     bool result = true;
@@ -50,7 +50,7 @@ class MDArray {
 public:
     using element_type = T;
     using value_type = std::remove_cv_t<T>;
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using extents_type = Extents;
     using layout_type = Layout;
     using mapping_type = typename layout_type::template mapping<extents_type>;

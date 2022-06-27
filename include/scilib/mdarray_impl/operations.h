@@ -214,15 +214,12 @@ operator*(const Matrix<T, Layout, Allocator>& a,
 //------------------------------------------------------------------------------
 // Apply operations:
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor,
-          class F>
-constexpr void apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
-                     F f)
+template <class T, std::size_t ext, class Layout, class Accessor, class F>
+constexpr void
+apply(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
+      F f)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < v.extent(0); ++i) {
         f(v(i));
@@ -230,15 +227,18 @@ constexpr void apply(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
 }
 
 template <class T,
-          stdex::extents<>::size_type nrows,
-          stdex::extents<>::size_type ncols,
+          std::size_t nrows,
+          std::size_t ncols,
           class Layout,
           class Accessor,
           class F>
-constexpr void
-apply(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m, F f)
+constexpr void apply(stdex::mdspan<T,
+                                   stdex::extents<std::size_t, nrows, ncols>,
+                                   Layout,
+                                   Accessor> m,
+                     F f)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < m.extent(0); ++i) {
         for (size_type j = 0; j < m.extent(1); ++j) {
@@ -250,14 +250,12 @@ apply(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m, F f)
 //------------------------------------------------------------------------------
 // Stream methods:
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline void
+print(std::ostream& ostrm,
+      stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     ostrm << v.extent(0) << '\n' << '{';
     for (size_type i = 0; i < v.extent(0); ++i) {
@@ -273,7 +271,7 @@ template <class T, class Layout, class Allocator>
 inline std::ostream& operator<<(std::ostream& ostrm,
                                 const Vector<T, Layout, Allocator>& v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     ostrm << v.size() << '\n' << '{';
     for (size_type i = 0; i < v.size(); ++i) {
@@ -290,7 +288,7 @@ template <class T, class Layout, class Allocator>
 inline std::istream& operator>>(std::istream& istrm,
                                 Vector<T, Layout, Allocator>& v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     size_type n;
     istrm >> n;
@@ -307,15 +305,17 @@ inline std::istream& operator>>(std::istream& istrm,
 }
 
 template <class T,
-          stdex::extents<>::size_type nrows,
-          stdex::extents<>::size_type ncols,
+          std::size_t nrows,
+          std::size_t ncols,
           class Layout,
           class Accessor>
-inline void
-print(std::ostream& ostrm,
-      stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m)
+inline void print(std::ostream& ostrm,
+                  stdex::mdspan<T,
+                                stdex::extents<std::size_t, nrows, ncols>,
+                                Layout,
+                                Accessor> m)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (size_type i = 0; i < m.extent(0); ++i) {
@@ -333,7 +333,7 @@ template <class T, class Layout, class Allocator>
 inline std::ostream& operator<<(std::ostream& ostrm,
                                 const Matrix<T, Layout, Allocator>& m)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (size_type i = 0; i < m.extent(0); ++i) {
@@ -352,7 +352,7 @@ template <class T, class Layout, class Allocator>
 inline std::istream& operator>>(std::istream& istrm,
                                 Matrix<T, Layout, Allocator>& m)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     size_type nr;
     size_type nc;

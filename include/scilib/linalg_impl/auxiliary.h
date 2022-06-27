@@ -19,24 +19,24 @@ namespace Linalg {
 //------------------------------------------------------------------------------
 // Fill mdspan:
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline void fill(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v,
-                 const T& value)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline void
+fill(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
+     const T& value)
 {
     Sci::apply(v, [&](T& vi) { vi = value; });
 }
 
 template <class T,
-          stdex::extents<>::size_type nrows,
-          stdex::extents<>::size_type ncols,
+          std::size_t nrows,
+          std::size_t ncols,
           class Layout,
           class Accessor>
-inline void
-fill(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> m,
-     const T& value)
+inline void fill(stdex::mdspan<T,
+                               stdex::extents<std::size_t, nrows, ncols>,
+                               Layout,
+                               Accessor> m,
+                 const T& value)
 {
     Sci::apply(m, [&](T& mi) { mi = value; });
 }
@@ -52,15 +52,13 @@ inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& value)
 //------------------------------------------------------------------------------
 // Limit array values:
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline void clip(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> a,
-                 const T& a_min,
-                 const T& a_max)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline void
+clip(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> a,
+     const T& a_min,
+     const T& a_max)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < a.extent(0); ++i) {
         if (a(i) < a_min) {
@@ -73,16 +71,18 @@ inline void clip(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> a,
 }
 
 template <class T,
-          stdex::extents<>::size_type nrows,
-          stdex::extents<>::size_type ncols,
+          std::size_t nrows,
+          std::size_t ncols,
           class Layout,
           class Accessor>
-inline void
-clip(stdex::mdspan<T, stdex::extents<nrows, ncols>, Layout, Accessor> a,
-     const T& a_min,
-     const T& a_max)
+inline void clip(stdex::mdspan<T,
+                               stdex::extents<std::size_t, nrows, ncols>,
+                               Layout,
+                               Accessor> a,
+                 const T& a_min,
+                 const T& a_max)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < a.extent(0); ++i) {
         for (size_type j = 0; i < a.extent(1); ++i) {
@@ -107,14 +107,11 @@ inline void clip(Sci::MDArray<T, Extents, Layout, Allocator>& a,
 //------------------------------------------------------------------------------
 // Find argmax, argmin, max, min, sum, and product of elements:
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline stdex::extents<>::size_type
-argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline std::size_t
+argmax(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     size_type max_idx = 0;
@@ -129,20 +126,16 @@ argmax(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout, class Allocator>
-inline stdex::extents<>::size_type
-argmax(const Sci::Vector<T, Layout, Allocator>& v)
+inline std::size_t argmax(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return argmax(v.view());
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline stdex::extents<>::size_type
-argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline std::size_t
+argmin(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     size_type min_idx = 0;
@@ -157,19 +150,16 @@ argmin(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
 }
 
 template <class T, class Layout, class Allocator>
-inline stdex::extents<>::size_type
-argmin(const Sci::Vector<T, Layout, Allocator>& v)
+inline std::size_t argmin(const Sci::Vector<T, Layout, Allocator>& v)
 {
     return argmin(v.view());
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline auto max(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline auto
+max(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = v(0);
@@ -187,13 +177,11 @@ inline T max(const Sci::Vector<T, Layout, Allocator>& v)
     return max(v.view());
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline auto min(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline auto
+min(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = v(0);
@@ -211,13 +199,11 @@ inline T min(const Sci::Vector<T, Layout, Allocator>& v)
     return min(v.view());
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline auto sum(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline auto
+sum(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 0;
@@ -233,13 +219,11 @@ inline T sum(const Sci::Vector<T, Layout, Allocator>& v)
     return sum(v.view());
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline auto prod(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> v)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline auto
+prod(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 1;

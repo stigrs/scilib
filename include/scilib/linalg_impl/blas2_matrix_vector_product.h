@@ -27,27 +27,31 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T_a,
-          stdex::extents<>::size_type nrows_a,
-          stdex::extents<>::size_type ncols_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
           class Layout_a,
           class Accessor_a,
           class T_x,
-          stdex::extents<>::size_type ext_x,
+          std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type ext_y,
+          std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<T_a, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a>
-        a,
-    stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+    stdex::mdspan<T_a,
+                  stdex::extents<std::size_t, nrows_a, ncols_a>,
+                  Layout_a,
+                  Accessor_a> a,
+    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
+        x,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
+        y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < a.extent(0); ++i) {
         y(i) = T_y{0};

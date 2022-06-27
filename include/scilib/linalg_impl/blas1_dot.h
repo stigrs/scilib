@@ -16,18 +16,21 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T,
-          stdex::extents<>::size_type ext_x,
+          std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
-          stdex::extents<>::size_type ext_y,
+          std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline auto dot(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-                stdex::mdspan<T, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+inline auto
+dot(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
+        x,
+    stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
+        y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 0;

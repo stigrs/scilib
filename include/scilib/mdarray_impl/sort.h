@@ -15,16 +15,13 @@ namespace stdex = std::experimental;
 
 namespace __Detail {
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline stdex::extents<>::size_type
-partition(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x,
-          stdex::extents<>::size_type start,
-          stdex::extents<>::size_type end)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline std::size_t partition(
+    stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x,
+    std::size_t start,
+    std::size_t end)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     T xi = x(start);
     size_type i = start;
@@ -38,14 +35,11 @@ partition(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x,
     return i;
 }
 
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline void
-quick_sort(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x,
-           stdex::extents<>::size_type start,
-           stdex::extents<>::size_type end)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline void quick_sort(
+    stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x,
+    std::size_t start,
+    std::size_t end)
 {
     if (start < end) {
         auto pivot = partition(x, start, end);
@@ -57,13 +51,11 @@ quick_sort(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x,
 } // namespace __Detail
 
 // Quick sort.
-template <class T,
-          stdex::extents<>::size_type ext,
-          class Layout,
-          class Accessor>
-inline void sort(stdex::mdspan<T, stdex::extents<ext>, Layout, Accessor> x)
+template <class T, std::size_t ext, class Layout, class Accessor>
+inline void
+sort(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     size_type start = 0;
     size_type end = x.extent(0);
