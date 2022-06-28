@@ -46,16 +46,7 @@
 #ifndef SCILIB_LINALG_TRANSPOSED_H
 #define SCILIB_LINALG_TRANSPOSED_H
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4172) // workaround bug in MSVC 2022 (19.32)
-#endif
-
 #include <experimental/mdspan>
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 namespace Sci {
 namespace Linalg {
