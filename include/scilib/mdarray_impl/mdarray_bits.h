@@ -229,14 +229,14 @@ public:
 
     constexpr size_type extent(size_type dim) const noexcept
     {
-        assert(dim >= 0 && dim < extents_type::rank());
+        assert(dim < extents_type::rank());
         return map.extents().extent(dim);
     }
 
     // Signed extent.
     constexpr difference_type sextent(size_type dim) const noexcept
     {
-        assert(dim >= 0 && dim < extents_type::rank());
+        assert(dim < extents_type::rank());
         return static_cast<difference_type>(map.extents().extent(dim));
     }
 
