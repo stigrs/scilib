@@ -29,7 +29,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
     std::vector<size_type> indexes{static_cast<size_type>(dims)...};
     bool result = true;
     for (size_type i = 0; i < indexes.size(); ++i) {
-        if (indexes[i] < 0 || indexes[i] >= exts.extent(i)) {
+        if (!(indexes[i] < exts.extent(i))) {
             result = false;
         }
     }
