@@ -17,22 +17,24 @@ namespace stdex = std::experimental;
 
 template <class T_scalar,
           class T_x,
-          stdex::extents<>::size_type ext_x,
+          std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type ext_y,
+          std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void
-axpy(const T_scalar& scalar,
-     stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-     stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y)
+inline void axpy(
+    const T_scalar& scalar,
+    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
+        x,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
+        y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     for (size_type i = 0; i < y.extent(0); ++i) {
         y(i) = scalar * x(i) + y(i);

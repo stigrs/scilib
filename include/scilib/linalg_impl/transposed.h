@@ -54,10 +54,11 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 namespace {
-template <stdex::extents<>::size_type ext0, stdex::extents<>::size_type ext1>
-stdex::extents<ext1, ext0> transpose_extents(stdex::extents<ext0, ext1> e)
+template <std::size_t ext0, std::size_t ext1>
+inline stdex::extents<std::size_t, ext1, ext0>
+transpose_extents(stdex::extents<std::size_t, ext0, ext1> e)
 {
-    return stdex::extents<ext1, ext0>(e.extent(1), e.extent(0));
+    return stdex::extents<std::size_t, ext1, ext0>(e.extent(1), e.extent(0));
 }
 } // namespace
 
@@ -110,7 +111,7 @@ public:
 };
 
 template <class T, class Extents, class Layout, class Accessor>
-stdex::mdspan<T, Extents, layout_transpose<Layout>, Accessor>
+inline stdex::mdspan<T, Extents, layout_transpose<Layout>, Accessor>
 transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
     static_assert(a.rank() == 2);
@@ -124,8 +125,10 @@ template <class T, class Layout, class Allocator>
 inline Sci::Matrix<T, Layout, Allocator>
 transposed(const Sci::Matrix<T, Layout, Allocator>& a)
 {
-    Sci::Matrix<T, Layout, Allocator> tmp = transposed(a.view());
-    return tmp;
+    auto at = transposed(a.view());
+    Sci::Matrix<T, Layout, Allocator> res(at.extent(0), at.extent(1));
+    Sci::copy(at, res.view());
+    return res;
 }
 
 } // namespace Linalg

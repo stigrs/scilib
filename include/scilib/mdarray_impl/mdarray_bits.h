@@ -24,12 +24,12 @@ namespace __Detail {
 template <class Extents, class... Dims>
 inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     std::vector<size_type> indexes{static_cast<size_type>(dims)...};
     bool result = true;
     for (size_type i = 0; i < indexes.size(); ++i) {
-        if (indexes[i] < 0 || indexes[i] >= exts.extent(i)) {
+        if (!(indexes[i] < exts.extent(i))) {
             result = false;
         }
     }
@@ -50,7 +50,7 @@ class MDArray {
 public:
     using element_type = T;
     using value_type = std::remove_cv_t<T>;
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using extents_type = Extents;
     using layout_type = Layout;
     using mapping_type = typename layout_type::template mapping<extents_type>;
@@ -229,14 +229,14 @@ public:
 
     constexpr size_type extent(size_type dim) const noexcept
     {
-        assert(dim >= 0 && dim < extents_type::rank());
+        assert(dim < extents_type::rank());
         return map.extents().extent(dim);
     }
 
     // Signed extent.
     constexpr difference_type sextent(size_type dim) const noexcept
     {
-        assert(dim >= 0 && dim < extents_type::rank());
+        assert(dim < extents_type::rank());
         return static_cast<difference_type>(map.extents().extent(dim));
     }
 

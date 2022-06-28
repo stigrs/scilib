@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Stig Rune Sellevag
+// Copyright (c) 2022 Stig Rune Sellevag
 //
 // This file is distributed under the MIT License. See the accompanying file
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
@@ -40,24 +40,26 @@ using layout_right = stdex::layout_right;
 using layout_stride = stdex::layout_stride;
 
 template <class T, class Layout = stdex::layout_right>
-using Vector_view =
-    stdex::mdspan<T, stdex::extents<stdex::dynamic_extent>, Layout>;
+using Vector_view = stdex::
+    mdspan<T, stdex::extents<std::size_t, stdex::dynamic_extent>, Layout>;
 
 template <class T>
-using Subvector_view = stdex::
-    mdspan<T, stdex::extents<stdex::dynamic_extent>, stdex::layout_stride>;
+using Subvector_view =
+    stdex::mdspan<T,
+                  stdex::extents<std::size_t, stdex::dynamic_extent>,
+                  stdex::layout_stride>;
 
 template <class T, class Layout = stdex::layout_right>
-using Matrix_view =
-    stdex::mdspan<T,
-                  stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-                  Layout>;
+using Matrix_view = stdex::mdspan<
+    T,
+    stdex::extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent>,
+    Layout>;
 
 template <class T>
-using Submatrix_view =
-    stdex::mdspan<T,
-                  stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-                  stdex::layout_stride>;
+using Submatrix_view = stdex::mdspan<
+    T,
+    stdex::extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent>,
+    stdex::layout_stride>;
 
 // clang-format off
 template <class E>
@@ -81,23 +83,26 @@ class MDArray;
 template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
-using Vector =
-    MDArray<T, stdex::extents<stdex::dynamic_extent>, Layout, Allocator>;
+using Vector = MDArray<T,
+                       stdex::extents<std::size_t, stdex::dynamic_extent>,
+                       Layout,
+                       Allocator>;
 
 template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
-using Matrix =
-    MDArray<T,
-            stdex::extents<stdex::dynamic_extent, stdex::dynamic_extent>,
-            Layout,
-            Allocator>;
+using Matrix = MDArray<
+    T,
+    stdex::extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent>,
+    Layout,
+    Allocator>;
 
 template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array3D = MDArray<T,
-                        stdex::extents<stdex::dynamic_extent,
+                        stdex::extents<std::size_t,
+                                       stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
                         Layout,
@@ -107,7 +112,8 @@ template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array4D = MDArray<T,
-                        stdex::extents<stdex::dynamic_extent,
+                        stdex::extents<std::size_t,
+                                       stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
@@ -118,7 +124,8 @@ template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array5D = MDArray<T,
-                        stdex::extents<stdex::dynamic_extent,
+                        stdex::extents<std::size_t,
+                                       stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -130,7 +137,8 @@ template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array6D = MDArray<T,
-                        stdex::extents<stdex::dynamic_extent,
+                        stdex::extents<std::size_t,
+                                       stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -143,7 +151,8 @@ template <class T,
           class Layout = stdex::layout_right,
           class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array7D = MDArray<T,
-                        stdex::extents<stdex::dynamic_extent,
+                        stdex::extents<std::size_t,
+                                       stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,

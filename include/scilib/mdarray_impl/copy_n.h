@@ -16,24 +16,26 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 template <class T_x,
-          stdex::extents<>::size_type ext_x,
+          std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
-          stdex::extents<>::size_type ext_y,
+          std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void
-copy_n(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
-       stdex::extents<>::size_type count,
-       stdex::mdspan<T_y, stdex::extents<ext_y>, Layout_y, Accessor_y> y,
-       stdex::extents<>::size_type offset = 0)
+inline void copy_n(
+    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
+        x,
+    std::size_t count,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
+        y,
+    std::size_t offset = 0)
 {
     assert(count <= x.extent(0));
     assert(offset >= 0 && offset < count);
     assert(count > 0 && offset + count <= y.extent(0));
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     for (size_type i = 0; i < count; ++i) {
         y(i + offset) = x(i);
     }
@@ -41,9 +43,9 @@ copy_n(stdex::mdspan<T_x, stdex::extents<ext_x>, Layout_x, Accessor_x> x,
 
 template <class T, class Layout>
 inline void copy_n(const Vector<T, Layout>& x,
-                   stdex::extents<>::size_type count,
+                   std::size_t count,
                    Vector<T, Layout>& y,
-                   stdex::extents<>::size_type offset = 0)
+                   std::size_t offset = 0)
 {
     copy_n(x.view(), count, y.view(), offset);
 }

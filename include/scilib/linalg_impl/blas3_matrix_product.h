@@ -25,32 +25,38 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T_a,
-          stdex::extents<>::size_type nrows_a,
-          stdex::extents<>::size_type ncols_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
           class Layout_a,
           class Accessor_a,
           class T_b,
-          stdex::extents<>::size_type nrows_b,
-          stdex::extents<>::size_type ncols_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
           class Layout_b,
           class Accessor_b,
           class T_c,
-          stdex::extents<>::size_type nrows_c,
-          stdex::extents<>::size_type ncols_c,
+          std::size_t nrows_c,
+          std::size_t ncols_c,
           class Layout_c,
           class Accessor_c>
     requires(!std::is_const_v<T_c>)
-inline void matrix_product(
-    stdex::mdspan<T_a, stdex::extents<nrows_a, ncols_a>, Layout_a, Accessor_a>
-        a,
-    stdex::mdspan<T_b, stdex::extents<nrows_b, ncols_b>, Layout_b, Accessor_b>
-        b,
-    stdex::mdspan<T_c, stdex::extents<nrows_c, ncols_c>, Layout_c, Accessor_c>
-        c)
+inline void
+matrix_product(stdex::mdspan<T_a,
+                             stdex::extents<std::size_t, nrows_a, ncols_a>,
+                             Layout_a,
+                             Accessor_a> a,
+               stdex::mdspan<T_b,
+                             stdex::extents<std::size_t, nrows_b, ncols_b>,
+                             Layout_b,
+                             Accessor_b> b,
+               stdex::mdspan<T_c,
+                             stdex::extents<std::size_t, nrows_c, ncols_c>,
+                             Layout_c,
+                             Accessor_c> c)
 {
     static_assert(a.static_extent(1) == b.static_extent(0));
 
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     const size_type n = a.extent(0);
     const size_type m = a.extent(1);
@@ -182,7 +188,7 @@ inline Sci::Matrix<T, Layout, Allocator>
 matrix_product(const Sci::Matrix<T, Layout, Allocator>& a,
                const Sci::Matrix<T, Layout, Allocator>& b)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
 
     const size_type n = a.extent(0);
     const size_type p = b.extent(1);

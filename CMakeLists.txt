@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(Scilib 
-    VERSION 0.2
+    VERSION 0.3
     LANGUAGES CXX
 )
 
@@ -47,18 +47,23 @@ endif()
 # Check if OpenMP is available.
 find_package(OpenMP)
 
-# Check if C++20 standard is available.
-if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
-    message(STATUS "Using C++20 standard")
-    set(CMAKE_CXX_STANDARD 20)
+# Check if C++23 standard is available.
+if("cxx_std_23" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+    message(STATUS "Using C++23 standard")
+    set(CMAKE_CXX_STANDARD 23)
 else()
-    message(FATAL_ERROR "Requested Scilib_CXX_STANDARD \"20\" not supported by provided C++ compiler")
+    if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+        message(STATUS "Using C++20 standard")
+        set(CMAKE_CXX_STANDARD 20)
+    else()
+        message(FATAL_ERROR "Requested Scilib_CXX_STANDARD not supported by provided C++ compiler")
+    endif()
 endif()
 
 option(Scilib_ENABLE_CONCEPTS "Try to enable concepts support by giving extra flags." ON)
 
 if(Scilib_ENABLE_CONCEPTS)
-    if(CMAKE_CXX_STANDARD STREQUAL "20")
+    if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
         include(CheckCXXCompilerFlag)
         CHECK_CXX_COMPILER_FLAG("-fconcepts" COMPILER_SUPPORTS_FCONCEPTS)
         if(COMPILER_SUPPORTS_FCONCEPTS)
@@ -91,7 +96,7 @@ if(MSVC)
         set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od /Qopenmp)
         set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O3 /Qopenmp)
     else()
-        set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /WX /wd4100)
+        set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /WX) 
         set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od)
         set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O2)
     endif()

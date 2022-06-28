@@ -16,14 +16,12 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T,
-          stdex::extents<>::size_type ext_x,
-          class Layout_x,
-          class Accessor_x>
-inline stdex::extents<>::size_type
-idx_abs_max(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
+template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
+inline std::size_t idx_abs_max(
+    stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
+        x)
 {
-    using size_type = stdex::extents<>::size_type;
+    using size_type = std::size_t;
     using magn_type = std::remove_cv_t<decltype(std::abs(x(0)))>;
 
     size_type max_idx = 0;
@@ -38,8 +36,7 @@ idx_abs_max(stdex::mdspan<T, stdex::extents<ext_x>, Layout_x, Accessor_x> x)
 }
 
 template <class T, class Layout, class Allocator>
-inline stdex::extents<>::size_type
-idx_abs_max(const Sci::Vector<T, Layout, Allocator>& x)
+inline std::size_t idx_abs_max(const Sci::Vector<T, Layout, Allocator>& x)
 {
     return idx_abs_max(x.view());
 }

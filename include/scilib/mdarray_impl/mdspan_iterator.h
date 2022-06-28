@@ -24,7 +24,7 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 template <class T,
-          class Extents = stdex::extents<stdex::dynamic_extent>,
+          class Extents = stdex::extents<std::size_t, stdex::dynamic_extent>,
           class Layout = stdex::layout_right,
           class Accessor = stdex::default_accessor<T>>
     requires Extents_has_rank<Extents>
@@ -32,23 +32,24 @@ class MDSpan_iterator {
 public:
     using iterator_category = std::random_access_iterator_tag;
     using value_type = std::remove_cv_t<T>;
-    using extents_t = Extents;
-    using mdspan_t = stdex::mdspan<T, Extents, Layout, Accessor>;
+    using extents_type = Extents;
+    using mdspan_type = stdex::mdspan<T, Extents, Layout, Accessor>;
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
-    using difference_type = typename mdspan_t::difference_type;
-    using reference = typename mdspan_t::reference;
-    using pointer = typename mdspan_t::pointer;
+    using difference_type = std::ptrdiff_t;
+    using reference = typename mdspan_type::reference;
+    using pointer = typename mdspan_type::pointer;
 
     // Needed for LegacyForwardIterator
     MDSpan_iterator() = default;
 
-    constexpr explicit MDSpan_iterator(mdspan_t x)
+    constexpr explicit MDSpan_iterator(mdspan_type x)
         : x_(x), current_(0), size_(x.extent(0))
     {
         static_assert(Extents::rank() == 1);
     }
 
-    constexpr explicit MDSpan_iterator(mdspan_t x, difference_type curr_index)
+    constexpr explicit MDSpan_iterator(mdspan_type x,
+                                       difference_type curr_index)
         : x_(x), current_(curr_index), size_(x.extent(0))
     {
         static_assert(Extents::rank() == 1);
@@ -179,7 +180,7 @@ public:
     }
 
 private:
-    mdspan_t x_;
+    mdspan_type x_;
     difference_type current_ = 0;
     difference_type size_ = 0;
 };
