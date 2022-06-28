@@ -38,9 +38,9 @@ licensing of GoogleTest and stdBLAS.
 
 | Compiler      | Versions Tested |
 |:--------------|----------------:|
-| GCC           | 9               |
+| GCC           | 10              |
 | Clang         | 11              |
-| Visual Studio | VS2019          |
+| Visual Studio | VS2022          |
 | XCode         | 13.0            |
 | Intel         | 2021            |
 

@@ -67,7 +67,7 @@ TEST(TestLinalg, TestInvColMajor)
 
     Matrix<double, stdex::layout_left> a(a_data, 4, 4);
     Matrix<double> ans_t(ainv_data, 4, 4);
-    Matrix<double, stdex::layout_left> ans(transposed(ans_t.view()));
+    Matrix<double, stdex::layout_left> ans(transposed(ans_t).view());
 
     auto res = inv(a);
 
