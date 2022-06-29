@@ -7,6 +7,7 @@
 #ifndef SCILIB_MDARRAY_BITS_H
 #define SCILIB_MDARRAY_BITS_H
 
+#include "support.h"
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -22,7 +23,7 @@ namespace __Detail {
 template <class Extents, class... Dims>
 inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
-    using size_type = std::size_t;
+    using size_type = typename Extents::size_type;
 
     std::vector<size_type> indexes{static_cast<size_type>(dims)...};
     bool result = true;
@@ -37,8 +38,8 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 template <class T, class Extents, class Layout, class Accessor>
 inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
 {
-    // m.extents() is returned by reference, need to make a copy
-    using size_type = Extents::size_type;
+    // mdspan returns m.extents() by reference, need to make a copy
+    using size_type = typename Extents::size_type;
 
     std::array<size_type, Extents::rank()> res;
     for (size_type i = 0; i < m.rank(); ++i) {
@@ -84,14 +85,16 @@ public:
     constexpr MDArray() = default;
 
     template <class... Exts>
+        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr explicit MDArray(Exts... exts)
         : map(extents_type(static_cast<size_type>(exts)...)), ctr(map.required_span_size())
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
     }
 
     template <class... Exts>
-        requires(std::is_convertible_v<Exts, size_type> && sizeof...(Exts) == extents_type::rank())
+        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
         : map(extents_type(static_cast<size_type>(exts)...)), ctr(m)
     {
@@ -143,7 +146,7 @@ public:
 
 #if MDSPAN_USE_PAREN_OPERATOR
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type> &&
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr reference operator()(Indices... indices) noexcept
     {
@@ -152,7 +155,7 @@ public:
     }
 
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type> &&
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator()(Indices... indices) const noexcept
     {
@@ -163,7 +166,7 @@ public:
 
 #if MDSPAN_USE_BRACKET_OPERATOR
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type> &&
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr reference operator[](Indices... indices) noexcept
     {
@@ -172,7 +175,7 @@ public:
     }
 
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type> &&
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator[](Indices... indices) const noexcept
     {
@@ -267,7 +270,8 @@ public:
     // Modifiers
 
     template <class... Exts>
-        requires(std::is_convertible_v<Exts, size_type> && sizeof...(Exts) == extents_type::rank())
+        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr void resize(Exts... exts) noexcept
     {
         map = mapping_type(extents_type(static_cast<size_type>(exts)...));
