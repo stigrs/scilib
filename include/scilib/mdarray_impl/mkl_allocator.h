@@ -42,15 +42,13 @@ public:
 };
 
 template <class T1, class T2>
-constexpr bool operator==(const MKL_allocator<T1>&,
-                          const MKL_allocator<T2>&) noexcept
+constexpr bool operator==(const MKL_allocator<T1>&, const MKL_allocator<T2>&) noexcept
 {
     return true;
 }
 
 template <class T1, class T2>
-constexpr bool operator!=(const MKL_allocator<T1>& lhs,
-                          const MKL_allocator<T2>& rhs) noexcept
+constexpr bool operator!=(const MKL_allocator<T1>& lhs, const MKL_allocator<T2>& rhs) noexcept
 {
     return !(lhs == rhs);
 }

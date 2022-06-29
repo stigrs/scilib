@@ -15,10 +15,9 @@ namespace stdex = std::experimental;
 namespace __Detail {
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline std::size_t partition(
-    stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x,
-    std::size_t start,
-    std::size_t end)
+inline std::size_t partition(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x,
+                             std::size_t start,
+                             std::size_t end)
 {
     using size_type = std::size_t;
 
@@ -35,10 +34,9 @@ inline std::size_t partition(
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline void quick_sort(
-    stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x,
-    std::size_t start,
-    std::size_t end)
+inline void quick_sort(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x,
+                       std::size_t start,
+                       std::size_t end)
 {
     if (start < end) {
         auto pivot = partition(x, start, end);
@@ -51,8 +49,7 @@ inline void quick_sort(
 
 // Quick sort.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline void
-sort(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline void sort(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     using size_type = std::size_t;
 

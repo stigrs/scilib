@@ -38,19 +38,10 @@ template <class T_a,
           class Layout_c,
           class Accessor_c>
     requires(!std::is_const_v<T_c>)
-inline void
-matrix_product(stdex::mdspan<T_a,
-                             stdex::extents<std::size_t, nrows_a, ncols_a>,
-                             Layout_a,
-                             Accessor_a> a,
-               stdex::mdspan<T_b,
-                             stdex::extents<std::size_t, nrows_b, ncols_b>,
-                             Layout_b,
-                             Accessor_b> b,
-               stdex::mdspan<T_c,
-                             stdex::extents<std::size_t, nrows_c, ncols_c>,
-                             Layout_c,
-                             Accessor_c> c)
+inline void matrix_product(
+    stdex::mdspan<T_a, stdex::extents<std::size_t, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    stdex::mdspan<T_b, stdex::extents<std::size_t, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+    stdex::mdspan<T_c, stdex::extents<std::size_t, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
 {
     static_assert(a.static_extent(1) == b.static_extent(0));
 
@@ -93,8 +84,8 @@ inline void matrix_product(Sci::Matrix_view<double, Layout> a,
         ldb = k;
         ldc = m;
     }
-    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
-                a.data(), lda, b.data(), ldb, beta, c.data(), ldc);
+    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha, a.data(), lda, b.data(),
+                ldb, beta, c.data(), ldc);
 }
 
 template <class Layout>
@@ -120,8 +111,8 @@ inline void matrix_product(Sci::Matrix_view<const double, Layout> a,
         ldb = k;
         ldc = m;
     }
-    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
-                a.data(), lda, b.data(), ldb, beta, c.data(), ldc);
+    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha, a.data(), lda, b.data(),
+                ldb, beta, c.data(), ldc);
 }
 
 #ifdef USE_MKL
@@ -148,15 +139,14 @@ inline void matrix_product(Sci::Matrix_view<std::complex<double>, Layout> a,
         ldb = k;
         ldc = m;
     }
-    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
-                a.data(), lda, b.data(), ldb, &beta, c.data(), ldc);
+    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha, a.data(), lda, b.data(),
+                ldb, &beta, c.data(), ldc);
 }
 
 template <class Layout>
-inline void
-matrix_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
-               Sci::Matrix_view<const std::complex<double>, Layout> b,
-               Sci::Matrix_view<std::complex<double>, Layout> c)
+inline void matrix_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
+                           Sci::Matrix_view<const std::complex<double>, Layout> b,
+                           Sci::Matrix_view<std::complex<double>, Layout> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
@@ -176,15 +166,14 @@ matrix_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
         ldb = k;
         ldc = m;
     }
-    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha,
-                a.data(), lda, b.data(), ldb, &beta, c.data(), ldc);
+    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha, a.data(), lda, b.data(),
+                ldb, &beta, c.data(), ldc);
 }
 #endif
 
 template <class T, class Layout, class Allocator>
-inline Sci::Matrix<T, Layout, Allocator>
-matrix_product(const Sci::Matrix<T, Layout, Allocator>& a,
-               const Sci::Matrix<T, Layout, Allocator>& b)
+inline Sci::Matrix<T, Layout, Allocator> matrix_product(const Sci::Matrix<T, Layout, Allocator>& a,
+                                                        const Sci::Matrix<T, Layout, Allocator>& b)
 {
     using size_type = std::size_t;
 

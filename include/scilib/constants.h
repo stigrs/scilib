@@ -10,7 +10,7 @@
 namespace Sci {
 namespace Constants {
 
-//--------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 // Provides definitions of mathematical constants, metric prefixes,
 // physical constants, and conversion factors.
 

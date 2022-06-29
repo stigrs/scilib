@@ -28,8 +28,7 @@ double error_norm(const Sci::Vector<double, Layout, Allocator>& y,
     assert(y.size() == ynew.size());
     assert(y.size() == err_vec.size());
 
-    double max_norm =
-        std::abs(err_vec(0)) / (atol + std::max(y(0), ynew(0)) * rtol);
+    double max_norm = std::abs(err_vec(0)) / (atol + std::max(y(0), ynew(0)) * rtol);
     for (std::size_t i = 1; i < err_vec.extent(0); ++i) {
         double tol = atol + std::max(std::abs(y(0)), std::abs(ynew(0))) * rtol;
         double val = std::abs(err_vec(0)) / tol;
@@ -42,12 +41,8 @@ double error_norm(const Sci::Vector<double, Layout, Allocator>& y,
 
 // Embedded Dormand-Prince method of order 4(5).
 template <class F, class Layout, class Allocator>
-void dormand_prince(F f,
-                    double& x,
-                    double xf,
-                    Sci::Vector<double, Layout, Allocator>& y,
-                    double atol,
-                    double rtol)
+void dormand_prince(
+    F f, double& x, double xf, Sci::Vector<double, Layout, Allocator>& y, double atol, double rtol)
 {
     // Butcher tableau for Dormand-Prince method:
     // Source: https://en.wikipedia.org/wiki/Dormand-Prince_method
@@ -139,8 +134,7 @@ void dormand_prince(F f,
         auto err_vec = h * (e1 * k1 + e2 * k2 + e3 * k3 + e4 * k4 + e5 * k5 + e6 * k6 + e7 * k7);
         auto ynew = y + h * (b1 * k1 + b2 * k2 + b3 * k3 + b4 * k4 + b5 * k5 + b6 * k6 + b7 * k7);
         // clang-format on
-        double error_norm =
-            Sci::Integrate::__Detail::error_norm(y, ynew, err_vec, atol, rtol);
+        double error_norm = Sci::Integrate::__Detail::error_norm(y, ynew, err_vec, atol, rtol);
 
         if (error_norm > 1.0) { // reject the step
             double scale = safety * std::pow(1.0 / error_norm, 0.2);

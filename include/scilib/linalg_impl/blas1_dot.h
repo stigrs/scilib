@@ -21,11 +21,8 @@ template <class T,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline auto
-dot(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x,
-    stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
-        y)
+inline auto dot(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
@@ -39,11 +36,7 @@ dot(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
     return result;
 }
 
-template <class T,
-          class Layout_x,
-          class Allocator_x,
-          class Layout_y,
-          class Allocator_y>
+template <class T, class Layout_x, class Allocator_x, class Layout_y, class Allocator_y>
 inline T dot(const Sci::Vector<T, Layout_x, Allocator_x>& x,
              const Sci::Vector<T, Layout_y, Allocator_y>& y)
 {

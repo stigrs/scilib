@@ -35,9 +35,8 @@ inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
 {
     static_assert(a.is_contiguous());
 
-    assert(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' ||
-           norm == 'o' || norm == 'I' || norm == 'i' || norm == 'F' ||
-           norm == 'f' || norm == 'E' || norm == 'e');
+    assert(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' || norm == 'o' || norm == 'I' ||
+           norm == 'i' || norm == 'F' || norm == 'f' || norm == 'E' || norm == 'e');
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
@@ -52,8 +51,7 @@ inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
 }
 
 template <class Layout, class Allocator>
-inline double matrix_norm(const Sci::Matrix<double, Layout, Allocator>& a,
-                          char norm)
+inline double matrix_norm(const Sci::Matrix<double, Layout, Allocator>& a, char norm)
 {
     return matrix_norm(a.view(), norm);
 }

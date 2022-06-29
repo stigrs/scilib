@@ -19,10 +19,8 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <std::size_t ext_x, class Layout_x, class Accessor_x>
-inline double norm2(stdex::mdspan<double,
-                                  stdex::extents<std::size_t, ext_x>,
-                                  Layout_x,
-                                  Accessor_x> x)
+inline double
+norm2(stdex::mdspan<double, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
 {
     const BLAS_INT n = static_cast<BLAS_INT>(x.size());
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
@@ -31,10 +29,8 @@ inline double norm2(stdex::mdspan<double,
 }
 
 template <std::size_t ext_x, class Layout_x, class Accessor_x>
-inline double norm2(stdex::mdspan<const double,
-                                  stdex::extents<std::size_t, ext_x>,
-                                  Layout_x,
-                                  Accessor_x> x)
+inline double
+norm2(stdex::mdspan<const double, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
 {
     const BLAS_INT n = static_cast<BLAS_INT>(x.size());
     const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));

@@ -23,13 +23,10 @@ template <class T_x,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void copy_n(
-    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x,
-    std::size_t count,
-    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
-        y,
-    std::size_t offset = 0)
+inline void copy_n(stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
+                   std::size_t count,
+                   stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y,
+                   std::size_t offset = 0)
 {
     assert(count <= x.extent(0));
     assert(offset >= 0 && offset < count);
@@ -41,10 +38,8 @@ inline void copy_n(
 }
 
 template <class T, class Layout>
-inline void copy_n(const Vector<T, Layout>& x,
-                   std::size_t count,
-                   Vector<T, Layout>& y,
-                   std::size_t offset = 0)
+inline void
+copy_n(const Vector<T, Layout>& x, std::size_t count, Vector<T, Layout>& y, std::size_t offset = 0)
 {
     copy_n(x.view(), count, y.view(), offset);
 }

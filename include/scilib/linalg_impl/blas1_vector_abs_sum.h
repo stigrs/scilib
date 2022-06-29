@@ -16,9 +16,7 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
-inline auto abs_sum(
-    stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x)
+inline auto abs_sum(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
 {
     using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;

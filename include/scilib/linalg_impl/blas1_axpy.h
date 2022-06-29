@@ -22,12 +22,9 @@ template <class T_scalar,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void axpy(
-    const T_scalar& scalar,
-    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x,
-    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
-        y)
+inline void axpy(const T_scalar& scalar,
+                 stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
+                 stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 

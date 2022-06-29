@@ -41,14 +41,12 @@ public:
     // Needed for LegacyForwardIterator
     MDSpan_iterator() = default;
 
-    constexpr explicit MDSpan_iterator(mdspan_type x)
-        : x_(x), current_(0), size_(x.extent(0))
+    constexpr explicit MDSpan_iterator(mdspan_type x) : x_(x), current_(0), size_(x.extent(0))
     {
         static_assert(Extents::rank() == 1);
     }
 
-    constexpr explicit MDSpan_iterator(mdspan_type x,
-                                       difference_type curr_index)
+    constexpr explicit MDSpan_iterator(mdspan_type x, difference_type curr_index)
         : x_(x), current_(curr_index), size_(x.extent(0))
     {
         static_assert(Extents::rank() == 1);
@@ -111,8 +109,7 @@ public:
         return tmp;
     }
 
-    friend constexpr iterator operator+(difference_type n,
-                                        iterator other) noexcept
+    friend constexpr iterator operator+(difference_type n, iterator other) noexcept
     {
         return other + n;
     }
@@ -140,25 +137,13 @@ public:
         return current_ != other.current_ || x_.data() != other.x_.data();
     }
 
-    constexpr bool operator<(iterator other) const noexcept
-    {
-        return current_ < other.current_;
-    }
+    constexpr bool operator<(iterator other) const noexcept { return current_ < other.current_; }
 
-    constexpr bool operator>(iterator other) const noexcept
-    {
-        return other < *this;
-    }
+    constexpr bool operator>(iterator other) const noexcept { return other < *this; }
 
-    constexpr bool operator<=(iterator other) const noexcept
-    {
-        return !(other < *this);
-    }
+    constexpr bool operator<=(iterator other) const noexcept { return !(other < *this); }
 
-    constexpr bool operator>=(iterator other) const noexcept
-    {
-        return !(*this < other);
-    }
+    constexpr bool operator>=(iterator other) const noexcept { return !(*this < other); }
 
     constexpr reference operator[](difference_type i) const noexcept
     {
@@ -185,8 +170,7 @@ private:
 };
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<T, Extents, Layout, Accessor>
-begin(stdex::mdspan<T, Extents, Layout, Accessor> x)
+MDSpan_iterator<T, Extents, Layout, Accessor> begin(stdex::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     return iterator(x);
@@ -201,8 +185,7 @@ cbegin(stdex::mdspan<T, Extents, Layout, Accessor> x)
 }
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<T, Extents, Layout, Accessor>
-end(stdex::mdspan<T, Extents, Layout, Accessor> x)
+MDSpan_iterator<T, Extents, Layout, Accessor> end(stdex::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     return iterator(x, x.extent(0));

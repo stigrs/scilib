@@ -23,8 +23,7 @@ namespace Linalg {
 
 // Compute the minimum norm-solution to a real linear least squares problem.
 template <class Layout>
-inline void lstsq(Sci::Matrix_view<double, Layout> a,
-                  Sci::Matrix_view<double, Layout> b)
+inline void lstsq(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b)
 {
     namespace stdex = std::experimental;
 
@@ -48,8 +47,8 @@ inline void lstsq(Sci::Matrix_view<double, Layout> a,
         lda = m;
         ldb = n;
     }
-    BLAS_INT info = LAPACKE_dgelsd(matrix_layout, m, n, nrhs, a.data(), lda,
-                                   b.data(), ldb, s.data(), rcond, &rank);
+    BLAS_INT info = LAPACKE_dgelsd(matrix_layout, m, n, nrhs, a.data(), lda, b.data(), ldb,
+                                   s.data(), rcond, &rank);
     if (info != 0) {
         throw std::runtime_error("dgelsd failed");
     }

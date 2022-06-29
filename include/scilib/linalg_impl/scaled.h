@@ -59,10 +59,7 @@ private:
     using result_type = decltype(value * scaling_factor);
 
 public:
-    scaled_scalar(Reference v, const ScalingFactor& s)
-        : value(v), scaling_factor(s)
-    {
-    }
+    scaled_scalar(Reference v, const ScalingFactor& s) : value(v), scaling_factor(s) {}
 
     operator result_type() const { return value * scaling_factor; }
 };
@@ -84,8 +81,7 @@ public:
         return reference(acc_.access(p, i), scale_factor_);
     }
 
-    typename offset_policy::pointer offset(pointer p,
-                                           std::size_t i) const noexcept
+    typename offset_policy::pointer offset(pointer p, std::size_t i) const noexcept
     {
         return acc_.offset(p, i);
     }
@@ -101,32 +97,20 @@ private:
     S scale_factor_;
 };
 
-template <class T,
-          class Extents,
-          class Layout,
-          class Accessor,
-          class ScalingFactorType>
-inline stdex::
-    mdspan<T, Extents, Layout, accessor_scaled<Accessor, ScalingFactorType>>
-    scaled(ScalingFactorType scaling_factor,
-           stdex::mdspan<T, Extents, Layout, Accessor> a)
+template <class T, class Extents, class Layout, class Accessor, class ScalingFactorType>
+inline stdex::mdspan<T, Extents, Layout, accessor_scaled<Accessor, ScalingFactorType>>
+scaled(ScalingFactorType scaling_factor, stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
     using accessor_t = accessor_scaled<Accessor, ScalingFactorType>;
-    return stdex::mdspan<T, Extents, Layout, accessor_t>(
-        a.data(), a.mapping(), accessor_t(a.accessor(), scaling_factor));
+    return stdex::mdspan<T, Extents, Layout, accessor_t>(a.data(), a.mapping(),
+                                                         accessor_t(a.accessor(), scaling_factor));
 }
 
-template <class T,
-          class Extents,
-          class Layout,
-          class Allocator,
-          class ScalingFactorType>
+template <class T, class Extents, class Layout, class Allocator, class ScalingFactorType>
 inline Sci::MDArray<T, Extents, Layout, Allocator>
-scaled(ScalingFactorType scaling_factor,
-       const Sci::MDArray<T, Extents, Layout, Allocator>& a)
+scaled(ScalingFactorType scaling_factor, const Sci::MDArray<T, Extents, Layout, Allocator>& a)
 {
-    Sci::MDArray<T, Extents, Layout, Allocator> tmp =
-        scaled(scaling_factor, a.view());
+    Sci::MDArray<T, Extents, Layout, Allocator> tmp = scaled(scaling_factor, a.view());
     return tmp;
 }
 

@@ -57,8 +57,8 @@ void benchmark(BLAS_INT m, BLAS_INT n)
 
     time_start = dsecnd();
     for (int it = 0; it < loop_count; ++it) {
-        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha,
-                    MKL_A, lda, MKL_B, ldb, beta, MKL_C, ldc);
+        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha, MKL_A, lda, MKL_B,
+                    ldb, beta, MKL_C, ldc);
     }
     time_end = dsecnd();
     time_avg = (time_end - time_start) / loop_count;

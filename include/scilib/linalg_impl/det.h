@@ -54,10 +54,7 @@ auto det(Sci::Matrix_view<T, Layout> a)
 
 template <class T, class Layout, class Allocator>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
-inline T det(const Sci::Matrix<T, Layout, Allocator>& a)
-{
-    return det(a.view());
-}
+inline T det(const Sci::Matrix<T, Layout, Allocator>& a) { return det(a.view()); }
 
 } // namespace Linalg
 } // namespace Sci

@@ -21,11 +21,9 @@ template <class T_x,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline void swap_elements(
-    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x,
-    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
-        y)
+inline void
+swap_elements(stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
+              stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     using size_type = std::size_t;
@@ -45,15 +43,9 @@ template <class T_x,
           std::size_t ncols_y,
           class Layout_y,
           class Accessor_y>
-inline void
-swap_elements(stdex::mdspan<T_x,
-                            stdex::extents<std::size_t, nrows_x, ncols_x>,
-                            Layout_x,
-                            Accessor_x> x,
-              stdex::mdspan<T_y,
-                            stdex::extents<std::size_t, nrows_y, ncols_y>,
-                            Layout_y,
-                            Accessor_y> y)
+inline void swap_elements(
+    stdex::mdspan<T_x, stdex::extents<std::size_t, nrows_x, ncols_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, nrows_y, ncols_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -79,15 +71,9 @@ template <class T_x,
           std::size_t n3_y,
           class Layout_y,
           class Accessor_y>
-inline void
-swap_elements(stdex::mdspan<T_x,
-                            stdex::extents<std::size_t, n1_x, n2_x, n3_x>,
-                            Layout_x,
-                            Accessor_x> x,
-              stdex::mdspan<T_y,
-                            stdex::extents<std::size_t, n1_y, n2_y, n3_y>,
-                            Layout_y,
-                            Accessor_y> y)
+inline void swap_elements(
+    stdex::mdspan<T_x, stdex::extents<std::size_t, n1_x, n2_x, n3_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, n1_y, n2_y, n3_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -118,15 +104,9 @@ template <class T_x,
           std::size_t n4_y,
           class Layout_y,
           class Accessor_y>
-inline void
-swap_elements(stdex::mdspan<T_x,
-                            stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x>,
-                            Layout_x,
-                            Accessor_x> x,
-              stdex::mdspan<T_y,
-                            stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y>,
-                            Layout_y,
-                            Accessor_y> y)
+inline void swap_elements(
+    stdex::mdspan<T_x, stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -163,14 +143,12 @@ template <class T_x,
           class Layout_y,
           class Accessor_y>
 inline void swap_elements(
-    stdex::mdspan<T_x,
-                  stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x>,
-                  Layout_x,
-                  Accessor_x> x,
-    stdex::mdspan<T_y,
-                  stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y>,
-                  Layout_y,
-                  Accessor_y> y)
+    stdex::
+        mdspan<T_x, stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x>, Layout_x, Accessor_x>
+            x,
+    stdex::
+        mdspan<T_y, stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y>, Layout_y, Accessor_y>
+            y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -211,17 +189,15 @@ template <class T_x,
           std::size_t n6_y,
           class Layout_y,
           class Accessor_y>
-inline void swap_elements(
-    stdex::mdspan<
-        T_x,
-        stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
-        Layout_x,
-        Accessor_x> x,
-    stdex::mdspan<
-        T_y,
-        stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y>,
-        Layout_y,
-        Accessor_y> y)
+inline void
+swap_elements(stdex::mdspan<T_x,
+                            stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
+                            Layout_x,
+                            Accessor_x> x,
+              stdex::mdspan<T_y,
+                            stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y>,
+                            Layout_y,
+                            Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));
@@ -238,8 +214,7 @@ inline void swap_elements(
                 for (size_type i4 = 0; i4 < x.extent(3); ++i4) {
                     for (size_type i5 = 0; i5 < x.extent(4); ++i5) {
                         for (size_type i6 = 0; i6 < x.extent(5); ++i6) {
-                            std::swap(x(i1, i2, i3, i4, i5, i6),
-                                      y(i1, i2, i3, i4, i5, i6));
+                            std::swap(x(i1, i2, i3, i4, i5, i6), y(i1, i2, i3, i4, i5, i6));
                         }
                     }
                 }
@@ -268,17 +243,15 @@ template <class T_x,
           std::size_t n7_y,
           class Layout_y,
           class Accessor_y>
-inline void swap_elements(
-    stdex::mdspan<
-        T_x,
-        stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
-        Layout_x,
-        Accessor_x> x,
-    stdex::mdspan<
-        T_y,
-        stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
-        Layout_y,
-        Accessor_y> y)
+inline void
+swap_elements(stdex::mdspan<T_x,
+                            stdex::extents<std::size_t, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
+                            Layout_x,
+                            Accessor_x> x,
+              stdex::mdspan<T_y,
+                            stdex::extents<std::size_t, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
+                            Layout_y,
+                            Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));

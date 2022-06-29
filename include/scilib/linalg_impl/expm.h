@@ -69,8 +69,7 @@ auto expm(Sci::Matrix_view<T, Layout> a)
 }
 
 template <class Layout, class Allocator>
-inline Sci::Matrix<double, Layout, Allocator>
-expm(const Sci::Matrix<double, Layout, Allocator>& a)
+inline Sci::Matrix<double, Layout, Allocator> expm(const Sci::Matrix<double, Layout, Allocator>& a)
 {
     return expm(a.view());
 }

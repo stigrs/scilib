@@ -16,16 +16,14 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 // Generate a tuple for slicing.
-inline std::tuple<std::size_t, std::size_t> seq(std::size_t first,
-                                                std::size_t last)
+inline std::tuple<std::size_t, std::size_t> seq(std::size_t first, std::size_t last)
 {
     return std::tuple<std::size_t, std::size_t>{first, last};
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-first(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
-      std::size_t count)
+inline auto first(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
+                  std::size_t count)
 {
     using size_type = std::size_t;
     std::pair<size_type, size_type> slice{0, count};
@@ -45,9 +43,8 @@ inline auto first(const Vector<T, Layout, Allocator>& v, std::size_t count)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-last(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
-     std::size_t count)
+inline auto last(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
+                 std::size_t count)
 {
     using size_type = std::size_t;
     std::pair<size_type, size_type> slice{v.extent(0) - count, v.extent(0)};
@@ -66,15 +63,8 @@ inline auto last(const Vector<T, Layout, Allocator>& x, std::size_t count)
     return last(x.view(), count);
 }
 
-template <class T,
-          std::size_t nrows,
-          std::size_t ncols,
-          class Layout,
-          class Accessor>
-inline auto row(stdex::mdspan<T,
-                              stdex::extents<std::size_t, nrows, ncols>,
-                              Layout,
-                              Accessor> m,
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
+inline auto row(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m,
                 std::size_t i)
 {
     return stdex::submdspan(m, i, stdex::full_extent);
@@ -92,15 +82,8 @@ inline auto row(const Matrix<T, Layout, Allocator>& m, std::size_t i)
     return row(m.view(), i);
 }
 
-template <class T,
-          std::size_t nrows,
-          std::size_t ncols,
-          class Layout,
-          class Accessor>
-inline auto column(stdex::mdspan<T,
-                                 stdex::extents<std::size_t, nrows, ncols>,
-                                 Layout,
-                                 Accessor> m,
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
+inline auto column(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m,
                    std::size_t j)
 {
     return stdex::submdspan(m, stdex::full_extent, j);
@@ -119,8 +102,7 @@ inline auto column(const Matrix<T, Layout, Allocator>& m, std::size_t i)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto diag(
-    stdex::mdspan<T, stdex::extents<std::size_t, ext, ext>, Layout, Accessor> m)
+inline auto diag(stdex::mdspan<T, stdex::extents<std::size_t, ext, ext>, Layout, Accessor> m)
 {
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
         return Subvector_view<T>{m.data(),
@@ -146,36 +128,21 @@ inline auto diag(const Matrix<T, Layout, Allocator>& m)
     return diag(m.view());
 }
 
-template <class T,
-          class Extents,
-          class Layout,
-          class Accessor,
-          class... SliceSpecs>
+template <class T, class Extents, class Layout, class Accessor, class... SliceSpecs>
 // Check of SliceSpecs is done by submdspan
-inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m,
-                  SliceSpecs... slices)
+inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m, SliceSpecs... slices)
 {
     return stdex::submdspan(m, slices...);
 }
 
-template <class T,
-          class Extents,
-          class Layout,
-          class Allocator,
-          class... SliceSpecs>
-inline auto slice(MDArray<T, Extents, Layout, Allocator>& m,
-                  SliceSpecs... slices)
+template <class T, class Extents, class Layout, class Allocator, class... SliceSpecs>
+inline auto slice(MDArray<T, Extents, Layout, Allocator>& m, SliceSpecs... slices)
 {
     return slice(m.view(), slices...);
 }
 
-template <class T,
-          class Extents,
-          class Layout,
-          class Allocator,
-          class... SliceSpecs>
-inline auto slice(const MDArray<T, Extents, Layout, Allocator>& m,
-                  SliceSpecs... slices)
+template <class T, class Extents, class Layout, class Allocator, class... SliceSpecs>
+inline auto slice(const MDArray<T, Extents, Layout, Allocator>& m, SliceSpecs... slices)
 {
     return slice(m.view(), slices...);
 }

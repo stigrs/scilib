@@ -18,7 +18,7 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Properties:
 
 template <class T, class Extents, class Layout, class Allocator>
@@ -46,20 +46,18 @@ constexpr std::ptrdiff_t ssize(stdex::mdspan<T, Extents, Layout, Accessor> m)
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-constexpr std::ptrdiff_t
-sextent(const MDArray<T, Extents, Layout, Allocator>& m, std::size_t dim)
+constexpr std::ptrdiff_t sextent(const MDArray<T, Extents, Layout, Allocator>& m, std::size_t dim)
 {
     return m.sextent(dim);
 }
 
 template <class T, class Extents, class Layout, class Accessor>
-constexpr std::ptrdiff_t sextent(stdex::mdspan<T, Extents, Layout, Accessor> m,
-                                 std::size_t dim)
+constexpr std::ptrdiff_t sextent(stdex::mdspan<T, Extents, Layout, Accessor> m, std::size_t dim)
 {
     return static_cast<std::ptrdiff_t>(m.extent(dim));
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Equality comparisons:
 
 template <class T, class Extents, class Layout, class Allocator>
@@ -108,7 +106,7 @@ constexpr bool operator>=(const MDArray<T, Extents, Layout, Allocator>& a,
     return !(a < b);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Arithmetic operations:
 
 template <class T, class Extents, class Layout, class Allocator>
@@ -185,35 +183,31 @@ operator%(const MDArray<T, Extents, Layout, Allocator>& v, const T& scalar)
     return res %= scalar;
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Matrix-matrix product:
 
 template <class T, class Layout, class Allocator>
-constexpr Matrix<T, Layout, Allocator>
-operator*(const Matrix<T, Layout, Allocator>& a,
-          const Matrix<T, Layout, Allocator>& b)
+constexpr Matrix<T, Layout, Allocator> operator*(const Matrix<T, Layout, Allocator>& a,
+                                                 const Matrix<T, Layout, Allocator>& b)
 {
     return Sci::Linalg::matrix_product(a, b);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Matrix-vector product:
 
 template <class T, class Layout, class Allocator>
-constexpr Vector<T, Layout, Allocator>
-operator*(const Matrix<T, Layout, Allocator>& a,
-          const Vector<T, Layout, Allocator>& x)
+constexpr Vector<T, Layout, Allocator> operator*(const Matrix<T, Layout, Allocator>& a,
+                                                 const Vector<T, Layout, Allocator>& x)
 {
     return Sci::Linalg::matrix_vector_product(a, x);
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Apply operations:
 
 template <class T, std::size_t ext, class Layout, class Accessor, class F>
-constexpr void
-apply(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
-      F f)
+constexpr void apply(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v, F f)
 {
     using size_type = std::size_t;
 
@@ -222,17 +216,9 @@ apply(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
     }
 }
 
-template <class T,
-          std::size_t nrows,
-          std::size_t ncols,
-          class Layout,
-          class Accessor,
-          class F>
-constexpr void apply(stdex::mdspan<T,
-                                   stdex::extents<std::size_t, nrows, ncols>,
-                                   Layout,
-                                   Accessor> m,
-                     F f)
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor, class F>
+constexpr void
+apply(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m, F f)
 {
     using size_type = std::size_t;
 
@@ -243,13 +229,12 @@ constexpr void apply(stdex::mdspan<T,
     }
 }
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 // Stream methods:
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline void
-print(std::ostream& ostrm,
-      stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline void print(std::ostream& ostrm,
+                  stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
 {
     using size_type = std::size_t;
 
@@ -264,8 +249,7 @@ print(std::ostream& ostrm,
 }
 
 template <class T, class Layout, class Allocator>
-inline std::ostream& operator<<(std::ostream& ostrm,
-                                const Vector<T, Layout, Allocator>& v)
+inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, Allocator>& v)
 {
     using size_type = std::size_t;
 
@@ -281,8 +265,7 @@ inline std::ostream& operator<<(std::ostream& ostrm,
 }
 
 template <class T, class Layout, class Allocator>
-inline std::istream& operator>>(std::istream& istrm,
-                                Vector<T, Layout, Allocator>& v)
+inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
 {
     using size_type = std::size_t;
 
@@ -300,16 +283,9 @@ inline std::istream& operator>>(std::istream& istrm,
     return istrm;
 }
 
-template <class T,
-          std::size_t nrows,
-          std::size_t ncols,
-          class Layout,
-          class Accessor>
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T,
-                                stdex::extents<std::size_t, nrows, ncols>,
-                                Layout,
-                                Accessor> m)
+                  stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m)
 {
     using size_type = std::size_t;
 
@@ -326,8 +302,7 @@ inline void print(std::ostream& ostrm,
 }
 
 template <class T, class Layout, class Allocator>
-inline std::ostream& operator<<(std::ostream& ostrm,
-                                const Matrix<T, Layout, Allocator>& m)
+inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, Allocator>& m)
 {
     using size_type = std::size_t;
 
@@ -345,8 +320,7 @@ inline std::ostream& operator<<(std::ostream& ostrm,
 }
 
 template <class T, class Layout, class Allocator>
-inline std::istream& operator>>(std::istream& istrm,
-                                Matrix<T, Layout, Allocator>& m)
+inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout, Allocator>& m)
 {
     using size_type = std::size_t;
 

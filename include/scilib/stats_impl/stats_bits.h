@@ -18,12 +18,10 @@ namespace stdex = std::experimental;
 
 // Arithmetic mean.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-mean(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto mean(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     using value_type = std::remove_cv_t<T>;
-    value_type result =
-        Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
+    value_type result = Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
     return result;
 }
 
@@ -35,8 +33,7 @@ inline T mean(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Median.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-median(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto median(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
@@ -61,8 +58,7 @@ inline T median(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Variance.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-var(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto var(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
@@ -86,8 +82,7 @@ inline T var(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Standard deviation.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-stddev(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto stddev(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     return std::sqrt(var(x));
 }
@@ -100,8 +95,7 @@ inline T stddev(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Root-mean-square deviation.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto
-rms(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto rms(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     using size_type = std::size_t;
     using value_type = std::remove_cv_t<T>;
@@ -127,11 +121,8 @@ template <class T,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline auto
-cov(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x,
-    stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
-        y)
+inline auto cov(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
@@ -151,8 +142,7 @@ cov(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
 }
 
 template <class T, class Layout, class Allocator>
-inline T cov(const Sci::Vector<T, Layout, Allocator>& x,
-             const Sci::Vector<T, Layout, Allocator>& y)
+inline T cov(const Sci::Vector<T, Layout, Allocator>& x, const Sci::Vector<T, Layout, Allocator>& y)
 {
     return cov(x.view(), y.view());
 }

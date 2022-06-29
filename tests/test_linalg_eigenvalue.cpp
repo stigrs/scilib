@@ -52,8 +52,7 @@ TEST(TestLinalg, TestEigs)
 TEST(TestLinalg, TestEig)
 {
     // Numpy:
-    std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813,
-                                   7.50500862};
+    std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813, 7.50500862};
 
     std::vector<double> eval_im = {1.12844169, -1.12844169, 0.0, 0.0};
 
@@ -106,8 +105,7 @@ TEST(TestLinalg, TestEigColMajor)
     using namespace Sci::Linalg;
 
     // Numpy:
-    std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813,
-                                   7.50500862};
+    std::vector<double> eval_re = {-3.17360337, -3.17360337, 2.84219813, 7.50500862};
 
     std::vector<double> eval_im = {1.12844169, -1.12844169, 0.0, 0.0};
 
