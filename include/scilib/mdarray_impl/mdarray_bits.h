@@ -38,7 +38,7 @@ template <class T, class Extents, class Layout, class Accessor>
 inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
 {
     // m.extents() is returned by reference, need to make a copy
-    using size_type = typename Extents::size_type;
+    using size_type = Extents::size_type;
 
     std::array<size_type, Extents::rank()> res;
     for (size_type i = 0; i < m.rank(); ++i) {
@@ -91,11 +91,10 @@ public:
     }
 
     template <class... Exts>
-        requires(std::is_convertible_v<Exts, size_type>)
+        requires(std::is_convertible_v<Exts, size_type> && sizeof...(Exts) == extents_type::rank())
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
         : map(extents_type(static_cast<size_type>(exts)...)), ctr(m)
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
         assert(m.size() == map.required_span_size());
     }
 
@@ -144,19 +143,19 @@ public:
 
 #if MDSPAN_USE_PAREN_OPERATOR
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type>)
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr reference operator()(Indices... indices) noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
 
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type>)
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator()(Indices... indices) const noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
@@ -164,19 +163,19 @@ public:
 
 #if MDSPAN_USE_BRACKET_OPERATOR
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type>)
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr reference operator[](Indices... indices) noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
 
     template <class... Indices>
-        requires(std::is_convertible_v<Indices, size_type>)
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator[](Indices... indices) const noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
@@ -268,10 +267,9 @@ public:
     // Modifiers
 
     template <class... Exts>
-        requires(std::is_convertible_v<Exts, size_type>)
+        requires(std::is_convertible_v<Exts, size_type> && sizeof...(Exts) == extents_type::rank())
     constexpr void resize(Exts... exts) noexcept
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
         map = mapping_type(extents_type(static_cast<size_type>(exts)...));
         ctr = container_type(map.required_span_size());
     }
