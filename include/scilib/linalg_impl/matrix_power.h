@@ -10,7 +10,6 @@
 namespace Sci {
 namespace Linalg {
 
-#include <scilib/mdarray.h>
 #include <cmath>
 #include <type_traits>
 

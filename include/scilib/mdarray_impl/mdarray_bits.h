@@ -10,9 +10,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <experimental/mdspan>
 #include <functional>
-#include <scilib/mdarray_impl/copy.h>
 #include <type_traits>
 #include <vector>
 
@@ -34,6 +32,19 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
         }
     }
     return result;
+}
+
+template <class T, class Extents, class Layout, class Accessor>
+inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
+{
+    // m.extents() is returned by reference, need to make a copy
+    using size_type = Extents::size_type;
+
+    std::array<size_type, Extents::rank()> res;
+    for (size_type i = 0; i < m.rank(); ++i) {
+        res[i] = m.extent(i);
+    }
+    return res;
 }
 
 } // namespace __Detail
@@ -83,10 +94,11 @@ public:
     }
 
     template <class... Exts>
+        requires(std::is_convertible_v<Exts, size_type> &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
         : map(extents_type(static_cast<size_type>(exts)...)), ctr(m)
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
         assert(m.size() == map.required_span_size());
     }
 
@@ -106,7 +118,7 @@ public:
 
     template <class T_m, class Extents_m, class Layout_m, class Accessor_m>
     constexpr MDArray(stdex::mdspan<T_m, Extents_m, Layout_m, Accessor_m> m)
-        : map(m.extents()), ctr(m.size())
+        : map(extents_type(__Detail::extents(m))), ctr(m.size())
     {
         static_assert(m.rank() == extents_type::rank());
         static_assert(m.rank() <= 7);
@@ -122,7 +134,7 @@ public:
         static_assert(m.rank() == extents_type::rank());
         static_assert(m.rank() <= 7);
 
-        map = mapping_type(m.extents());
+        map = mapping_type(extents_type(__Detail::extents(m)));
         ctr = container_type(m.size());
 
         copy(m, view());
@@ -134,21 +146,45 @@ public:
     //--------------------------------------------------------------------------
     // Mapping multidimensional index to access element
 
+#if MDSPAN_USE_PAREN_OPERATOR
     template <class... Indices>
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr reference operator()(Indices... indices) noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
 
     template <class... Indices>
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator()(Indices... indices) const noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
+#endif
+
+#if MDSPAN_USE_BRACKET_OPERATOR
+    template <class... Indices>
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
+    constexpr reference operator[](Indices... indices) noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), indices...));
+        return ctr[map(indices...)];
+    }
+
+    template <class... Indices>
+        requires(std::is_convertible_v<Indices, size_type> &&
+                 sizeof...(Indices) == extents_type::rank())
+    constexpr const_reference operator[](Indices... indices) const noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), indices...));
+        return ctr[map(indices...)];
+    }
+#endif
 
     //--------------------------------------------------------------------------
     // Iterators
@@ -254,9 +290,10 @@ public:
     // Modifiers
 
     template <class... Exts>
+        requires(std::is_convertible_v<Exts, size_type> &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr void resize(Exts... exts) noexcept
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
         map = mapping_type(extents_type(static_cast<size_type>(exts)...));
         ctr = container_type(map.required_span_size());
     }

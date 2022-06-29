@@ -7,8 +7,8 @@
 #ifndef SCILIB_MDARRAY_H
 #define SCILIB_MDARRAY_H
 
+#include "mdarray_impl/support.h"
 #include <experimental/mdspan>
-#include <scilib/mdarray_impl/support.h>
 #include <cstddef>
 #include <vector>
 #include <utility>

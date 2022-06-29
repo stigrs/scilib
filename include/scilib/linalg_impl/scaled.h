@@ -46,8 +46,6 @@
 #ifndef SCILIB_LINALG_SCALED_H
 #define SCILIB_LINALG_SCALED_H
 
-#include <experimental/mdspan>
-
 namespace Sci {
 namespace Linalg {
 

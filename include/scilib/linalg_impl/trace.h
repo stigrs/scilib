@@ -7,7 +7,6 @@
 #ifndef SCILIB_LINALG_TRACE_H
 #define SCILIB_LINALG_TRACE_H
 
-#include <experimental/mdspan>
 #include <cassert>
 #include <type_traits>
 

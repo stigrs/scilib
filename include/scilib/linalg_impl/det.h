@@ -7,9 +7,8 @@
 #ifndef SCILIB_LINALG_DET_H
 #define SCILIB_LINALG_DET_H
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/auxiliary.h>
-#include <scilib/linalg_impl/matrix_decomposition.h>
+#include "auxiliary.h"
+#include "matrix_decomposition.h"
 #include <cassert>
 #include <type_traits>
 

@@ -7,9 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_AXPY_H
 #define SCILIB_LINALG_BLAS1_AXPY_H
 
-#include <experimental/mdspan>
-#include <scilib/mdarray.h>
-
 namespace Sci {
 namespace Linalg {
 

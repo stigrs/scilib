@@ -13,7 +13,6 @@
 #ifndef SCILIB_MDARRAY_MDSPAN_ITERATOR_H
 #define SCILIB_MDARRAY_MDSPAN_ITERATOR_H
 
-#include <experimental/mdspan>
 #include <cstddef>
 #include <cassert>
 #include <iterator>

@@ -46,8 +46,6 @@
 #ifndef SCILIB_LINALG_TRANSPOSED_H
 #define SCILIB_LINALG_TRANSPOSED_H
 
-#include <experimental/mdspan>
-
 namespace Sci {
 namespace Linalg {
 
@@ -125,10 +123,7 @@ template <class T, class Layout, class Allocator>
 inline Sci::Matrix<T, Layout, Allocator>
 transposed(const Sci::Matrix<T, Layout, Allocator>& a)
 {
-    auto at = transposed(a.view());
-    Sci::Matrix<T, Layout, Allocator> res(at.extent(0), at.extent(1));
-    Sci::copy(at, res.view());
-    return res;
+    return Sci::Matrix<T, Layout, Allocator>(transposed(a.view()));
 }
 
 } // namespace Linalg

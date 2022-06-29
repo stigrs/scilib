@@ -7,7 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_IDX_ABS_MAX_H
 #define SCILIB_LINALG_BLAS1_IDX_ABS_MAX_H
 
-#include <experimental/mdspan>
 #include <cmath>
 #include <type_traits>
 

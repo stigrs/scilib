@@ -13,9 +13,7 @@
 #include <cblas.h>
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/lapack_types.h>
-#include <experimental/mdspan>
+#include "lapack_types.h"
 #include <cassert>
 #include <complex>
 #include <type_traits>

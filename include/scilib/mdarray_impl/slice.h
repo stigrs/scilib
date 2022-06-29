@@ -7,7 +7,6 @@
 #ifndef SCILIB_MDARRAY_SLICE_H
 #define SCILIB_MDARRAY_SLICE_H
 
-#include <experimental/mdspan>
 #include <array>
 #include <cstddef>
 #include <utility>

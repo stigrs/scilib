@@ -7,12 +7,8 @@
 #ifndef SCILIB_MDARRAY_OPERATIONS_H
 #define SCILIB_MDARRAY_OPERATIONS_H
 
-#include <scilib/mdarray_impl/mdarray_bits.h>
-#include <scilib/mdarray_impl/slice.h>
-#include <scilib/mdarray_impl/support.h>
-#include <scilib/linalg_impl/blas2_matrix_vector_product.h>
-#include <scilib/linalg_impl/blas3_matrix_product.h>
-#include <scilib/linalg_impl/transposed.h>
+#include "../linalg_impl/blas2_matrix_vector_product.h"
+#include "../linalg_impl/blas3_matrix_product.h"
 #include <algorithm>
 #include <iostream>
 #include <iomanip>

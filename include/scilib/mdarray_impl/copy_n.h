@@ -7,7 +7,6 @@
 #ifndef SCILIB_MDARRAY_COPY_N_H
 #define SCILIB_MDARRAY_COPY_N_H
 
-#include <experimental/mdspan>
 #include <cassert>
 #include <type_traits>
 

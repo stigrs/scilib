@@ -7,7 +7,7 @@
 #ifndef SCILIB_INTEGRATE_IMPL_TRAPZ_H
 #define SCILIB_INTEGRATE_IMPL_TRAPZ_H
 
-#include <experimental/mdspan>
+#include "../mdarray.h"
 #include <type_traits>
 #include <cmath>
 

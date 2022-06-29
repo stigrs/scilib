@@ -13,8 +13,7 @@
 #include <lapacke.h>
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/lapack_types.h>
+#include "lapack_types.h"
 #include <exception>
 #include <cassert>
 #include <complex>

@@ -13,8 +13,6 @@
 #include <cblas.h>
 #endif
 
-#include <experimental/mdspan>
-
 namespace Sci {
 namespace Linalg {
 

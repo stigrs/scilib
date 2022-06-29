@@ -7,7 +7,6 @@
 #ifndef SCILIB_MDARRAY_SWAP_ELEMENTS_H
 #define SCILIB_MDARRAY_SWAP_ELEMENTS_H
 
-#include <experimental/mdspan>
 #include <utility>
 
 namespace Sci {

@@ -7,7 +7,6 @@
 #ifndef SCILIB_MDARRAY_SORT_H
 #define SCILIB_MDARRAY_SORT_H
 
-#include <experimental/mdspan>
 #include <algorithm>
 
 namespace Sci {

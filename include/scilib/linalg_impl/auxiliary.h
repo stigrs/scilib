@@ -7,8 +7,6 @@
 #ifndef SCILIB_LINALG_AUXILIARY_H
 #define SCILIB_LINALG_AUXILIARY_H
 
-#include <scilib/mdarray.h>
-#include <experimental/mdspan>
 #include <cassert>
 #include <random>
 #include <type_traits>

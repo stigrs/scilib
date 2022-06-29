@@ -7,6 +7,8 @@
 #ifndef SCILIB_MDARRAY_SUPPORT_H
 #define SCILIB_MDARRAY_SUPPORT_H
 
+#include <type_traits>
+
 namespace Sci {
 namespace __Detail {
 

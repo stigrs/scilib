@@ -7,7 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_VECTOR_ABS_SUM_H
 #define SCILIB_LINALG_BLAS1_VECTOR_ABS_SUM_H
 
-#include <experimental/mdspan>
 #include <cmath>
 #include <type_traits>
 

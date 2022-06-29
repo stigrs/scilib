@@ -7,7 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_DOT_H
 #define SCILIB_LINALG_BLAS1_DOT_H
 
-#include <experimental/mdspan>
 #include <type_traits>
 
 namespace Sci {

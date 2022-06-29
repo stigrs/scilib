@@ -7,7 +7,7 @@
 #ifndef SCILIB_INTEGRATE_SOLVE_IVP_H
 #define SCILIB_INTEGRATE_SOLVE_IVP_H
 
-#include <scilib/mdarray.h>
+#include "../mdarray.h"
 #include <exception>
 #include <cmath>
 #include <limits>

@@ -7,9 +7,8 @@
 #ifndef SCILIB_STATS_BITS_H
 #define SCILIB_STATS_BITS_H
 
-#include <experimental/mdspan>
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
+#include "../mdarray.h"
+#include "../linalg.h"
 #include <type_traits>
 #include <cmath>
 

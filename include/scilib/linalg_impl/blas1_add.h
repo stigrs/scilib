@@ -7,8 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_ADD_H
 #define SCILIB_LINALG_BLAS1_ADD_H
 
-#include <experimental/mdspan>
-
 namespace Sci {
 namespace Linalg {
 

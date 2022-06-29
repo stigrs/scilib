@@ -7,7 +7,6 @@
 #ifndef SCILIB_MDARRAY_COPY_H
 #define SCILIB_MDARRAY_COPY_H
 
-#include <experimental/mdspan>
 #include <type_traits>
 
 namespace Sci {
