@@ -7,10 +7,9 @@
 #ifndef SCILIB_LINALG_EXPM_H
 #define SCILIB_LINALG_EXPM_H
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/auxiliary.h>
-#include <scilib/linalg_impl/matrix_norm.h>
-#include <scilib/linalg_impl/scaled.h>
+#include "auxiliary.h"
+#include "matrix_norm.h"
+#include "scaled.h"
 #include <cassert>
 #include <type_traits>
 
@@ -70,8 +69,7 @@ auto expm(Sci::Matrix_view<T, Layout> a)
 }
 
 template <class Layout, class Allocator>
-inline Sci::Matrix<double, Layout, Allocator>
-expm(const Sci::Matrix<double, Layout, Allocator>& a)
+inline Sci::Matrix<double, Layout, Allocator> expm(const Sci::Matrix<double, Layout, Allocator>& a)
 {
     return expm(a.view());
 }

@@ -7,7 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_IDX_ABS_MAX_H
 #define SCILIB_LINALG_BLAS1_IDX_ABS_MAX_H
 
-#include <experimental/mdspan>
 #include <cmath>
 #include <type_traits>
 
@@ -17,9 +16,8 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
-inline std::size_t idx_abs_max(
-    stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x)
+inline std::size_t
+idx_abs_max(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
 {
     using size_type = std::size_t;
     using magn_type = std::remove_cv_t<decltype(std::abs(x(0)))>;

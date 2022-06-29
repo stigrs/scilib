@@ -20,9 +20,7 @@
 #endif
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/lapack_types.h>
-#include <experimental/mdspan>
+#include "lapack_types.h"
 #include <exception>
 #include <cassert>
 #include <type_traits>
@@ -34,8 +32,7 @@ namespace stdex = std::experimental;
 
 // LU factorization.
 template <class Layout>
-inline void lu(Sci::Matrix_view<double, Layout> a,
-               Sci::Vector_view<BLAS_INT, Layout> ipiv)
+inline void lu(Sci::Matrix_view<double, Layout> a, Sci::Vector_view<BLAS_INT, Layout> ipiv)
 {
     static_assert(a.is_contiguous());
     static_assert(ipiv.is_contiguous());
@@ -53,8 +50,7 @@ inline void lu(Sci::Matrix_view<double, Layout> a,
         lda = m;
     }
 
-    BLAS_INT info =
-        LAPACKE_dgetrf(matrix_layout, m, n, a.data(), lda, ipiv.data());
+    BLAS_INT info = LAPACKE_dgetrf(matrix_layout, m, n, a.data(), lda, ipiv.data());
     if (info < 0) {
         throw std::runtime_error("dgetrf: illegal input parameter");
     }
@@ -94,8 +90,7 @@ inline void qr(Sci::Matrix_view<double, Layout> a,
 
     // Compute QR factorization:
 
-    BLAS_INT info =
-        LAPACKE_dgeqrf(matrix_layout, m, n, q.data(), lda, tau.data());
+    BLAS_INT info = LAPACKE_dgeqrf(matrix_layout, m, n, q.data(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dgeqrf failed");
     }
@@ -149,9 +144,8 @@ inline void svd(Sci::Matrix_view<double, Layout> a,
 
     Sci::Vector<double, Layout> superb(std::min(m, n) - 1);
 
-    BLAS_INT info =
-        LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data(), lda, s.data(),
-                       u.data(), ldu, vt.data(), ldvt, superb.data());
+    BLAS_INT info = LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data(), lda, s.data(), u.data(),
+                                   ldu, vt.data(), ldvt, superb.data());
     if (info != 0) {
         throw std::runtime_error("dgesvd failed");
     }

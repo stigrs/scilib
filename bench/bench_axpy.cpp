@@ -18,19 +18,14 @@
 
 typedef std::chrono::duration<double, std::milli> Timer;
 
-void print(int n,
-           const Timer& t_eigen,
-           const Timer& t_sci,
-           const Timer& t_val,
-           const Timer& t_axpy)
+void print(int n, const Timer& t_eigen, const Timer& t_sci, const Timer& t_val, const Timer& t_axpy)
 {
     std::cout << "Vector addition:\n"
               << "----------------\n"
               << "size =         " << n << '\n'
               << "scilib/eigen = " << t_sci.count() / t_eigen.count() << "\n"
               << "scilib/val =   " << t_sci.count() / t_val.count() << "\n"
-              << "axpy/eigen =   " << t_axpy.count() / t_eigen.count()
-              << "\n\n";
+              << "axpy/eigen =   " << t_axpy.count() / t_eigen.count() << "\n\n";
 }
 
 void benchmark(int n)

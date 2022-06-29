@@ -7,7 +7,6 @@
 #ifndef SCILIB_LINALG_ELEMENT_WISE_MATH_H
 #define SCILIB_LINALG_ELEMENT_WISE_MATH_H
 
-#include <scilib/mdarray.h>
 #include <cmath>
 #include <complex>
 #include <type_traits>
@@ -15,7 +14,7 @@
 namespace Sci {
 namespace Linalg {
 
-//------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 //
 // Miscellaneous element-wise functions:
 

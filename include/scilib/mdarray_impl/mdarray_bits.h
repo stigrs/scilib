@@ -7,12 +7,11 @@
 #ifndef SCILIB_MDARRAY_BITS_H
 #define SCILIB_MDARRAY_BITS_H
 
+#include "support.h"
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <experimental/mdspan>
 #include <functional>
-#include <scilib/mdarray_impl/copy.h>
 #include <type_traits>
 #include <vector>
 
@@ -24,7 +23,7 @@ namespace __Detail {
 template <class Extents, class... Dims>
 inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
-    using size_type = std::size_t;
+    using size_type = typename Extents::size_type;
 
     std::vector<size_type> indexes{static_cast<size_type>(dims)...};
     bool result = true;
@@ -34,6 +33,19 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
         }
     }
     return result;
+}
+
+template <class T, class Extents, class Layout, class Accessor>
+inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
+{
+    // mdspan returns m.extents() by reference, need to make a copy
+    using size_type = typename Extents::size_type;
+
+    std::array<size_type, Extents::rank()> res;
+    for (size_type i = 0; i < m.rank(); ++i) {
+        res[i] = m.extent(i);
+    }
+    return res;
 }
 
 } // namespace __Detail
@@ -56,8 +68,7 @@ public:
     using mapping_type = typename layout_type::template mapping<extents_type>;
     using container_type = std::vector<value_type, Allocator>;
     using view_type = stdex::mdspan<value_type, extents_type, layout_type>;
-    using const_view_type =
-        stdex::mdspan<const value_type, extents_type, layout_type>;
+    using const_view_type = stdex::mdspan<const value_type, extents_type, layout_type>;
     using difference_type = typename container_type::difference_type;
     using pointer = typename container_type::pointer;
     using const_pointer = typename container_type::const_pointer;
@@ -66,27 +77,27 @@ public:
     using iterator = typename container_type::iterator;
     using const_iterator = typename container_type::const_iterator;
     using reverse_iterator = typename container_type::reverse_iterator;
-    using const_reverse_iterator =
-        typename container_type::const_reverse_iterator;
+    using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Constructors, assignment and destructor
 
     constexpr MDArray() = default;
 
     template <class... Exts>
+        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr explicit MDArray(Exts... exts)
-        : map(extents_type(static_cast<size_type>(exts)...)),
-          ctr(map.required_span_size())
+        : map(extents_type(static_cast<size_type>(exts)...)), ctr(map.required_span_size())
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
     }
 
     template <class... Exts>
+        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
         : map(extents_type(static_cast<size_type>(exts)...)), ctr(m)
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
         assert(m.size() == map.required_span_size());
     }
 
@@ -106,7 +117,7 @@ public:
 
     template <class T_m, class Extents_m, class Layout_m, class Accessor_m>
     constexpr MDArray(stdex::mdspan<T_m, Extents_m, Layout_m, Accessor_m> m)
-        : map(m.extents()), ctr(m.size())
+        : map(extents_type(__Detail::extents(m))), ctr(m.size())
     {
         static_assert(m.rank() == extents_type::rank());
         static_assert(m.rank() <= 7);
@@ -116,13 +127,12 @@ public:
     constexpr MDArray& operator=(const MDArray& m) = default;
 
     template <class T_m, class Extents_m, class Layout_m, class Accessor_m>
-    constexpr MDArray&
-    operator=(stdex::mdspan<T_m, Extents_m, Layout_m, Accessor_m> m)
+    constexpr MDArray& operator=(stdex::mdspan<T_m, Extents_m, Layout_m, Accessor_m> m)
     {
         static_assert(m.rank() == extents_type::rank());
         static_assert(m.rank() <= 7);
 
-        map = mapping_type(m.extents());
+        map = mapping_type(extents_type(__Detail::extents(m)));
         ctr = container_type(m.size());
 
         copy(m, view());
@@ -131,26 +141,50 @@ public:
 
     ~MDArray() = default;
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Mapping multidimensional index to access element
 
+#if MDSPAN_USE_PAREN_OPERATOR
     template <class... Indices>
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr reference operator()(Indices... indices) noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
 
     template <class... Indices>
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+                 sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator()(Indices... indices) const noexcept
     {
-        static_assert(sizeof...(indices) == extents_type::rank());
+        assert(__Detail::__check_bounds(map.extents(), indices...));
+        return ctr[map(indices...)];
+    }
+#endif
+
+#if MDSPAN_USE_BRACKET_OPERATOR
+    template <class... Indices>
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+                 sizeof...(Indices) == extents_type::rank())
+    constexpr reference operator[](Indices... indices) noexcept
+    {
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(indices...)];
     }
 
-    //--------------------------------------------------------------------------
+    template <class... Indices>
+        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+                 sizeof...(Indices) == extents_type::rank())
+    constexpr const_reference operator[](Indices... indices) const noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), indices...));
+        return ctr[map(indices...)];
+    }
+#endif
+
+    //----------------------------------------------------------------------------------------------
     // Iterators
 
     constexpr iterator begin() noexcept { return ctr.begin(); }
@@ -160,15 +194,9 @@ public:
 
     constexpr reverse_iterator rbegin() noexcept { return ctr.rbegin(); }
 
-    constexpr const_reverse_iterator rbegin() const noexcept
-    {
-        return ctr.rbegin();
-    }
+    constexpr const_reverse_iterator rbegin() const noexcept { return ctr.rbegin(); }
 
-    constexpr const_reverse_iterator crbegin() const noexcept
-    {
-        return ctr.crbegin();
-    }
+    constexpr const_reverse_iterator crbegin() const noexcept { return ctr.crbegin(); }
 
     constexpr iterator end() noexcept { return ctr.end(); }
 
@@ -177,17 +205,11 @@ public:
 
     constexpr reverse_iterator rend() noexcept { return ctr.rend(); }
 
-    constexpr const_reverse_iterator rend() const noexcept
-    {
-        return ctr.rend();
-    }
+    constexpr const_reverse_iterator rend() const noexcept { return ctr.rend(); }
 
-    constexpr const_reverse_iterator crend() const noexcept
-    {
-        return ctr.crend();
-    }
+    constexpr const_reverse_iterator crend() const noexcept { return ctr.crend(); }
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Access underlying data
 
     constexpr pointer data() noexcept { return ctr.data(); }
@@ -196,20 +218,17 @@ public:
     constexpr container_type& container() noexcept { return ctr; }
     constexpr const container_type& container() const noexcept { return ctr; }
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Return view of data
 
-    constexpr view_type view() noexcept
-    {
-        return view_type(ctr.data(), map.extents());
-    }
+    constexpr view_type view() noexcept { return view_type(ctr.data(), map.extents()); }
 
     constexpr const_view_type view() const noexcept
     {
         return const_view_type(ctr.data(), map.extents());
     }
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Observers of the multidimensional index space
 
     constexpr static size_type rank() noexcept { return extents_type::rank(); }
@@ -240,23 +259,21 @@ public:
         return static_cast<difference_type>(map.extents().extent(dim));
     }
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Observers of the mapping
 
     constexpr mapping_type mapping() const noexcept { return map; }
 
-    constexpr size_type stride(size_type dim) const noexcept
-    {
-        return map.stride(dim);
-    }
+    constexpr size_type stride(size_type dim) const noexcept { return map.stride(dim); }
 
-    //--------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // Modifiers
 
     template <class... Exts>
+        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+                 sizeof...(Exts) == extents_type::rank())
     constexpr void resize(Exts... exts) noexcept
     {
-        static_assert(sizeof...(exts) == extents_type::rank());
         map = mapping_type(extents_type(static_cast<size_type>(exts)...));
         ctr = container_type(map.required_span_size());
     }

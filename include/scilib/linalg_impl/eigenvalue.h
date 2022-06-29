@@ -13,8 +13,7 @@
 #include <lapacke.h>
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/lapack_types.h>
+#include "lapack_types.h"
 #include <exception>
 #include <cassert>
 #include <complex>
@@ -56,9 +55,8 @@ inline void eigs(Sci::Matrix_view<double, Layout> a,
         matrix_layout = LAPACK_COL_MAJOR;
     }
 
-    info = LAPACKE_dsyevr(matrix_layout, 'V', 'A', 'U', n, a.data(), lda, vl,
-                          vu, il, iu, abstol, &m, w.data(), z.data(), ldz,
-                          isuppz.data());
+    info = LAPACKE_dsyevr(matrix_layout, 'V', 'A', 'U', n, a.data(), lda, vl, vu, il, iu, abstol,
+                          &m, w.data(), z.data(), ldz, isuppz.data());
     if (info != 0) {
         throw std::runtime_error("dsyevr failed");
     }
@@ -101,9 +99,8 @@ void eig(Sci::Matrix_view<double, Layout> a,
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
-    BLAS_INT info =
-        LAPACKE_dgeev(matrix_layout, 'N', 'V', n, a.data(), n, wr.data(),
-                      wi.data(), vl.data(), n, vr.data(), n);
+    BLAS_INT info = LAPACKE_dgeev(matrix_layout, 'N', 'V', n, a.data(), n, wr.data(), wi.data(),
+                                  vl.data(), n, vr.data(), n);
     if (info != 0) {
         throw std::runtime_error("dgeev failed");
     }
@@ -125,10 +122,7 @@ void eig(Sci::Matrix_view<double, Layout> a,
     }
 }
 
-template <class Layout,
-          class Allocator_a,
-          class Allocator_evec,
-          class Allocator_eval>
+template <class Layout, class Allocator_a, class Allocator_evec, class Allocator_eval>
 void eig(Sci::Matrix<double, Layout, Allocator_a>& a,
          Sci::Matrix<std::complex<double>, Layout, Allocator_evec>& evec,
          Sci::Vector<std::complex<double>, Layout, Allocator_eval>& eval)

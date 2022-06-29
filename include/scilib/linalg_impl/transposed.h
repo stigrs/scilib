@@ -46,8 +46,6 @@
 #ifndef SCILIB_LINALG_TRANSPOSED_H
 #define SCILIB_LINALG_TRANSPOSED_H
 
-#include <experimental/mdspan>
-
 namespace Sci {
 namespace Linalg {
 
@@ -80,28 +78,16 @@ public:
         mapping(nested_mapping_type map) : nested_mapping(map) {}
 
         // for non-batched layouts
-        size_type operator()(size_type i, size_type j) const
-        {
-            return nested_mapping(j, i);
-        }
+        size_type operator()(size_type i, size_type j) const { return nested_mapping(j, i); }
 
         constexpr auto extents() const noexcept
         {
             return transpose_extents(nested_mapping.extents());
         }
 
-        constexpr bool is_unique() const noexcept
-        {
-            return nested_mapping.is_unique();
-        }
-        constexpr bool is_contiguous() const noexcept
-        {
-            return nested_mapping.is_contiguous();
-        }
-        constexpr bool is_strided() const noexcept
-        {
-            return nested_mapping.is_strided();
-        }
+        constexpr bool is_unique() const noexcept { return nested_mapping.is_unique(); }
+        constexpr bool is_contiguous() const noexcept { return nested_mapping.is_contiguous(); }
+        constexpr bool is_strided() const noexcept { return nested_mapping.is_strided(); }
 
         constexpr size_type stride(size_type r) const noexcept
         {
@@ -117,18 +103,14 @@ transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
     static_assert(a.rank() == 2);
     using layout_type = layout_transpose<Layout>;
     using mapping_type = typename layout_type::template mapping<Extents>;
-    return stdex::mdspan<T, Extents, layout_type, Accessor>(
-        a.data(), mapping_type(a.mapping()), a.accessor());
+    return stdex::mdspan<T, Extents, layout_type, Accessor>(a.data(), mapping_type(a.mapping()),
+                                                            a.accessor());
 }
 
 template <class T, class Layout, class Allocator>
-inline Sci::Matrix<T, Layout, Allocator>
-transposed(const Sci::Matrix<T, Layout, Allocator>& a)
+inline Sci::Matrix<T, Layout, Allocator> transposed(const Sci::Matrix<T, Layout, Allocator>& a)
 {
-    auto at = transposed(a.view());
-    Sci::Matrix<T, Layout, Allocator> res(at.extent(0), at.extent(1));
-    Sci::copy(at, res.view());
-    return res;
+    return Sci::Matrix<T, Layout, Allocator>(transposed(a.view()));
 }
 
 } // namespace Linalg

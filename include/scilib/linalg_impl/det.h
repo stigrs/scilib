@@ -7,9 +7,8 @@
 #ifndef SCILIB_LINALG_DET_H
 #define SCILIB_LINALG_DET_H
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/auxiliary.h>
-#include <scilib/linalg_impl/matrix_decomposition.h>
+#include "auxiliary.h"
+#include "matrix_decomposition.h"
 #include <cassert>
 #include <type_traits>
 
@@ -55,10 +54,7 @@ auto det(Sci::Matrix_view<T, Layout> a)
 
 template <class T, class Layout, class Allocator>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
-inline T det(const Sci::Matrix<T, Layout, Allocator>& a)
-{
-    return det(a.view());
-}
+inline T det(const Sci::Matrix<T, Layout, Allocator>& a) { return det(a.view()); }
 
 } // namespace Linalg
 } // namespace Sci

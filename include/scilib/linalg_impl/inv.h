@@ -13,9 +13,7 @@
 #include <lapacke.h>
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/lapack_types.h>
-#include <experimental/mdspan>
+#include "lapack_types.h"
 #include <exception>
 #include <cassert>
 #include <type_traits>
@@ -26,8 +24,7 @@ namespace Linalg {
 // Matrix inversion.
 template <class T_a, class T_res, class Layout>
     requires(std::is_same_v<std::remove_cv_t<T_a>, double>)
-inline void inv(Sci::Matrix_view<T_a, Layout> a,
-                Sci::Matrix_view<T_res, Layout> res)
+inline void inv(Sci::Matrix_view<T_a, Layout> a, Sci::Matrix_view<T_res, Layout> res)
 {
     namespace stdex = std::experimental;
 
@@ -53,16 +50,14 @@ inline void inv(Sci::Matrix_view<T_a, Layout> a,
     Sci::Vector<BLAS_INT, Layout> ipiv(n);
     Sci::Linalg::lu(res, ipiv.view()); // perform LU factorization
 
-    BLAS_INT info =
-        LAPACKE_dgetri(matrix_layout, n, res.data(), lda, ipiv.data());
+    BLAS_INT info = LAPACKE_dgetri(matrix_layout, n, res.data(), lda, ipiv.data());
     if (info != 0) {
         throw std::runtime_error("dgetri: matrix inversion failed");
     }
 }
 
 template <class Layout, class Allocator>
-inline Sci::Matrix<double, Layout, Allocator>
-inv(const Sci::Matrix<double, Layout, Allocator>& a)
+inline Sci::Matrix<double, Layout, Allocator> inv(const Sci::Matrix<double, Layout, Allocator>& a)
 {
     Sci::Matrix<double, Layout, Allocator> res(a.extent(0), a.extent(1));
     inv(a.view(), res.view());

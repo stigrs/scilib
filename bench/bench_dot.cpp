@@ -25,8 +25,7 @@ void print(int n, const Timer& t_eigen, const Timer& t_sci, const Timer& t_val)
               << "------------\n"
               << "size =            " << n << '\n'
               << "scilib/eigen =    " << t_sci.count() / t_eigen.count() << "\n"
-              << "scilib/valarray = " << t_sci.count() / t_val.count()
-              << "\n\n";
+              << "scilib/valarray = " << t_sci.count() / t_val.count() << "\n\n";
 }
 
 void benchmark(int n)
@@ -64,8 +63,7 @@ void benchmark(int n)
     t1 = std::chrono::high_resolution_clock::now();
     double val;
     for (int it = 0; it < 10000; ++it) {
-        val = std::inner_product(std::begin(va), std::end(va), std::begin(vb),
-                                 0.0);
+        val = std::inner_product(std::begin(va), std::end(va), std::begin(vb), 0.0);
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_val = t2 - t1;

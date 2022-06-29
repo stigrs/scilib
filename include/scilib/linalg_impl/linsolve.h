@@ -13,9 +13,7 @@
 #include <lapacke.h>
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg_impl/lapack_types.h>
-#include <experimental/mdspan>
+#include "lapack_types.h"
 #include <exception>
 #include <cassert>
 #include <type_traits>
@@ -25,8 +23,7 @@ namespace Linalg {
 
 // Solve linear system of equations.
 template <class Layout>
-inline void linsolve(Sci::Matrix_view<double, Layout> a,
-                     Sci::Matrix_view<double, Layout> b)
+inline void linsolve(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b)
 {
     namespace stdex = std::experimental;
 
@@ -49,8 +46,8 @@ inline void linsolve(Sci::Matrix_view<double, Layout> a,
         matrix_layout = LAPACK_COL_MAJOR;
         ldb = n;
     }
-    BLAS_INT info = LAPACKE_dgesv(matrix_layout, n, nrhs, a.data(), lda,
-                                  ipiv.data(), b.data(), ldb);
+    BLAS_INT info =
+        LAPACKE_dgesv(matrix_layout, n, nrhs, a.data(), lda, ipiv.data(), b.data(), ldb);
     if (info != 0) {
         throw std::runtime_error("dgesv: factor U is singular");
     }

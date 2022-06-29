@@ -7,8 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_ADD_H
 #define SCILIB_LINALG_BLAS1_ADD_H
 
-#include <experimental/mdspan>
-
 namespace Sci {
 namespace Linalg {
 
@@ -27,13 +25,9 @@ template <class T_x,
           class Layout_z,
           class Accessor_z>
     requires(!std::is_const_v<T_z>)
-inline void
-add(stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x>
-        x,
-    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y>
-        y,
-    stdex::mdspan<T_z, stdex::extents<std::size_t, ext_z>, Layout_z, Accessor_z>
-        z)
+inline void add(stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y,
+                stdex::mdspan<T_z, stdex::extents<std::size_t, ext_z>, Layout_z, Accessor_z> z)
 {
     static_assert(x.static_extent(0) == z.static_extent(0));
     static_assert(y.static_extent(0) == z.static_extent(0));

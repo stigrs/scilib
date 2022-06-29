@@ -30,7 +30,6 @@ int main()
     for (int i = 0; i < 5; ++i) {
         Sci::Integrate::solve_ivp(lorentz, t0, tf, y);
         tf += 0.1;
-        std::cout << "At t = " << t0 << ", y = " << y(0) << " " << y(1) << " "
-                  << y(2) << '\n';
+        std::cout << "At t = " << t0 << ", y = " << y(0) << " " << y(1) << " " << y(2) << '\n';
     }
 }

@@ -7,7 +7,7 @@
 #ifndef SCILIB_INTEGRATE_IMPL_TRAPZ_H
 #define SCILIB_INTEGRATE_IMPL_TRAPZ_H
 
-#include <experimental/mdspan>
+#include "../mdarray.h"
 #include <type_traits>
 #include <cmath>
 
@@ -18,15 +18,10 @@ namespace stdex = std::experimental;
 
 // Integrate function values over a non-uniform grid using the
 // trapezoidal rule.
-template <class T_scalar,
-          class T_x,
-          std::size_t ext,
-          class Layout,
-          class Accessor>
-inline auto
-trapz(T_scalar xlo,
-      T_scalar xup,
-      stdex::mdspan<T_x, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+template <class T_scalar, class T_x, std::size_t ext, class Layout, class Accessor>
+inline auto trapz(T_scalar xlo,
+                  T_scalar xup,
+                  stdex::mdspan<T_x, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
 {
     using size_type = std::size_t;
     using value_type = std::remove_cv_t<T_x>;

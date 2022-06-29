@@ -9,6 +9,6 @@
 
 // Do not change this ordering.
 
-#include <scilib/stats_impl/stats_bits.h>
+#include "stats_impl/stats_bits.h"
 
 #endif // SCILIB_STATS_H

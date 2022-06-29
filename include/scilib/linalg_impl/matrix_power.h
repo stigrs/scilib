@@ -10,7 +10,6 @@
 namespace Sci {
 namespace Linalg {
 
-#include <scilib/mdarray.h>
 #include <cmath>
 #include <type_traits>
 
@@ -61,8 +60,8 @@ inline auto matrix_power(Sci::Matrix_view<T, Layout> m, int n)
 }
 
 template <class T, class Layout, class Allocator>
-inline Sci::Matrix<T, Layout, Allocator>
-matrix_power(const Sci::Matrix<T, Layout, Allocator>& m, int n)
+inline Sci::Matrix<T, Layout, Allocator> matrix_power(const Sci::Matrix<T, Layout, Allocator>& m,
+                                                      int n)
 {
     return matrix_power(m.view(), n);
 }
