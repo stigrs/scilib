@@ -51,6 +51,8 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
+namespace __Detail {
+
 template <class Reference, class ScalingFactor>
 class scaled_scalar {
 private:
@@ -97,21 +99,22 @@ private:
     S scale_factor_;
 };
 
-template <class T, class Extents, class Layout, class Accessor, class ScalingFactorType>
-inline stdex::mdspan<T, Extents, Layout, accessor_scaled<Accessor, ScalingFactorType>>
+} // namespace __Detail
+
+template <class ScalingFactorType, class T, class Extents, class Layout, class Accessor>
+inline stdex::mdspan<T, Extents, Layout, __Detail::accessor_scaled<Accessor, ScalingFactorType>>
 scaled(ScalingFactorType scaling_factor, stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
-    using accessor_t = accessor_scaled<Accessor, ScalingFactorType>;
+    using accessor_t = __Detail::accessor_scaled<Accessor, ScalingFactorType>;
     return stdex::mdspan<T, Extents, Layout, accessor_t>(a.data(), a.mapping(),
                                                          accessor_t(a.accessor(), scaling_factor));
 }
 
-template <class T, class Extents, class Layout, class Allocator, class ScalingFactorType>
+template <class ScalingFactorType, class T, class Extents, class Layout, class Allocator>
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 scaled(ScalingFactorType scaling_factor, const Sci::MDArray<T, Extents, Layout, Allocator>& a)
 {
-    Sci::MDArray<T, Extents, Layout, Allocator> tmp = scaled(scaling_factor, a.view());
-    return tmp;
+    return Sci::MDArray<T, Extents, Layout, Allocator>(scaled(scaling_factor, a.view()));
 }
 
 } // namespace Linalg
