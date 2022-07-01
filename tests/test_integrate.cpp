@@ -92,7 +92,7 @@ TEST(TestIntegrate, TestDormandPrince)
 
     for (int i = 0; i < 5; ++i) {
         solve_ivp(lorentz, t0, tf, y, 1.0e-7, 1.0e-7);
-        for (std::size_t j = 0; j < y.extent(0); ++j) {
+        for (Sci::index j = 0; j < y.extent(0); ++j) {
             EXPECT_NEAR(y(j), ans(i, j), 5.0e-5);
         }
         tf += 0.1;
@@ -123,7 +123,7 @@ TEST(TestIntegrate, TestStiff)
     for (int it = 0; it < 100; ++it) {
         solve_ivp(fsys_stiff, t0, tf, y, 1.0e-7, 1.0e-7);
         if (it == 0 || it == 9 || it == 99) {
-            for (std::size_t j = 0; j < y.extent(0); ++j) {
+            for (Sci::index j = 0; j < y.extent(0); ++j) {
                 EXPECT_NEAR(y(j), ans(i, j), 5.0e-3);
             }
             ++i;

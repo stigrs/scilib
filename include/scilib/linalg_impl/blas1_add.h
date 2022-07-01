@@ -25,17 +25,17 @@ template <class T_x,
           class Layout_z,
           class Accessor_z>
     requires(!std::is_const_v<T_z>)
-inline void add(stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
-                stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y,
-                stdex::mdspan<T_z, stdex::extents<std::size_t, ext_z>, Layout_z, Accessor_z> z)
+inline void add(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y,
+                stdex::mdspan<T_z, stdex::extents<index, ext_z>, Layout_z, Accessor_z> z)
 {
     static_assert(x.static_extent(0) == z.static_extent(0));
     static_assert(y.static_extent(0) == z.static_extent(0));
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    using size_type = std::size_t;
+    using index_type = index;
 
-    for (size_type i = 0; i < z.extent(0); ++i) {
+    for (index_type i = 0; i < z.extent(0); ++i) {
         z(i) = x(i) + y(i);
     }
 }

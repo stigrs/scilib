@@ -27,9 +27,6 @@ inline void lstsq(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, L
 {
     namespace stdex = std::experimental;
 
-    static_assert(a.is_contiguous());
-    static_assert(b.is_contiguous());
-
     BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
     BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
@@ -47,8 +44,8 @@ inline void lstsq(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, L
         lda = m;
         ldb = n;
     }
-    BLAS_INT info = LAPACKE_dgelsd(matrix_layout, m, n, nrhs, a.data(), lda, b.data(), ldb,
-                                   s.data(), rcond, &rank);
+    BLAS_INT info = LAPACKE_dgelsd(matrix_layout, m, n, nrhs, a.data_handle(), lda, b.data_handle(),
+                                   ldb, s.data(), rcond, &rank);
     if (info != 0) {
         throw std::runtime_error("dgelsd failed");
     }

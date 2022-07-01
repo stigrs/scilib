@@ -70,7 +70,7 @@ template <class Accessor, class S>
 class accessor_scaled {
 public:
     using element_type = typename Accessor::element_type;
-    using pointer = typename Accessor::pointer;
+    using data_handle_type = typename Accessor::data_handle_type;
     using reference = scaled_scalar<typename Accessor::reference, S>;
     using offset_policy = accessor_scaled<typename Accessor::offset_policy, S>;
 
@@ -78,17 +78,18 @@ public:
 
     accessor_scaled(Accessor a, S sval) : acc_(a), scale_factor_(sval) {}
 
-    reference access(pointer p, std::size_t i) const noexcept
+    reference access(data_handle_type p, std::size_t i) const noexcept
     {
         return reference(acc_.access(p, i), scale_factor_);
     }
 
-    typename offset_policy::pointer offset(pointer p, std::size_t i) const noexcept
+    typename offset_policy::data_handle_type offset(data_handle_type p,
+                                                    std::size_t i) const noexcept
     {
         return acc_.offset(p, i);
     }
 
-    element_type* decay(pointer p) const noexcept { return acc_.decay(p); }
+    element_type* decay(data_handle_type p) const noexcept { return acc_.decay(p); }
 
     Accessor nested_accessor() const { return acc_; }
 
@@ -106,7 +107,7 @@ inline stdex::mdspan<T, Extents, Layout, __Detail::accessor_scaled<Accessor, Sca
 scaled(ScalingFactorType scaling_factor, stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
     using accessor_t = __Detail::accessor_scaled<Accessor, ScalingFactorType>;
-    return stdex::mdspan<T, Extents, Layout, accessor_t>(a.data(), a.mapping(),
+    return stdex::mdspan<T, Extents, Layout, accessor_t>(a.data_handle(), a.mapping(),
                                                          accessor_t(a.accessor(), scaling_factor));
 }
 

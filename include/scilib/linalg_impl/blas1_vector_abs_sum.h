@@ -16,13 +16,13 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
-inline auto abs_sum(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
+inline auto abs_sum(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 0;
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
         result += std::abs(x(i));
     }
     return result;

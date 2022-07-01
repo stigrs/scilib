@@ -53,10 +53,9 @@ namespace stdex = std::experimental;
 
 namespace {
 template <std::size_t ext0, std::size_t ext1>
-inline stdex::extents<std::size_t, ext1, ext0>
-transpose_extents(stdex::extents<std::size_t, ext0, ext1> e)
+inline stdex::extents<index, ext1, ext0> transpose_extents(stdex::extents<index, ext0, ext1> e)
 {
-    return stdex::extents<std::size_t, ext1, ext0>(e.extent(1), e.extent(0));
+    return stdex::extents<index, ext1, ext0>(e.extent(1), e.extent(0));
 }
 } // namespace
 
@@ -69,7 +68,7 @@ public:
         using nested_mapping_type = typename Layout::template mapping<Extents>;
 
     public:
-        using size_type = typename Extents::size_type;
+        using index_type = typename Extents::index_type;
 
         nested_mapping_type nested_mapping;
 
@@ -78,7 +77,7 @@ public:
         mapping(nested_mapping_type map) : nested_mapping(map) {}
 
         // for non-batched layouts
-        size_type operator()(size_type i, size_type j) const { return nested_mapping(j, i); }
+        index_type operator()(index_type i, index_type j) const { return nested_mapping(j, i); }
 
         constexpr auto extents() const noexcept
         {
@@ -89,9 +88,9 @@ public:
         constexpr bool is_contiguous() const noexcept { return nested_mapping.is_contiguous(); }
         constexpr bool is_strided() const noexcept { return nested_mapping.is_strided(); }
 
-        constexpr size_type stride(size_type r) const noexcept
+        constexpr index_type stride(index_type r) const noexcept
         {
-            return nested_mapping.stride(size_type(1) - r);
+            return nested_mapping.stride(index_type(1) - r);
         }
     };
 };
@@ -103,8 +102,8 @@ transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
     static_assert(a.rank() == 2);
     using layout_type = layout_transpose<Layout>;
     using mapping_type = typename layout_type::template mapping<Extents>;
-    return stdex::mdspan<T, Extents, layout_type, Accessor>(a.data(), mapping_type(a.mapping()),
-                                                            a.accessor());
+    return stdex::mdspan<T, Extents, layout_type, Accessor>(
+        a.data_handle(), mapping_type(a.mapping()), a.accessor());
 }
 
 template <class T, class Layout, class Allocator>

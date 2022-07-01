@@ -23,7 +23,7 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 template <class T,
-          class Extents = stdex::extents<std::size_t, stdex::dynamic_extent>,
+          class Extents = stdex::extents<index, stdex::dynamic_extent>,
           class Layout = stdex::layout_right,
           class Accessor = stdex::default_accessor<T>>
     requires Extents_has_rank<Extents>
@@ -36,7 +36,7 @@ public:
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     using difference_type = std::ptrdiff_t;
     using reference = typename mdspan_type::reference;
-    using pointer = typename mdspan_type::pointer;
+    using data_handle_type = typename mdspan_type::data_handle_type;
 
     // Needed for LegacyForwardIterator
     MDSpan_iterator() = default;
@@ -123,18 +123,18 @@ public:
 
     constexpr difference_type operator-(iterator it) const noexcept
     {
-        assert(x_.data() == it.x_.data() && x_.extent(0) == it.x_.extent(0));
+        assert(x_.data_handle() == it.x_.data_handle() && x_.extent(0) == it.x_.extent(0));
         return current_ - it.current_;
     }
 
     constexpr bool operator==(iterator other) const noexcept
     {
-        return current_ == other.current_ && x_.data() == other.x_.data();
+        return current_ == other.current_ && x_.data_handle() == other.x_.data_handle();
     }
 
     constexpr bool operator!=(iterator other) const noexcept
     {
-        return current_ != other.current_ || x_.data() != other.x_.data();
+        return current_ != other.current_ || x_.data_handle() != other.x_.data_handle();
     }
 
     constexpr bool operator<(iterator other) const noexcept { return current_ < other.current_; }
@@ -157,10 +157,10 @@ public:
         return x_(current_);
     }
 
-    constexpr pointer operator->() const noexcept
+    constexpr data_handle_type operator->() const noexcept
     {
         assert(0 <= current_ && current_ < size_);
-        return x_.accessor().offset(x_.data(), x_.mapping()(current_));
+        return x_.accessor().offset(x_.data_handle(), x_.mapping()(current_));
     }
 
 private:

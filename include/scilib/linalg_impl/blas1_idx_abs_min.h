@@ -17,14 +17,14 @@ namespace stdex = std::experimental;
 
 template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
 inline std::size_t
-idx_abs_min(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
+idx_abs_min(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using magn_type = std::remove_cv_t<decltype(std::abs(x(0)))>;
 
-    size_type min_idx = 0;
+    index_type min_idx = 0;
     magn_type min_val = std::abs(x(0));
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
         if (std::abs(x(i)) < min_val) {
             min_val = std::abs(x(i));
             min_idx = i;

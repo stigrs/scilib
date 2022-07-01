@@ -37,8 +37,8 @@ TEST(TestLinalg, TestInv)
 
     auto res = inv(a);
 
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-8);
         }
     }
@@ -71,8 +71,8 @@ TEST(TestLinalg, TestInvColMajor)
 
     auto res = inv(a);
 
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-8);
         }
     }

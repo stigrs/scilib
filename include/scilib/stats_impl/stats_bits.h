@@ -18,7 +18,7 @@ namespace stdex = std::experimental;
 
 // Arithmetic mean.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto mean(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto mean(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
 {
     using value_type = std::remove_cv_t<T>;
     value_type result = Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
@@ -33,15 +33,15 @@ inline T mean(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Median.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto median(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto median(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     Sci::Vector<value_type> xcopy(x);
     Sci::sort(xcopy.view());
 
-    size_type n = (xcopy.extent(0) + 1) / 2;
+    index_type n = (xcopy.extent(0) + 1) / 2;
     value_type med = xcopy(n);
     if (xcopy.extent(0) % 2 == 0) { // even
         n = (xcopy.extent(0) + 1) / 2 - 1;
@@ -58,9 +58,9 @@ inline T median(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Variance.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto var(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto var(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     // Two-pass algorithm:
@@ -68,7 +68,7 @@ inline auto var(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Acces
     value_type xmean = mean(x);
     value_type sum2 = value_type{0};
 
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
         sum2 += std::pow(x(i) - xmean, 2);
     }
     return sum2 / (n - 1.0);
@@ -82,7 +82,7 @@ inline T var(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Standard deviation.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto stddev(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto stddev(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
 {
     return std::sqrt(var(x));
 }
@@ -95,13 +95,13 @@ inline T stddev(const Sci::Vector<T, Layout, Allocator>& x)
 
 // Root-mean-square deviation.
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto rms(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> x)
+inline auto rms(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type sum2 = value_type{0};
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
         sum2 += x(i) * x(i);
     }
     return std::sqrt(sum2 / x.extent(0));
@@ -121,19 +121,19 @@ template <class T,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline auto cov(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
-                stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
+inline auto cov(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type xmean = mean(x);
     value_type ymean = mean(y);
     value_type res = value_type{0};
 
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
         value_type a = x(i) - xmean;
         value_type b = y(i) - ymean;
         res += a * b / (x.extent(0) - T{1});

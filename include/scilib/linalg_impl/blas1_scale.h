@@ -14,22 +14,21 @@ namespace stdex = std::experimental;
 
 template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
 inline void scale(const T& scalar,
-                  stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x)
+                  stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x)
 {
-    using size_type = std::size_t;
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    using index_type = index;
+    for (index_type i = 0; i < x.extent(0); ++i) {
         x(i) *= scalar;
     }
 }
 
 template <class T, std::size_t nrows, std::size_t ncols, class Layout_m, class Accessor_m>
-inline void
-scale(const T& scalar,
-      stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout_m, Accessor_m> m)
+inline void scale(const T& scalar,
+                  stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout_m, Accessor_m> m)
 {
-    using size_type = std::size_t;
-    for (size_type i = 0; i < m.extent(0); ++i) {
-        for (size_type j = 0; j < m.extent(1); ++j) {
+    using index_type = index;
+    for (index_type i = 0; i < m.extent(0); ++i) {
+        for (index_type j = 0; j < m.extent(1); ++j) {
             m(i, j) *= scalar;
         }
     }

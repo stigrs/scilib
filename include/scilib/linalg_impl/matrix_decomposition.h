@@ -34,9 +34,6 @@ namespace stdex = std::experimental;
 template <class Layout>
 inline void lu(Sci::Matrix_view<double, Layout> a, Sci::Vector_view<BLAS_INT, Layout> ipiv)
 {
-    static_assert(a.is_contiguous());
-    static_assert(ipiv.is_contiguous());
-
     const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
 
@@ -50,7 +47,7 @@ inline void lu(Sci::Matrix_view<double, Layout> a, Sci::Vector_view<BLAS_INT, La
         lda = m;
     }
 
-    BLAS_INT info = LAPACKE_dgetrf(matrix_layout, m, n, a.data(), lda, ipiv.data());
+    BLAS_INT info = LAPACKE_dgetrf(matrix_layout, m, n, a.data_handle(), lda, ipiv.data_handle());
     if (info < 0) {
         throw std::runtime_error("dgetrf: illegal input parameter");
     }
@@ -90,14 +87,14 @@ inline void qr(Sci::Matrix_view<double, Layout> a,
 
     // Compute QR factorization:
 
-    BLAS_INT info = LAPACKE_dgeqrf(matrix_layout, m, n, q.data(), lda, tau.data());
+    BLAS_INT info = LAPACKE_dgeqrf(matrix_layout, m, n, q.data_handle(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dgeqrf failed");
     }
 
     // Compute Q:
 
-    info = LAPACKE_dorgqr(matrix_layout, m, n, n, q.data(), lda, tau.data());
+    info = LAPACKE_dorgqr(matrix_layout, m, n, n, q.data_handle(), lda, tau.data());
     if (info != 0) {
         throw std::runtime_error("dorgqr failed");
     }
@@ -144,8 +141,9 @@ inline void svd(Sci::Matrix_view<double, Layout> a,
 
     Sci::Vector<double, Layout> superb(std::min(m, n) - 1);
 
-    BLAS_INT info = LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data(), lda, s.data(), u.data(),
-                                   ldu, vt.data(), ldvt, superb.data());
+    BLAS_INT info =
+        LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data_handle(), lda, s.data_handle(),
+                       u.data_handle(), ldu, vt.data_handle(), ldvt, superb.data());
     if (info != 0) {
         throw std::runtime_error("dgesvd failed");
     }

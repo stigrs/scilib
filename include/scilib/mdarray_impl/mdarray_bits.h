@@ -23,12 +23,12 @@ namespace __Detail {
 template <class Extents, class... Dims>
 inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
-    using size_type = typename Extents::size_type;
+    using index_type = typename Extents::index_type;
 
-    std::vector<size_type> indexes{static_cast<size_type>(dims)...};
+    std::vector<index_type> indexes{static_cast<index_type>(dims)...};
     bool result = true;
-    for (size_type i = 0; i < indexes.size(); ++i) {
-        if (!(indexes[i] < exts.extent(i))) {
+    for (std::size_t i = 0; i < indexes.size(); ++i) {
+        if (!(indexes[i] >= 0 && indexes[i] < exts.extent(i))) {
             result = false;
         }
     }
@@ -39,10 +39,10 @@ template <class T, class Extents, class Layout, class Accessor>
 inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
 {
     // mdspan returns m.extents() by reference, need to make a copy
-    using size_type = typename Extents::size_type;
+    using index_type = typename Extents::index_type;
 
-    std::array<size_type, Extents::rank()> res;
-    for (size_type i = 0; i < m.rank(); ++i) {
+    std::array<index_type, Extents::rank()> res;
+    for (std::size_t i = 0; i < m.rank(); ++i) {
         res[i] = m.extent(i);
     }
     return res;
@@ -62,9 +62,9 @@ class MDArray {
 public:
     using element_type = T;
     using value_type = std::remove_cv_t<T>;
-    using size_type = std::size_t;
     using extents_type = Extents;
     using layout_type = Layout;
+    using index_type = typename extents_type::index_type;
     using mapping_type = typename layout_type::template mapping<extents_type>;
     using container_type = std::vector<value_type, Allocator>;
     using view_type = stdex::mdspan<value_type, extents_type, layout_type>;
@@ -85,29 +85,29 @@ public:
     constexpr MDArray() = default;
 
     template <class... Exts>
-        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Exts, index_type>...> &&
                  sizeof...(Exts) == extents_type::rank())
     constexpr explicit MDArray(Exts... exts)
-        : map(extents_type(static_cast<size_type>(exts)...)), ctr(map.required_span_size())
+        : map(extents_type(static_cast<index_type>(exts)...)), ctr(map.required_span_size())
     {
     }
 
     template <class... Exts>
-        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Exts, index_type>...> &&
                  sizeof...(Exts) == extents_type::rank())
     constexpr MDArray(const std::vector<T>& m, Exts... exts)
-        : map(extents_type(static_cast<size_type>(exts)...)), ctr(m)
+        : map(extents_type(static_cast<index_type>(exts)...)), ctr(m)
     {
         assert(m.size() == map.required_span_size());
     }
 
     template <std::size_t N>
     constexpr MDArray(const std::array<T, N>& a,
-                      const std::array<size_type, extents_type::rank()>& exts)
+                      const std::array<index_type, extents_type::rank()>& exts)
         : map(exts), ctr(a.begin(), a.end())
     {
-        assert(N == std::accumulate(exts.begin(), exts.end(), size_type{1},
-                                    std::multiplies<size_type>()));
+        assert(N == std::accumulate(exts.begin(), exts.end(), index_type{1},
+                                    std::multiplies<index_type>()));
     }
 
     constexpr MDArray(MDArray&&) = default;
@@ -146,7 +146,7 @@ public:
 
 #if MDSPAN_USE_PAREN_OPERATOR
     template <class... Indices>
-        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Indices, index_type>...> &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr reference operator()(Indices... indices) noexcept
     {
@@ -155,7 +155,7 @@ public:
     }
 
     template <class... Indices>
-        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Indices, index_type>...> &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator()(Indices... indices) const noexcept
     {
@@ -166,7 +166,7 @@ public:
 
 #if MDSPAN_USE_BRACKET_OPERATOR
     template <class... Indices>
-        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Indices, index_type>...> &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr reference operator[](Indices... indices) noexcept
     {
@@ -175,7 +175,7 @@ public:
     }
 
     template <class... Indices>
-        requires(__Detail::All(std::is_convertible_v<Indices, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Indices, index_type>...> &&
                  sizeof...(Indices) == extents_type::rank())
     constexpr const_reference operator[](Indices... indices) const noexcept
     {
@@ -231,29 +231,29 @@ public:
     //----------------------------------------------------------------------------------------------
     // Observers of the multidimensional index space
 
-    constexpr static size_type rank() noexcept { return extents_type::rank(); }
+    constexpr static std::size_t rank() noexcept { return extents_type::rank(); }
 
     constexpr bool empty() const noexcept { return ctr.empty(); }
 
-    constexpr size_type size() const noexcept { return ctr.size(); }
+    constexpr std::size_t size() const noexcept { return ctr.size(); }
 
     constexpr difference_type ssize() const noexcept
     {
         return static_cast<difference_type>(ctr.size());
     }
 
-    constexpr size_type max_size() const noexcept { return ctr.max_size(); }
+    constexpr std::size_t max_size() const noexcept { return ctr.max_size(); }
 
     constexpr extents_type extents() const noexcept { return map.extents(); }
 
-    constexpr size_type extent(size_type dim) const noexcept
+    constexpr index_type extent(std::size_t dim) const noexcept
     {
-        assert(dim < extents_type::rank());
+        assert(dim >= 0 && dim < extents_type::rank());
         return map.extents().extent(dim);
     }
 
     // Signed extent.
-    constexpr difference_type sextent(size_type dim) const noexcept
+    constexpr difference_type sextent(index_type dim) const noexcept
     {
         assert(dim < extents_type::rank());
         return static_cast<difference_type>(map.extents().extent(dim));
@@ -264,17 +264,21 @@ public:
 
     constexpr mapping_type mapping() const noexcept { return map; }
 
-    constexpr size_type stride(size_type dim) const noexcept { return map.stride(dim); }
+    constexpr index_type stride(std::size_t dim) const noexcept
+    {
+        assert(dim >= 0 && dim < extents_type::rank());
+        return map.stride(dim);
+    }
 
     //----------------------------------------------------------------------------------------------
     // Modifiers
 
     template <class... Exts>
-        requires(__Detail::All(std::is_convertible_v<Exts, size_type>...) &&
+        requires(std::conjunction_v<std::is_convertible<Exts, index_type>...> &&
                  sizeof...(Exts) == extents_type::rank())
     constexpr void resize(Exts... exts) noexcept
     {
-        map = mapping_type(extents_type(static_cast<size_type>(exts)...));
+        map = mapping_type(extents_type(static_cast<index_type>(exts)...));
         ctr = container_type(map.required_span_size());
     }
 
@@ -287,7 +291,7 @@ public:
     template <class F>
     constexpr MDArray& apply(F f) noexcept
     {
-        for (size_type i = 0; i < size(); ++i) {
+        for (std::size_t i = 0; i < size(); ++i) {
             f(ctr[i]);
         }
         return *this;
@@ -296,7 +300,7 @@ public:
     template <class F, class U>
     constexpr MDArray& apply(F f, const U& val) noexcept
     {
-        for (size_type i = 0; i < size(); ++i) {
+        for (std::size_t i = 0; i < size(); ++i) {
             f(ctr[i], val);
         }
         return *this;

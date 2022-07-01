@@ -39,16 +39,16 @@ template <class T_a,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<T_a, stdex::extents<std::size_t, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-    stdex::mdspan<T_x, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T_y, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
+    stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
-    using size_type = std::size_t;
+    using index_type = index;
 
-    for (size_type i = 0; i < a.extent(0); ++i) {
+    for (index_type i = 0; i < a.extent(0); ++i) {
         y(i) = T_y{0};
-        for (size_type j = 0; j < a.extent(1); ++j) {
+        for (index_type j = 0; j < a.extent(1); ++j) {
             y(i) += a(i, j) * x(j);
         }
     }
@@ -76,8 +76,8 @@ inline void matrix_vector_product(Sci::Matrix_view<double, Layout> a,
         matrix_layout = CblasColMajor;
         lda = m;
     }
-    cblas_dgemv(matrix_layout, CblasNoTrans, m, n, alpha, a.data(), lda, x.data(), incx, beta,
-                y.data(), incy);
+    cblas_dgemv(matrix_layout, CblasNoTrans, m, n, alpha, a.data_handle(), lda, x.data_handle(),
+                incx, beta, y.data_handle(), incy);
 }
 
 template <class Layout>
@@ -102,8 +102,8 @@ inline void matrix_vector_product(Sci::Matrix_view<const double, Layout> a,
         matrix_layout = CblasColMajor;
         lda = m;
     }
-    cblas_dgemv(matrix_layout, CblasNoTrans, m, n, alpha, a.data(), lda, x.data(), incx, beta,
-                y.data(), incy);
+    cblas_dgemv(matrix_layout, CblasNoTrans, m, n, alpha, a.data_handle(), lda, x.data_handle(),
+                incx, beta, y.data_handle(), incy);
 }
 
 #ifdef USE_MKL
@@ -130,8 +130,8 @@ inline void matrix_vector_product(Sci::Matrix_view<std::complex<double>, Layout>
         matrix_layout = CblasColMajor;
         lda = m;
     }
-    cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data(), lda, x.data(), incx, &beta,
-                y.data(), incy);
+    cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data_handle(), lda, x.data_handle(),
+                incx, &beta, y.data_handle(), incy);
 }
 
 template <class Layout>
@@ -156,8 +156,8 @@ inline void matrix_vector_product(Sci::Matrix_view<const std::complex<double>, L
         matrix_layout = CblasColMajor;
         lda = m;
     }
-    cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data(), lda, x.data(), incx, &beta,
-                y.data(), incy);
+    cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data_handle(), lda, x.data_handle(),
+                incx, &beta, y.data_handle(), incy);
 }
 #endif
 

@@ -21,16 +21,16 @@ template <class T,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline auto dot(stdex::mdspan<T, stdex::extents<std::size_t, ext_x>, Layout_x, Accessor_x> x,
-                stdex::mdspan<T, stdex::extents<std::size_t, ext_y>, Layout_y, Accessor_y> y)
+inline auto dot(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 0;
-    for (size_type i = 0; i < x.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
         result += x(i) * y(i);
     }
     return result;

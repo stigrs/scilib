@@ -28,9 +28,6 @@ inline void eigs(Sci::Matrix_view<double, Layout> a,
                  Sci::Vector_view<double, Layout> w,
                  double abstol = -1.0 /* use default value */)
 {
-    static_assert(a.is_contiguous());
-    static_assert(w.is_contiguous());
-
     assert(a.extent(0) == a.extent(1));
     assert(w.extent(0) == a.extent(0));
 
@@ -55,8 +52,8 @@ inline void eigs(Sci::Matrix_view<double, Layout> a,
         matrix_layout = LAPACK_COL_MAJOR;
     }
 
-    info = LAPACKE_dsyevr(matrix_layout, 'V', 'A', 'U', n, a.data(), lda, vl, vu, il, iu, abstol,
-                          &m, w.data(), z.data(), ldz, isuppz.data());
+    info = LAPACKE_dsyevr(matrix_layout, 'V', 'A', 'U', n, a.data_handle(), lda, vl, vu, il, iu,
+                          abstol, &m, w.data_handle(), z.data(), ldz, isuppz.data());
     if (info != 0) {
         throw std::runtime_error("dsyevr failed");
     }
@@ -79,10 +76,6 @@ void eig(Sci::Matrix_view<double, Layout> a,
 {
     using namespace Sci;
 
-    static_assert(a.is_contiguous());
-    static_assert(evec.is_contiguous());
-    static_assert(eval.is_contiguous());
-
     assert(a.extent(0) == a.extent(1));
     assert(a.extent(0) == eval.extent(0));
     assert(a.extent(0) == evec.extent(0));
@@ -99,8 +92,8 @@ void eig(Sci::Matrix_view<double, Layout> a,
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
-    BLAS_INT info = LAPACKE_dgeev(matrix_layout, 'N', 'V', n, a.data(), n, wr.data(), wi.data(),
-                                  vl.data(), n, vr.data(), n);
+    BLAS_INT info = LAPACKE_dgeev(matrix_layout, 'N', 'V', n, a.data_handle(), n, wr.data(),
+                                  wi.data(), vl.data(), n, vr.data(), n);
     if (info != 0) {
         throw std::runtime_error("dgeev failed");
     }

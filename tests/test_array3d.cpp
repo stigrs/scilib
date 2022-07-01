@@ -18,9 +18,9 @@ TEST(TestMDArray, TestArray3D)
     Sci::Array3D<int> a(3, 4, 5);
     a = 1;
 
-    for (std::size_t i = 0; i < a.extent(0); ++i) {
-        for (std::size_t j = 0; j < a.extent(1); ++j) {
-            for (std::size_t k = 0; k < a.extent(2); ++k) {
+    for (Sci::index i = 0; i < a.extent(0); ++i) {
+        for (Sci::index j = 0; j < a.extent(1); ++j) {
+            for (Sci::index k = 0; k < a.extent(2); ++k) {
                 EXPECT_EQ(a(i, j, k), 1);
             }
         }

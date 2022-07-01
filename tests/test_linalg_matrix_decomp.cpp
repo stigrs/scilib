@@ -35,8 +35,8 @@ TEST(TestLinalg, TestLU)
 
     lu(a, ipiv);
 
-    for (std::size_t i = 0; i < ans.extent(0); ++i) {
-        for (std::size_t j = 0; j < ans.extent(1); ++j) {
+    for (Sci::index i = 0; i < ans.extent(0); ++i) {
+        for (Sci::index j = 0; j < ans.extent(1); ++j) {
             EXPECT_NEAR(a(i, j), ans(i, j), 1.0e-5);
         }
     }
@@ -61,8 +61,8 @@ TEST(TestLinalg, TestQR)
 
     qr(a, q, r);
     auto res = q * r;
-    for (std::size_t i = 0; i < ans.extent(0); ++i) {
-        for (std::size_t j = 0; j < ans.extent(1); ++j) {
+    for (Sci::index i = 0; i < ans.extent(0); ++i) {
+        for (Sci::index j = 0; j < ans.extent(1); ++j) {
             EXPECT_DOUBLE_EQ(res(i, j), ans(i, j));
         }
     }
@@ -87,8 +87,8 @@ TEST(TestLinalg, TestQRColMajor)
 
     qr(a, q, r);
     auto res = q * r;
-    for (std::size_t i = 0; i < ans.extent(0); ++i) {
-        for (std::size_t j = 0; j < ans.extent(1); ++j) {
+    for (Sci::index i = 0; i < ans.extent(0); ++i) {
+        for (Sci::index j = 0; j < ans.extent(1); ++j) {
             EXPECT_DOUBLE_EQ(res(i, j), ans(i, j));
         }
     }
@@ -127,8 +127,8 @@ TEST(TestLinalg, TestSVD)
     copy(s.view(), sigma_diag);
 
     auto res = u * sigma * vt;
-    for (std::size_t i = 0; i < ans.extent(0); ++i) {
-        for (std::size_t j = 0; j < ans.extent(1); ++j) {
+    for (Sci::index i = 0; i < ans.extent(0); ++i) {
+        for (Sci::index j = 0; j < ans.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-6);
         }
     }
@@ -167,8 +167,8 @@ TEST(TestLinalg, TestSVDColMajor)
     copy(s.view(), sigma_diag);
 
     auto res = u * sigma * vt;
-    for (std::size_t j = 0; j < ans.extent(1); ++j) {
-        for (std::size_t i = 0; i < ans.extent(0); ++i) {
+    for (Sci::index j = 0; j < ans.extent(1); ++j) {
+        for (Sci::index i = 0; i < ans.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-6);
         }
     }

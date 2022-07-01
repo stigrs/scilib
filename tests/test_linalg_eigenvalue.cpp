@@ -91,8 +91,8 @@ TEST(TestLinalg, TestEig)
         EXPECT_NEAR(eval(i).imag(), eval_im[i], 5.0e-8);
     }
 
-    for (std::size_t i = 0; i < evec.extent(0); ++i) {
-        for (std::size_t j = 0; j < evec.extent(1); ++j) {
+    for (Sci::index i = 0; i < evec.extent(0); ++i) {
+        for (Sci::index j = 0; j < evec.extent(1); ++j) {
             EXPECT_NEAR(evec(i, j).real(), evec_re(i, j), 5.0e-9);
             EXPECT_NEAR(evec(i, j).imag(), evec_im(i, j), 5.0e-9);
         }
@@ -144,8 +144,8 @@ TEST(TestLinalg, TestEigColMajor)
         EXPECT_NEAR(eval(i).imag(), eval_im[i], 5.0e-8);
     }
 
-    for (std::size_t j = 0; j < evec.extent(1); ++j) {
-        for (std::size_t i = 0; i < evec.extent(0); ++i) {
+    for (Sci::index j = 0; j < evec.extent(1); ++j) {
+        for (Sci::index i = 0; i < evec.extent(0); ++i) {
             EXPECT_NEAR(evec(i, j).real(), evec_re(i, j), 5.0e-9);
             EXPECT_NEAR(evec(i, j).imag(), evec_im(i, j), 5.0e-9);
         }

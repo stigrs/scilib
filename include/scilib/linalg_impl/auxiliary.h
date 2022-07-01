@@ -18,14 +18,13 @@ namespace Linalg {
 // Fill mdspan:
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline void fill(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v,
-                 const T& value)
+inline void fill(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v, const T& value)
 {
     Sci::apply(v, [&](T& vi) { vi = value; });
 }
 
 template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline void fill(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m,
+inline void fill(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m,
                  const T& value)
 {
     Sci::apply(m, [&](T& mi) { mi = value; });
@@ -43,13 +42,13 @@ inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& value)
 // Limit array values:
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline void clip(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> a,
+inline void clip(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> a,
                  const T& a_min,
                  const T& a_max)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
-    for (size_type i = 0; i < a.extent(0); ++i) {
+    for (index_type i = 0; i < a.extent(0); ++i) {
         if (a(i) < a_min) {
             a(i) = a_min;
         }
@@ -60,14 +59,14 @@ inline void clip(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Acce
 }
 
 template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline void clip(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> a,
+inline void clip(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a,
                  const T& a_min,
                  const T& a_max)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
-    for (size_type i = 0; i < a.extent(0); ++i) {
-        for (size_type j = 0; i < a.extent(1); ++i) {
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = 0; i < a.extent(1); ++i) {
             if (a(i, j) < a_min) {
                 a(i, j) = a_min;
             }
@@ -88,14 +87,14 @@ inline void clip(Sci::MDArray<T, Extents, Layout, Allocator>& a, const T& a_min,
 // Find argmax, argmin, max, min, sum, and product of elements:
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline std::size_t argmax(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline std::size_t argmax(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
-    size_type max_idx = 0;
+    index_type max_idx = 0;
     value_type max_val = v(0);
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         if (v(i) > max_val) {
             max_val = v(i);
             max_idx = i;
@@ -111,14 +110,14 @@ inline std::size_t argmax(const Sci::Vector<T, Layout, Allocator>& v)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline std::size_t argmin(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline std::size_t argmin(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
-    size_type min_idx = 0;
+    index_type min_idx = 0;
     value_type min_val = v(0);
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         if (v(i) < min_val) {
             min_val = v(i);
             min_idx = i;
@@ -134,13 +133,13 @@ inline std::size_t argmin(const Sci::Vector<T, Layout, Allocator>& v)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto max(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline auto max(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = v(0);
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         if (v(i) > result) {
             result = v(i);
         }
@@ -155,13 +154,13 @@ inline T max(const Sci::Vector<T, Layout, Allocator>& v)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto min(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline auto min(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = v(0);
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         if (v(i) < result) {
             result = v(i);
         }
@@ -176,13 +175,13 @@ inline T min(const Sci::Vector<T, Layout, Allocator>& v)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto sum(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline auto sum(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 0;
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         result += v(i);
     }
     return result;
@@ -195,13 +194,13 @@ inline T sum(const Sci::Vector<T, Layout, Allocator>& v)
 }
 
 template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto prod(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+inline auto prod(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 1;
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         result *= v(i);
     }
     return result;
@@ -216,11 +215,12 @@ inline T prod(const Sci::Vector<T, Layout, Allocator>& v)
 //--------------------------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
+// clang-format off
 template <class M, class... Args>
-    requires MDArray_type<M>
+    requires(MDArray_type<M> && M::rank() == sizeof...(Args))
+// clang-format on
 inline M zeros(Args... args)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     M res(args...);
@@ -228,11 +228,12 @@ inline M zeros(Args... args)
     return res;
 }
 
+// clang-format off
 template <class M, class... Args>
-    requires MDArray_type<M>
+    requires(MDArray_type<M> && M::rank() == sizeof...(Args))
+// clang-format on
 inline M ones(Args... args)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     M res(args...);
@@ -240,18 +241,18 @@ inline M ones(Args... args)
     return res;
 }
 
+// clang-format off
 template <class M = Sci::Matrix<double>>
-    requires MDArray_type<M>
+    requires(MDArray_type<M> && M::rank() == 2)
+// clang-format on
 inline M identity(std::size_t n)
 {
-    static_assert(M::rank() == 2);
-
     using value_type = typename M::value_type;
-    using size_type = typename M::size_type;
+    using index_type = typename M::index_type;
 
     M res(n, n);
     auto res_diag = Sci::diag(res.view());
-    for (size_type i = 0; i < res_diag.extent(0); ++i) {
+    for (index_type i = 0; i < res_diag.extent(0); ++i) {
         res_diag(i) = value_type{1};
     }
     return res;

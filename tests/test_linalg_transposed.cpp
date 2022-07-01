@@ -26,8 +26,8 @@ TEST(TestMatrix, TestTransposed)
     Sci::Matrix<int> ans(t_data, 4, 2);
     auto at = Sci::Linalg::transposed(a);
 
-    for (std::size_t i = 0; i < at.extent(0); ++i) {
-        for (std::size_t j = 0; j < at.extent(1); ++j) {
+    for (Sci::index i = 0; i < at.extent(0); ++i) {
+        for (Sci::index j = 0; j < at.extent(1); ++j) {
             EXPECT_EQ(at(i, j), ans(i, j));
         }
     }
@@ -51,8 +51,8 @@ TEST(TestMatrix, TestTransposedColMajor)
     Sci::Matrix<int, stdex::layout_left> ans(t_data, 2, 4);
     auto at = Sci::Linalg::transposed(a);
 
-    for (std::size_t j = 0; j < at.extent(1); ++j) {
-        for (std::size_t i = 0; i < at.extent(0); ++i) {
+    for (Sci::index j = 0; j < at.extent(1); ++j) {
+        for (Sci::index i = 0; i < at.extent(0); ++i) {
             EXPECT_EQ(at(i, j), ans(i, j));
         }
     }

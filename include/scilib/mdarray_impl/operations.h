@@ -207,23 +207,22 @@ constexpr Vector<T, Layout, Allocator> operator*(const Matrix<T, Layout, Allocat
 // Apply operations:
 
 template <class T, std::size_t ext, class Layout, class Accessor, class F>
-constexpr void apply(stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v, F f)
+constexpr void apply(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v, F f)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         f(v(i));
     }
 }
 
 template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor, class F>
-constexpr void
-apply(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m, F f)
+constexpr void apply(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m, F f)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
-    for (size_type i = 0; i < m.extent(0); ++i) {
-        for (size_type j = 0; j < m.extent(1); ++j) {
+    for (index_type i = 0; i < m.extent(0); ++i) {
+        for (index_type j = 0; j < m.extent(1); ++j) {
             f(m(i, j));
         }
     }
@@ -234,12 +233,12 @@ apply(stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Access
 
 template <class T, std::size_t ext, class Layout, class Accessor>
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<std::size_t, ext>, Layout, Accessor> v)
+                  stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
     ostrm << v.extent(0) << '\n' << '{';
-    for (size_type i = 0; i < v.extent(0); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
             ostrm << "\n  ";
@@ -251,12 +250,12 @@ inline void print(std::ostream& ostrm,
 template <class T, class Layout, class Allocator>
 inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, Allocator>& v)
 {
-    using size_type = std::size_t;
+    using index_type = typename Vector<T, Layout, Allocator>::index_type;
 
     ostrm << v.size() << '\n' << '{';
-    for (size_type i = 0; i < v.size(); ++i) {
+    for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
-        if (!((i + 1) % 7) && (i != (v.size() - 1))) {
+        if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
             ostrm << "\n  ";
         }
     }
@@ -267,15 +266,15 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, All
 template <class T, class Layout, class Allocator>
 inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout, Allocator>& v)
 {
-    using size_type = std::size_t;
+    using index_type = typename Vector<T, Layout, Allocator>::index_type;
 
-    size_type n;
+    index_type n;
     istrm >> n;
     std::vector<T> tmp(n);
 
     char ch;
     istrm >> ch; // {
-    for (size_type i = 0; i < n; ++i) {
+    for (index_type i = 0; i < n; ++i) {
         istrm >> tmp[i];
     }
     istrm >> ch; // }
@@ -285,13 +284,13 @@ inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout, Allocator
 
 template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<std::size_t, nrows, ncols>, Layout, Accessor> m)
+                  stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
-    for (size_type i = 0; i < m.extent(0); ++i) {
-        for (size_type j = 0; j < m.extent(1); ++j) {
+    for (index_type i = 0; i < m.extent(0); ++i) {
+        for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
         }
         if (i != (m.extent(0) - 1)) {
@@ -304,11 +303,11 @@ inline void print(std::ostream& ostrm,
 template <class T, class Layout, class Allocator>
 inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, Allocator>& m)
 {
-    using size_type = std::size_t;
+    using index_type = typename Matrix<T, Layout, Allocator>::index_type;
 
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
-    for (size_type i = 0; i < m.extent(0); ++i) {
-        for (size_type j = 0; j < m.extent(1); ++j) {
+    for (index_type i = 0; i < m.extent(0); ++i) {
+        for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
         }
         if (i != (m.extent(0) - 1)) {
@@ -322,17 +321,17 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, All
 template <class T, class Layout, class Allocator>
 inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout, Allocator>& m)
 {
-    using size_type = std::size_t;
+    using index_type = typename Matrix<T, Layout, Allocator>::index_type;
 
-    size_type nr;
-    size_type nc;
+    index_type nr;
+    index_type nc;
     char ch;
 
     istrm >> nr >> ch >> nc;
     std::vector<T> tmp(nr * nc);
 
     istrm >> ch; // {
-    for (size_type i = 0; i < nr * nc; ++i) {
+    for (index_type i = 0; i < nr * nc; ++i) {
         istrm >> tmp[i];
     }
     istrm >> ch; // }

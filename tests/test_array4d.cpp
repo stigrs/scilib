@@ -9,13 +9,15 @@
 
 TEST(TestMDArray, TestArray4D)
 {
+    using index_type = Sci::Array4D<int>::index_type;
+
     Sci::Array4D<int> a(3, 4, 5, 6);
     a = 1;
 
-    for (std::size_t i = 0; i < a.extent(0); ++i) {
-        for (std::size_t j = 0; j < a.extent(1); ++j) {
-            for (std::size_t k = 0; k < a.extent(2); ++k) {
-                for (std::size_t l = 0; l < a.extent(3); ++l) {
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = 0; j < a.extent(1); ++j) {
+            for (index_type k = 0; k < a.extent(2); ++k) {
+                for (index_type l = 0; l < a.extent(3); ++l) {
                     EXPECT_EQ(a(i, j, k, l), 1);
                 }
             }

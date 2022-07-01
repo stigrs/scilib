@@ -42,38 +42,38 @@ TEST(TestLinalg, TestMatrixPower)
     Matrix<double> M(M_data, 2, 2);
 
     auto res = matrix_power(M, 0);
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans2(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 1);
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), M(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 2);
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans4(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 3);
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans1(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, -3);
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans3(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 6);
-    for (std::size_t i = 0; i < res.extent(0); ++i) {
-        for (std::size_t j = 0; j < res.extent(1); ++j) {
+    for (Sci::index i = 0; i < res.extent(0); ++i) {
+        for (Sci::index j = 0; j < res.extent(1); ++j) {
             EXPECT_NEAR(res(i, j), ans4(i, j), 1.0e-6);
         }
     }
@@ -111,38 +111,38 @@ TEST(TestLinalg, TestMatrixPowerColMajor)
     Matrix<double, stdex::layout_left> M(M_data, 2, 2);
 
     auto res = matrix_power(M, 0);
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans2(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 1);
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), M(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 2);
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans4(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 3);
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans1(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, -3);
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans3(i, j), 1.0e-6);
         }
     }
     res = matrix_power(M, 6);
-    for (std::size_t j = 0; j < res.extent(1); ++j) {
-        for (std::size_t i = 0; i < res.extent(0); ++i) {
+    for (Sci::index j = 0; j < res.extent(1); ++j) {
+        for (Sci::index i = 0; i < res.extent(0); ++i) {
             EXPECT_NEAR(res(i, j), ans4(i, j), 1.0e-6);
         }
     }
