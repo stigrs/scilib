@@ -248,7 +248,7 @@ public:
 
     constexpr index_type extent(std::size_t dim) const noexcept
     {
-        assert(dim >= 0 && dim < extents_type::rank());
+        assert(dim < extents_type::rank());
         return map.extents().extent(dim);
     }
 
@@ -266,7 +266,7 @@ public:
 
     constexpr index_type stride(std::size_t dim) const noexcept
     {
-        assert(dim >= 0 && dim < extents_type::rank());
+        assert(dim < extents_type::rank());
         return map.stride(dim);
     }
 
