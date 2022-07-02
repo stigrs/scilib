@@ -74,7 +74,7 @@ public:
 
         mapping() = default;
 
-        mapping(nested_mapping_type map) : nested_mapping(map) {}
+        mapping(nested_mapping_type map) : nested_mapping(map) { }
 
         // for non-batched layouts
         index_type operator()(index_type i, index_type j) const { return nested_mapping(j, i); }

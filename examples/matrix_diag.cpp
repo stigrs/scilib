@@ -4,11 +4,11 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
 #include <iostream>
-#include <vector>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
 #include <tuple>
+#include <vector>
 
 int main()
 {
@@ -20,8 +20,10 @@ int main()
     };
     // clang-format on
     Sci::Matrix<int> m(data, 3, 3);
-    std::cout << "matrix:\n" << m << '\n';
+    std::cout << "matrix:\n"
+              << m << '\n';
 
     Sci::Linalg::fill(Sci::diag(m), 10);
-    std::cout << "matrix:\n" << m << '\n';
+    std::cout << "matrix:\n"
+              << m << '\n';
 }

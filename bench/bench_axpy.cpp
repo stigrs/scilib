@@ -9,12 +9,12 @@
 #pragma warning(disable : 5054)
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
+#include <Eigen/Dense>
 #include <chrono>
 #include <iostream>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
 #include <valarray>
-#include <Eigen/Dense>
 
 typedef std::chrono::duration<double, std::milli> Timer;
 

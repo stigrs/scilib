@@ -4,9 +4,9 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
 #include <iostream>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
 #include <vector>
 
 int main()
@@ -19,7 +19,8 @@ int main()
     };
     // clang-format on
     Sci::Matrix<int> m(data, 3, 4);
-    std::cout << "matrix:\n" << m << '\n';
+    std::cout << "matrix:\n"
+              << m << '\n';
 
     auto mt = Sci::Linalg::transposed(m.view());
     Sci::print(std::cout, mt);

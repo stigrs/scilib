@@ -61,7 +61,7 @@ private:
     using result_type = decltype(value * scaling_factor);
 
 public:
-    scaled_scalar(Reference v, const ScalingFactor& s) : value(v), scaling_factor(s) {}
+    scaled_scalar(Reference v, const ScalingFactor& s) : value(v), scaling_factor(s) { }
 
     operator result_type() const { return value * scaling_factor; }
 };
@@ -76,7 +76,7 @@ public:
 
     accessor_scaled() = default;
 
-    accessor_scaled(Accessor a, S sval) : acc_(a), scale_factor_(sval) {}
+    accessor_scaled(Accessor a, S sval) : acc_(a), scale_factor_(sval) { }
 
     reference access(data_handle_type p, std::size_t i) const noexcept
     {

@@ -13,10 +13,10 @@
 #ifndef SCILIB_MDARRAY_MDSPAN_ITERATOR_H
 #define SCILIB_MDARRAY_MDSPAN_ITERATOR_H
 
-#include <cstddef>
 #include <cassert>
-#include <iterator>
+#include <cstddef>
 #include <iostream>
+#include <iterator>
 
 namespace Sci {
 

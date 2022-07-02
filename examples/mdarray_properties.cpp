@@ -4,9 +4,9 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
 #include <iostream>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
 #include <vector>
 
 int main()

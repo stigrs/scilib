@@ -16,8 +16,8 @@
 #include "lapack_types.h"
 #include <cassert>
 #include <complex>
-#include <type_traits>
 #include <iostream>
+#include <type_traits>
 
 namespace Sci {
 namespace Linalg {

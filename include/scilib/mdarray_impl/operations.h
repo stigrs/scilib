@@ -10,8 +10,8 @@
 #include "../linalg_impl/blas2_matrix_vector_product.h"
 #include "../linalg_impl/blas3_matrix_product.h"
 #include <algorithm>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <type_traits>
 
 namespace Sci {
@@ -237,7 +237,8 @@ inline void print(std::ostream& ostrm,
 {
     using index_type = index;
 
-    ostrm << v.extent(0) << '\n' << '{';
+    ostrm << v.extent(0) << '\n'
+          << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
@@ -252,7 +253,8 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, All
 {
     using index_type = typename Vector<T, Layout, Allocator>::index_type;
 
-    ostrm << v.size() << '\n' << '{';
+    ostrm << v.size() << '\n'
+          << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
@@ -288,7 +290,8 @@ inline void print(std::ostream& ostrm,
 {
     using index_type = index;
 
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n'
+          << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
         for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
@@ -305,7 +308,8 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, All
 {
     using index_type = typename Matrix<T, Layout, Allocator>::index_type;
 
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n'
+          << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
         for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";

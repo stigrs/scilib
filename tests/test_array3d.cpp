@@ -4,8 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
 #include <gtest/gtest.h>
+#include <scilib/mdarray.h>
 
 void beast(const Sci::Array3D<int>& a)
 {

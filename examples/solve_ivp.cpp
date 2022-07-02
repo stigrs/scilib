@@ -1,6 +1,6 @@
-#include <scilib/mdarray.h>
-#include <scilib/integrate.h>
 #include <iostream>
+#include <scilib/integrate.h>
+#include <scilib/mdarray.h>
 
 Sci::Vector<double> lorentz(double /* t */, const Sci::Vector<double>& y)
 {

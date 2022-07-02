@@ -8,10 +8,10 @@
 #define SCILIB_MDARRAY_H
 
 #include "mdarray_impl/support.h"
-#include <experimental/mdspan>
 #include <cstddef>
-#include <vector>
+#include <experimental/mdspan>
 #include <utility>
+#include <vector>
 
 #if _MSC_VER >= 1927
 #include <concepts>
@@ -141,14 +141,16 @@ using Array7D = MDArray<T,
 
 } // namespace Sci
 
-#include <scilib/mdarray_impl/mdspan_iterator.h>
-#include <scilib/mdarray_impl/copy.h>
-#include <scilib/mdarray_impl/copy_n.h>
-#include <scilib/mdarray_impl/sort.h>
-#include <scilib/mdarray_impl/swap_elements.h>
-#include <scilib/mdarray_impl/slice.h>
-#include <scilib/mdarray_impl/support.h>
-#include <scilib/mdarray_impl/mdarray_bits.h>
-#include <scilib/mdarray_impl/operations.h>
+// clang-format off
+#include "mdarray_impl/mdspan_iterator.h"
+#include "mdarray_impl/copy.h"
+#include "mdarray_impl/copy_n.h"
+#include "mdarray_impl/sort.h"
+#include "mdarray_impl/swap_elements.h"
+#include "mdarray_impl/slice.h"
+#include "mdarray_impl/support.h"
+#include "mdarray_impl/mdarray_bits.h"
+#include "mdarray_impl/operations.h"
+// clang-format on
 
 #endif // SCILIB_MDARRAY_H

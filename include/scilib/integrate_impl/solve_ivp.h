@@ -8,10 +8,10 @@
 #define SCILIB_INTEGRATE_SOLVE_IVP_H
 
 #include "../mdarray.h"
-#include <exception>
-#include <cmath>
-#include <limits>
 #include <cassert>
+#include <cmath>
+#include <exception>
+#include <limits>
 
 namespace Sci {
 namespace Integrate {

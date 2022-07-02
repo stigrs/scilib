@@ -7,10 +7,10 @@
 #ifndef SCILIB_STATS_BITS_H
 #define SCILIB_STATS_BITS_H
 
-#include "../mdarray.h"
 #include "../linalg.h"
-#include <type_traits>
+#include "../mdarray.h"
 #include <cmath>
+#include <type_traits>
 
 namespace Sci {
 namespace Stats {

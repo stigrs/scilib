@@ -9,13 +9,13 @@
 #pragma warning(disable : 5054)
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
+#include <Eigen/Dense>
 #include <chrono>
 #include <iostream>
-#include <valarray>
 #include <numeric>
-#include <Eigen/Dense>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
+#include <valarray>
 
 using Timer = std::chrono::duration<double, std::micro>;
 
@@ -43,7 +43,7 @@ void benchmark(int n)
     }
     auto t2 = std::chrono::high_resolution_clock::now();
     Timer t_eigen = t2 - t1;
-    (void) dot_eigen; // ignore unused result
+    (void)dot_eigen; // ignore unused result
 
     Sci::Vector<double> na(n);
     Sci::Vector<double> nb(n);
@@ -56,7 +56,7 @@ void benchmark(int n)
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;
-    (void) sci;
+    (void)sci;
 
     std::valarray<double> va(1.0, n);
     std::valarray<double> vb(2.0, n);
@@ -67,7 +67,7 @@ void benchmark(int n)
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_val = t2 - t1;
-    (void) val;
+    (void)val;
 
     print(n, t_eigen, t_sci, t_val);
 }

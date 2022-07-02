@@ -8,8 +8,8 @@
 #define SCILIB_INTEGRATE_IMPL_TRAPZ_H
 
 #include "../mdarray.h"
-#include <type_traits>
 #include <cmath>
+#include <type_traits>
 
 namespace Sci {
 namespace Integrate {

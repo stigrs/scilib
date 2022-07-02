@@ -4,11 +4,11 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
-#include <gtest/gtest.h>
-#include <vector>
 #include <cmath>
+#include <gtest/gtest.h>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
+#include <vector>
 
 TEST(TestLinalg, TestMatrixNorm)
 {

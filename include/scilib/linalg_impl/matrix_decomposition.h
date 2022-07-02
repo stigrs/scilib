@@ -21,8 +21,8 @@
 #endif
 
 #include "lapack_types.h"
-#include <exception>
 #include <cassert>
+#include <exception>
 #include <type_traits>
 
 namespace Sci {

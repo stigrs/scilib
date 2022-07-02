@@ -4,12 +4,12 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
-#include <scilib/integrate.h>
-#include <scilib/constants.h>
 #include <gtest/gtest.h>
-#include <vector>
 #include <limits>
+#include <scilib/constants.h>
+#include <scilib/integrate.h>
+#include <scilib/mdarray.h>
+#include <vector>
 
 Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
 {

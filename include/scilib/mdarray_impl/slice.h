@@ -9,8 +9,8 @@
 
 #include <array>
 #include <cstddef>
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 namespace Sci {
 namespace stdex = std::experimental;
