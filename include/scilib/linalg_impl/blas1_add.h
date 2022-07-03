@@ -7,8 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS1_ADD_H
 #define SCILIB_LINALG_BLAS1_ADD_H
 
-#include <experimental/linalg>
-
 namespace Sci {
 namespace Linalg {
 
@@ -40,7 +38,7 @@ inline void add(const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
                 const Sci::Vector<T_y, Layout_y, Allocator_y>& y,
                 Sci::Vector<T_z, Layout_z, Allocator_z>& z)
 {
-    std::experimental::linalg::add(x.view(), y.view(), z.view());
+    add(x.view(), y.view(), z.view());
 }
 
 } // namespace Linalg

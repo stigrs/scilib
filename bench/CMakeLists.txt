@@ -9,10 +9,6 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
-if(NOT TARGET std::linalg)
-    find_package(linalg REQUIRED)
-endif()
-
 if(NOT TARGET Eigen3::Eigen)
     find_package(Eigen3 REQUIRED)
 endif()
@@ -36,9 +32,8 @@ foreach(program ${PROGRAMS})
 	target_link_libraries (
 	    ${program} 
         PRIVATE
-        std::mdspan
-        std::linalg
         scilib::scilib
+        std::mdspan
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}
         OpenMP::OpenMP_CXX

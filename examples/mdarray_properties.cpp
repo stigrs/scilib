@@ -4,12 +4,10 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <experimental/linalg>
 #include <iostream>
 #include <scilib/linalg.h>
 #include <scilib/mdarray.h>
 #include <vector>
-
 
 int main()
 {
@@ -63,10 +61,6 @@ int main()
     std::cout << "m2_view = ";
     Sci::print(std::cout, m2_view);
     std::cout << "\n\n";
-
-    std::cout << "ssize(m2) =      " << Sci::ssize(m2) << '\n';
-    std::cout << "sextent(m2, 0) = " << Sci::sextent(m2, 0) << '\n';
-    std::cout << "sextent(m2, 1) = " << Sci::sextent(m2, 1) << "\n\n";
 
     // This should not compile:
     // m2_view(0, 0) = 1;
