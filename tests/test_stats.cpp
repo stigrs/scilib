@@ -4,9 +4,9 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#include <gtest/gtest.h>
 #include <scilib/mdarray.h>
 #include <scilib/statistics.h>
-#include <gtest/gtest.h>
 #include <vector>
 
 TEST(TestStats, TestMean)

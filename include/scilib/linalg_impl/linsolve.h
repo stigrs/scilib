@@ -14,8 +14,8 @@
 #endif
 
 #include "lapack_types.h"
-#include <exception>
 #include <cassert>
+#include <exception>
 #include <type_traits>
 
 namespace Sci {
@@ -26,9 +26,6 @@ template <class Layout>
 inline void linsolve(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b)
 {
     namespace stdex = std::experimental;
-
-    static_assert(a.is_contiguous());
-    static_assert(b.is_contiguous());
 
     assert(a.extent(0) == a.extent(1));
     assert(b.extent(0) == a.extent(1));
@@ -46,8 +43,8 @@ inline void linsolve(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double
         matrix_layout = LAPACK_COL_MAJOR;
         ldb = n;
     }
-    BLAS_INT info =
-        LAPACKE_dgesv(matrix_layout, n, nrhs, a.data(), lda, ipiv.data(), b.data(), ldb);
+    BLAS_INT info = LAPACKE_dgesv(matrix_layout, n, nrhs, a.data_handle(), lda, ipiv.data(),
+                                  b.data_handle(), ldb);
     if (info != 0) {
         throw std::runtime_error("dgesv: factor U is singular");
     }

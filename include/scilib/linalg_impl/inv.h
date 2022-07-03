@@ -14,8 +14,8 @@
 #endif
 
 #include "lapack_types.h"
-#include <exception>
 #include <cassert>
+#include <exception>
 #include <type_traits>
 
 namespace Sci {
@@ -27,9 +27,6 @@ template <class T_a, class T_res, class Layout>
 inline void inv(Sci::Matrix_view<T_a, Layout> a, Sci::Matrix_view<T_res, Layout> res)
 {
     namespace stdex = std::experimental;
-
-    static_assert(a.is_contiguous());
-    static_assert(res.is_contiguous());
 
     assert(a.extent(0) == a.extent(1));
 
@@ -50,7 +47,7 @@ inline void inv(Sci::Matrix_view<T_a, Layout> a, Sci::Matrix_view<T_res, Layout>
     Sci::Vector<BLAS_INT, Layout> ipiv(n);
     Sci::Linalg::lu(res, ipiv.view()); // perform LU factorization
 
-    BLAS_INT info = LAPACKE_dgetri(matrix_layout, n, res.data(), lda, ipiv.data());
+    BLAS_INT info = LAPACKE_dgetri(matrix_layout, n, res.data_handle(), lda, ipiv.data());
     if (info != 0) {
         throw std::runtime_error("dgetri: matrix inversion failed");
     }

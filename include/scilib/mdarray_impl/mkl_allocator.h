@@ -20,25 +20,25 @@ template <class T>
 class MKL_allocator {
 public:
     using value_type = T;
-    using size_type = std::size_t;
+    using index_type = index;
     using difference_type = std::ptrdiff_t;
 
-    constexpr MKL_allocator() noexcept {}
-    constexpr MKL_allocator(const MKL_allocator&) noexcept {}
+    constexpr MKL_allocator() noexcept { }
+    constexpr MKL_allocator(const MKL_allocator&) noexcept { }
 
     template <class U>
     constexpr MKL_allocator(const MKL_allocator<U>&) noexcept
     {
     }
 
-    ~MKL_allocator() {}
+    ~MKL_allocator() { }
 
-    constexpr T* allocate(size_type n)
+    constexpr T* allocate(index_type n)
     {
-        return (T*) mkl_calloc(n, sizeof(value_type), MKL_MEM_ALIGNMENT);
+        return (T*)mkl_calloc(n, sizeof(value_type), MKL_MEM_ALIGNMENT);
     }
 
-    constexpr void deallocate(T* p, size_type /* n */) { mkl_free(p); }
+    constexpr void deallocate(T* p, index_type /* n */) { mkl_free(p); }
 };
 
 template <class T1, class T2>

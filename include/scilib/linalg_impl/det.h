@@ -20,7 +20,6 @@ template <class T, class Layout>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
 auto det(Sci::Matrix_view<T, Layout> a)
 {
-    static_assert(a.is_contiguous());
     assert(a.extent(0) == a.extent(1));
 
     using value_type = std::remove_cv_t<T>;

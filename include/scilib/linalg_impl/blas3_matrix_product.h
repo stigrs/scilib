@@ -38,23 +38,23 @@ template <class T_a,
           class Layout_c,
           class Accessor_c>
     requires(!std::is_const_v<T_c>)
-inline void matrix_product(
-    stdex::mdspan<T_a, stdex::extents<std::size_t, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-    stdex::mdspan<T_b, stdex::extents<std::size_t, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
-    stdex::mdspan<T_c, stdex::extents<std::size_t, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
+inline void
+matrix_product(stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+               stdex::mdspan<T_b, stdex::extents<index, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+               stdex::mdspan<T_c, stdex::extents<index, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
 {
     static_assert(a.static_extent(1) == b.static_extent(0));
 
-    using size_type = std::size_t;
+    using index_type = index;
 
-    const size_type n = a.extent(0);
-    const size_type m = a.extent(1);
-    const size_type p = b.extent(1);
+    const index_type n = a.extent(0);
+    const index_type m = a.extent(1);
+    const index_type p = b.extent(1);
 
-    for (size_type i = 0; i < n; ++i) {
-        for (size_type j = 0; j < p; ++j) {
+    for (index_type i = 0; i < n; ++i) {
+        for (index_type j = 0; j < p; ++j) {
             c(i, j) = T_c{0};
-            for (size_type k = 0; k < m; ++k) {
+            for (index_type k = 0; k < m; ++k) {
                 c(i, j) += a(i, k) * b(k, j);
             }
         }
@@ -84,8 +84,8 @@ inline void matrix_product(Sci::Matrix_view<double, Layout> a,
         ldb = k;
         ldc = m;
     }
-    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha, a.data(), lda, b.data(),
-                ldb, beta, c.data(), ldc);
+    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha, a.data_handle(), lda,
+                b.data_handle(), ldb, beta, c.data_handle(), ldc);
 }
 
 template <class Layout>
@@ -111,8 +111,8 @@ inline void matrix_product(Sci::Matrix_view<const double, Layout> a,
         ldb = k;
         ldc = m;
     }
-    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha, a.data(), lda, b.data(),
-                ldb, beta, c.data(), ldc);
+    cblas_dgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, alpha, a.data_handle(), lda,
+                b.data_handle(), ldb, beta, c.data_handle(), ldc);
 }
 
 #ifdef USE_MKL
@@ -166,8 +166,8 @@ inline void matrix_product(Sci::Matrix_view<const std::complex<double>, Layout> 
         ldb = k;
         ldc = m;
     }
-    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha, a.data(), lda, b.data(),
-                ldb, &beta, c.data(), ldc);
+    cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha, a.data_handle(), lda,
+                b.data_handle(), ldb, &beta, c.data_handle(), ldc);
 }
 #endif
 
@@ -175,10 +175,10 @@ template <class T, class Layout, class Allocator>
 inline Sci::Matrix<T, Layout, Allocator> matrix_product(const Sci::Matrix<T, Layout, Allocator>& a,
                                                         const Sci::Matrix<T, Layout, Allocator>& b)
 {
-    using size_type = std::size_t;
+    using index_type = index;
 
-    const size_type n = a.extent(0);
-    const size_type p = b.extent(1);
+    const index_type n = a.extent(0);
+    const index_type p = b.extent(1);
 
     Sci::Matrix<T, Layout, Allocator> res(n, p);
     matrix_product(a.view(), b.view(), res.view());

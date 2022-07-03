@@ -51,6 +51,8 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
+namespace __Detail {
+
 template <class Reference, class ScalingFactor>
 class scaled_scalar {
 private:
@@ -59,7 +61,7 @@ private:
     using result_type = decltype(value * scaling_factor);
 
 public:
-    scaled_scalar(Reference v, const ScalingFactor& s) : value(v), scaling_factor(s) {}
+    scaled_scalar(Reference v, const ScalingFactor& s) : value(v), scaling_factor(s) { }
 
     operator result_type() const { return value * scaling_factor; }
 };
@@ -68,25 +70,26 @@ template <class Accessor, class S>
 class accessor_scaled {
 public:
     using element_type = typename Accessor::element_type;
-    using pointer = typename Accessor::pointer;
+    using data_handle_type = typename Accessor::data_handle_type;
     using reference = scaled_scalar<typename Accessor::reference, S>;
     using offset_policy = accessor_scaled<typename Accessor::offset_policy, S>;
 
     accessor_scaled() = default;
 
-    accessor_scaled(Accessor a, S sval) : acc_(a), scale_factor_(sval) {}
+    accessor_scaled(Accessor a, S sval) : acc_(a), scale_factor_(sval) { }
 
-    reference access(pointer p, std::size_t i) const noexcept
+    reference access(data_handle_type p, std::size_t i) const noexcept
     {
         return reference(acc_.access(p, i), scale_factor_);
     }
 
-    typename offset_policy::pointer offset(pointer p, std::size_t i) const noexcept
+    typename offset_policy::data_handle_type offset(data_handle_type p,
+                                                    std::size_t i) const noexcept
     {
         return acc_.offset(p, i);
     }
 
-    element_type* decay(pointer p) const noexcept { return acc_.decay(p); }
+    element_type* decay(data_handle_type p) const noexcept { return acc_.decay(p); }
 
     Accessor nested_accessor() const { return acc_; }
 
@@ -97,21 +100,22 @@ private:
     S scale_factor_;
 };
 
-template <class T, class Extents, class Layout, class Accessor, class ScalingFactorType>
-inline stdex::mdspan<T, Extents, Layout, accessor_scaled<Accessor, ScalingFactorType>>
+} // namespace __Detail
+
+template <class ScalingFactorType, class T, class Extents, class Layout, class Accessor>
+inline stdex::mdspan<T, Extents, Layout, __Detail::accessor_scaled<Accessor, ScalingFactorType>>
 scaled(ScalingFactorType scaling_factor, stdex::mdspan<T, Extents, Layout, Accessor> a)
 {
-    using accessor_t = accessor_scaled<Accessor, ScalingFactorType>;
-    return stdex::mdspan<T, Extents, Layout, accessor_t>(a.data(), a.mapping(),
+    using accessor_t = __Detail::accessor_scaled<Accessor, ScalingFactorType>;
+    return stdex::mdspan<T, Extents, Layout, accessor_t>(a.data_handle(), a.mapping(),
                                                          accessor_t(a.accessor(), scaling_factor));
 }
 
-template <class T, class Extents, class Layout, class Allocator, class ScalingFactorType>
+template <class ScalingFactorType, class T, class Extents, class Layout, class Allocator>
 inline Sci::MDArray<T, Extents, Layout, Allocator>
 scaled(ScalingFactorType scaling_factor, const Sci::MDArray<T, Extents, Layout, Allocator>& a)
 {
-    Sci::MDArray<T, Extents, Layout, Allocator> tmp = scaled(scaling_factor, a.view());
-    return tmp;
+    return Sci::MDArray<T, Extents, Layout, Allocator>(scaled(scaling_factor, a.view()));
 }
 
 } // namespace Linalg

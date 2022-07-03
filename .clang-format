@@ -1,27 +1,15 @@
-ColumnLimit: 100
-
-UseTab: Never
-IndentWidth: 4
-AccessModifierOffset: -4
-NamespaceIndentation: None
-
-BinPackParameters: false
+BasedOnStyle: WebKit
+AlignAfterOpenBracket: Align
+AlignOperands: true
+BraceWrapping:
+  AfterFunction: true
+BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Stroustrup
-AlwaysBreakTemplateDeclarations: true
-BreakConstructorInitializersBeforeComma: false
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
-AllowShortBlocksOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
-
-PointerAlignment: Left
-AlignConsecutiveAssignments: false
-AlignTrailingComments: true
-
-SortIncludes: false
-SpaceAfterCStyleCast: true
-SpaceAfterTemplateKeyword: true
+BreakConstructorInitializers: BeforeColon
+ColumnLimit: 100
+Cpp11BracedListStyle: true
 FixNamespaceComments: true
-IndentCaseLabels: false
 IndentRequires: true
+NamespaceIndentation: None
+SortIncludes: true
+SpaceBeforeCpp11BracedList: false

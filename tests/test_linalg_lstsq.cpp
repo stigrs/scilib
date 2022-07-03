@@ -4,9 +4,9 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
 #include <gtest/gtest.h>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
 #include <vector>
 
 TEST(TestLinalg, TestLstsq)
@@ -43,8 +43,8 @@ TEST(TestLinalg, TestLstsq)
 
     lstsq(a, b);
 
-    for (std::size_t i = 0; i < b.extent(0); ++i) {
-        for (std::size_t j = 0; j < b.extent(1); ++j) {
+    for (Sci::index i = 0; i < b.extent(0); ++i) {
+        for (Sci::index j = 0; j < b.extent(1); ++j) {
             EXPECT_NEAR(b(i, j), xans(i, j), 5.0e-3);
         }
     }
@@ -81,8 +81,8 @@ TEST(TestLinalg, TestLstsqColMajor)
 
     lstsq(a, b);
 
-    for (std::size_t j = 0; j < b.extent(1); ++j) {
-        for (std::size_t i = 0; i < b.extent(0); ++i) {
+    for (Sci::index j = 0; j < b.extent(1); ++j) {
+        for (Sci::index i = 0; i < b.extent(0); ++i) {
             EXPECT_NEAR(b(i, j), xans(i, j), 5.0e-3);
         }
     }

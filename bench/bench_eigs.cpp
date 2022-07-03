@@ -10,11 +10,11 @@
 #pragma warning(disable : 5054)
 #endif
 
-#include <scilib/mdarray.h>
-#include <scilib/linalg.h>
+#include <Eigen/Dense>
 #include <chrono>
 #include <iostream>
-#include <Eigen/Dense>
+#include <scilib/linalg.h>
+#include <scilib/mdarray.h>
 
 using Timer = std::chrono::duration<double, std::milli>;
 

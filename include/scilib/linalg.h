@@ -9,6 +9,7 @@
 
 // Do not change this ordering.
 
+// clang-format off
 #include "mdarray.h"
 
 #include "linalg_impl/lapack_types.h"
@@ -38,5 +39,6 @@
 #include "linalg_impl/matrix_power.h"
 #include "linalg_impl/linsolve.h"
 #include "linalg_impl/lstsq.h"
+// clang-format on
 
 #endif // SCILIB_LINALG_H

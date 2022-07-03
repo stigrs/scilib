@@ -33,8 +33,6 @@ template <class T, class Layout>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
 inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
 {
-    static_assert(a.is_contiguous());
-
     assert(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' || norm == 'o' || norm == 'I' ||
            norm == 'i' || norm == 'F' || norm == 'f' || norm == 'E' || norm == 'e');
 
@@ -47,7 +45,7 @@ inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
-    return LAPACKE_dlange(matrix_layout, norm, m, n, a.data(), lda);
+    return LAPACKE_dlange(matrix_layout, norm, m, n, a.data_handle(), lda);
 }
 
 template <class Layout, class Allocator>

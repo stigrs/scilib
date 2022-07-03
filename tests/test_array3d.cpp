@@ -4,8 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
 #include <gtest/gtest.h>
+#include <scilib/mdarray.h>
 
 void beast(const Sci::Array3D<int>& a)
 {
@@ -18,9 +18,9 @@ TEST(TestMDArray, TestArray3D)
     Sci::Array3D<int> a(3, 4, 5);
     a = 1;
 
-    for (std::size_t i = 0; i < a.extent(0); ++i) {
-        for (std::size_t j = 0; j < a.extent(1); ++j) {
-            for (std::size_t k = 0; k < a.extent(2); ++k) {
+    for (Sci::index i = 0; i < a.extent(0); ++i) {
+        for (Sci::index j = 0; j < a.extent(1); ++j) {
+            for (Sci::index k = 0; k < a.extent(2); ++k) {
                 EXPECT_EQ(a(i, j, k), 1);
             }
         }

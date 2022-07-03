@@ -4,8 +4,8 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
 #include <gtest/gtest.h>
+#include <scilib/mdarray.h>
 #include <vector>
 
 TEST(TestVector, TestSize)
@@ -65,7 +65,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::Vector<int> a(v, std::array<std::size_t, 1>{v.size()});
+    Sci::Vector<int> a(v, std::array<Sci::index, 1>{v.size()});
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));

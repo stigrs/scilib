@@ -8,10 +8,10 @@
 #define SCILIB_MDARRAY_H
 
 #include "mdarray_impl/support.h"
-#include <experimental/mdspan>
 #include <cstddef>
-#include <vector>
+#include <experimental/mdspan>
 #include <utility>
+#include <vector>
 
 #if _MSC_VER >= 1927
 #include <concepts>
@@ -30,30 +30,32 @@
 
 namespace stdex = std::experimental;
 
-// Signed array index.
-using Index = std::ptrdiff_t;
-
 namespace Sci {
+
+#ifndef SCILIB_INDEX_TYPE
+#define SCILIB_INDEX_TYPE std::size_t
+#endif
+using index = SCILIB_INDEX_TYPE;
 
 using layout_left = stdex::layout_left;
 using layout_right = stdex::layout_right;
 using layout_stride = stdex::layout_stride;
 
 template <class T, class Layout = stdex::layout_right>
-using Vector_view = stdex::mdspan<T, stdex::extents<std::size_t, stdex::dynamic_extent>, Layout>;
+using Vector_view = stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, Layout>;
 
 template <class T>
 using Subvector_view =
-    stdex::mdspan<T, stdex::extents<std::size_t, stdex::dynamic_extent>, stdex::layout_stride>;
+    stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, stdex::layout_stride>;
 
 template <class T, class Layout = stdex::layout_right>
-using Matrix_view = stdex::
-    mdspan<T, stdex::extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent>, Layout>;
+using Matrix_view =
+    stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>, Layout>;
 
 template <class T>
 using Submatrix_view =
     stdex::mdspan<T,
-                  stdex::extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent>,
+                  stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_stride>;
 
 // clang-format off
@@ -76,25 +78,24 @@ class MDArray;
 // clang-format on
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Vector = MDArray<T, stdex::extents<std::size_t, stdex::dynamic_extent>, Layout, Allocator>;
+using Vector = MDArray<T, stdex::extents<index, stdex::dynamic_extent>, Layout, Allocator>;
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
 using Matrix = MDArray<T,
-                       stdex::extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent>,
+                       stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
                        Layout,
                        Allocator>;
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array3D = MDArray<
     T,
-    stdex::
-        extents<std::size_t, stdex::dynamic_extent, stdex::dynamic_extent, stdex::dynamic_extent>,
+    stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent, stdex::dynamic_extent>,
     Layout,
     Allocator>;
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array4D = MDArray<T,
-                        stdex::extents<std::size_t,
+                        stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -104,7 +105,7 @@ using Array4D = MDArray<T,
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array5D = MDArray<T,
-                        stdex::extents<std::size_t,
+                        stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -115,7 +116,7 @@ using Array5D = MDArray<T,
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array6D = MDArray<T,
-                        stdex::extents<std::size_t,
+                        stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -127,7 +128,7 @@ using Array6D = MDArray<T,
 
 template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
 using Array7D = MDArray<T,
-                        stdex::extents<std::size_t,
+                        stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
@@ -140,14 +141,16 @@ using Array7D = MDArray<T,
 
 } // namespace Sci
 
-#include <scilib/mdarray_impl/mdspan_iterator.h>
-#include <scilib/mdarray_impl/copy.h>
-#include <scilib/mdarray_impl/copy_n.h>
-#include <scilib/mdarray_impl/sort.h>
-#include <scilib/mdarray_impl/swap_elements.h>
-#include <scilib/mdarray_impl/slice.h>
-#include <scilib/mdarray_impl/support.h>
-#include <scilib/mdarray_impl/mdarray_bits.h>
-#include <scilib/mdarray_impl/operations.h>
+// clang-format off
+#include "mdarray_impl/mdspan_iterator.h"
+#include "mdarray_impl/copy.h"
+#include "mdarray_impl/copy_n.h"
+#include "mdarray_impl/sort.h"
+#include "mdarray_impl/swap_elements.h"
+#include "mdarray_impl/slice.h"
+#include "mdarray_impl/support.h"
+#include "mdarray_impl/mdarray_bits.h"
+#include "mdarray_impl/operations.h"
+// clang-format on
 
 #endif // SCILIB_MDARRAY_H

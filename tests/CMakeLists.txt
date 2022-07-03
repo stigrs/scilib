@@ -28,9 +28,9 @@ function(add_scilib_test name)
     target_link_libraries (
         ${name} 
         PRIVATE
+        std::mdspan
         scilib::scilib
         gtest_main
-        std::mdspan
 	    ${BLAS_LIBRARIES}
         OpenMP::OpenMP_CXX
     ) 

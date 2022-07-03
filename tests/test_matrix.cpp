@@ -4,17 +4,17 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <scilib/mdarray.h>
 #include <gtest/gtest.h>
+#include <scilib/mdarray.h>
 
 TEST(TestMatrix, TestSize)
 {
-    std::size_t nrows = 5;
-    std::size_t ncols = 3;
+    Sci::index nrows = 5;
+    Sci::index ncols = 3;
 
     Sci::Matrix<int> m(nrows, ncols);
 
-    EXPECT_EQ(m.size(), nrows * ncols);
+    EXPECT_EQ(m.size(), static_cast<std::size_t>(nrows * ncols));
     EXPECT_EQ(m.extent(0), nrows);
     EXPECT_EQ(m.extent(1), ncols);
 }
@@ -23,8 +23,8 @@ TEST(TestMatrix, TestElementAccess)
 {
     Sci::Matrix<int> m(5, 3);
     m = 2;
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
             EXPECT_EQ(m(i, j), 2);
         }
     }
@@ -78,8 +78,8 @@ TEST(TestMatrix, TestAssignSpan)
 
 TEST(TestMatrix, TestResize)
 {
-    std::size_t nrows = 5;
-    std::size_t ncols = 3;
+    Sci::index nrows = 5;
+    Sci::index ncols = 3;
     Sci::Matrix<int> a(nrows, ncols);
     a.resize(3, 5);
     EXPECT_EQ(a.extent(0), ncols);
@@ -88,8 +88,8 @@ TEST(TestMatrix, TestResize)
 
 TEST(TestMatrix, TestSwap)
 {
-    std::size_t n1 = 5;
-    std::size_t n2 = 3;
+    Sci::index n1 = 5;
+    Sci::index n2 = 3;
     Sci::Matrix<int> a(n1, n2);
     Sci::Matrix<int> b(n2, n1);
     std::swap(a, b);
@@ -108,8 +108,8 @@ TEST(TestMatrix, TestInitializer)
     Sci::Matrix<int> m(v, 2, 3);
 
     int val = 1;
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
             EXPECT_EQ(m(i, j), val);
             ++val;
         }
@@ -197,8 +197,8 @@ TEST(TestMatrix, TestColMajor)
     Sci::Matrix<int, stdex::layout_left> m(v, 2, 3);
 
     int val = 1;
-    for (std::size_t i = 0; i < m.extent(0); ++i) {
-        for (std::size_t j = 0; j < m.extent(1); ++j) {
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
             EXPECT_EQ(m(i, j), val);
             ++val;
         }

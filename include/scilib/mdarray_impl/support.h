@@ -18,14 +18,6 @@ concept convertible_to = std::is_convertible_v<From, To> && requires
     static_cast<To>(std::declval<From>());
 };
 
-constexpr bool All() { return true; }
-
-template <class... Args>
-constexpr bool All(bool b, Args... args)
-{
-    return b && All(args...);
-}
-
 } // namespace __Detail
 } // namespace Sci
 
