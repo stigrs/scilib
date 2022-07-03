@@ -32,7 +32,6 @@ foreach(program ${PROGRAMS})
         scilib::scilib
         std::mdspan
 	    ${BLAS_LIBRARIES}
-        OpenMP::OpenMP_CXX
 	) 
     target_compile_options(
         ${program}

@@ -32,7 +32,6 @@ function(add_scilib_test name)
         scilib::scilib
         gtest_main
 	    ${BLAS_LIBRARIES}
-        OpenMP::OpenMP_CXX
     ) 
     target_compile_options(
         ${name}
