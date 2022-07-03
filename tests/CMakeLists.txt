@@ -19,6 +19,10 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
+if(NOT TARGET std::linalg)
+    find_package(linalg REQUIRED)
+endif()
+
 if(NOT TARGET scilib::scilib)
     find_package(scilib REQUIRED)
 endif()
@@ -28,9 +32,10 @@ function(add_scilib_test name)
     target_link_libraries (
         ${name} 
         PRIVATE
+        std::linalg
+        std::mdspan
         scilib::scilib
         gtest_main
-        std::mdspan
 	    ${BLAS_LIBRARIES}
         OpenMP::OpenMP_CXX
     ) 

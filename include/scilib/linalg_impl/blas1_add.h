@@ -7,22 +7,15 @@
 #ifndef SCILIB_LINALG_BLAS1_ADD_H
 #define SCILIB_LINALG_BLAS1_ADD_H
 
+#include <experimental/linalg>
+
 namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_x,
-          std::size_t ext_x,
-          class Layout_x,
-          class Accessor_x,
-          std::size_t ext_y,
-          class T_y,
-          class Layout_y,
-          class Accessor_y,
-          std::size_t ext_z,
-          class T_z,
-          class Layout_z,
+template <class T_x, std::size_t ext_x, class Layout_x, class Accessor_x, std::size_t ext_y,
+          class T_y, class Layout_y, class Accessor_y, std::size_t ext_z, class T_z, class Layout_z,
           class Accessor_z>
     requires(!std::is_const_v<T_z>)
 inline void add(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
@@ -40,21 +33,14 @@ inline void add(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Acces
     }
 }
 
-template <class T_x,
-          class Layout_x,
-          class Allocator_x,
-          class T_y,
-          class Layout_y,
-          class Allocator_y,
-          class T_z,
-          class Layout_z,
-          class Allocator_z>
+template <class T_x, class Layout_x, class Allocator_x, class T_y, class Layout_y,
+          class Allocator_y, class T_z, class Layout_z, class Allocator_z>
     requires(!std::is_const_v<T_z>)
 inline void add(const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
                 const Sci::Vector<T_y, Layout_y, Allocator_y>& y,
                 Sci::Vector<T_z, Layout_z, Allocator_z>& z)
 {
-    add(x.view(), y.view(), z.view());
+    std::experimental::linalg::add(x.view(), y.view(), z.view());
 }
 
 } // namespace Linalg

@@ -122,6 +122,9 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
+# stdBLAS is required.
+find_package(linalg REQUIRED)
+
 # BLAS and LAPACKE are required.
 if(DEFINED ENV{MKLROOT})
 	find_package(MKL)
