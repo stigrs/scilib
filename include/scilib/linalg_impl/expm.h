@@ -9,9 +9,10 @@
 
 #include "auxiliary.h"
 #include "matrix_norm.h"
-#include "scaled.h"
 #include <cassert>
+#include <experimental/linalg>
 #include <type_traits>
+
 
 namespace Sci {
 namespace Linalg {
@@ -36,7 +37,7 @@ auto expm(Sci::Matrix_view<T, Layout> a)
     int e = static_cast<int>(std::log2(matrix_norm(a, 'I')));
     int s = std::max(0, e + 1);
 
-    Matrix<value_type, Layout> A = scaled(1.0 / std::pow(2.0, s), a);
+    Matrix<value_type, Layout> A = std::experimental::linalg::scaled(1.0 / std::pow(2.0, s), a);
     Matrix<value_type, Layout> X = A;
 
     value_type c = 0.5;

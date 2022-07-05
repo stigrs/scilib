@@ -11,6 +11,7 @@
 
 #include <Eigen/Dense>
 #include <chrono>
+#include <experimental/linalg>
 #include <iostream>
 #include <scilib/linalg.h>
 #include <scilib/mdarray.h>
@@ -64,7 +65,8 @@ void benchmark(int n)
 
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10000; ++it) {
-        add(scaled(2.0, va.view()), vb.view(), vb.view());
+        std::experimental::linalg::add(std::experimental::linalg::scaled(2.0, va.view()), vb.view(),
+                                       vb.view());
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_axpy = t2 - t1;

@@ -9,6 +9,10 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
+if(NOT TARGET std::linalg)
+    find_package(linalg REQUIRED)
+endif()
+
 if(NOT TARGET Eigen3::Eigen)
     find_package(Eigen3 REQUIRED)
 endif()
@@ -34,6 +38,7 @@ foreach(program ${PROGRAMS})
         PRIVATE
         scilib::scilib
         std::mdspan
+        std::linalg
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}
 	) 

@@ -23,6 +23,7 @@
 #include "lapack_types.h"
 #include <cassert>
 #include <exception>
+#include <experimental/linalg>
 #include <type_traits>
 
 namespace Sci {
@@ -65,8 +66,7 @@ inline void lu(Sci::Matrix<double, Layout, Allocator_a>& a,
 
 // QR factorization.
 template <class Layout>
-inline void qr(Sci::Matrix_view<double, Layout> a,
-               Sci::Matrix_view<double, Layout> q,
+inline void qr(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> q,
                Sci::Matrix_view<double, Layout> r)
 {
     assert(q.extent(0) == a.extent(0) && q.extent(1) == a.extent(1));
@@ -101,13 +101,12 @@ inline void qr(Sci::Matrix_view<double, Layout> a,
 
     // Compute R:
 
-    matrix_product(transposed(q), a, r);
-    transposed(q);
+    matrix_product(std::experimental::linalg::transposed(q), a, r);
+    std::experimental::linalg::transposed(q);
 }
 
 template <class Layout, class Allocator>
-inline void qr(Sci::Matrix<double, Layout, Allocator>& a,
-               Sci::Matrix<double, Layout, Allocator>& q,
+inline void qr(Sci::Matrix<double, Layout, Allocator>& a, Sci::Matrix<double, Layout, Allocator>& q,
                Sci::Matrix<double, Layout, Allocator>& r)
 {
     qr(a.view(), q.view(), r.view());
@@ -115,10 +114,8 @@ inline void qr(Sci::Matrix<double, Layout, Allocator>& a,
 
 // Singular value decomposition.
 template <class Layout>
-inline void svd(Sci::Matrix_view<double, Layout> a,
-                Sci::Vector_view<double, Layout> s,
-                Sci::Matrix_view<double, Layout> u,
-                Sci::Matrix_view<double, Layout> vt)
+inline void svd(Sci::Matrix_view<double, Layout> a, Sci::Vector_view<double, Layout> s,
+                Sci::Matrix_view<double, Layout> u, Sci::Matrix_view<double, Layout> vt)
 {
     const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
@@ -150,10 +147,9 @@ inline void svd(Sci::Matrix_view<double, Layout> a,
 }
 
 template <class Layout, class Allocator>
-inline void svd(Sci::Matrix<double, Layout, Allocator>& a,
-                Sci::Vector<double, Layout, Allocator>& s,
-                Sci::Matrix<double, Layout, Allocator>& u,
-                Sci::Matrix<double, Layout, Allocator>& vt)
+inline void
+svd(Sci::Matrix<double, Layout, Allocator>& a, Sci::Vector<double, Layout, Allocator>& s,
+    Sci::Matrix<double, Layout, Allocator>& u, Sci::Matrix<double, Layout, Allocator>& vt)
 {
     svd(a.view(), s.view(), u.view(), vt.view());
 }

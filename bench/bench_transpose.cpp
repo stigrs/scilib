@@ -11,8 +11,8 @@
 
 #include <Eigen/Dense>
 #include <chrono>
+#include <experimental/linalg>
 #include <iostream>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
 
 using Timer = std::chrono::duration<double, std::milli>;
@@ -37,7 +37,7 @@ void benchmark(int n, int m)
     Sci::Matrix<double> m2(n, m);
     m2 = 1.0;
     t1 = std::chrono::high_resolution_clock::now();
-    auto mt = Sci::Linalg::transposed(m2.view());
+    auto mt = std::experimental::linalg::transposed(m2.view());
     t2 = std::chrono::high_resolution_clock::now();
     (void)mt;
     Timer t_sci = t2 - t1;

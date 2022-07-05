@@ -16,42 +16,25 @@
 #include "lapack_types.h"
 #include <cassert>
 #include <complex>
-#include <iostream>
+#include <experimental/linalg>
 #include <type_traits>
+
 
 namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_a,
-          std::size_t nrows_a,
-          std::size_t ncols_a,
-          class Layout_a,
-          class Accessor_a,
-          class T_x,
-          std::size_t ext_x,
-          class Layout_x,
-          class Accessor_x,
-          class T_y,
-          std::size_t ext_y,
-          class Layout_y,
-          class Accessor_y>
+template <class T_a, std::size_t nrows_a, std::size_t ncols_a, class Layout_a, class Accessor_a,
+          class T_x, std::size_t ext_x, class Layout_x, class Accessor_x, class T_y,
+          std::size_t ext_y, class Layout_y, class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void matrix_vector_product(
     stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
     stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
     stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == a.static_extent(1));
-    using index_type = index;
-
-    for (index_type i = 0; i < a.extent(0); ++i) {
-        y(i) = T_y{0};
-        for (index_type j = 0; j < a.extent(1); ++j) {
-            y(i) += a(i, j) * x(j);
-        }
-    }
+    std::experimental::linalg::matrix_vector_product(a, x, y);
 }
 
 template <class Layout>

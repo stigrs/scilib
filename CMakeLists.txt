@@ -119,6 +119,20 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
+# stdBLAS is required.
+message(STATUS "Fetch stdBLAS from Github")
+include(FetchContent)
+FetchContent_Declare(
+    linalg
+    GIT_REPOSITORY  https://github.com/stigrs/stdBLAS.git
+    GIT_TAG         main
+)
+FetchContent_MakeAvailable(linalg)
+
+if(NOT TARGET std::linalg)
+    find_package(linalg REQUIRED)
+endif()
+
 # BLAS and LAPACKE are required.
 if(DEFINED ENV{MKLROOT})
 	find_package(MKL)

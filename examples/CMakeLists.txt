@@ -9,6 +9,10 @@ if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
+if(NOT TARGET std::linalg)
+    find_package(linalg REQUIRED)
+endif()
+
 if(NOT TARGET scilib::scilib)
     find_package(scilib REQUIRED)
 endif()
@@ -31,6 +35,7 @@ foreach(program ${PROGRAMS})
         PRIVATE
         scilib::scilib
         std::mdspan
+        std::linalg
 	    ${BLAS_LIBRARIES}
 	) 
     target_compile_options(
