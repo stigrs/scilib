@@ -1,42 +1,3 @@
-// ************************************************************************
-//
-//                        Kokkos v. 2.0
-//              Copyright (2019) Sandia Corporation
-//
-// Under the terms of Contract DE-AC04-94AL85000 with Sandia Corporation,
-// the U.S. Government retains certain rights in this software.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-// 1. Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//
-// 2. Redistributions in binary form must reproduce the above copyright
-// notice, this list of conditions and the following disclaimer in the
-// documentation and/or other materials provided with the distribution.
-//
-// 3. Neither the name of the Corporation nor the names of the
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY SANDIA CORPORATION "AS IS" AND ANY
-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-// PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SANDIA CORPORATION OR THE
-// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Questions? Contact Christian R. Trott (crtrott@sandia.gov)
-//
-// ************************************************************************
-
 // Copyright (c) 2021 Stig Rune Sellevag
 //
 // This file is distributed under the MIT License. See the accompanying file
@@ -46,70 +7,15 @@
 #ifndef SCILIB_LINALG_TRANSPOSED_H
 #define SCILIB_LINALG_TRANSPOSED_H
 
+#include <experimental/linalg>
+
 namespace Sci {
 namespace Linalg {
-
-namespace stdex = std::experimental;
-
-namespace {
-template <std::size_t ext0, std::size_t ext1>
-inline stdex::extents<index, ext1, ext0> transpose_extents(stdex::extents<index, ext0, ext1> e)
-{
-    return stdex::extents<index, ext1, ext0>(e.extent(1), e.extent(0));
-}
-} // namespace
-
-template <class Layout>
-class layout_transpose {
-public:
-    template <class Extents>
-    struct mapping {
-    private:
-        using nested_mapping_type = typename Layout::template mapping<Extents>;
-
-    public:
-        using index_type = typename Extents::index_type;
-
-        nested_mapping_type nested_mapping;
-
-        mapping() = default;
-
-        mapping(nested_mapping_type map) : nested_mapping(map) { }
-
-        // for non-batched layouts
-        index_type operator()(index_type i, index_type j) const { return nested_mapping(j, i); }
-
-        constexpr auto extents() const noexcept
-        {
-            return transpose_extents(nested_mapping.extents());
-        }
-
-        constexpr bool is_unique() const noexcept { return nested_mapping.is_unique(); }
-        constexpr bool is_contiguous() const noexcept { return nested_mapping.is_contiguous(); }
-        constexpr bool is_strided() const noexcept { return nested_mapping.is_strided(); }
-
-        constexpr index_type stride(index_type r) const noexcept
-        {
-            return nested_mapping.stride(index_type(1) - r);
-        }
-    };
-};
-
-template <class T, class Extents, class Layout, class Accessor>
-inline stdex::mdspan<T, Extents, layout_transpose<Layout>, Accessor>
-transposed(stdex::mdspan<T, Extents, Layout, Accessor> a)
-{
-    static_assert(a.rank() == 2);
-    using layout_type = layout_transpose<Layout>;
-    using mapping_type = typename layout_type::template mapping<Extents>;
-    return stdex::mdspan<T, Extents, layout_type, Accessor>(
-        a.data_handle(), mapping_type(a.mapping()), a.accessor());
-}
 
 template <class T, class Layout, class Allocator>
 inline Sci::Matrix<T, Layout, Allocator> transposed(const Sci::Matrix<T, Layout, Allocator>& a)
 {
-    return Sci::Matrix<T, Layout, Allocator>(transposed(a.view()));
+    return Sci::Matrix<T, Layout, Allocator>(std::experimental::linalg::transposed(a.view()));
 }
 
 } // namespace Linalg

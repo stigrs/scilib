@@ -17,53 +17,27 @@
 #include <complex>
 #include <type_traits>
 
+#include <experimental/linalg>
+
 namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_a,
-          std::size_t nrows_a,
-          std::size_t ncols_a,
-          class Layout_a,
-          class Accessor_a,
-          class T_b,
-          std::size_t nrows_b,
-          std::size_t ncols_b,
-          class Layout_b,
-          class Accessor_b,
-          class T_c,
-          std::size_t nrows_c,
-          std::size_t ncols_c,
-          class Layout_c,
-          class Accessor_c>
+template <class T_a, std::size_t nrows_a, std::size_t ncols_a, class Layout_a, class Accessor_a,
+          class T_b, std::size_t nrows_b, std::size_t ncols_b, class Layout_b, class Accessor_b,
+          class T_c, std::size_t nrows_c, std::size_t ncols_c, class Layout_c, class Accessor_c>
     requires(!std::is_const_v<T_c>)
 inline void
 matrix_product(stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
                stdex::mdspan<T_b, stdex::extents<index, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
                stdex::mdspan<T_c, stdex::extents<index, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
 {
-    static_assert(a.static_extent(1) == b.static_extent(0));
-
-    using index_type = index;
-
-    const index_type n = a.extent(0);
-    const index_type m = a.extent(1);
-    const index_type p = b.extent(1);
-
-    for (index_type i = 0; i < n; ++i) {
-        for (index_type j = 0; j < p; ++j) {
-            c(i, j) = T_c{0};
-            for (index_type k = 0; k < m; ++k) {
-                c(i, j) += a(i, k) * b(k, j);
-            }
-        }
-    }
+    std::experimental::linalg::matrix_product(a, b, c);
 }
 
 template <class Layout>
-inline void matrix_product(Sci::Matrix_view<double, Layout> a,
-                           Sci::Matrix_view<double, Layout> b,
+inline void matrix_product(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b,
                            Sci::Matrix_view<double, Layout> c)
 {
     constexpr double alpha = 1.0;

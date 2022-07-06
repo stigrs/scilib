@@ -15,8 +15,13 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+
 if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
+endif()
+
+if(NOT TARGET std::linalg)
+    find_package(linalg REQUIRED)
 endif()
 
 if(NOT TARGET scilib::scilib)
@@ -28,11 +33,11 @@ function(add_scilib_test name)
     target_link_libraries (
         ${name} 
         PRIVATE
+        std::linalg
         std::mdspan
         scilib::scilib
         gtest_main
 	    ${BLAS_LIBRARIES}
-        OpenMP::OpenMP_CXX
     ) 
     target_compile_options(
         ${name}

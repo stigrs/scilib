@@ -42,7 +42,7 @@ void benchmark(int n)
     Matrix<double> b1 = randu<Matrix<double>>(n, n);
     Matrix<double> b1_t = b1;
     Matrix<double> b2(n, n);
-    matrix_product(transposed(b1_t.view()), b1.view(), b2.view());
+    matrix_product(transposed(b1_t), b1, b2);
     Vector<double> wr(n);
     t1 = std::chrono::high_resolution_clock::now();
     eigs(b2.view(), wr.view());

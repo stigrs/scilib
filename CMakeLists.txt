@@ -44,9 +44,6 @@ else()
     option(BUILD_SHARED_LIBS "Compile shared libraries." ON)
 endif()
 
-# Check if OpenMP is available.
-find_package(OpenMP)
-
 # Check if C++23 standard is available.
 if("cxx_std_23" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
     message(STATUS "Using C++23 standard")
@@ -120,6 +117,20 @@ endif()
 
 if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
+endif()
+
+# stdBLAS is required.
+message(STATUS "Fetch stdBLAS from Github")
+include(FetchContent)
+FetchContent_Declare(
+    linalg
+    GIT_REPOSITORY  https://github.com/stigrs/stdBLAS.git
+    GIT_TAG         main
+)
+FetchContent_MakeAvailable(linalg)
+
+if(NOT TARGET std::linalg)
+    find_package(linalg REQUIRED)
 endif()
 
 # BLAS and LAPACKE are required.

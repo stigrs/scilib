@@ -4,6 +4,7 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#include <experimental/linalg>
 #include <gtest/gtest.h>
 #include <scilib/linalg.h>
 #include <scilib/mdarray.h>
@@ -28,7 +29,7 @@ TEST(TestLinAlg, TestAdd)
 TEST(TestLinalg, TestAbsSum)
 {
     Sci::Vector<int> v(std::vector<int>{1, 2, 3, -4}, 4);
-    EXPECT_EQ(Sci::Linalg::abs_sum(v), 10);
+    EXPECT_EQ(Sci::Linalg::vector_abs_sum(v), 10);
 }
 
 TEST(TestLinalg, TestAxpy)
@@ -66,8 +67,8 @@ TEST(TestLinalg, TestIdxAbsMin)
 TEST(TestLinalg, TestNorm2)
 {
     Sci::Vector<double> v(std::vector<double>{1.0, 2.0, 3.0}, 3);
-    auto ans = Sci::Linalg::norm2(v);
-    EXPECT_EQ(ans * ans, 14.0);
+    auto ans = Sci::Linalg::vector_norm2(v);
+    EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }
 
 TEST(TestLinalg, TestNorm2Row)
@@ -77,8 +78,8 @@ TEST(TestLinalg, TestNorm2Row)
                               4, 5, 6};
     // clang-format on
     Sci::Matrix<double> ma(aa, 2, 3);
-    auto ans = Sci::Linalg::norm2(Sci::row(ma.view(), 0));
-    EXPECT_EQ(ans * ans, 14.0);
+    auto ans = std::experimental::linalg::vector_norm2(Sci::row(ma.view(), 0));
+    EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }
 
 TEST(TestLinalg, TestScaled)

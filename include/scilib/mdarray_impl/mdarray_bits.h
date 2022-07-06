@@ -288,35 +288,28 @@ public:
         std::swap(ctr, m.ctr);
     }
 
-    template <class F>
-    constexpr MDArray& apply(F f) noexcept
+    template <class F> constexpr MDArray& apply(F f) noexcept
     {
-        for (std::size_t i = 0; i < size(); ++i) {
+        for (index_type i = 0; i < static_cast<index_type>(size()); ++i) {
             f(ctr[i]);
         }
         return *this;
     }
 
-    template <class F, class U>
-    constexpr MDArray& apply(F f, const U& val) noexcept
+    template <class F, class U> constexpr MDArray& apply(F f, const U& val) noexcept
     {
-        for (std::size_t i = 0; i < size(); ++i) {
+        for (index_type i = 0; i < static_cast<index_type>(size()); ++i) {
             f(ctr[i], val);
         }
         return *this;
     }
 
-    template <class F>
-    constexpr MDArray& apply(const MDArray& m, F f) noexcept
+    template <class F> constexpr MDArray& apply(const MDArray& m, F f) noexcept
     {
         assert(view().extents() == m.view().extents());
 
-        auto i = begin();
-        auto j = m.begin();
-        while (i != end()) {
-            f(*i, *j);
-            ++i;
-            ++j;
+        for (index_type i = 0; i < static_cast<index_type>(size()); ++i) {
+            f(ctr[i], m.ctr[i]);
         }
         return *this;
     }

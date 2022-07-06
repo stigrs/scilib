@@ -7,35 +7,15 @@
 #ifndef SCILIB_LINALG_BLAS1_IDX_ABS_MAX_H
 #define SCILIB_LINALG_BLAS1_IDX_ABS_MAX_H
 
-#include <cmath>
-#include <type_traits>
+#include <experimental/linalg>
 
 namespace Sci {
 namespace Linalg {
 
-namespace stdex = std::experimental;
-
-template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
-inline index idx_abs_max(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x)
-{
-    using index_type = index;
-    using magn_type = std::remove_cv_t<decltype(std::abs(x(0)))>;
-
-    index_type max_idx = 0;
-    magn_type max_val = std::abs(x(0));
-    for (index_type i = 0; i < x.extent(0); ++i) {
-        if (max_val < std::abs(x(i))) {
-            max_val = std::abs(x(i));
-            max_idx = i;
-        }
-    }
-    return max_idx;
-}
-
 template <class T, class Layout, class Allocator>
 inline index idx_abs_max(const Sci::Vector<T, Layout, Allocator>& x)
 {
-    return idx_abs_max(x.view());
+    return std::experimental::linalg::idx_abs_max(x.view());
 }
 
 } // namespace Linalg
