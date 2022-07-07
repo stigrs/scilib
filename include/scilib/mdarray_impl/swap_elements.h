@@ -240,13 +240,11 @@ inline void
 swap_elements(stdex::mdspan<T_x,
                             stdex::extents<index, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
                             Layout_x,
-                            Accessor_x>
-                  x,
+                            Accessor_x> x,
               stdex::mdspan<T_y,
                             stdex::extents<index, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
                             Layout_y,
-                            Accessor_y>
-                  y)
+                            Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
     static_assert(x.static_extent(1) == y.static_extent(1));

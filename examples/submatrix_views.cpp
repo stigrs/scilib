@@ -18,16 +18,13 @@ int main()
     };
     // clang-format on
     Sci::Matrix<int> m(data, 3, 4);
-    std::cout << "matrix:\n"
-              << m << '\n';
+    std::cout << "matrix:\n" << m << '\n';
 
     Sci::Vector<int> r = Sci::row(m, 1);
-    std::cout << "m.row(1):\n"
-              << r << '\n';
+    std::cout << "m.row(1):\n" << r << '\n';
 
     Sci::Vector<int> c = Sci::column(m, 2);
-    std::cout << "m.column(2):\n"
-              << c << '\n';
+    std::cout << "m.column(2):\n" << c << '\n';
 
     auto sub = Sci::slice(m, Sci::seq(1, 3), Sci::seq(1, 4));
     std::cout << "m.sub:\n";
@@ -35,6 +32,5 @@ int main()
     std::cout << '\n';
 
     Sci::apply(sub, [&](int& i) { i *= -1; });
-    std::cout << "matrix:\n"
-              << m << '\n';
+    std::cout << "matrix:\n" << m << '\n';
 }
