@@ -20,9 +20,7 @@ int main()
             a(i, j) = i + j;
         }
     }
-    std::cout << "Before:\n"
-              << a << '\n';
+    std::cout << "Before:\n" << a << '\n';
     beast(a);
-    std::cout << "After:\n"
-              << a << '\n';
+    std::cout << "After:\n" << a << '\n';
 }

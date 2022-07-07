@@ -16,8 +16,8 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T, std::size_t ext, class Layout_m, class Accessor_m>
-    requires(std::is_arithmetic_v<std::remove_cv_t<T>>)
-inline auto trace(stdex::mdspan<T, stdex::extents<index, ext, ext>, Layout_m, Accessor_m> m)
+requires(std::is_arithmetic_v<std::remove_cv_t<T>>) inline auto trace(
+    stdex::mdspan<T, stdex::extents<index, ext, ext>, Layout_m, Accessor_m> m)
 {
     return Sci::Linalg::sum(Sci::diag(m));
 }

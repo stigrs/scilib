@@ -21,10 +21,10 @@ template <class T_scalar,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-    requires(!std::is_const_v<T_y>)
-inline void axpy(const T_scalar& scalar,
-                 stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
-                 stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
+requires(!std::is_const_v<T_y>) inline void axpy(
+    const T_scalar& scalar,
+    stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == y.static_extent(0));
 
@@ -42,10 +42,9 @@ template <class T_scalar,
           class T_y,
           class Layout_y,
           class Allocator_y>
-    requires(!std::is_const_v<T_y>)
-inline void axpy(const T_scalar& scalar,
-                 const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
-                 Sci::Vector<T_y, Layout_y, Allocator_y>& y)
+requires(!std::is_const_v<T_y>) inline void axpy(const T_scalar& scalar,
+                                                 const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
+                                                 Sci::Vector<T_y, Layout_y, Allocator_y>& y)
 {
     axpy(scalar, x.view(), y.view());
 }

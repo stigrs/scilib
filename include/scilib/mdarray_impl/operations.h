@@ -19,42 +19,76 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 //--------------------------------------------------------------------------------------------------
-// Properties:
+// Modifier operations:
 
-template <class T, class Extents, class Layout, class Allocator>
-constexpr std::size_t rank(const MDArray<T, Extents, Layout, Allocator>& m)
+template <class T, class Extent, class Layout, class Accessor, class F>
+constexpr void apply(stdex::mdspan<T, Extent, Layout, Accessor> v, F f)
 {
-    return m.rank();
+    using index_type = typename Extent::index_type;
+
+    for (index_type i = 0; i < v.size(); ++i) {
+        f(v.data_handle()[i]);
+    }
 }
 
-template <class T, class Extents, class Layout, class Accessor>
-constexpr std::size_t rank(stdex::mdspan<T, Extents, Layout, Accessor> m)
+template <class T, class Extent, class Layout, class Container, class F>
+constexpr void apply(stdex::mdarray<T, Extent, Layout, Container>& m, F f)
 {
-    return m.rank();
+    using index_type = typename Extent::index_type;
+
+    for (index_type i = 0; i < v.size(); ++i) {
+        f(v.data()[i]);
+    }
 }
 
-template <class T, class Extents, class Layout, class Allocator>
-constexpr std::ptrdiff_t ssize(const MDArray<T, Extents, Layout, Allocator>& m)
+template <class T, class Extent, class Layout, class Accessor, class F, class U>
+constexpr void apply(stdex::mdspan<T, Extent, Layout, Accessor> v, F f, const U& val)
 {
-    return m.ssize();
+    using index_type = typename Extent::index_type;
+
+    for (index_type i = 0; i < v.size(); ++i) {
+        f(v.data_handle()[i], val);
+    }
 }
 
-template <class T, class Extents, class Layout, class Accessor>
-constexpr std::ptrdiff_t ssize(stdex::mdspan<T, Extents, Layout, Accessor> m)
+template <class T, class Extent, class Layout, class Container, class F, class U>
+constexpr void apply(stdex::mdarray<T, Extent, Layout, Container>& m, F f, const U& val)
 {
-    return static_cast<std::ptrdiff_t>(m.size());
+    using index_type = typename Extent::index_type;
+
+    for (index_type i = 0; i < v.size(); ++i) {
+        f(v.data()[i], val);
+    }
 }
 
-template <class T, class Extents, class Layout, class Allocator>
-constexpr std::ptrdiff_t sextent(const MDArray<T, Extents, Layout, Allocator>& m, std::size_t dim)
+template <class T, class Extent, class Layout, class Accessor, class F>
+constexpr void apply(stdex::mdspan<T, Extent, Layout, Accessor> a,
+                     stdex::mdspan<T, Extent, Layout, Accessor> b,
+                     F f)
 {
-    return m.sextent(dim);
+    assert(a.size() == b.size());
+    assert(a.extents() == b.extents());
+
+    using index_type = typename Extent::index_type;
+
+    for (index_type i = 0; i < a.size(); ++i) {
+        f(a.data()[i], b.data()[i]);
+    }
 }
 
-template <class T, class Extents, class Layout, class Accessor>
-constexpr std::ptrdiff_t sextent(stdex::mdspan<T, Extents, Layout, Accessor> m, std::size_t dim)
+template <class T, class Extent, class Layout, class Container, class F>
+constexpr void apply(stdex::mdarray<T, Extent, Layout, Container>& a,
+                     const stdex::mdarray<T, Extent, Layout, Container>& b,
+                     F f)
 {
-    return static_cast<std::ptrdiff_t>(m.extent(dim));
+    assert(a.size() == b.size());
+    assert(a.extents() == b.extents());
+
+    using index_type = typename Extent::index_type;
+
+    for (index_type i = 0; i < a.size(); ++i) {
+        f(a.data()[i], b.data()[i]);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -204,31 +238,6 @@ constexpr Vector<T, Layout, Allocator> operator*(const Matrix<T, Layout, Allocat
 }
 
 //--------------------------------------------------------------------------------------------------
-// Apply operations:
-
-template <class T, std::size_t ext, class Layout, class Accessor, class F>
-constexpr void apply(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v, F f)
-{
-    using index_type = index;
-
-    for (index_type i = 0; i < v.extent(0); ++i) {
-        f(v(i));
-    }
-}
-
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor, class F>
-constexpr void apply(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m, F f)
-{
-    using index_type = index;
-
-    for (index_type i = 0; i < m.extent(0); ++i) {
-        for (index_type j = 0; j < m.extent(1); ++j) {
-            f(m(i, j));
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 // Stream methods:
 
 template <class T, std::size_t ext, class Layout, class Accessor>
@@ -237,8 +246,7 @@ inline void print(std::ostream& ostrm,
 {
     using index_type = index;
 
-    ostrm << v.extent(0) << '\n'
-          << '{';
+    ostrm << v.extent(0) << '\n' << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
@@ -253,8 +261,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, All
 {
     using index_type = typename Vector<T, Layout, Allocator>::index_type;
 
-    ostrm << v.size() << '\n'
-          << '{';
+    ostrm << v.size() << '\n' << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
@@ -290,8 +297,7 @@ inline void print(std::ostream& ostrm,
 {
     using index_type = index;
 
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n'
-          << '{';
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
         for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
@@ -308,8 +314,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, All
 {
     using index_type = typename Matrix<T, Layout, Allocator>::index_type;
 
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n'
-          << '{';
+    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
         for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";

@@ -13,13 +13,11 @@
 #include <experimental/linalg>
 #include <type_traits>
 
-
 namespace Sci {
 namespace Linalg {
 
 template <class T, class Layout>
-    requires(std::is_same_v<std::remove_cv_t<T>, double>)
-auto expm(Sci::Matrix_view<T, Layout> a)
+requires(std::is_same_v<std::remove_cv_t<T>, double>) auto expm(Sci::Matrix_view<T, Layout> a)
 {
     // Algorithm: Matlab expm1 (demo directory).
     //

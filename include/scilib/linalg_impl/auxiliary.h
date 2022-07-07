@@ -31,7 +31,7 @@ inline void fill(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, A
 }
 
 template <class T, class Extents, class Layout, class Allocator>
-    requires Extents_has_rank<Extents>
+requires Extents_has_rank<Extents>
 inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& value)
 {
     static_assert(Extents::rank() <= 2);
@@ -218,8 +218,8 @@ inline T prod(const Sci::Vector<T, Layout, Allocator>& v)
 // clang-format off
 template <class M, class... Args>
     requires(MDArray_type<M> && M::rank() == sizeof...(Args))
-// clang-format on
-inline M zeros(Args... args)
+    // clang-format on
+    inline M zeros(Args... args)
 {
     using value_type = typename M::value_type;
 
@@ -231,8 +231,8 @@ inline M zeros(Args... args)
 // clang-format off
 template <class M, class... Args>
     requires(MDArray_type<M> && M::rank() == sizeof...(Args))
-// clang-format on
-inline M ones(Args... args)
+    // clang-format on
+    inline M ones(Args... args)
 {
     using value_type = typename M::value_type;
 
@@ -244,8 +244,8 @@ inline M ones(Args... args)
 // clang-format off
 template <class M = Sci::Matrix<double>>
     requires(MDArray_type<M> && M::rank() == 2)
-// clang-format on
-inline M identity(std::size_t n)
+    // clang-format on
+    inline M identity(std::size_t n)
 {
     using value_type = typename M::value_type;
     using index_type = typename M::index_type;
@@ -261,8 +261,8 @@ inline M identity(std::size_t n)
 // Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
 template <class M, class... Args>
-    requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
-inline M randn(Args... args)
+requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>) inline M
+    randn(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -282,8 +282,8 @@ inline M randn(Args... args)
 // Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
 template <class M, class... Args>
-    requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
-inline M randu(Args... args)
+requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>) inline M
+    randu(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -303,8 +303,7 @@ inline M randu(Args... args)
 // Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
 template <class M, class... Args>
-    requires(MDArray_type<M>&& std::is_integral_v<typename M::value_type>)
-inline M randi(Args... args)
+requires(MDArray_type<M>&& std::is_integral_v<typename M::value_type>) inline M randi(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
@@ -322,8 +321,9 @@ inline M randi(Args... args)
 }
 
 template <class T, class Layout, class Allocator>
-    requires(std::is_floating_point_v<T>)
-Sci::Vector<T, Layout, Allocator> linspace(T start, T stop, int num = 50)
+requires(std::is_floating_point_v<T>) Sci::Vector<T, Layout, Allocator> linspace(T start,
+                                                                                 T stop,
+                                                                                 int num = 50)
 {
     assert(stop > start);
     T step_size = (stop - start) / (num - 1);

@@ -4,14 +4,11 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#ifndef SCILIB_MDARRAY_BITS_H
-#define SCILIB_MDARRAY_BITS_H
+#ifndef SCILIB_MDARRAY_EXT_H
+#define SCILIB_MDARRAY_EXT_H
 
-#include "support.h"
-#include <algorithm>
 #include <array>
-#include <cassert>
-#include <functional>
+#include <gsl/gsl>
 #include <type_traits>
 #include <vector>
 
@@ -21,7 +18,7 @@ namespace stdex = std::experimental;
 namespace __Detail {
 
 template <class Extents, class... Dims>
-inline bool __check_bounds(const Extents& exts, Dims... dims)
+inline bool __bounds_check(const Extents& exts, Dims... dims)
 {
     using index_type = typename Extents::index_type;
 
@@ -34,6 +31,11 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
     }
     return result;
 }
+
+} // namespace __Detail
+
+//--------------------------------------------------------------------------------------------------
+// Capacity:
 
 template <class T, class Extents, class Layout, class Accessor>
 inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
@@ -48,8 +50,59 @@ inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
     return res;
 }
 
-} // namespace __Detail
+//--------------------------------------------------------------------------------------------------
+// Element access:
 
+template <class T, class Extents, class Layout, class Accessor, class... Indices>
+    requires(std::conjunction_v<std::is_convertible<Indices, typename Extents::index_type>...> &&
+             sizeof...(Indices) == Extents::rank())
+constexpr T& at(stdex::mdspan<T, Extents, Layout, Accessor> m, Indices... indices) noexcept
+{
+    Expects(__Detail::__bounds_check(m.extents(), indices...));
+    return m(indices...);
+}
+
+template <class T, class Extents, class Layout, class Container, class... Indices>
+    requires(std::conjunction_v<std::is_convertible<Indices, typename Extents::index_type>...> &&
+             sizeof...(Indices) == Extents::rank())
+constexpr T& at(stdex::mdarray<T, Extents, Layout, Container>& m, Indices... indices) noexcept
+{
+    Expects(__Detail::__bounds_check(m.extents(), indices...));
+    return m(indices...);
+}
+
+template <class T, class Extents, class Layout, class Container, class... Indices>
+    requires(std::conjunction_v<std::is_convertible<Indices, typename Extents::index_type>...> &&
+             sizeof...(Indices) == Extents::rank())
+constexpr const T& at(const stdex::mdarray<T, Extents, Layout, Container>& m,
+                      Indices... indices) noexcept
+{
+    Expects(__Detail::__bounds_check(m.extents(), indices...));
+    return m(indices...);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Utility functions for making mdspans and mdarrays:
+
+template <class T, class Extents, class Layout, class Container>
+constexpr stdex::mdspan<T, Extents, Layout>
+make_mdspan(stdex::mdarray<T, Extents, Layout, Container>& m) noexcept
+{
+    return stdex::mdspan<T, Extents, Layout>(m.data(), m.mapping());
+}
+
+template <class T, class Extents, class Layout, class Accessor>
+constexpr stdex::mdarray<T, Extents, Layout>
+make_mdarray(stdex::mdspan<T, Extents, Layout, Accessor> m) noexcept
+{
+    static_assert(m.rank() <= 7);
+    stdex::mdarray<T, Extents, Layout> res(m.extents());
+    auto res_view = make_mdspan(res);
+    copy(m, res_view);
+    return res;
+}
+
+#if 0
 // Dense multidimensional array class for numerical computing using mdspan
 // for views.
 //
@@ -288,7 +341,8 @@ public:
         std::swap(ctr, m.ctr);
     }
 
-    template <class F> constexpr MDArray& apply(F f) noexcept
+    template <class F>
+    constexpr MDArray& apply(F f) noexcept
     {
         for (index_type i = 0; i < static_cast<index_type>(size()); ++i) {
             f(ctr[i]);
@@ -296,7 +350,8 @@ public:
         return *this;
     }
 
-    template <class F, class U> constexpr MDArray& apply(F f, const U& val) noexcept
+    template <class F, class U>
+    constexpr MDArray& apply(F f, const U& val) noexcept
     {
         for (index_type i = 0; i < static_cast<index_type>(size()); ++i) {
             f(ctr[i], val);
@@ -304,7 +359,8 @@ public:
         return *this;
     }
 
-    template <class F> constexpr MDArray& apply(const MDArray& m, F f) noexcept
+    template <class F>
+    constexpr MDArray& apply(const MDArray& m, F f) noexcept
     {
         assert(view().extents() == m.view().extents());
 
@@ -359,6 +415,7 @@ private:
     container_type ctr;
 };
 
+#endif
 } // namespace Sci
 
-#endif // SCILIB_MDARRAY_BITS_H
+#endif // SCILIB_MDARRAY_EXT_H

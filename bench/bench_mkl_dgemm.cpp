@@ -42,9 +42,9 @@ void benchmark(BLAS_INT m, BLAS_INT n)
 
     time_start = dsecnd();
 
-    double* MKL_A = (double*)mkl_malloc(sizeof(double) * m * k, 64);
-    double* MKL_B = (double*)mkl_malloc(sizeof(double) * k * n, 64);
-    double* MKL_C = (double*)mkl_malloc(sizeof(double) * m * n, 64);
+    double* MKL_A = (double*) mkl_malloc(sizeof(double) * m * k, 64);
+    double* MKL_B = (double*) mkl_malloc(sizeof(double) * k * n, 64);
+    double* MKL_C = (double*) mkl_malloc(sizeof(double) * m * n, 64);
 
     for (BLAS_INT i = 0; i < m * k; ++i) {
         MKL_A[i] = 1.0;

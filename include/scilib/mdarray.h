@@ -7,18 +7,10 @@
 #ifndef SCILIB_MDARRAY_H
 #define SCILIB_MDARRAY_H
 
-#include "mdarray_impl/support.h"
 #include <cstddef>
+#include <experimental/mdarray>
 #include <experimental/mdspan>
-#include <utility>
 #include <vector>
-
-#if _MSC_VER >= 1927
-#include <concepts>
-#define STD_CONVERTIBLE_TO(X) std::convertible_to<X>
-#else
-#define STD_CONVERTIBLE_TO(X) Sci::__Detail::convertible_to<X>
-#endif
 
 #ifdef USE_MKL_ALLOCATOR
 #include <scilib/mdarray_impl/mkl_allocator.h>
@@ -58,99 +50,93 @@ using Submatrix_view =
                   stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_stride>;
 
-// clang-format off
-template <class E>
-concept Extents_has_rank = 
-    requires (E /* exts */) { { E::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
-};
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Vector = stdex::mdarray<T, stdex::extents<index, stdex::dynamic_extent>, Layout, Container>;
 
-template <class M>
-concept MDArray_type = 
-    requires (M /* m */) { { M::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
-};
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Matrix = stdex::mdarray<T,
+                              stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
+                              Layout,
+                              Container>;
 
-template <class T, 
-          class Extents, 
-          class Layout = stdex::layout_right, 
-          class Allocator = MDARRAY_ALLOCATOR(T)> 
-    requires Extents_has_rank<Extents> 
-class MDArray;
-// clang-format on
-
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Vector = MDArray<T, stdex::extents<index, stdex::dynamic_extent>, Layout, Allocator>;
-
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Matrix = MDArray<T,
-                       stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
-                       Layout,
-                       Allocator>;
-
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array3D = MDArray<
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Array3D = stdex::mdarray<
     T,
     stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent, stdex::dynamic_extent>,
     Layout,
-    Allocator>;
+    Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array4D = MDArray<T,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Array4D = stdex::mdarray<T,
+                               stdex::extents<index,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent>,
+                               Layout,
+                               Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array5D = MDArray<T,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Array5D = stdex::mdarray<T,
+                               stdex::extents<index,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent>,
+                               Layout,
+                               Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array6D = MDArray<T,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Array6D = stdex::mdarray<T,
+                               stdex::extents<index,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent>,
+                               Layout,
+                               Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array7D = MDArray<T,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+template <class T,
+          class Layout = stdex::layout_right,
+          class Container = std::vector<T, MDARRAY_ALLOCATOR(T)>>
+using Array7D = stdex::mdarray<T,
+                               stdex::extents<index,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent,
+                                              stdex::dynamic_extent>,
+                               Layout,
+                               Container>;
 
 } // namespace Sci
 
 // clang-format off
 #include "mdarray_impl/mdspan_iterator.h"
 #include "mdarray_impl/copy.h"
-#include "mdarray_impl/copy_n.h"
-#include "mdarray_impl/sort.h"
-#include "mdarray_impl/swap_elements.h"
-#include "mdarray_impl/slice.h"
-#include "mdarray_impl/support.h"
-#include "mdarray_impl/mdarray_bits.h"
-#include "mdarray_impl/operations.h"
+//#include "mdarray_impl/copy_n.h"
+//#include "mdarray_impl/sort.h"
+//#include "mdarray_impl/swap_elements.h"
+//#include "mdarray_impl/slice.h"
+#include "mdarray_impl/mdarray_ext.h"
+//#include "mdarray_impl/operations.h"
 // clang-format on
 
 #endif // SCILIB_MDARRAY_H

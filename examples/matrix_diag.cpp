@@ -20,10 +20,8 @@ int main()
     };
     // clang-format on
     Sci::Matrix<int> m(data, 3, 3);
-    std::cout << "matrix:\n"
-              << m << '\n';
+    std::cout << "matrix:\n" << m << '\n';
 
     Sci::Linalg::fill(Sci::diag(m), 10);
-    std::cout << "matrix:\n"
-              << m << '\n';
+    std::cout << "matrix:\n" << m << '\n';
 }

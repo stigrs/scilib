@@ -41,7 +41,7 @@ template <class T, class Layout>
 inline void
 copy_n(const Vector<T, Layout>& x, std::size_t count, Vector<T, Layout>& y, std::size_t offset = 0)
 {
-    copy_n(x.view(), count, y.view(), offset);
+    copy_n(view(x), count, view(y), offset);
 }
 
 } // namespace Sci

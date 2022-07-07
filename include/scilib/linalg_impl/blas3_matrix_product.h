@@ -24,20 +24,32 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_a, std::size_t nrows_a, std::size_t ncols_a, class Layout_a, class Accessor_a,
-          class T_b, std::size_t nrows_b, std::size_t ncols_b, class Layout_b, class Accessor_b,
-          class T_c, std::size_t nrows_c, std::size_t ncols_c, class Layout_c, class Accessor_c>
-    requires(!std::is_const_v<T_c>)
-inline void
-matrix_product(stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-               stdex::mdspan<T_b, stdex::extents<index, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
-               stdex::mdspan<T_c, stdex::extents<index, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
+template <class T_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          class T_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Layout_b,
+          class Accessor_b,
+          class T_c,
+          std::size_t nrows_c,
+          std::size_t ncols_c,
+          class Layout_c,
+          class Accessor_c>
+requires(!std::is_const_v<T_c>) inline void matrix_product(
+    stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    stdex::mdspan<T_b, stdex::extents<index, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+    stdex::mdspan<T_c, stdex::extents<index, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
 {
     std::experimental::linalg::matrix_product(a, b, c);
 }
 
 template <class Layout>
-inline void matrix_product(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b,
+inline void matrix_product(Sci::Matrix_view<double, Layout> a,
+                           Sci::Matrix_view<double, Layout> b,
                            Sci::Matrix_view<double, Layout> c)
 {
     constexpr double alpha = 1.0;

@@ -26,7 +26,6 @@ template <class T,
           class Extents = stdex::extents<index, stdex::dynamic_extent>,
           class Layout = stdex::layout_right,
           class Accessor = stdex::default_accessor<T>>
-    requires Extents_has_rank<Extents>
 class MDSpan_iterator {
 public:
     using iterator_category = std::random_access_iterator_tag;
@@ -170,14 +169,15 @@ private:
 };
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<T, Extents, Layout, Accessor> begin(stdex::mdspan<T, Extents, Layout, Accessor> x)
+inline MDSpan_iterator<T, Extents, Layout, Accessor>
+begin(stdex::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     return iterator(x);
 }
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<const T, Extents, Layout, Accessor>
+inline MDSpan_iterator<const T, Extents, Layout, Accessor>
 cbegin(stdex::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<const T, Extents, Layout, Accessor>;
@@ -185,14 +185,15 @@ cbegin(stdex::mdspan<T, Extents, Layout, Accessor> x)
 }
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<T, Extents, Layout, Accessor> end(stdex::mdspan<T, Extents, Layout, Accessor> x)
+inline MDSpan_iterator<T, Extents, Layout, Accessor>
+end(stdex::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     return iterator(x, x.extent(0));
 }
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<const T, Extents, Layout, Accessor>
+inline MDSpan_iterator<const T, Extents, Layout, Accessor>
 cend(stdex::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<const T, Extents, Layout, Accessor>;
