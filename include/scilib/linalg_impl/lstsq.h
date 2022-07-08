@@ -32,7 +32,7 @@ inline void lstsq(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, L
     BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
     BLAS_INT rank;
 
-    double rcond = -1.0; // use machine epsilon
+    double rcond = -1.0;                           // use machine epsilon
     Sci::Vector<double, Layout> s(std::min(m, n)); // singular values of a
 
     auto matrix_layout = LAPACK_ROW_MAJOR;

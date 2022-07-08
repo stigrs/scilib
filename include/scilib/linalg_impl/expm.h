@@ -13,7 +13,6 @@
 #include <experimental/linalg>
 #include <type_traits>
 
-
 namespace Sci {
 namespace Linalg {
 

@@ -12,8 +12,15 @@
 namespace Sci {
 namespace Linalg {
 
-template <class T_x, class Layout_x, class Allocator_x, class T_y, class Layout_y,
-          class Allocator_y, class T_z, class Layout_z, class Allocator_z>
+template <class T_x,
+          class Layout_x,
+          class Allocator_x,
+          class T_y,
+          class Layout_y,
+          class Allocator_y,
+          class T_z,
+          class Layout_z,
+          class Allocator_z>
     requires(!std::is_const_v<T_z>)
 inline void add(const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
                 const Sci::Vector<T_y, Layout_y, Allocator_y>& y,

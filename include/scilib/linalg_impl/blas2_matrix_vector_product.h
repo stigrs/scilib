@@ -19,15 +19,24 @@
 #include <experimental/linalg>
 #include <type_traits>
 
-
 namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T_a, std::size_t nrows_a, std::size_t ncols_a, class Layout_a, class Accessor_a,
-          class T_x, std::size_t ext_x, class Layout_x, class Accessor_x, class T_y,
-          std::size_t ext_y, class Layout_y, class Accessor_y>
+template <class T_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          class T_x,
+          std::size_t ext_x,
+          class Layout_x,
+          class Accessor_x,
+          class T_y,
+          std::size_t ext_y,
+          class Layout_y,
+          class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void matrix_vector_product(
     stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
