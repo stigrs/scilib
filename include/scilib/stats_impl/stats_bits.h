@@ -25,8 +25,8 @@ inline auto mean(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> 
     return result;
 }
 
-template <class T, class Layout, class Allocator>
-inline T mean(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline T mean(const Sci::Vector<T, Layout, Container>& x)
 {
     return mean(x.view());
 }
@@ -50,8 +50,8 @@ inline auto median(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor
     return med;
 }
 
-template <class T, class Layout, class Allocator>
-inline T median(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline T median(const Sci::Vector<T, Layout, Container>& x)
 {
     return median(x.view());
 }
@@ -74,8 +74,8 @@ inline auto var(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x
     return sum2 / (n - 1.0);
 }
 
-template <class T, class Layout, class Allocator>
-inline T var(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline T var(const Sci::Vector<T, Layout, Container>& x)
 {
     return var(x.view());
 }
@@ -87,8 +87,8 @@ inline auto stddev(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor
     return std::sqrt(var(x));
 }
 
-template <class T, class Layout, class Allocator>
-inline T stddev(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline T stddev(const Sci::Vector<T, Layout, Container>& x)
 {
     return stddev(x.view());
 }
@@ -107,8 +107,8 @@ inline auto rms(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x
     return std::sqrt(sum2 / x.extent(0));
 }
 
-template <class T, class Layout, class Allocator>
-inline T rms(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline T rms(const Sci::Vector<T, Layout, Container>& x)
 {
     return rms(x.view());
 }
@@ -141,8 +141,8 @@ inline auto cov(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accesso
     return res;
 }
 
-template <class T, class Layout, class Allocator>
-inline T cov(const Sci::Vector<T, Layout, Allocator>& x, const Sci::Vector<T, Layout, Allocator>& y)
+template <class T, class Layout, class Container>
+inline T cov(const Sci::Vector<T, Layout, Container>& x, const Sci::Vector<T, Layout, Container>& y)
 {
     return cov(x.view(), y.view());
 }

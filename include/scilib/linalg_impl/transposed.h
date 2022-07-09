@@ -12,10 +12,10 @@
 namespace Sci {
 namespace Linalg {
 
-template <class T, class Layout, class Allocator>
-inline Sci::Matrix<T, Layout, Allocator> transposed(const Sci::Matrix<T, Layout, Allocator>& a)
+template <class T, class Layout, class Container>
+inline Sci::Matrix<T, Layout, Container> transposed(const Sci::Matrix<T, Layout, Container>& a)
 {
-    return Sci::Matrix<T, Layout, Allocator>(std::experimental::linalg::transposed(a.view()));
+    return Sci::Matrix<T, Layout, Container>(std::experimental::linalg::transposed(a.view()));
 }
 
 } // namespace Linalg

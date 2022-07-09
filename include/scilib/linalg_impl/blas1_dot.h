@@ -14,9 +14,9 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T, class Layout_x, class Allocator_x, class Layout_y, class Allocator_y>
-inline T dot(const Sci::Vector<T, Layout_x, Allocator_x>& x,
-             const Sci::Vector<T, Layout_y, Allocator_y>& y)
+template <class T, class Layout_x, class Container_x, class Layout_y, class Container_y>
+inline T dot(const Sci::Vector<T, Layout_x, Container_x>& x,
+             const Sci::Vector<T, Layout_y, Container_y>& y)
 {
     return std::experimental::linalg::dot(x.view(), y.view());
 }

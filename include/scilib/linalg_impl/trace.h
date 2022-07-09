@@ -22,10 +22,10 @@ inline auto trace(stdex::mdspan<T, stdex::extents<index, ext, ext>, Layout_m, Ac
     return Sci::Linalg::sum(Sci::diag(m));
 }
 
-template <class T, class Layout, class Allocator>
-inline T trace(const Sci::Matrix<T, Layout, Allocator>& m)
+template <class T, class Layout, class Container>
+inline T trace(const Sci::Matrix<T, Layout, Container>& m)
 {
-    assert(m.extent(0) == m.extent(1));
+    Expects(m.extent(0) == m.extent(1));
     return trace(m.view());
 }
 

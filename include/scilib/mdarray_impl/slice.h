@@ -29,14 +29,14 @@ inline auto first(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor>
     return stdex::submdspan(v, slice);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto first(Vector<T, Layout, Allocator>& v, std::size_t count)
+template <class T, class Layout, class Container>
+inline auto first(Vector<T, Layout, Container>& v, std::size_t count)
 {
     return first(v.view(), count);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto first(const Vector<T, Layout, Allocator>& v, std::size_t count)
+template <class T, class Layout, class Container>
+inline auto first(const Vector<T, Layout, Container>& v, std::size_t count)
 {
     return first(v.view(), count);
 }
@@ -49,14 +49,14 @@ inline auto last(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> 
     return stdex::submdspan(v, slice);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto last(Vector<T, Layout, Allocator>& x, std::size_t count)
+template <class T, class Layout, class Container>
+inline auto last(Vector<T, Layout, Container>& x, std::size_t count)
 {
     return last(x.view(), count);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto last(const Vector<T, Layout, Allocator>& x, std::size_t count)
+template <class T, class Layout, class Container>
+inline auto last(const Vector<T, Layout, Container>& x, std::size_t count)
 {
     return last(x.view(), count);
 }
@@ -68,14 +68,14 @@ inline auto row(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Ac
     return stdex::submdspan(m, i, stdex::full_extent);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto row(Matrix<T, Layout, Allocator>& m, std::size_t i)
+template <class T, class Layout, class Container>
+inline auto row(Matrix<T, Layout, Container>& m, std::size_t i)
 {
     return row(m.view(), i);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto row(const Matrix<T, Layout, Allocator>& m, std::size_t i)
+template <class T, class Layout, class Container>
+inline auto row(const Matrix<T, Layout, Container>& m, std::size_t i)
 {
     return row(m.view(), i);
 }
@@ -87,14 +87,14 @@ inline auto column(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout,
     return stdex::submdspan(m, stdex::full_extent, j);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto column(Matrix<T, Layout, Allocator>& m, std::size_t i)
+template <class T, class Layout, class Container>
+inline auto column(Matrix<T, Layout, Container>& m, std::size_t i)
 {
     return column(m.view(), i);
 }
 
-template <class T, class Layout, class Allocator>
-inline auto column(const Matrix<T, Layout, Allocator>& m, std::size_t i)
+template <class T, class Layout, class Container>
+inline auto column(const Matrix<T, Layout, Container>& m, std::size_t i)
 {
     return column(m.view(), i);
 }
@@ -103,25 +103,25 @@ template <class T, std::size_t ext, class Layout, class Accessor>
 inline auto diag(stdex::mdspan<T, stdex::extents<index, ext, ext>, Layout, Accessor> m)
 {
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
-        return Subvector_view<T>{
+        return stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, stdex::layout_stride>{
             m.data_handle(),
             {stdex::dextents<index, 1>{m.extent(0)}, std::array<index, 1>{m.stride(1) + 1}}};
     }
     else {
-        return Subvector_view<T>{
+        return stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, stdex::layout_stride>{
             m.data_handle(),
             {stdex::dextents<index, 1>{m.extent(0)}, std::array<index, 1>{m.stride(0) + 1}}};
     }
 }
 
-template <class T, class Layout, class Allocator>
-inline auto diag(Matrix<T, Layout, Allocator>& m)
+template <class T, class Layout, class Container>
+inline auto diag(Matrix<T, Layout, Container>& m)
 {
     return diag(m.view());
 }
 
-template <class T, class Layout, class Allocator>
-inline auto diag(const Matrix<T, Layout, Allocator>& m)
+template <class T, class Layout, class Container>
+inline auto diag(const Matrix<T, Layout, Container>& m)
 {
     return diag(m.view());
 }
@@ -133,14 +133,14 @@ inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m, SliceSpecs... s
     return stdex::submdspan(m, slices...);
 }
 
-template <class T, class Extents, class Layout, class Allocator, class... SliceSpecs>
-inline auto slice(MDArray<T, Extents, Layout, Allocator>& m, SliceSpecs... slices)
+template <class T, class Extents, class Layout, class Container, class... SliceSpecs>
+inline auto slice(MDArray<T, Extents, Layout, Container>& m, SliceSpecs... slices)
 {
     return slice(m.view(), slices...);
 }
 
-template <class T, class Extents, class Layout, class Allocator, class... SliceSpecs>
-inline auto slice(const MDArray<T, Extents, Layout, Allocator>& m, SliceSpecs... slices)
+template <class T, class Extents, class Layout, class Container, class... SliceSpecs>
+inline auto slice(const MDArray<T, Extents, Layout, Container>& m, SliceSpecs... slices)
 {
     return slice(m.view(), slices...);
 }

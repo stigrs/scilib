@@ -10,6 +10,13 @@
 #include <array>
 #include <type_traits>
 
+#if _MSC_VER >= 1927
+#include <concepts>
+#define STD_CONVERTIBLE_TO(X) std::convertible_to<X>
+#else
+#define STD_CONVERTIBLE_TO(X) Sci::__Detail::convertible_to<X>
+#endif
+
 namespace Sci {
 namespace __Detail {
 
@@ -31,6 +38,18 @@ struct Container_is_array<std::array<ElementType, N>> : std::true_type {
         return std::array<ElementType, N>();
     }
 };
+
+// clang-format off
+template <class E>
+concept Extents_has_rank = 
+    requires (E /* exts */) { { E::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
+};
+
+template <class M>
+concept MDArray_type = 
+    requires (M /* m */) { { M::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
+};
+// clang-format on
 
 } // namespace __Detail
 } // namespace Sci

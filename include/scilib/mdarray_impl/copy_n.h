@@ -28,9 +28,9 @@ inline void copy_n(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Ac
                    stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y,
                    std::size_t offset = 0)
 {
-    assert(count <= x.extent(0));
-    assert(offset >= 0 && offset < count);
-    assert(count > 0 && offset + count <= y.extent(0));
+    Expects(count <= x.extent(0));
+    Expects(offset >= 0 && offset < count);
+    Expects(count > 0 && offset + count <= y.extent(0));
     using index_type = index;
     for (index_type i = 0; i < count; ++i) {
         y(i + offset) = x(i);

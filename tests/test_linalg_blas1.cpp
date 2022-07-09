@@ -28,7 +28,7 @@ TEST(TestLinAlg, TestAdd)
 
 TEST(TestLinalg, TestAbsSum)
 {
-    Sci::Vector<int> v(std::vector<int>{1, 2, 3, -4}, 4);
+    Sci::Vector<int> v({1, 2, 3, -4}, 4);
     EXPECT_EQ(Sci::Linalg::vector_abs_sum(v), 10);
 }
 

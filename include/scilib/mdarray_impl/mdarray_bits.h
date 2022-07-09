@@ -62,7 +62,7 @@ inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
 //   https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p1684r2.html
 //
 template <class ElementType, class Extents, class LayoutPolicy, class Container>
-    requires Extents_has_rank<Extents>
+    requires __Detail::Extents_has_rank<Extents>
 class MDArray {
 public:
     using element_type = ElementType;
@@ -211,8 +211,8 @@ public:
     {
         static_assert(other.rank() <= 7);
         for (std::size_t r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == stdex::dynamic_extent ||
-                    static_extent(r) == other.extent(r));
+            Expects(static_extent(r) == gsl::narrow<index_type>(stdex::dynamic_extent) ||
+                    static_extent(r) == gsl::narrow<index_type>(other.extent(r)));
         }
         copy(other, view());
     }
@@ -319,8 +319,8 @@ public:
     {
         static_assert(other.rank() <= 7);
         for (std::size_t r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == stdex::dynamic_extent ||
-                    static_extent(r) == other.extent(r));
+            Expects(static_extent(r) == gsl::narrow<index_type>(stdex::dynamic_extent) ||
+                    static_extent(r) == gsl::narrow<index_type>(other.extent(r)));
         }
         copy(other, view());
     }
@@ -422,10 +422,10 @@ public:
                                                                                          map, a);
     }
 
-    template <class OtherAccessorType = stdex::default_accessor<element_type>>
-        requires(std::is_same_v<element_type, typename OtherAccessorType::element_type>)
+    template <class OtherAccessorType = stdex::default_accessor<const element_type>>
+        requires(std::is_same_v<const element_type, typename OtherAccessorType::element_type>)
     constexpr stdex::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>
-    view(const OtherAccessorType& a = stdex::default_accessor<element_type>()) const
+    view(const OtherAccessorType& a = stdex::default_accessor<const element_type>()) const
     {
         return stdex::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>(
             data(), map, a);

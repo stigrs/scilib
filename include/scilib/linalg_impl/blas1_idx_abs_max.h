@@ -12,8 +12,8 @@
 namespace Sci {
 namespace Linalg {
 
-template <class T, class Layout, class Allocator>
-inline index idx_abs_max(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline index idx_abs_max(const Sci::Vector<T, Layout, Container>& x)
 {
     return std::experimental::linalg::idx_abs_max(x.view());
 }

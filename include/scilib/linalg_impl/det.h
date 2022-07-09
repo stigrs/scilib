@@ -16,16 +16,16 @@ namespace Sci {
 namespace Linalg {
 
 // Determinant of square matrix.
-template <class T, class Layout>
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
-auto det(Sci::Matrix_view<T, Layout> a)
+auto det(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a)
 {
-    assert(a.extent(0) == a.extent(1));
+    Expects(a.extent(0) == a.extent(1));
 
     using value_type = std::remove_cv_t<T>;
 
     value_type ddet = 0.0;
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(0));
 
     if (n == 1) {
         ddet = a(0, 0);
@@ -46,14 +46,14 @@ auto det(Sci::Matrix_view<T, Layout> a)
             }
         }
         ddet = Sci::Linalg::prod(Sci::diag(tmp.view()));
-        ddet *= std::pow(-1.0, static_cast<value_type>(permut));
+        ddet *= std::pow(-1.0, gsl::narrow<value_type>(permut));
     }
     return ddet;
 }
 
-template <class T, class Layout, class Allocator>
+template <class T, class Layout, class Container>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
-inline T det(const Sci::Matrix<T, Layout, Allocator>& a) { return det(a.view()); }
+inline T det(const Sci::Matrix<T, Layout, Container>& a) { return det(a.view()); }
 
 } // namespace Linalg
 } // namespace Sci

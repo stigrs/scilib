@@ -163,7 +163,7 @@ TEST(TestVector, TestAddValue)
         EXPECT_EQ(vi, 6);
     }
 }
-#if 0
+
 TEST(TestVector, TestAddVector)
 {
     Sci::Vector<int> a(5);
@@ -228,4 +228,3 @@ TEST(TestVector, TestLast)
         EXPECT_EQ(v_slice(i), a(i + 2));
     }
 }
-#endif

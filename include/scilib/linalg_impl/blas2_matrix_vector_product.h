@@ -17,6 +17,7 @@
 #include <cassert>
 #include <complex>
 #include <experimental/linalg>
+#include <gsl/gsl>
 #include <type_traits>
 
 namespace Sci {
@@ -46,20 +47,29 @@ inline void matrix_vector_product(
     std::experimental::linalg::matrix_vector_product(a, x, y);
 }
 
-template <class Layout>
-inline void matrix_vector_product(Sci::Matrix_view<double, Layout> a,
-                                  Sci::Vector_view<double, Layout> x,
-                                  Sci::Vector_view<double, Layout> y)
+template <std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          std::size_t ext_x,
+          class Layout,
+          class Accessor_x,
+          std::size_t ext_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
+    stdex::mdspan<double, stdex::extents<index, ext_x>, Layout, Accessor_x> x,
+    stdex::mdspan<double, stdex::extents<index, ext_y>, Layout, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -72,20 +82,29 @@ inline void matrix_vector_product(Sci::Matrix_view<double, Layout> a,
                 incx, beta, y.data_handle(), incy);
 }
 
-template <class Layout>
-inline void matrix_vector_product(Sci::Matrix_view<const double, Layout> a,
-                                  Sci::Vector_view<const double, Layout> x,
-                                  Sci::Vector_view<double, Layout> y)
+template <std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          std::size_t ext_x,
+          class Layout,
+          class Accessor_x,
+          std::size_t ext_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::mdspan<const double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
+    stdex::mdspan<const double, stdex::extents<index, ext_x>, Layout, Accessor_x> x,
+    stdex::mdspan<double, stdex::extents<index, ext_y>, Layout, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -100,20 +119,30 @@ inline void matrix_vector_product(Sci::Matrix_view<const double, Layout> a,
 
 #ifdef USE_MKL
 // Does not work with OpenBLAS version 0.2.14.1
-template <class Layout>
-inline void matrix_vector_product(Sci::Matrix_view<std::complex<double>, Layout> a,
-                                  Sci::Vector_view<std::complex<double>, Layout> x,
-                                  Sci::Vector_view<std::complex<double>, Layout> y)
+template <std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          std::size_t ext_x,
+          class Layout,
+          class Accessor_x,
+          std::size_t ext_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::mdspan<std::complex<double>, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a>
+        a,
+    stdex::mdspan<std::complex<double>, stdex::extents<index, ext_x>, Layout, Accessor_x> x,
+    stdex::mdspan<std::complex<double>, stdex::extents<index, ext_y>, Layout, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -126,20 +155,32 @@ inline void matrix_vector_product(Sci::Matrix_view<std::complex<double>, Layout>
                 incx, &beta, y.data_handle(), incy);
 }
 
-template <class Layout>
-inline void matrix_vector_product(Sci::Matrix_view<const std::complex<double>, Layout> a,
-                                  Sci::Vector_view<const std::complex<double>, Layout> x,
-                                  Sci::Vector_view<std::complex<double>, Layout> y)
+template <std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          std::size_t ext_x,
+          class Layout,
+          class Accessor_x,
+          std::size_t ext_y,
+          class Accessor_y>
+inline void matrix_vector_product(
+    stdex::mdspan<const std::complex<double>,
+                  stdex::extents<index, nrows_a, ncols_a>,
+                  Layout,
+                  Accessor_a> a,
+    stdex::mdspan<const std::complex<double>, stdex::extents<index, ext_x>, Layout, Accessor_x> x,
+    stdex::mdspan<std::complex<double>, stdex::extents<index, ext_y>, Layout, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = static_cast<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = static_cast<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -153,22 +194,22 @@ inline void matrix_vector_product(Sci::Matrix_view<const std::complex<double>, L
 }
 #endif
 
-template <class T, class Layout, class Allocator>
-inline Sci::Vector<T, Layout, Allocator>
-matrix_vector_product(const Sci::Matrix<T, Layout, Allocator>& a,
-                      const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline Sci::Vector<T, Layout, Container>
+matrix_vector_product(const Sci::Matrix<T, Layout, Container>& a,
+                      const Sci::Vector<T, Layout, Container>& x)
 {
-    Sci::Vector<T, Layout, Allocator> res(a.extent(0));
+    Sci::Vector<T, Layout, Container> res(a.extent(0));
     matrix_vector_product(a.view(), x.view(), res.view());
     return res;
 }
 
-template <class T, class Layout, class Allocator>
-inline void matrix_vector_product(const Sci::Matrix<T, Layout, Allocator>& a,
-                                  const Sci::Vector<T, Layout, Allocator>& x,
-                                  Sci::Vector<T, Layout, Allocator>& res)
+template <class T, class Layout, class Container>
+inline void matrix_vector_product(const Sci::Matrix<T, Layout, Container>& a,
+                                  const Sci::Vector<T, Layout, Container>& x,
+                                  Sci::Vector<T, Layout, Container>& res)
 {
-    assert(res.size() == a.extent(0));
+    Expects(res.size() == gsl::narrow<std::size_t>(a.extent(0)));
     matrix_vector_product(a.view(), x.view(), res.view());
 }
 
