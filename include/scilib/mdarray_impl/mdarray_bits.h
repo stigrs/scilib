@@ -370,6 +370,24 @@ public:
     }
 #endif
 
+    template <class... SizeTypes>
+        requires(std::conjunction_v<std::is_convertible<SizeTypes, index_type>...> &&
+                 sizeof...(SizeTypes) == extents_type::rank())
+    constexpr reference at(SizeTypes... indices) noexcept
+    {
+        Expects(__Detail::__check_bounds(map.extents(), indices...));
+        return ctr[map(indices...)];
+    }
+
+    template <class... SizeTypes>
+        requires(std::conjunction_v<std::is_convertible<SizeTypes, index_type>...> &&
+                 sizeof...(SizeTypes) == extents_type::rank())
+    constexpr const_reference at(SizeTypes... indices) const noexcept
+    {
+        Expects(__Detail::__check_bounds(map.extents(), indices...));
+        return ctr[map(indices...)];
+    }
+
     static constexpr std::size_t rank() noexcept { return extents_type::rank(); }
     static constexpr std::size_t rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
     static constexpr index_type static_extent(std::size_t r) noexcept
