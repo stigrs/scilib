@@ -7,6 +7,8 @@
 #ifndef SCILIB_MDARRAY_OPERATIONS_H
 #define SCILIB_MDARRAY_OPERATIONS_H
 
+#include "../linalg_impl/blas1_add.h"
+#include "../linalg_impl/blas1_scale.h"
 #include "../linalg_impl/blas2_matrix_vector_product.h"
 #include "../linalg_impl/blas3_matrix_product.h"
 #include <algorithm>
@@ -105,8 +107,15 @@ constexpr MDArray<T, Extents, Layout, Container>
 operator+(const MDArray<T, Extents, Layout, Container>& a,
           const MDArray<T, Extents, Layout, Container>& b)
 {
-    MDArray<T, Extents, Layout, Container> res = a;
-    return res += b;
+    if constexpr (Extents::rank() <= 2) {
+        MDArray<T, Extents, Layout, Container> res(a.extents());
+        std::experimental::linalg::add(a.view(), b.view(), res.view());
+        return res;
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = a;
+        return res += b;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -138,16 +147,30 @@ template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res *= scalar;
+    if constexpr (Extents::rank() <= 2) {
+        MDArray<T, Extents, Layout, Container> res(v.extents());
+        std::experimental::linalg::scale(scalar, res.view());
+        return res;
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = v;
+        return res *= scalar;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res *= scalar;
+    if constexpr (Extents::rank() <= 2) {
+        MDArray<T, Extents, Layout, Container> res(v.extents());
+        std::experimental::linalg::scale(scalar, res.view());
+        return res;
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = v;
+        return res *= scalar;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
