@@ -21,6 +21,16 @@ TEST(TestMDArray, TestSizeStaticMDArray)
     EXPECT_EQ(v.size(), sz);
 }
 
+TEST(TestMDArray, TestSizeMatrix33)
+{
+    const int nr = 3;
+    const int nc = 3;
+
+    Sci::Matrix33<int> m;
+    EXPECT_EQ(m.extent(0), nr);
+    EXPECT_EQ(m.extent(1), nc);
+}
+
 TEST(TestVector, TestEmpty)
 {
     Sci::Vector<int> v;
@@ -40,7 +50,7 @@ TEST(TestVector, TestAlloc)
     Sci::Vector<int> w(stdex::extents<int, sz>{sz}, std::allocator<int>());
     EXPECT_EQ(w.size(), sz);
 }
-#if 0
+
 TEST(TestVector, TestElementAccesss)
 {
     Sci::Vector<int> v(5);
@@ -87,7 +97,7 @@ TEST(TestVector, TestCopySpan)
     EXPECT_EQ(a(0), 10);
     EXPECT_NE(a(0), v(0));
 }
-
+#if 0
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
@@ -101,6 +111,7 @@ TEST(TestVector, TestCopyVector)
         EXPECT_NE(v[i], a(i));
     }
 }
+#endif
 
 TEST(TestVector, TestResize)
 {
@@ -123,20 +134,14 @@ TEST(TestVector, TestSwap)
     EXPECT_EQ(b.size(), n1);
 }
 
-TEST(TestVector, TestEmpty)
-{
-    Sci::Vector<int> a;
-    EXPECT_TRUE(a.empty());
-}
-
 TEST(TestVector, TestInitializer)
 {
-    std::vector<int> v = {1, 2, 3, 4, 5};
+    auto v = {1, 2, 3, 4, 5};
     Sci::Vector<int> a(v, v.size());
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
-        EXPECT_EQ(v[i], a(i));
+        EXPECT_EQ(i + 1, a(i));
     }
 }
 
@@ -158,7 +163,7 @@ TEST(TestVector, TestAddValue)
         EXPECT_EQ(vi, 6);
     }
 }
-
+#if 0
 TEST(TestVector, TestAddVector)
 {
     Sci::Vector<int> a(5);

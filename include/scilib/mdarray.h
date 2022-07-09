@@ -8,11 +8,14 @@
 #define SCILIB_MDARRAY_H
 
 #include "mdarray_impl/support.h"
+#include <array>
 #include <cstddef>
 #include <experimental/mdspan>
+#include <gsl/gsl>
 #include <utility>
 #include <valarray>
 #include <vector>
+
 
 #if _MSC_VER >= 1927
 #include <concepts>
@@ -34,7 +37,7 @@ namespace stdex = std::experimental;
 namespace Sci {
 
 #ifndef SCILIB_INDEX_TYPE
-#define SCILIB_INDEX_TYPE std::size_t
+#define SCILIB_INDEX_TYPE gsl::index
 #endif
 using index = SCILIB_INDEX_TYPE;
 
@@ -80,6 +83,22 @@ template <class ElementType,
     requires Extents_has_rank<Extents> 
 class MDArray;
 // clang-format on
+
+//--------------------------------------------------------------------------------------------------
+// Stack-allocated MDArrays:
+
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::array<ElementType, 3>>
+using Vector3 = MDArray<ElementType, stdex::extents<index, 3>, LayoutPolicy, Container>;
+
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::array<ElementType, 3>>
+using Matrix33 = MDArray<ElementType, stdex::extents<index, 3, 3>, LayoutPolicy, Container>;
+
+//--------------------------------------------------------------------------------------------------
+// Heap-allocated MDArrays:
 
 template <class ElementType,
           class LayoutPolicy = stdex::layout_right,
