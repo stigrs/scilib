@@ -19,42 +19,25 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 //--------------------------------------------------------------------------------------------------
-// Properties:
+// Utility functions for making mdspans and mdarrays:
 
-template <class T, class Extents, class Layout, class Container>
-constexpr std::size_t rank(const MDArray<T, Extents, Layout, Container>& m)
+template <class T,
+          class Extents,
+          class Layout,
+          class Container,
+          class Accessor = stdex::default_accessor<T>>
+constexpr stdex::mdspan<T, Extents, Layout, Accessor>
+make_mdspan(MDArray<T, Extents, Layout, Container>& m,
+            const Accessor& a = stdex::default_accessor<T>())
 {
-    return m.rank();
+    return stdex::mdspan<T, Extents, Layout>(m.data(), m.mapping(), a);
 }
 
-template <class T, class Extents, class Layout, class Accessor>
-constexpr std::size_t rank(stdex::mdspan<T, Extents, Layout, Accessor> m)
+template <class T, class Extents, class Layout, class Container = std::vector<T>, class Accessor>
+constexpr MDArray<T, Extents, Layout, Container>
+make_mdarray(stdex::mdspan<T, Extents, Layout, Accessor> m)
 {
-    return m.rank();
-}
-
-template <class T, class Extents, class Layout, class Container>
-constexpr std::ptrdiff_t ssize(const MDArray<T, Extents, Layout, Container>& m)
-{
-    return m.ssize();
-}
-
-template <class T, class Extents, class Layout, class Accessor>
-constexpr std::ptrdiff_t ssize(stdex::mdspan<T, Extents, Layout, Accessor> m)
-{
-    return static_cast<std::ptrdiff_t>(m.size());
-}
-
-template <class T, class Extents, class Layout, class Container>
-constexpr std::ptrdiff_t sextent(const MDArray<T, Extents, Layout, Container>& m, std::size_t dim)
-{
-    return m.sextent(dim);
-}
-
-template <class T, class Extents, class Layout, class Accessor>
-constexpr std::ptrdiff_t sextent(stdex::mdspan<T, Extents, Layout, Accessor> m, std::size_t dim)
-{
-    return static_cast<std::ptrdiff_t>(m.extent(dim));
+    return MDArray<T, Extents, Layout, Container>(m);
 }
 
 //--------------------------------------------------------------------------------------------------

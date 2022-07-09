@@ -91,7 +91,7 @@ TEST(TestVector, TestCopySpan)
         v(i) = i;
     }
 
-    Sci::Vector<int> a(v.view());
+    Sci::Vector<int> a = Sci::make_mdarray(v.view());
     a(0) = 10;
     EXPECT_EQ(v(0), 0);
     EXPECT_EQ(a(0), 10);
