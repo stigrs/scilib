@@ -25,7 +25,7 @@ auto det(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor>
     using value_type = std::remove_cv_t<T>;
 
     value_type ddet = 0.0;
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(0));
 
     if (n == 1) {
         ddet = a(0, 0);
@@ -46,7 +46,7 @@ auto det(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor>
             }
         }
         ddet = Sci::Linalg::prod(Sci::diag(tmp.view()));
-        ddet *= std::pow(-1.0, gsl::narrow<value_type>(permut));
+        ddet *= std::pow(-1.0, gsl::narrow_cast<value_type>(permut));
     }
     return ddet;
 }

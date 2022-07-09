@@ -37,7 +37,7 @@ eigs(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Acce
     Expects(a.extent(0) == a.extent(1));
     Expects(w.extent(0) == a.extent(0));
 
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT nselect = n;
     const BLAS_INT lda = n;
     const BLAS_INT ldz = nselect;
@@ -99,7 +99,7 @@ void eig(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, 
     Expects(a.extent(0) == evec.extent(0));
     Expects(a.extent(1) == evec.extent(1));
 
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     Sci::Vector<double, Layout> wr(n);
     Sci::Vector<double, Layout> wi(n);

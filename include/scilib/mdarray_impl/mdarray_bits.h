@@ -122,7 +122,7 @@ public:
     constexpr explicit MDArray(const container_type& c, SizeTypes... exts)
         : map(extents_type(exts...)), ctr(c)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     // clang-format off
@@ -131,12 +131,12 @@ public:
         : map(exts), ctr(c)
     // clang-format on
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     constexpr MDArray(const container_type& c, const mapping_type& m) : map(m), ctr(c)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     // clang-format off
@@ -148,7 +148,7 @@ public:
     constexpr explicit MDArray(container_type&& c, SizeTypes... exts)
         : map(extents_type(exts...)), ctr(std::move(c))
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     // clang-format off
@@ -157,12 +157,12 @@ public:
         : map(exts), ctr(std::move(c))
     // clang-format on
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     constexpr MDArray(container_type&& c, const mapping_type& m) : map(m), ctr(std::move(c))
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     // clang-format off
@@ -175,7 +175,7 @@ public:
     constexpr explicit MDArray(std::initializer_list<element_type> init, SizeTypes... exts)
         : map(extents_type(exts...)), ctr(init)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(init.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(init.size()));
     }
 
     // clang-format off
@@ -185,7 +185,7 @@ public:
         : map(exts), ctr(init)
     // clang-format on
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(init.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(init.size()));
     }
 
     // clang-format off
@@ -194,7 +194,7 @@ public:
         : map(m), ctr(init)
     // clang-format on
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(init.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(init.size()));
     }
 
     // clang-format off
@@ -211,8 +211,8 @@ public:
     {
         static_assert(other.rank() <= 7);
         for (std::size_t r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == gsl::narrow<index_type>(stdex::dynamic_extent) ||
-                    static_extent(r) == gsl::narrow<index_type>(other.extent(r)));
+            Expects(static_extent(r) == gsl::narrow_cast<index_type>(stdex::dynamic_extent) ||
+                    static_extent(r) == gsl::narrow_cast<index_type>(other.extent(r)));
         }
         copy(other, view());
     }
@@ -246,7 +246,7 @@ public:
     constexpr MDArray(const container_type& c, const extents_type& exts, const Alloc& a)
         : map(exts), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     template <class Alloc>
@@ -254,7 +254,7 @@ public:
     constexpr MDArray(const container_type& c, const mapping_type& m, const Alloc& a)
         : map(m), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     // clang-format off
@@ -265,14 +265,14 @@ public:
     constexpr MDArray(container_type&& c, const extents_type& exts, const Alloc& a)
         : map(exts), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     template <class Alloc>
         requires(std::is_constructible_v<container_type, std::size_t, Alloc>)
     constexpr MDArray(container_type&& c, const mapping_type& m, const Alloc& a) : map(m), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
     }
 
     // clang-format off
@@ -286,7 +286,7 @@ public:
                       const Alloc& a)
         : map(exts), ctr(init, a)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(init.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(init.size()));
     }
 
     // clang-format off
@@ -299,7 +299,7 @@ public:
                       const Alloc& a)
         : map(m), ctr(init, a)
     {
-        Expects(map.required_span_size() == gsl::narrow<index_type>(init.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(init.size()));
     }
 
     // clang-format off
@@ -319,8 +319,8 @@ public:
     {
         static_assert(other.rank() <= 7);
         for (std::size_t r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == gsl::narrow<index_type>(stdex::dynamic_extent) ||
-                    static_extent(r) == gsl::narrow<index_type>(other.extent(r)));
+            Expects(static_extent(r) == gsl::narrow_cast<index_type>(stdex::dynamic_extent) ||
+                    static_extent(r) == gsl::narrow_cast<index_type>(other.extent(r)));
         }
         copy(other, view());
     }
@@ -481,7 +481,7 @@ public:
     template <class F>
     constexpr MDArray& apply(F f) noexcept
     {
-        for (index_type i = 0; i < gsl::narrow<index_type>(size()); ++i) {
+        for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
             f(ctr[i]);
         }
         return *this;
@@ -490,7 +490,7 @@ public:
     template <class F, class U>
     constexpr MDArray& apply(F f, const U& val) noexcept
     {
-        for (index_type i = 0; i < gsl::narrow<index_type>(size()); ++i) {
+        for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
             f(ctr[i], val);
         }
         return *this;
@@ -501,7 +501,7 @@ public:
     {
         Expects(extents() == m.extents());
 
-        for (index_type i = 0; i < gsl::narrow<index_type>(size()); ++i) {
+        for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
             f(ctr[i], m.ctr[i]);
         }
         return *this;

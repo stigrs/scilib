@@ -38,8 +38,8 @@ inline auto matrix_norm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, La
             norm == 'I' || norm == 'i' || norm == 'F' || norm == 'f' || norm == 'E' || norm == 'e');
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
-    BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
 
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {

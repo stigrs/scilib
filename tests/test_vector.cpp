@@ -97,11 +97,12 @@ TEST(TestVector, TestCopySpan)
     EXPECT_EQ(a(0), 10);
     EXPECT_NE(a(0), v(0));
 }
-#if 0
+
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::Vector<int> a(v, std::array<Sci::index, 1>{v.size()});
+    Sci::MDArray<int, stdex::extents<int, 5>, stdex::layout_right, std::array<int, 5>> a(v,
+                                                                                         v.size());
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));
@@ -111,7 +112,6 @@ TEST(TestVector, TestCopyVector)
         EXPECT_NE(v[i], a(i));
     }
 }
-#endif
 
 TEST(TestVector, TestResize)
 {

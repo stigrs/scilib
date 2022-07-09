@@ -41,10 +41,10 @@ template <std::size_t nrows,
 inline void lu(stdex::mdspan<double, stdex::extents<index, nrows, ncols>, Layout, Accessor_a> a,
                stdex::mdspan<BLAS_INT, stdex::extents<index, ext_ipiv>, Layout, Accessor_ipiv> ipiv)
 {
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
-    Expects(gsl::narrow<BLAS_INT>(ipiv.size()) >= std::min(m, n));
+    Expects(gsl::narrow_cast<BLAS_INT>(ipiv.size()) >= std::min(m, n));
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
@@ -88,8 +88,8 @@ inline void qr(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, La
     Expects(q.extent(0) == a.extent(0) && q.extent(1) == a.extent(1));
     Expects(r.extent(0) == a.extent(0) && r.extent(1) == a.extent(1));
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
@@ -148,16 +148,16 @@ svd(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Acces
     stdex::mdspan<double, stdex::extents<index, nrows_u, ncols_u>, Layout, Accessor_u> u,
     stdex::mdspan<double, stdex::extents<index, nrows_vt, ncols_vt>, Layout, Accessor_vt> vt)
 {
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
     const BLAS_INT ldu = m;
     const BLAS_INT ldvt = n;
 
-    Expects(gsl::narrow<BLAS_INT>(s.extent(0)) == std::min(m, n));
-    Expects(gsl::narrow<BLAS_INT>(u.extent(0)) == m);
-    Expects(gsl::narrow<BLAS_INT>(u.extent(1)) == ldu);
-    Expects(gsl::narrow<BLAS_INT>(vt.extent(0)) == n);
-    Expects(gsl::narrow<BLAS_INT>(vt.extent(1)) == ldvt);
+    Expects(gsl::narrow_cast<BLAS_INT>(s.extent(0)) == std::min(m, n));
+    Expects(gsl::narrow_cast<BLAS_INT>(u.extent(0)) == m);
+    Expects(gsl::narrow_cast<BLAS_INT>(u.extent(1)) == ldu);
+    Expects(gsl::narrow_cast<BLAS_INT>(vt.extent(0)) == n);
+    Expects(gsl::narrow_cast<BLAS_INT>(vt.extent(1)) == ldvt);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;

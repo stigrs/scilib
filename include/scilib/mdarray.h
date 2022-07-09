@@ -29,7 +29,7 @@ namespace stdex = std::experimental;
 namespace Sci {
 
 #ifndef SCILIB_INDEX_TYPE
-#define SCILIB_INDEX_TYPE std::size_t
+#define SCILIB_INDEX_TYPE gsl::index
 #endif
 using index = SCILIB_INDEX_TYPE;
 

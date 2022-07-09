@@ -33,9 +33,9 @@ inline void
 lstsq(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
       stdex::mdspan<double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b)
 {
-    BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
-    BLAS_INT nrhs = gsl::narrow<BLAS_INT>(b.extent(1));
+    BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT nrhs = gsl::narrow_cast<BLAS_INT>(b.extent(1));
     BLAS_INT rank;
 
     double rcond = -1.0;                           // use machine epsilon

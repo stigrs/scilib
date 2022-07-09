@@ -14,8 +14,8 @@ TEST(TestLinalg, TestMatrixVectorProduct)
 {
     std::vector<int> va = {1, -1, 2, 0, -3, 1};
     Sci::Matrix<int> a(va, 2, 3);
-    Sci::Vector<int> x(std::vector<int>{2, 1, 0}, 3);
-    Sci::Vector<int> y(std::vector<int>{1, -3}, 2);
+    Sci::Vector<int> x({2, 1, 0}, 3);
+    Sci::Vector<int> y({1, -3}, 2);
     EXPECT_EQ((a * x), y);
 }
 

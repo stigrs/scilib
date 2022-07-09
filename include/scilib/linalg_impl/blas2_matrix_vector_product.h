@@ -66,10 +66,10 @@ inline void matrix_vector_product(
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow_cast<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -101,10 +101,10 @@ inline void matrix_vector_product(
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow_cast<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -139,10 +139,10 @@ inline void matrix_vector_product(
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow_cast<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -177,10 +177,10 @@ inline void matrix_vector_product(
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
-    const BLAS_INT incx = gsl::narrow<BLAS_INT>(x.stride(0));
-    const BLAS_INT incy = gsl::narrow<BLAS_INT>(y.stride(0));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT incx = gsl::narrow_cast<BLAS_INT>(x.stride(0));
+    const BLAS_INT incy = gsl::narrow_cast<BLAS_INT>(y.stride(0));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
@@ -209,7 +209,7 @@ inline void matrix_vector_product(const Sci::Matrix<T, Layout, Container>& a,
                                   const Sci::Vector<T, Layout, Container>& x,
                                   Sci::Vector<T, Layout, Container>& res)
 {
-    Expects(res.size() == gsl::narrow<std::size_t>(a.extent(0)));
+    Expects(res.size() == gsl::narrow_cast<std::size_t>(a.extent(0)));
     matrix_vector_product(a.view(), x.view(), res.view());
 }
 

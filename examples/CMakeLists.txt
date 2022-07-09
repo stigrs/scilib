@@ -17,6 +17,10 @@ if(NOT TARGET scilib::scilib)
     find_package(scilib REQUIRED)
 endif()
 
+if(NOT TARGET Microsoft.GSL::GSL)
+    find_package(Microsoft.GSL CONFIG)
+endif()
+
 set(PROGRAMS 
     aliasing
     const_correctness
@@ -36,6 +40,7 @@ foreach(program ${PROGRAMS})
         scilib::scilib
         std::mdspan
         std::linalg
+        Microsoft.GSL::GSL
 	    ${BLAS_LIBRARIES}
 	) 
     target_compile_options(

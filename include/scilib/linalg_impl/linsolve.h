@@ -36,8 +36,8 @@ linsolve(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, 
     Expects(a.extent(0) == a.extent(1));
     Expects(b.extent(0) == a.extent(1));
 
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(a.extent(1));
-    const BLAS_INT nrhs = gsl::narrow<BLAS_INT>(b.extent(1));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT nrhs = gsl::narrow_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT lda = n;
 
     Sci::Vector<BLAS_INT, Layout> ipiv(n);

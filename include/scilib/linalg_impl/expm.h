@@ -33,7 +33,7 @@ auto expm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor
 
     assert(a.extent(0) == a.extent(1));
 
-    int e = gsl::narrow<int>(std::log2(matrix_norm(a, 'I')));
+    int e = gsl::narrow_cast<int>(std::log2(matrix_norm(a, 'I')));
     int s = std::max(0, e + 1);
 
     Matrix<value_type, Layout> A = std::experimental::linalg::scaled(1.0 / std::pow(2.0, s), a);
@@ -48,7 +48,7 @@ auto expm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor
     int p = 1;
 
     for (int k = 2; k <= q; ++k) {
-        c *= (q - k + 1) / gsl::narrow<value_type>(k * (2 * q - k + 1));
+        c *= (q - k + 1) / gsl::narrow_cast<value_type>(k * (2 * q - k + 1));
         X = A * X;
         auto cX = c * X;
         E += cX;

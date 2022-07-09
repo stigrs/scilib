@@ -15,9 +15,8 @@
 
 #include "lapack_types.h"
 #include <complex>
-#include <type_traits>
-
 #include <experimental/linalg>
+#include <type_traits>
 
 namespace Sci {
 namespace Linalg {
@@ -25,50 +24,59 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T_a,
+          class IndexType_a,
           std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout_a,
           class Accessor_a,
           class T_b,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Layout_b,
           class Accessor_b,
           class T_c,
+          class IndexType_c,
           std::size_t nrows_c,
           std::size_t ncols_c,
           class Layout_c,
           class Accessor_c>
-    requires(!std::is_const_v<T_c>)
-inline void
-matrix_product(stdex::mdspan<T_a, stdex::extents<index, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-               stdex::mdspan<T_b, stdex::extents<index, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
-               stdex::mdspan<T_c, stdex::extents<index, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
+    requires(!std::is_const_v<T_c> && std::is_integral_v<IndexType_a> &&
+             std::is_integral_v<IndexType_b> && std::is_integral_v<IndexType_c>)
+inline void matrix_product(
+    stdex::mdspan<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    stdex::mdspan<T_b, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+    stdex::mdspan<T_c, stdex::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
 {
     std::experimental::linalg::matrix_product(a, b, c);
 }
 
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Accessor_b,
+          class IndexType_c,
           std::size_t nrows_c,
           std::size_t ncols_c,
           class Accessor_c>
-inline void
-matrix_product(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
-               stdex::mdspan<double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b,
-               stdex::mdspan<double, stdex::extents<index, nrows_c, ncols_c>, Layout, Accessor_c> c)
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
+                 std::is_integral_v<IndexType_c>)
+inline void matrix_product(
+    stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+    stdex::mdspan<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b,
+    stdex::mdspan<double, stdex::extents<IndexType_c, nrows_c, ncols_c>, Layout, Accessor_c> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(b.extent(1));
-    const BLAS_INT k = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = k;
@@ -85,27 +93,34 @@ matrix_product(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, La
                 b.data_handle(), ldb, beta, c.data_handle(), ldc);
 }
 
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Accessor_b,
+          class IndexType_c,
           std::size_t nrows_c,
           std::size_t ncols_c,
           class Accessor_c>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
+                 std::is_integral_v<IndexType_c>)
 inline void matrix_product(
-    stdex::mdspan<const double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
-    stdex::mdspan<const double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b,
-    stdex::mdspan<double, stdex::extents<index, nrows_c, ncols_c>, Layout, Accessor_c> c)
+    stdex::mdspan<const double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a>
+        a,
+    stdex::mdspan<const double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b>
+        b,
+    stdex::mdspan<double, stdex::extents<IndexType_c, nrows_c, ncols_c>, Layout, Accessor_c> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(b.extent(1));
-    const BLAS_INT k = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = k;
@@ -123,30 +138,40 @@ inline void matrix_product(
 }
 
 #ifdef USE_MKL
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Accessor_b,
+          class IndexType_c,
           std::size_t nrows_c,
           std::size_t ncols_c,
           class Accessor_c>
-inline void matrix_product(
-    stdex::mdspan<std::complex<double>, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a>
-        a,
-    stdex::mdspan<std::complex<double>, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b>
-        b,
-    stdex::mdspan<std::complex<double>, stdex::extents<index, nrows_c, ncols_c>, Layout, Accessor_c>
-        c)
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
+                 std::is_integral_v<IndexType_c>)
+inline void matrix_product(stdex::mdspan<std::complex<double>,
+                                         stdex::extents<IndexType_a, nrows_a, ncols_a>,
+                                         Layout,
+                                         Accessor_a> a,
+                           stdex::mdspan<std::complex<double>,
+                                         stdex::extents<IndexType_b, nrows_b, ncols_b>,
+                                         Layout,
+                                         Accessor_b> b,
+                           stdex::mdspan<std::complex<double>,
+                                         stdex::extents<IndexType_c, nrows_c, ncols_c>,
+                                         Layout,
+                                         Accessor_c> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(b.extent(1));
-    const BLAS_INT k = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = k;
@@ -163,34 +188,40 @@ inline void matrix_product(
                 ldb, &beta, c.data(), ldc);
 }
 
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Accessor_b,
+          class IndexType_c,
           std::size_t nrows_c,
           std::size_t ncols_c,
           class Accessor_c>
-inline void matrix_product(
-    stdex::mdspan<const std::complex<double>,
-                  stdex::extents<index, nrows_a, ncols_a>,
-                  Layout,
-                  Accessor_a> a,
-    stdex::mdspan<const std::complex<double>,
-                  stdex::extents<index, nrows_b, ncols_b>,
-                  Layout,
-                  Accessor_b> b,
-    stdex::mdspan<std::complex<double>, stdex::extents<index, nrows_c, ncols_c>, Layout, Accessor_c>
-        c)
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
+                 std::is_integral_v<IndexType_c>)
+inline void matrix_product(stdex::mdspan<const std::complex<double>,
+                                         stdex::extents<IndexType_a, nrows_a, ncols_a>,
+                                         Layout,
+                                         Accessor_a> a,
+                           stdex::mdspan<const std::complex<double>,
+                                         stdex::extents<IndexType_b, nrows_b, ncols_b>,
+                                         Layout,
+                                         Accessor_b> b,
+                           stdex::mdspan<std::complex<double>,
+                                         stdex::extents<IndexType_c, nrows_c, ncols_c>,
+                                         Layout,
+                                         Accessor_c> c)
 {
     constexpr std::complex<double> alpha = {1.0, 0.0};
     constexpr std::complex<double> beta = {0.0, 0.0};
 
-    const BLAS_INT m = gsl::narrow<BLAS_INT>(a.extent(0));
-    const BLAS_INT n = gsl::narrow<BLAS_INT>(b.extent(1));
-    const BLAS_INT k = gsl::narrow<BLAS_INT>(a.extent(1));
+    const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT k = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = k;
