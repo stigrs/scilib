@@ -22,16 +22,22 @@ namespace Sci {
 namespace Linalg {
 
 // Solve linear system of equations.
-template <class Layout>
-inline void linsolve(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b)
+template <std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Accessor_a,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Accessor_b>
+inline void
+linsolve(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
+         stdex::mdspan<double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b)
 {
-    namespace stdex = std::experimental;
+    Expects(a.extent(0) == a.extent(1));
+    Expects(b.extent(0) == a.extent(1));
 
-    assert(a.extent(0) == a.extent(1));
-    assert(b.extent(0) == a.extent(1));
-
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    const BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    const BLAS_INT nrhs = gsl::narrow_cast<BLAS_INT>(b.extent(1));
     const BLAS_INT lda = n;
 
     Sci::Vector<BLAS_INT, Layout> ipiv(n);
@@ -50,9 +56,9 @@ inline void linsolve(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double
     }
 }
 
-template <class Layout, class Allocator>
-inline void linsolve(Sci::Matrix<double, Layout, Allocator>& a,
-                     Sci::Matrix<double, Layout, Allocator>& b)
+template <class Layout, class Container>
+inline void linsolve(Sci::Matrix<double, Layout, Container>& a,
+                     Sci::Matrix<double, Layout, Container>& b)
 {
     linsolve(a.view(), b.view());
 }

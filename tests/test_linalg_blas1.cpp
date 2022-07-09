@@ -28,15 +28,15 @@ TEST(TestLinAlg, TestAdd)
 
 TEST(TestLinalg, TestAbsSum)
 {
-    Sci::Vector<int> v(std::vector<int>{1, 2, 3, -4}, 4);
+    Sci::Vector<int> v({1, 2, 3, -4}, 4);
     EXPECT_EQ(Sci::Linalg::vector_abs_sum(v), 10);
 }
 
 TEST(TestLinalg, TestAxpy)
 {
     std::vector<int> ans = {4, 8, 12, 16, 20};
-    Sci::Vector<int> x(std::vector<int>{1, 2, 3, 4, 5}, 5);
-    Sci::Vector<int> y(std::vector<int>{2, 4, 6, 8, 10}, 5);
+    Sci::Vector<int> x({1, 2, 3, 4, 5}, 5);
+    Sci::Vector<int> y({2, 4, 6, 8, 10}, 5);
 
     Sci::Linalg::axpy(2, x, y);
     for (std::size_t i = 0; i < x.size(); ++i) {
@@ -46,27 +46,27 @@ TEST(TestLinalg, TestAxpy)
 
 TEST(TestLinalg, TestDot)
 {
-    Sci::Vector<int> a(std::vector<int>{1, 3, -5}, 3);
-    Sci::Vector<int> b(std::vector<int>{4, -2, -1}, 3);
+    Sci::Vector<int> a({1, 3, -5}, 3);
+    Sci::Vector<int> b({4, -2, -1}, 3);
 
     EXPECT_EQ(Sci::Linalg::dot(a, b), 3);
 }
 
 TEST(TestLinalg, TestIdxAbsMax)
 {
-    Sci::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
+    Sci::Vector<int> v({1, 3, -5, 2}, 4);
     EXPECT_EQ(Sci::Linalg::idx_abs_max(v), 2UL);
 }
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
-    Sci::Vector<int> v(std::vector<int>{1, 3, -5, 2}, 4);
+    Sci::Vector<int> v({1, 3, -5, 2}, 4);
     EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 0UL);
 }
 
 TEST(TestLinalg, TestNorm2)
 {
-    Sci::Vector<double> v(std::vector<double>{1.0, 2.0, 3.0}, 3);
+    Sci::Vector<double> v({1.0, 2.0, 3.0}, 3);
     auto ans = Sci::Linalg::vector_norm2(v);
     EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }

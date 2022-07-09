@@ -38,14 +38,14 @@ inline void axpy(const T_scalar& scalar,
 template <class T_scalar,
           class T_x,
           class Layout_x,
-          class Allocator_x,
+          class Container_x,
           class T_y,
           class Layout_y,
-          class Allocator_y>
+          class Container_y>
     requires(!std::is_const_v<T_y>)
 inline void axpy(const T_scalar& scalar,
-                 const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
-                 Sci::Vector<T_y, Layout_y, Allocator_y>& y)
+                 const Sci::Vector<T_x, Layout_x, Container_x>& x,
+                 Sci::Vector<T_y, Layout_y, Container_y>& y)
 {
     axpy(scalar, x.view(), y.view());
 }

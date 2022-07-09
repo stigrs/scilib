@@ -22,14 +22,20 @@ namespace Sci {
 namespace Linalg {
 
 // Compute the minimum norm-solution to a real linear least squares problem.
-template <class Layout>
-inline void lstsq(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, Layout> b)
+template <std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Accessor_a,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Accessor_b>
+inline void
+lstsq(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
+      stdex::mdspan<double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b)
 {
-    namespace stdex = std::experimental;
-
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
-    BLAS_INT nrhs = static_cast<BLAS_INT>(b.extent(1));
+    BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT nrhs = gsl::narrow_cast<BLAS_INT>(b.extent(1));
     BLAS_INT rank;
 
     double rcond = -1.0;                           // use machine epsilon
@@ -51,9 +57,9 @@ inline void lstsq(Sci::Matrix_view<double, Layout> a, Sci::Matrix_view<double, L
     }
 }
 
-template <class Layout, class Allocator>
-inline void lstsq(Sci::Matrix<double, Layout, Allocator>& a,
-                  Sci::Matrix<double, Layout, Allocator>& b)
+template <class Layout, class Container>
+inline void lstsq(Sci::Matrix<double, Layout, Container>& a,
+                  Sci::Matrix<double, Layout, Container>& b)
 {
     lstsq(a.view(), b.view());
 }

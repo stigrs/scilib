@@ -22,18 +22,23 @@ namespace Sci {
 namespace Linalg {
 
 // Matrix inversion.
-template <class T_a, class T_res, class Layout>
+template <class T_a,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor_a,
+          class T_res,
+          class Accessor_res>
     requires(std::is_same_v<std::remove_cv_t<T_a>, double>)
-inline void inv(Sci::Matrix_view<T_a, Layout> a, Sci::Matrix_view<T_res, Layout> res)
+inline void inv(stdex::mdspan<T_a, stdex::extents<index, nrows, ncols>, Layout, Accessor_a> a,
+                stdex::mdspan<T_res, stdex::extents<index, nrows, ncols>, Layout, Accessor_res> res)
 {
-    namespace stdex = std::experimental;
-
-    assert(a.extent(0) == a.extent(1));
+    Expects(a.extent(0) == a.extent(1));
 
     if (det(a) == 0.0) {
         throw std::runtime_error("inv: matrix not invertible");
     }
-    const BLAS_INT n = static_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(0));
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
@@ -53,10 +58,10 @@ inline void inv(Sci::Matrix_view<T_a, Layout> a, Sci::Matrix_view<T_res, Layout>
     }
 }
 
-template <class Layout, class Allocator>
-inline Sci::Matrix<double, Layout, Allocator> inv(const Sci::Matrix<double, Layout, Allocator>& a)
+template <class Layout, class Container>
+inline Sci::Matrix<double, Layout, Container> inv(const Sci::Matrix<double, Layout, Container>& a)
 {
-    Sci::Matrix<double, Layout, Allocator> res(a.extent(0), a.extent(1));
+    Sci::Matrix<double, Layout, Container> res(a.extent(0), a.extent(1));
     inv(a.view(), res.view());
     return res;
 }

@@ -29,16 +29,17 @@ namespace stdex = std::experimental;
 // - I, i:       infinity norm of the matrix (maximum row sum)
 // - F, f, E, e: Frobenius norm of the matrix (square root of sum of squares)
 //
-template <class T, class Layout>
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
     requires(std::is_same_v<std::remove_cv_t<T>, double>)
-inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
+inline auto matrix_norm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a,
+                        char norm)
 {
-    assert(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' || norm == 'o' || norm == 'I' ||
-           norm == 'i' || norm == 'F' || norm == 'f' || norm == 'E' || norm == 'e');
+    Expects(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' || norm == 'o' ||
+            norm == 'I' || norm == 'i' || norm == 'F' || norm == 'f' || norm == 'E' || norm == 'e');
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
-    BLAS_INT m = static_cast<BLAS_INT>(a.extent(0));
-    BLAS_INT n = static_cast<BLAS_INT>(a.extent(1));
+    BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
 
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
@@ -48,8 +49,8 @@ inline auto matrix_norm(Sci::Matrix_view<T, Layout> a, char norm)
     return LAPACKE_dlange(matrix_layout, norm, m, n, a.data_handle(), lda);
 }
 
-template <class Layout, class Allocator>
-inline double matrix_norm(const Sci::Matrix<double, Layout, Allocator>& a, char norm)
+template <class Layout, class Container>
+inline double matrix_norm(const Sci::Matrix<double, Layout, Container>& a, char norm)
 {
     return matrix_norm(a.view(), norm);
 }

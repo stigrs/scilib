@@ -12,8 +12,8 @@
 namespace Sci {
 namespace Linalg {
 
-template <class T, class Layout, class Allocator>
-inline T vector_abs_sum(const Sci::Vector<T, Layout, Allocator>& x)
+template <class T, class Layout, class Container>
+inline T vector_abs_sum(const Sci::Vector<T, Layout, Container>& x)
 {
     return std::experimental::linalg::vector_abs_sum(x.view());
 }

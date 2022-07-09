@@ -8,11 +8,47 @@
 #include <scilib/mdarray.h>
 #include <vector>
 
+TEST(TestMDArray, TestSizeStaticMDArray)
+{
+    const int nr = 2;
+    const int nc = 3;
+    const int sz = nr * nc;
+
+    Sci::MDArray<int, stdex::extents<int, nr, nc>, Sci::layout_right, std::array<int, sz>> v(nr,
+                                                                                             nc);
+    EXPECT_EQ(v.extent(0), nr);
+    EXPECT_EQ(v.extent(1), nc);
+    EXPECT_EQ(v.size(), sz);
+}
+
+TEST(TestMDArray, TestSizeMatrix33)
+{
+    const int nr = 3;
+    const int nc = 3;
+
+    Sci::Matrix33<int> m;
+    EXPECT_EQ(m.extent(0), nr);
+    EXPECT_EQ(m.extent(1), nc);
+}
+
+TEST(TestVector, TestEmpty)
+{
+    Sci::Vector<int> v;
+    EXPECT_EQ(v.size(), 0);
+}
+
 TEST(TestVector, TestSize)
 {
     std::size_t sz = 5;
     Sci::Vector<int> v(sz);
     EXPECT_EQ(v.size(), sz);
+}
+
+TEST(TestVector, TestAlloc)
+{
+    const std::size_t sz = 5;
+    Sci::Vector<int> w(stdex::extents<int, sz>{sz}, std::allocator<int>());
+    EXPECT_EQ(w.size(), sz);
 }
 
 TEST(TestVector, TestElementAccesss)
@@ -55,7 +91,7 @@ TEST(TestVector, TestCopySpan)
         v(i) = i;
     }
 
-    Sci::Vector<int> a(v.view());
+    Sci::Vector<int> a = Sci::make_mdarray(v.view());
     a(0) = 10;
     EXPECT_EQ(v(0), 0);
     EXPECT_EQ(a(0), 10);
@@ -65,7 +101,8 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::Vector<int> a(v, std::array<Sci::index, 1>{v.size()});
+    Sci::MDArray<int, stdex::extents<int, 5>, stdex::layout_right, std::array<int, 5>> a(v,
+                                                                                         v.size());
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));
@@ -97,20 +134,14 @@ TEST(TestVector, TestSwap)
     EXPECT_EQ(b.size(), n1);
 }
 
-TEST(TestVector, TestEmpty)
-{
-    Sci::Vector<int> a;
-    EXPECT_TRUE(a.empty());
-}
-
 TEST(TestVector, TestInitializer)
 {
-    std::vector<int> v = {1, 2, 3, 4, 5};
+    auto v = {1, 2, 3, 4, 5};
     Sci::Vector<int> a(v, v.size());
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
-        EXPECT_EQ(v[i], a(i));
+        EXPECT_EQ(i + 1, a(i));
     }
 }
 

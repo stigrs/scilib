@@ -14,8 +14,9 @@ namespace Linalg {
 #include <type_traits>
 
 // Raise a square matrix to the (integer) power n.
-template <class T, class Layout>
-inline auto matrix_power(Sci::Matrix_view<T, Layout> m, int n)
+template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
+inline auto matrix_power(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m,
+                         int n)
 {
     using namespace Sci;
     using namespace Sci::Linalg;
@@ -59,8 +60,8 @@ inline auto matrix_power(Sci::Matrix_view<T, Layout> m, int n)
     return res;
 }
 
-template <class T, class Layout, class Allocator>
-inline Sci::Matrix<T, Layout, Allocator> matrix_power(const Sci::Matrix<T, Layout, Allocator>& m,
+template <class T, class Layout, class Container>
+inline Sci::Matrix<T, Layout, Container> matrix_power(const Sci::Matrix<T, Layout, Container>& m,
                                                       int n)
 {
     return matrix_power(m.view(), n);

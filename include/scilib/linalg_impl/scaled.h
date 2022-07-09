@@ -12,11 +12,11 @@
 namespace Sci {
 namespace Linalg {
 
-template <class ScalingFactorType, class T, class Extents, class Layout, class Allocator>
-inline Sci::MDArray<T, Extents, Layout, Allocator>
-scaled(ScalingFactorType scaling_factor, const Sci::MDArray<T, Extents, Layout, Allocator>& a)
+template <class ScalingFactorType, class T, class Extents, class Layout, class Container>
+inline Sci::MDArray<T, Extents, Layout, Container>
+scaled(ScalingFactorType scaling_factor, const Sci::MDArray<T, Extents, Layout, Container>& a)
 {
-    return Sci::MDArray<T, Extents, Layout, Allocator>(
+    return Sci::MDArray<T, Extents, Layout, Container>(
         std::experimental::linalg::scaled(scaling_factor, a.view()));
 }
 

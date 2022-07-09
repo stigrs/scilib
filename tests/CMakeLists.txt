@@ -15,7 +15,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
 if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
 endif()
@@ -28,6 +27,10 @@ if(NOT TARGET scilib::scilib)
     find_package(scilib REQUIRED)
 endif()
 
+if(NOT TARGET Microsoft.GSL::GSL)
+    find_package(Microsoft.GSL CONFIG)
+endif()
+
 function(add_scilib_test name)
     add_executable(${name} ${name}.cpp)
     target_link_libraries (
@@ -36,6 +39,7 @@ function(add_scilib_test name)
         std::linalg
         std::mdspan
         scilib::scilib
+        Microsoft.GSL::GSL
         gtest_main
 	    ${BLAS_LIBRARIES}
     ) 

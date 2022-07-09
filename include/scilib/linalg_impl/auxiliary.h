@@ -30,9 +30,8 @@ inline void fill(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, A
     Sci::apply(m, [&](T& mi) { mi = value; });
 }
 
-template <class T, class Extents, class Layout, class Allocator>
-    requires Extents_has_rank<Extents>
-inline void fill(Sci::MDArray<T, Extents, Layout, Allocator>& m, const T& value)
+template <class T, class Extents, class Layout, class Container>
+inline void fill(Sci::MDArray<T, Extents, Layout, Container>& m, const T& value)
 {
     static_assert(Extents::rank() <= 2);
     fill(m.view(), value);
@@ -77,8 +76,8 @@ inline void clip(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, A
     }
 }
 
-template <class T, class Extents, class Layout, class Allocator>
-inline void clip(Sci::MDArray<T, Extents, Layout, Allocator>& a, const T& a_min, const T& a_max)
+template <class T, class Extents, class Layout, class Container>
+inline void clip(Sci::MDArray<T, Extents, Layout, Container>& a, const T& a_min, const T& a_max)
 {
     clip(a.view(), a_min, a_max);
 }
@@ -103,8 +102,8 @@ inline std::size_t argmax(stdex::mdspan<T, stdex::extents<index, ext>, Layout, A
     return max_idx;
 }
 
-template <class T, class Layout, class Allocator>
-inline std::size_t argmax(const Sci::Vector<T, Layout, Allocator>& v)
+template <class T, class Layout, class Container>
+inline std::size_t argmax(const Sci::Vector<T, Layout, Container>& v)
 {
     return argmax(v.view());
 }
@@ -126,8 +125,8 @@ inline std::size_t argmin(stdex::mdspan<T, stdex::extents<index, ext>, Layout, A
     return min_idx;
 }
 
-template <class T, class Layout, class Allocator>
-inline std::size_t argmin(const Sci::Vector<T, Layout, Allocator>& v)
+template <class T, class Layout, class Container>
+inline std::size_t argmin(const Sci::Vector<T, Layout, Container>& v)
 {
     return argmin(v.view());
 }
@@ -147,8 +146,8 @@ inline auto max(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v
     return result;
 }
 
-template <class T, class Layout, class Allocator>
-inline T max(const Sci::Vector<T, Layout, Allocator>& v)
+template <class T, class Layout, class Container>
+inline T max(const Sci::Vector<T, Layout, Container>& v)
 {
     return max(v.view());
 }
@@ -168,8 +167,8 @@ inline auto min(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v
     return result;
 }
 
-template <class T, class Layout, class Allocator>
-inline T min(const Sci::Vector<T, Layout, Allocator>& v)
+template <class T, class Layout, class Container>
+inline T min(const Sci::Vector<T, Layout, Container>& v)
 {
     return min(v.view());
 }
@@ -187,8 +186,8 @@ inline auto sum(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v
     return result;
 }
 
-template <class T, class Layout, class Allocator>
-inline T sum(const Sci::Vector<T, Layout, Allocator>& v)
+template <class T, class Layout, class Container>
+inline T sum(const Sci::Vector<T, Layout, Container>& v)
 {
     return sum(v.view());
 }
@@ -206,8 +205,8 @@ inline auto prod(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> 
     return result;
 }
 
-template <class T, class Layout, class Allocator>
-inline T prod(const Sci::Vector<T, Layout, Allocator>& v)
+template <class T, class Layout, class Container>
+inline T prod(const Sci::Vector<T, Layout, Container>& v)
 {
     return prod(v.view());
 }
@@ -217,7 +216,7 @@ inline T prod(const Sci::Vector<T, Layout, Allocator>& v)
 
 // clang-format off
 template <class M, class... Args>
-    requires(MDArray_type<M> && M::rank() == sizeof...(Args))
+    requires(__Detail::MDArray_type<M> && M::rank() == sizeof...(Args))
 // clang-format on
 inline M zeros(Args... args)
 {
@@ -230,7 +229,7 @@ inline M zeros(Args... args)
 
 // clang-format off
 template <class M, class... Args>
-    requires(MDArray_type<M> && M::rank() == sizeof...(Args))
+    requires(__Detail::MDArray_type<M> && M::rank() == sizeof...(Args))
 // clang-format on
 inline M ones(Args... args)
 {
@@ -243,7 +242,7 @@ inline M ones(Args... args)
 
 // clang-format off
 template <class M = Sci::Matrix<double>>
-    requires(MDArray_type<M> && M::rank() == 2)
+    requires(__Detail::MDArray_type<M> && M::rank() == 2)
 // clang-format on
 inline M identity(std::size_t n)
 {
@@ -261,7 +260,7 @@ inline M identity(std::size_t n)
 // Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
 template <class M, class... Args>
-    requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
+    requires(__Detail::MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
 inline M randn(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
@@ -282,7 +281,7 @@ inline M randn(Args... args)
 // Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
 template <class M, class... Args>
-    requires(MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
+    requires(__Detail::MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
 inline M randu(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
@@ -303,7 +302,7 @@ inline M randu(Args... args)
 // Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
 template <class M, class... Args>
-    requires(MDArray_type<M>&& std::is_integral_v<typename M::value_type>)
+    requires(__Detail::MDArray_type<M>&& std::is_integral_v<typename M::value_type>)
 inline M randi(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
@@ -321,15 +320,15 @@ inline M randi(Args... args)
     return res;
 }
 
-template <class T, class Layout, class Allocator>
+template <class T, class Layout, class Container>
     requires(std::is_floating_point_v<T>)
-Sci::Vector<T, Layout, Allocator> linspace(T start, T stop, int num = 50)
+Sci::Vector<T, Layout, Container> linspace(T start, T stop, int num = 50)
 {
     assert(stop > start);
     T step_size = (stop - start) / (num - 1);
     T value = start;
 
-    Sci::Vector<T, Layout, Allocator> res(num);
+    Sci::Vector<T, Layout, Container> res(num);
 
     res(0) = start;
     for (int i = 1; i < num; ++i) {

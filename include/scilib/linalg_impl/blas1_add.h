@@ -14,17 +14,17 @@ namespace Linalg {
 
 template <class T_x,
           class Layout_x,
-          class Allocator_x,
+          class Container_x,
           class T_y,
           class Layout_y,
-          class Allocator_y,
+          class Container_y,
           class T_z,
           class Layout_z,
-          class Allocator_z>
+          class Container_z>
     requires(!std::is_const_v<T_z>)
-inline void add(const Sci::Vector<T_x, Layout_x, Allocator_x>& x,
-                const Sci::Vector<T_y, Layout_y, Allocator_y>& y,
-                Sci::Vector<T_z, Layout_z, Allocator_z>& z)
+inline void add(const Sci::Vector<T_x, Layout_x, Container_x>& x,
+                const Sci::Vector<T_y, Layout_y, Container_y>& y,
+                Sci::Vector<T_z, Layout_z, Container_z>& z)
 {
     std::experimental::linalg::add(x.view(), y.view(), z.view());
 }
