@@ -54,7 +54,12 @@ using Vector3 = MDArray<ElementType, stdex::extents<index, 3>, LayoutPolicy, Con
 
 template <class ElementType,
           class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 3>>
+          class Container = std::array<ElementType, 4>>
+using Vector4 = MDArray<ElementType, stdex::extents<index, 4>, LayoutPolicy, Container>;
+
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::array<ElementType, 9>>
 using Matrix33 = MDArray<ElementType, stdex::extents<index, 3, 3>, LayoutPolicy, Container>;
 
 //--------------------------------------------------------------------------------------------------
