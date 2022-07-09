@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <experimental/mdspan>
 #include <utility>
+#include <valarray>
 #include <vector>
 
 #if _MSC_VER >= 1927
@@ -41,20 +42,23 @@ using layout_left = stdex::layout_left;
 using layout_right = stdex::layout_right;
 using layout_stride = stdex::layout_stride;
 
-template <class T, class Layout = stdex::layout_right>
-using Vector_view = stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, Layout>;
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
+using Vector_view =
+    stdex::mdspan<ElementType, stdex::extents<index, stdex::dynamic_extent>, LayoutPolicy>;
 
-template <class T>
+template <class ElementType>
 using Subvector_view =
-    stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, stdex::layout_stride>;
+    stdex::mdspan<ElementType, stdex::extents<index, stdex::dynamic_extent>, stdex::layout_stride>;
 
-template <class T, class Layout = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Matrix_view =
-    stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>, Layout>;
+    stdex::mdspan<ElementType,
+                  stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
+                  LayoutPolicy>;
 
-template <class T>
+template <class ElementType>
 using Submatrix_view =
-    stdex::mdspan<T,
+    stdex::mdspan<ElementType,
                   stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
                   stdex::layout_stride>;
 
@@ -69,88 +73,103 @@ concept MDArray_type =
     requires (M /* m */) { { M::rank() } -> STD_CONVERTIBLE_TO(std::size_t);
 };
 
-template <class T, 
+template <class ElementType, 
           class Extents, 
-          class Layout = stdex::layout_right, 
-          class Allocator = MDARRAY_ALLOCATOR(T)> 
+          class LayoutPolicy = stdex::layout_right, 
+          class Container = std::vector<ElementType>> 
     requires Extents_has_rank<Extents> 
 class MDArray;
 // clang-format on
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Vector = MDArray<T, stdex::extents<index, stdex::dynamic_extent>, Layout, Allocator>;
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
+using Vector =
+    MDArray<ElementType, stdex::extents<index, stdex::dynamic_extent>, LayoutPolicy, Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Matrix = MDArray<T,
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
+using Matrix = MDArray<ElementType,
                        stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
-                       Layout,
-                       Allocator>;
+                       LayoutPolicy,
+                       Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
 using Array3D = MDArray<
-    T,
+    ElementType,
     stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent, stdex::dynamic_extent>,
-    Layout,
-    Allocator>;
+    LayoutPolicy,
+    Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array4D = MDArray<T,
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
+using Array4D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+                        LayoutPolicy,
+                        Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array5D = MDArray<T,
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
+using Array5D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+                        LayoutPolicy,
+                        Container>;
 
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array6D = MDArray<T,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
-
-template <class T, class Layout = stdex::layout_right, class Allocator = MDARRAY_ALLOCATOR(T)>
-using Array7D = MDArray<T,
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
+using Array6D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent,
+                                       stdex::dynamic_extent>,
+                        LayoutPolicy,
+                        Container>;
+
+template <class ElementType,
+          class LayoutPolicy = stdex::layout_right,
+          class Container = std::vector<ElementType>>
+using Array7D = MDArray<ElementType,
+                        stdex::extents<index,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
+                                       stdex::dynamic_extent,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
-                        Layout,
-                        Allocator>;
+                        LayoutPolicy,
+                        Container>;
 
 } // namespace Sci
 
 // clang-format off
-#include "mdarray_impl/mdspan_iterator.h"
-#include "mdarray_impl/copy.h"
-#include "mdarray_impl/copy_n.h"
-#include "mdarray_impl/sort.h"
-#include "mdarray_impl/swap_elements.h"
-#include "mdarray_impl/slice.h"
+//#include "mdarray_impl/mdspan_iterator.h"
+//#include "mdarray_impl/copy.h"
+//#include "mdarray_impl/copy_n.h"
+//#include "mdarray_impl/sort.h"
+//#include "mdarray_impl/swap_elements.h"
+//#include "mdarray_impl/slice.h"
 #include "mdarray_impl/support.h"
 #include "mdarray_impl/mdarray_bits.h"
-#include "mdarray_impl/operations.h"
+//#include "mdarray_impl/operations.h"
 // clang-format on
 
 #endif // SCILIB_MDARRAY_H

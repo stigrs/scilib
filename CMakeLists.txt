@@ -133,6 +133,20 @@ if(NOT TARGET std::linalg)
     find_package(linalg REQUIRED)
 endif()
 
+# GSL is required.
+message(STATUS "Fetch GSL from Github")
+include(FetchContent)
+FetchContent_Declare(
+    GSL
+    GIT_REPOSITORY  https://github.com/microsoft/GSL.git
+    GIT_TAG         main
+)
+FetchContent_MakeAvailable(GSL)
+
+if(NOT TARGET Microsoft.GSL::GSL)
+    find_package(Microsoft.GSL CONFIG)
+endif()
+
 # BLAS and LAPACKE are required.
 if(DEFINED ENV{MKLROOT})
 	find_package(MKL)
@@ -224,9 +238,9 @@ if(Scilib_BUILD_BENCH)
         )
         FetchContent_MakeAvailable(eigen)
     endif()
-    add_subdirectory(bench)
+    #add_subdirectory(bench)
 endif()
 
 if(Scilib_BUILD_EXAMPLES) 
-    add_subdirectory(examples)
+    #add_subdirectory(examples)
 endif()
