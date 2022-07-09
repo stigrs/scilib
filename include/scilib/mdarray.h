@@ -162,7 +162,7 @@ using Array7D = MDArray<ElementType,
 
 // clang-format off
 //#include "mdarray_impl/mdspan_iterator.h"
-//#include "mdarray_impl/copy.h"
+#include "mdarray_impl/copy.h"
 //#include "mdarray_impl/copy_n.h"
 //#include "mdarray_impl/sort.h"
 //#include "mdarray_impl/swap_elements.h"

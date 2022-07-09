@@ -33,6 +33,13 @@ TEST(TestVector, TestSize)
     Sci::Vector<int> v(sz);
     EXPECT_EQ(v.size(), sz);
 }
+
+TEST(TestVector, TestAlloc)
+{
+    const std::size_t sz = 5;
+    Sci::Vector<int> w(stdex::extents<int, sz>{sz}, std::allocator<int>());
+    EXPECT_EQ(w.size(), sz);
+}
 #if 0
 TEST(TestVector, TestElementAccesss)
 {

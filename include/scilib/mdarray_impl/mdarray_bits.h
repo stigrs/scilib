@@ -74,8 +74,6 @@ public:
     using mapping_type = typename layout_type::template mapping<extents_type>;
     using value_type = std::remove_cv_t<element_type>;
     using index_type = typename extents_type::index_type;
-    using view_type = stdex::mdspan<value_type, extents_type, layout_type>;
-    using const_view_type = stdex::mdspan<const value_type, extents_type, layout_type>;
     using pointer = typename container_type::pointer;
     using const_pointer = typename container_type::const_pointer;
     using reference = typename container_type::reference;
@@ -172,7 +170,7 @@ public:
         requires(std::conjunction_v<std::is_convertible<SizeTypes, index_type>...> &&
                  std::is_constructible_v<extents_type, SizeTypes...> &&
                  std::is_constructible_v<mapping_type, extents_type> &&
-                 std::is_constructible<container_type, std::initializer_list<element_type>>)
+                 std::is_constructible_v<container_type, std::initializer_list<element_type>>)
     // clang-format on
     constexpr explicit MDArray(std::initializer_list<element_type> init, SizeTypes... exts)
         : map(extents_type(exts...)), ctr(init)
@@ -182,7 +180,7 @@ public:
 
     // clang-format off
     constexpr MDArray(std::initializer_list<element_type> init, const extents_type& exts) 
-        requires(std::is_constructible_v<mapping_type, extents_type>&&
+        requires(std::is_constructible_v<mapping_type, extents_type> &&
                  std::is_constructible_v<container_type, std::initializer_list<element_type>>)
         : map(exts), ctr(init)
     // clang-format on
@@ -206,26 +204,146 @@ public:
               class Accessor>
         requires(std::is_convertible_v<element_type, OtherElementType> &&
                  std::is_constructible_v<extents_type, OtherExtents>)
+    // clang-format on
     constexpr MDArray(
         stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor> other)
         : map(extents_type(__Detail::extents(other))), ctr(other.size())
-    // clang-format on
     {
         static_assert(other.rank() <= 7);
-        // copy(other, view());
+        for (std::size_t r = 0; r < other.rank(); ++r) {
+            Expects(extents().static_extent(r) == stdex::dynamic_extent ||
+                    extents().static_extent(r) == other.extent(r));
+        }
+        copy(other, view());
     }
 
     // [MDArray.ctors.alloc], MDArray constructors with allocators
 
+    // clang-format off
+    template <class Alloc>
+        requires(std::is_constructible_v<mapping_type, extents_type> &&
+                 std::is_constructible_v<container_type, std::size_t, Alloc>)
+    // clang-format on
+    constexpr MDArray(const extents_type& exts, const Alloc& a)
+        : map(exts), ctr(map.required_span_size(), a)
+    {
+    }
+
+    template <class Alloc>
+        requires(std::is_constructible_v<container_type, std::size_t, Alloc>)
+    constexpr MDArray(const mapping_type& m, const Alloc& a)
+        : map(m), ctr(map.required_span_size(), a)
+    {
+    }
+
+    // clang-format off
+    template <class Alloc>
+        requires(std::is_constructible_v<mapping_type, extents_type> &&
+                 std::is_constructible_v<container_type, std::size_t, Alloc>)
+    // clang-format on
+    constexpr MDArray(const container_type& c, const extents_type& exts, const Alloc& a)
+        : map(exts), ctr(c, a)
+    {
+        Expects(map.required_span_size() == c.size());
+    }
+
+    template <class Alloc>
+        requires(std::is_constructible_v<container_type, std::size_t, Alloc>)
+    constexpr MDArray(const container_type& c, const mapping_type& m, const Alloc& a)
+        : map(m), ctr(c, a)
+    {
+        Expects(map.required_span_size() == c.size());
+    }
+
+    // clang-format off
+    template <class Alloc>
+        requires(std::is_constructible_v<mapping_type, extents_type> &&
+                 std::is_constructible_v<container_type, std::size_t, Alloc>)
+    // clang-format on
+    constexpr MDArray(container_type&& c, const extents_type& exts, const Alloc& a)
+        : map(exts), ctr(c, a)
+    {
+        Expects(map.required_span_size() == c.size());
+    }
+
+    template <class Alloc>
+        requires(std::is_constructible_v<container_type, std::size_t, Alloc>)
+    constexpr MDArray(container_type&& c, const mapping_type& m, const Alloc& a) : map(m), ctr(c, a)
+    {
+        Expects(map.required_span_size() == c.size());
+    }
+
+    // clang-format off
+    template <class Alloc>
+        requires(
+            std::is_constructible_v<mapping_type, extents_type> &&
+            std::is_constructible_v<container_type, std::initializer_list<element_type>, Alloc>)
+    // clang-format on
+    constexpr MDArray(std::initializer_list<element_type> init,
+                      const extents_type& exts,
+                      const Alloc& a)
+        : map(exts), ctr(init, a)
+    {
+        Expects(map.required_span_size() == init.size());
+    }
+
+    // clang-format off
+    template <class Alloc>
+        requires(
+            std::is_constructible_v<container_type, std::initializer_list<element_type>, Alloc>)
+    // clang-format on
+    constexpr MDArray(std::initializer_list<element_type> init,
+                      const mapping_type& m,
+                      const Alloc& a)
+        : map(m), ctr(init, a)
+    {
+        Expects(map.required_span_size() == init.size());
+    }
+
+    // clang-format off
+    template <class OtherElementType,
+              class OtherExtents,
+              class OtherLayoutPolicy,
+              class Accessor,
+              class Alloc>
+        requires(std::is_convertible_v<element_type, OtherElementType> &&
+                 std::is_constructible_v<extents_type, OtherExtents> &&
+                 std::is_constructible_v<container_type, std::size_t, Alloc>)
+    // clang-format on
+    constexpr MDArray(
+        stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor> other,
+        const Alloc& a)
+        : map(extents_type(__Detail::extents(other))), ctr(other.size(), a)
+    {
+        static_assert(other.rank() <= 7);
+        for (std::size_t r = 0; r < other.rank(); ++r) {
+            Expects(extents().static_extent(r) == stdex::dynamic_extent ||
+                    extents().static_extent(r) == other.extent(r));
+        }
+        copy(other, view());
+    }
+
     // [MDArray.members], MDArray members
 
+    constexpr const extents_type& extents() const noexcept { return map.extents(); }
     constexpr index_type extent(std::size_t r) const
     {
         Expects(r < extents_type::rank());
         return map.extents().extent(r);
     }
 
-    constexpr std::size_t size() const { return ctr.size(); }
+    constexpr std::size_t size() const noexcept { return ctr.size(); }
+
+    constexpr pointer data() noexcept { return ctr.data(); }
+    constexpr const_pointer data() const noexcept { return ctr.data(); }
+
+    template <class OtherAccessorType>
+    constexpr stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>
+    view(const OtherAccessorType& a = stdex::default_accessor<element_type>)
+    {
+        return stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>(data(),
+                                                                                         map, a);
+    }
 
 private:
     mapping_type map;
