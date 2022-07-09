@@ -338,11 +338,21 @@ public:
     constexpr const_pointer data() const noexcept { return ctr.data(); }
 
     template <class OtherAccessorType>
+        requires(std::is_same_v<element_type, OtherAccessorType::element_type>)
     constexpr stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>
-    view(const OtherAccessorType& a = stdex::default_accessor<element_type>)
+    view(const OtherAccessorType& a = stdex::default_accessor<element_type>())
     {
         return stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>(data(),
                                                                                          map, a);
+    }
+
+    template <class OtherAccessorType>
+        requires(std::is_same_v<element_type, OtherAccessorType::element_type>)
+    constexpr stdex::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>
+    view(const OtherAccessorType& a = stdex::default_accessor<element_type>()) const
+    {
+        return stdex::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>(
+            data(), map, a);
     }
 
 private:
