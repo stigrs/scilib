@@ -22,7 +22,7 @@ Scilib is released under the [MIT](LICENSE) license.
 This project makes use of the following third-party libraries:
 * [GoogleTest](https://github.com/google/googletest) 
 * [mdspan](https://github.com/kokkos/mdspan)
-* [stdBLAS](https://github.com/kokkos/stdBLAS). 
+* [stdBLAS](https://github.com/kokkos/stdBLAS)
 * [Microsoft.GSL](https://github.com/microsoft/GSL)
 
 Please see their websites for details regarding licensing terms.
