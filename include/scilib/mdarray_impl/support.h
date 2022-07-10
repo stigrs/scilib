@@ -58,6 +58,10 @@ concept MDArray_type =
 
 //--------------------------------------------------------------------------------------------------
 // MDArray list initialization:
+//
+// Based on the N-Dimensional Matrix Design by Andrew Sutton and Bjarne Stroustrup available at
+//   https://code.google.com/archive/p/origin/
+// under a MIT license.
 
 // Describes the structure of a nested std::initializer_list.
 template <class T, std::size_t N>
@@ -85,7 +89,7 @@ inline bool check_non_jagged(const List& list);
 
 template <std::size_t N, class I, class List>
     requires(N == 1)
-inline void add_extents(I& first, const List& list) { *first++ = list.size(); }
+inline void add_extents(I& first, const List& list) { *first = list.size(); }
 
 // Recursion through nested std::initializer_list.
 template <std::size_t N, class I, class List>
@@ -93,8 +97,8 @@ template <std::size_t N, class I, class List>
 inline void add_extents(I& first, const List& list)
 {
     Expects(check_non_jagged<N>(list));
-    *first++ = list.size(); // store this size
-    add_extents<N - 1>(first, *list.begin());
+    *first = list.size(); // store this size
+    add_extents<N - 1>(++first, *list.begin());
 }
 
 // Determine the shape of the MDArray:
@@ -107,7 +111,7 @@ inline std::array<std::size_t, N> derive_extents(const List& list)
 {
     std::array<std::size_t, N> exts;
     auto f = exts.begin();
-    add_extents<N>(f, list); // add sizes (extents) to a
+    add_extents<N>(f, list); // add sizes (extents) to exts
     return exts;
 }
 
