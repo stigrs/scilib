@@ -116,6 +116,19 @@ TEST(TestMatrix, TestInitializer)
     }
 }
 
+TEST(TestMatrix, TestMDArrayInit)
+{
+    Sci::Matrix<int> m = {{1, 2, 3}, {4, 5, 6}};
+
+    int val = 1;
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
+            EXPECT_EQ(m(i, j), val);
+            ++val;
+        }
+    }
+}
+
 TEST(TestMatrix, TestSetValue)
 {
     Sci::Matrix<int> m(5, 3);
