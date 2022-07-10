@@ -8,6 +8,7 @@
 #define SCILIB_MDARRAY_SUPPORT_H
 
 #include <array>
+#include <gsl/gsl>
 #include <initializer_list>
 #include <type_traits>
 
