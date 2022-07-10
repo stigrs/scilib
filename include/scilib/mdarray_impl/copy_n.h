@@ -32,7 +32,7 @@ inline void copy_n(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout
                    std::size_t offset = 0)
 {
     Expects(count <= gsl::narrow_cast<std::size_t>(x.extent(0)));
-    Expects(offset >= 0 && offset < count);
+    Expects(offset < count);
     Expects(count > 0 && offset + count <= gsl::narrow_cast<std::size_t>(y.extent(0)));
 
     for (std::size_t i = 0; i < count; ++i) {
