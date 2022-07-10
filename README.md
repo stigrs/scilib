@@ -24,6 +24,7 @@ This project makes use of the following third-party libraries:
 * [mdspan](https://github.com/kokkos/mdspan)
 * [stdBLAS](https://github.com/kokkos/stdBLAS). 
 * [Microsoft.GSL](https://github.com/microsoft/GSL)
+
 Please see their websites for details regarding licensing terms.
 
 ## Quick Start
