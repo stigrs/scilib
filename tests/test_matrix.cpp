@@ -202,18 +202,14 @@ TEST(TestMatrix, TestDiag)
 
 TEST(TestMatrix, TestColMajor)
 {
-    // clang-format off
-    std::vector<int> v = {1, 4,  
-                          2, 5,
-                          3, 6};
-    // clang-format on
-    Sci::Matrix<int, stdex::layout_left> m(v, 2, 3);
+    std::vector<int> ans = {1, 4, 2, 5, 3, 6};
+    Sci::Matrix<int, stdex::layout_left> m = {{1, 2, 3}, {4, 5, 6}};
 
-    int val = 1;
-    for (Sci::index i = 0; i < m.extent(0); ++i) {
-        for (Sci::index j = 0; j < m.extent(1); ++j) {
-            EXPECT_EQ(m(i, j), val);
-            ++val;
+    int it = 0;
+    for (Sci::index j = 0; j < m.extent(1); ++j) {
+        for (Sci::index i = 0; i < m.extent(0); ++i) {
+            EXPECT_EQ(m(i, j), ans[it]);
+            ++it;
         }
     }
 }
