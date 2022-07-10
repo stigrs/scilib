@@ -107,7 +107,7 @@ constexpr MDArray<T, Extents, Layout, Container>
 operator+(const MDArray<T, Extents, Layout, Container>& a,
           const MDArray<T, Extents, Layout, Container>& b)
 {
-    if constexpr (Extents::rank() <= 2) {
+    if constexpr (Extents::rank() <= 1) {
         MDArray<T, Extents, Layout, Container> res(a.extents());
         std::experimental::linalg::add(a.view(), b.view(), res.view());
         return res;
@@ -147,30 +147,16 @@ template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 {
-    if constexpr (Extents::rank() <= 2) {
-        MDArray<T, Extents, Layout, Container> res(v.extents());
-        std::experimental::linalg::scale(scalar, res.view());
-        return res;
-    }
-    else {
-        MDArray<T, Extents, Layout, Container> res = v;
-        return res *= scalar;
-    }
+    MDArray<T, Extents, Layout, Container> res = v;
+    return res *= scalar;
 }
 
 template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
 {
-    if constexpr (Extents::rank() <= 2) {
-        MDArray<T, Extents, Layout, Container> res(v.extents());
-        std::experimental::linalg::scale(scalar, res.view());
-        return res;
-    }
-    else {
-        MDArray<T, Extents, Layout, Container> res = v;
-        return res *= scalar;
-    }
+    MDArray<T, Extents, Layout, Container> res = v;
+    return res *= scalar;
 }
 
 template <class T, class Extents, class Layout, class Container>

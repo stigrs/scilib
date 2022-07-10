@@ -197,6 +197,23 @@ public:
         Expects(map.required_span_size() == gsl::narrow_cast<index_type>(init.size()));
     }
 
+    template <class U>
+    constexpr MDArray(std::initializer_list<U>) = delete;
+
+    template <class U>
+    constexpr MDArray& operator=(std::initializer_list<U>) = delete;
+
+    // clang-format off
+    constexpr MDArray(__Detail::MDArray_initializer<element_type, extents_type::rank()> init) 
+        requires(std::is_same_v<layout_type, stdex::layout_right> &&
+                 std::is_same_v<container_type, std::vector<element_type>>)
+        : map(extents_type(__Detail::derive_extents<extents_type::rank()>(init)))
+    // clang-format on
+    {
+        ctr.reserve(map.required_span_size());
+        __Detail::insert_flat(init, ctr);
+    }
+
     // clang-format off
     template <class OtherElementType,
               class OtherExtents,
