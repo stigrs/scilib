@@ -7,26 +7,17 @@
 #include <iostream>
 #include <scilib/linalg.h>
 #include <scilib/mdarray.h>
-#include <vector>
 
 int main()
 {
-    std::vector<int> v1_data = {10, 20, 30, 40};
-    Sci::Vector<int> v1(v1_data, v1_data.size());
+    Sci::Vector<int> v1 = {10, 20, 30, 40};
     std::cout << "v1 = " << v1 << "\n\n";
 
     Sci::Vector<int> v2(5);
     Sci::Linalg::fill(v2, 1);
     std::cout << "v2 = " << v2 << '\n';
 
-    // clang-format off
-    std::vector<int> m1_data = {
-        1,  2,  3,  4,
-        5,  6,  7,  8,
-        9, 10, 11, 12
-    };
-    // clang-format on
-    Sci::Matrix<int> m1(m1_data, 3, 4);
+    Sci::Matrix<int> m1 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
     std::cout << "m1.rank() =    " << m1.rank() << '\n';
     std::cout << "m1.extent(0) = " << m1.extent(0) << '\n';
     std::cout << "m1.extent(1) = " << m1.extent(1) << "\n\n";
