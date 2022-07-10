@@ -6,15 +6,12 @@ and Intel MKL are supported.
 
 ## Features
 
-* Multidimensional dense arrays using [mdspan](https://github.com/kokkos/mdspan) 
-  for views and std::vector for storage (row-major or column-major storage 
-  order; default is row-major)
+* Multidimensional dense arrays (row-major or column-major storage order; default is row-major)
 * Linear algebra methods
 * Integration methods
 * Simple solver for initial value problems (Dormand-Prince)
 * Common statistical methods
-* Mathematical constants, metric prefixes, physical constants, and
-  conversion factors
+* Mathematical constants, metric prefixes, physical constants, and conversion factors
 
 ## Licensing
 
@@ -22,10 +19,12 @@ Scilib is released under the [MIT](LICENSE) license.
 
 ## Usage of Third Party Libraries
 
-This project makes use of [GoogleTest](https://github.com/google/googletest) 
-and code from [stdBLAS](https://github.com/kokkos/stdBLAS). Please see the 
-[ThirdPartyNotices.txt](ThirdPartyNotices.txt) file for details regarding the 
-licensing of GoogleTest and stdBLAS.
+This project makes use of the following third-party libraries:
+* [GoogleTest](https://github.com/google/googletest) 
+* [mdspan](https://github.com/kokkos/mdspan)
+* [stdBLAS](https://github.com/kokkos/stdBLAS). 
+* [Microsoft.GSL](https://github.com/microsoft/GSL)
+Please see their websites for details regarding licensing terms.
 
 ## Quick Start
 
@@ -64,7 +63,7 @@ into a directory called `scilib`.
 2. Configure CMake to use the compiler of your choice (you can see a list by
    running `cmake --help`):
 
-        cmake -G "Visual Studio 16 2019" ..
+        cmake -G "Visual Studio 17 2022" ..
 
 3. Build the software (in this case in the Release configuration):
 
@@ -79,5 +78,3 @@ into a directory called `scilib`.
         cmake --build . --config Release --target install
 
    All tests should pass, indicating that your platform is fully supported.
-
-6. Benchmarks can be built by setting the option BUILD_BENCH to ON. 
