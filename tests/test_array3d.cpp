@@ -43,3 +43,14 @@ TEST(TestMDArray, TestConstCorrectness)
     beast(a);
     EXPECT_EQ(a, b);
 }
+
+TEST(TestMDArray, TestArray3DInit)
+{
+    Sci::Array3D<int> m3 = {{{1, 2}, {3, 4}}, {{5, 6}, {7, 8}}, {{9, 10}, {11, 12}}};
+
+    EXPECT_EQ(m3.rank(), 3);
+    EXPECT_EQ(m3.size(), 12);
+    EXPECT_EQ(m3.extent(0), 3);
+    EXPECT_EQ(m3.extent(1), 2);
+    EXPECT_EQ(m3.extent(2), 2);
+}

@@ -15,24 +15,27 @@ namespace Sci {
 namespace stdex = std::experimental;
 
 template <class T_x,
+          class IndexType_x,
           std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-    requires(!std::is_const_v<T_y>)
-inline void copy_n(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
+    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
+             std::is_integral_v<IndexType_y>)
+inline void copy_n(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
                    std::size_t count,
-                   stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y,
+                   stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y,
                    std::size_t offset = 0)
 {
-    Expects(count <= x.extent(0));
+    Expects(count <= gsl::narrow_cast<std::size_t>(x.extent(0)));
     Expects(offset >= 0 && offset < count);
-    Expects(count > 0 && offset + count <= y.extent(0));
-    using index_type = index;
-    for (index_type i = 0; i < count; ++i) {
+    Expects(count > 0 && offset + count <= gsl::narrow_cast<std::size_t>(y.extent(0)));
+
+    for (std::size_t i = 0; i < count; ++i) {
         y(i + offset) = x(i);
     }
 }

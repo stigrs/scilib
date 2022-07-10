@@ -7,6 +7,8 @@
 #ifndef SCILIB_MDARRAY_OPERATIONS_H
 #define SCILIB_MDARRAY_OPERATIONS_H
 
+#include "../linalg_impl/blas1_add.h"
+#include "../linalg_impl/blas1_scale.h"
 #include "../linalg_impl/blas2_matrix_vector_product.h"
 #include "../linalg_impl/blas3_matrix_product.h"
 #include <algorithm>
@@ -105,8 +107,15 @@ constexpr MDArray<T, Extents, Layout, Container>
 operator+(const MDArray<T, Extents, Layout, Container>& a,
           const MDArray<T, Extents, Layout, Container>& b)
 {
-    MDArray<T, Extents, Layout, Container> res = a;
-    return res += b;
+    if constexpr (Extents::rank() <= 1) {
+        MDArray<T, Extents, Layout, Container> res(a.extents());
+        std::experimental::linalg::add(a.view(), b.view(), res.view());
+        return res;
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = a;
+        return res += b;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -214,11 +223,12 @@ constexpr void apply(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layou
 //--------------------------------------------------------------------------------------------------
 // Stream methods:
 
-template <class T, std::size_t ext, class Layout, class Accessor>
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+                  stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
 
     ostrm << v.extent(0) << '\n' << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
@@ -265,11 +275,17 @@ inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout, Container
     return istrm;
 }
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m)
+                  stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m)
 {
-    using index_type = index;
+    using index_type = IndexType;
 
     ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {

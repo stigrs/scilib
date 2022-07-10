@@ -145,6 +145,16 @@ TEST(TestVector, TestInitializer)
     }
 }
 
+TEST(TestVector, TestMDArrayInit)
+{
+    Sci::Vector<int> a = {1, 2, 3, 4, 5};
+
+    EXPECT_EQ(a.size(), 5);
+    for (std::size_t i = 0; i < a.size(); ++i) {
+        EXPECT_EQ(i + 1, a(i));
+    }
+}
+
 TEST(TestVector, TestSetValue)
 {
     Sci::Vector<int> v(5);

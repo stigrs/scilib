@@ -7,18 +7,10 @@
 #include <iostream>
 #include <scilib/linalg.h>
 #include <scilib/mdarray.h>
-#include <vector>
 
 int main()
 {
-    // clang-format off
-    std::vector<int> data = {
-        1,  2,  3,  4,
-        5,  6,  7,  8,
-        9, 10, 11, 12
-    };
-    // clang-format on
-    Sci::Matrix<int> m(data, 3, 4);
+    Sci::Matrix<int> m = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
     std::cout << "matrix:\n" << m << '\n';
 
     auto mt = Sci::Linalg::transposed(m);

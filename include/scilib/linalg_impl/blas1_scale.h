@@ -15,7 +15,7 @@ namespace Linalg {
 template <class T, class Extents, class Layout, class Container>
 inline void scale(const T& scalar, Sci::MDArray<T, Extents, Layout, Container>& m)
 {
-    static_assert(m.rank() <= 2);
+    static_assert(m.rank() <= 1);
     std::experimental::linalg::scale(scalar, m.view());
 }
 
