@@ -23,9 +23,11 @@ endif()
 
 set(PROGRAMS 
     aliasing
+    arithmetic
     const_correctness
     matrix_diag
     matrix_io
+    matrix_power
     mdarray_properties
     solve_ivp
     submatrix_views 
