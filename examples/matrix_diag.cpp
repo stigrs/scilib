@@ -11,7 +11,7 @@
 int main()
 {
     Sci::Matrix<int> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    std::cout << "matrix:\n" << m << '\n';
+    std::cout << "matrix:\n" << m << "\n\n";
 
     Sci::Linalg::fill(Sci::diag(m), 10);
     std::cout << "matrix:\n" << m << '\n';
