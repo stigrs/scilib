@@ -1,4 +1,4 @@
-# Scilib [![Build Status](https://dev.azure.com/stigrs0020/stigrs/_apis/build/status/stigrs.scilib?branchName=main)](https://dev.azure.com/stigrs0020/stigrs/_build/latest?definitionId=8&branchName=main)
+# Scilib [![CMake](https://github.com/stigrs/scilib/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/cmake.yml)
 
 Scilib provides a C++ library for linear algebra and scientific computing.
 BLAS and LAPACK are used for fast numerical performance. Currently, OpenBLAS
@@ -38,8 +38,8 @@ Please see their websites for details regarding licensing terms.
 
 | Compiler      | Versions Tested |
 |:--------------|----------------:|
-| GCC           | 10              |
-| Clang         | 11              |
+| GCC           | 9, 10           |
+| Clang         | 10, 11, 12      |
 | Visual Studio | VS2022          |
 | XCode         | 13.0            |
 | Intel         | 2021            |
