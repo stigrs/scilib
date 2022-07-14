@@ -63,9 +63,9 @@ jobs:
       # Install necessary software
       shell: pwsh
       run: |
-        mkdir $(BLAS_DIR)
-        nuget install OpenBLAS -o $(BLAS_DIR)
-        $env:PATH="$(BLAS_ROOT)\win32\bin;$(BLAS_ROOT)\native\x64\bin;$env:PATH"
+        mkdir ${{env.BLAS_DIR}}
+        nuget install OpenBLAS -o ${{env.BLAS_DIR}}
+        $env:PATH="${{env.BLAS_ROOT}}\win32\bin;${{env.BLAS_ROOT}}\native\x64\bin;$env:PATH"
       
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} 
