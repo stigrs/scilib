@@ -68,6 +68,7 @@ jobs:
       # Install necessary software
       shell: pwsh
       run: |
+        vcpkg install openblas
         mkdir ${{env.BLAS_DIR}}
         nuget install OpenBLAS -o ${{env.BLAS_DIR}}
         $env:PATH="${{env.BLAS_ROOT}}\win32\bin;${{env.BLAS_ROOT}}\native\x64\bin;$env:PATH"
