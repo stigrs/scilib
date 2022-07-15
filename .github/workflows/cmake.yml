@@ -65,7 +65,7 @@ jobs:
       #BLAS_DIR: "D:/a/openblas"
       #BLAS_ROOT: "D:/a/openblas/OpenBLAS.0.2.14.1/lib/native"
       MKL_DIR: "D:/a/"
-      MKLROOT: "D:/a/intelmkl.static.win-x64.2022.0.3.171/mkl/latest"
+      MKLROOT: "D:/a/intelmkl.static.win-x64.2022.0.3.171/lib/native"
 
     steps:
     - uses: actions/checkout@v3
@@ -76,26 +76,17 @@ jobs:
       # nuget install OpenBLAS -o ${{env.BLAS_DIR}}
       # $env:PATH="${{env.BLAS_ROOT}}\win32\bin;${{env.BLAS_ROOT}}\native\x64\bin;$env:PATH"
       shell: pwsh
-      run: |
-        nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
-        dir "D:/a/intelmkl.static.win-x64.2022.0.3.171/lib/native/include"
-        dir "D:/a/intelmkl.static.win-x64.2022.0.3.171/lib/native/win-x64"
+      run: nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
       
     - name: Configure CMake
-      run: |
-        cmd /E:ON /K ""${{env.MKLROOT}}\env\vars.bat" intel64"
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DScilib_BUILD_BENCH=OFF
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DScilib_BUILD_BENCH=OFF
 
     - name: Build
-      run: |
-        cmd /E:ON /K ""${{env.MKLROOT}}\env\vars.bat" intel64"
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: |
-        cmd /E:ON /K ""${{env.MKLROOT}}\env\vars.bat" intel64"
-        ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}}
       
   build-intel:
     runs-on: ubuntu-latest
