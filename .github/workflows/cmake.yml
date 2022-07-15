@@ -102,10 +102,14 @@ jobs:
         source /opt/intel/oneapi/setvars.sh intel64
       
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=icpx -DScilib_BUILD_BENCH=OFF
+      run: |
+        source /opt/intel/oneapi/setvars.sh intel64
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=icpx -DScilib_BUILD_BENCH=OFF
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: |
+        source /opt/intel/oneapi/setvars.sh intel64
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
