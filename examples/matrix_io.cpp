@@ -23,9 +23,9 @@ int main()
 
     std::stringstream ss(buf);
     ss >> m_col_major;
-    std::cout << m_col_major << '\n';
+    std::cout << "Column-major:\n" << m_col_major << "\n\n";
 
     ss.str(buf);
     ss >> m_row_major;
-    std::cout << m_row_major << '\n';
+    std::cout << "Row-major:\n" << m_row_major << "\n\n";
 }
