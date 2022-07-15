@@ -43,7 +43,7 @@ Please see their websites for details regarding licensing terms.
 | Clang         | 10, 11, 12      |
 | Visual Studio | VS2019, VS2022  |
 | XCode         | 13.0            |
-| Intel         | 2021            |
+| Intel         | 2022            |
 
 ### Obtaining the Source Code
 
