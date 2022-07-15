@@ -65,7 +65,7 @@ jobs:
       #BLAS_DIR: "D:/a/openblas"
       #BLAS_ROOT: "D:/a/openblas/OpenBLAS.0.2.14.1/lib/native"
       MKL_DIR: "D:/a/"
-      MKLROOT: "D:/a/Intel/oneAPI/mkl/latest"
+      MKLROOT: "D:/a/intelmkl.static.win-x64.2022.0.3.171/mkl/latest"
 
     steps:
     - uses: actions/checkout@v3
@@ -78,7 +78,7 @@ jobs:
       shell: pwsh
       run: |
         nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
-        dir ${{env.MKL_DIR}}
+        dir "D:/a/intelmkl.static.win-x64.2022.0.3.171"
       
     - name: Configure CMake
       run: |
