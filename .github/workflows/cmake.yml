@@ -78,7 +78,8 @@ jobs:
       shell: pwsh
       run: |
         nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
-        dir "D:/a/intelmkl.static.win-x64.2022.0.3.171"
+        dir "D:/a/intelmkl.static.win-x64.2022.0.3.171/build"
+        dir "D:/a/intelmkl.static.win-x64.2022.0.3.171/lib"
       
     - name: Configure CMake
       run: |
