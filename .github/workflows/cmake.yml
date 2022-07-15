@@ -78,21 +78,22 @@ jobs:
       shell: pwsh
       run: |
         nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
+        dir ${{env.MKL_DIR}}
       
     - name: Configure CMake
       run: |
-        cmd /E:ON /K ""D:\a\Intel\oneAPI\setvars.bat" intel64"
+        cmd /E:ON /K ""${{env.MKLROOT}}\env\vars.bat" intel64"
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DScilib_BUILD_BENCH=OFF
 
     - name: Build
       run: |
-        cmd /E:ON /K ""D:\a\Intel\oneAPI\setvars.bat" intel64"
+        cmd /E:ON /K ""${{env.MKLROOT}}\env\vars.bat" intel64"
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: |
-        cmd /E:ON /K ""D:\a\Intel\oneAPI\setvars.bat" intel64"
+        cmd /E:ON /K ""${{env.MKLROOT}}\env\vars.bat" intel64"
         ctest -C ${{env.BUILD_TYPE}}
       
   build-intel:
