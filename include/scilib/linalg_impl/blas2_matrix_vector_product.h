@@ -134,8 +134,6 @@ inline void matrix_vector_product(
                 incx, beta, y.data_handle(), incy);
 }
 
-#ifdef USE_MKL
-// Does not work with OpenBLAS version 0.2.14.1
 template <class IndexType_a,
           std::size_t nrows_a,
           std::size_t ncols_a,
@@ -225,7 +223,6 @@ inline void matrix_vector_product(
     cblas_zgemv(matrix_layout, CblasNoTrans, m, n, &alpha, a.data_handle(), lda, x.data_handle(),
                 incx, &beta, y.data_handle(), incy);
 }
-#endif
 
 template <class T, class Layout, class Container>
 inline void matrix_vector_product(const Sci::Matrix<T, Layout, Container>& a,

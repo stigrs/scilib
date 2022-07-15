@@ -62,8 +62,6 @@ jobs:
         os: [windows-2022, windows-2019]
 
     env:
-      #BLAS_DIR: "D:/a/openblas"
-      #BLAS_ROOT: "D:/a/openblas/OpenBLAS.0.2.14.1/lib/native"
       MKL_DIR: "D:/a/"
       MKLROOT: "D:/a/intelmkl.static.win-x64.2022.0.3.171/lib/native"
 
@@ -72,9 +70,6 @@ jobs:
 
     - name: Prepare
       # Install necessary software
-      # mkdir ${{env.BLAS_DIR}}
-      # nuget install OpenBLAS -o ${{env.BLAS_DIR}}
-      # $env:PATH="${{env.BLAS_ROOT}}\win32\bin;${{env.BLAS_ROOT}}\native\x64\bin;$env:PATH"
       shell: pwsh
       run: nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
       

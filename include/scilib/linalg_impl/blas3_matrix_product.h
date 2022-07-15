@@ -137,7 +137,6 @@ inline void matrix_product(
                 b.data_handle(), ldb, beta, c.data_handle(), ldc);
 }
 
-#ifdef USE_MKL
 template <class IndexType_a,
           std::size_t nrows_a,
           std::size_t ncols_a,
@@ -237,7 +236,6 @@ inline void matrix_product(stdex::mdspan<const std::complex<double>,
     cblas_zgemm(matrix_layout, CblasNoTrans, CblasNoTrans, m, n, k, &alpha, a.data_handle(), lda,
                 b.data_handle(), ldb, &beta, c.data_handle(), ldc);
 }
-#endif
 
 template <class T, class Layout, class Container>
 inline Sci::Matrix<T, Layout, Container> matrix_product(const Sci::Matrix<T, Layout, Container>& a,
