@@ -89,7 +89,7 @@ TEST(TestLinalg, TestQRColMajor)
     auto res = q * r;
     for (Sci::index i = 0; i < ans.extent(0); ++i) {
         for (Sci::index j = 0; j < ans.extent(1); ++j) {
-            EXPECT_DOUBLE_EQ(res(i, j), ans(i, j));
+            EXPECT_NEAR(res(i, j), ans(i, j), 1.0e-8);
         }
     }
 }
