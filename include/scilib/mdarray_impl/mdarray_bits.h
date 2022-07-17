@@ -24,17 +24,6 @@ namespace __Detail {
 //--------------------------------------------------------------------------------------------------
 // Type traits:
 
-template <class E>
-struct Is_extents : std::false_type {
-};
-
-template <class IndexType, std::size_t... SizeTypes>
-struct Is_extents<std::experimental::extents<IndexType, SizeTypes...>> : std::true_type {
-};
-
-template <class E>
-static constexpr bool Is_extents_v = Is_extents<E>::value;
-
 template <class M>
 struct Is_mdarray : std::false_type {
 };

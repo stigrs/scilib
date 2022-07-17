@@ -19,6 +19,20 @@ namespace __Detail {
 namespace stdex = std::experimental;
 
 //--------------------------------------------------------------------------------------------------
+// Type traits:
+
+template <class E>
+struct Is_extents : std::false_type {
+};
+
+template <class IndexType, std::size_t... SizeTypes>
+struct Is_extents<std::experimental::extents<IndexType, SizeTypes...>> : std::true_type {
+};
+
+template <class E>
+static constexpr bool Is_extents_v = Is_extents<E>::value;
+
+//--------------------------------------------------------------------------------------------------
 // mdspan returns m.extents() by reference, create a copy:
 
 template <class T, class Extents, class Layout, class Accessor>
