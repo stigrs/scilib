@@ -41,7 +41,7 @@ template <class ElementType,
           class Extents,
           class LayoutPolicy = stdex::layout_right,
           class Container = std::vector<ElementType>>
-    requires __Detail::Extents_has_rank<Extents>
+    requires __Detail::Is_extents_v<Extents>
 class MDArray;
 
 //--------------------------------------------------------------------------------------------------

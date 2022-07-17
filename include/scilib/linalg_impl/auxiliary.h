@@ -216,7 +216,7 @@ inline T prod(const Sci::Vector<T, Layout, Container>& v)
 
 // clang-format off
 template <class M, class... Args>
-    requires(__Detail::MDArray_type<M> && M::rank() == sizeof...(Args))
+    requires(__Detail::Is_mdarray_v<M> && M::rank() == sizeof...(Args))
 // clang-format on
 inline M zeros(Args... args)
 {
@@ -229,7 +229,7 @@ inline M zeros(Args... args)
 
 // clang-format off
 template <class M, class... Args>
-    requires(__Detail::MDArray_type<M> && M::rank() == sizeof...(Args))
+    requires(__Detail::Is_mdarray_v<M> && M::rank() == sizeof...(Args))
 // clang-format on
 inline M ones(Args... args)
 {
@@ -242,7 +242,7 @@ inline M ones(Args... args)
 
 // clang-format off
 template <class M = Sci::Matrix<double>>
-    requires(__Detail::MDArray_type<M> && M::rank() == 2)
+    requires(__Detail::Is_mdarray_v<M> && M::rank() == 2)
 // clang-format on
 inline M identity(std::size_t n)
 {
@@ -260,7 +260,7 @@ inline M identity(std::size_t n)
 // Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
 template <class M, class... Args>
-    requires(__Detail::MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
+    requires(__Detail::Is_mdarray_v<M>&& std::is_floating_point_v<typename M::value_type>)
 inline M randn(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
@@ -281,7 +281,7 @@ inline M randn(Args... args)
 // Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
 template <class M, class... Args>
-    requires(__Detail::MDArray_type<M>&& std::is_floating_point_v<typename M::value_type>)
+    requires(__Detail::Is_mdarray_v<M>&& std::is_floating_point_v<typename M::value_type>)
 inline M randu(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));
@@ -302,7 +302,7 @@ inline M randu(Args... args)
 // Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
 template <class M, class... Args>
-    requires(__Detail::MDArray_type<M>&& std::is_integral_v<typename M::value_type>)
+    requires(__Detail::Is_mdarray_v<M>&& std::is_integral_v<typename M::value_type>)
 inline M randi(Args... args)
 {
     static_assert(M::rank() == sizeof...(Args));

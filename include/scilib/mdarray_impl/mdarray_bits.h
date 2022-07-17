@@ -21,6 +21,47 @@ namespace stdex = std::experimental;
 
 namespace __Detail {
 
+//--------------------------------------------------------------------------------------------------
+// Type traits:
+
+template <class E>
+struct Is_extents : std::false_type {
+};
+
+template <class IndexType, std::size_t... SizeTypes>
+struct Is_extents<std::experimental::extents<IndexType, SizeTypes...>> : std::true_type {
+};
+
+template <class E>
+static constexpr bool Is_extents_v = Is_extents<E>::value;
+
+template <class M>
+struct Is_mdarray : std::false_type {
+};
+
+template <class ElementType, class Extents, class LayoutPolicy, class Container>
+struct Is_mdarray<MDArray<ElementType, Extents, LayoutPolicy, Container>> : std::true_type {
+};
+
+template <class M>
+static constexpr bool Is_mdarray_v = Is_mdarray<M>::value;
+
+template <class Container>
+struct Container_is_array : std::false_type {
+    static constexpr Container construct(std::size_t size) { return Container(size); }
+};
+
+template <class ElementType, std::size_t N>
+struct Container_is_array<std::array<ElementType, N>> : std::true_type {
+    static constexpr std::array<ElementType, N> construct(std::size_t)
+    {
+        return std::array<ElementType, N>();
+    }
+};
+
+//--------------------------------------------------------------------------------------------------
+// Bounds checking:
+
 template <class Extents, class... Dims>
 inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
@@ -36,19 +77,6 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
     return result;
 }
 
-template <class T, class Extents, class Layout, class Accessor>
-inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
-{
-    // mdspan returns m.extents() by reference, need to make a copy
-    using index_type = typename Extents::index_type;
-
-    std::array<index_type, Extents::rank()> res;
-    for (std::size_t i = 0; i < m.rank(); ++i) {
-        res[i] = m.extent(i);
-    }
-    return res;
-}
-
 } // namespace __Detail
 
 // Dense multidimensional array class for numerical computing using mdspan
@@ -62,7 +90,7 @@ inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
 //   https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2022/p1684r2.html
 //
 template <class ElementType, class Extents, class LayoutPolicy, class Container>
-    requires __Detail::Extents_has_rank<Extents>
+    requires __Detail::Is_extents_v<Extents>
 class MDArray {
 public:
     using element_type = ElementType;

@@ -147,16 +147,34 @@ template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res *= scalar;
+    using value_type = std::remove_cv_t<T>;
+    value_type scaling_factor = scalar;
+
+    if constexpr (Extents::rank() <= 7) {
+        return MDArray<T, Extents, Layout, Container>(
+            std::experimental::linalg::scaled(scaling_factor, v.view()));
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = v;
+        return res *= scalar;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res *= scalar;
+    using value_type = std::remove_cv_t<T>;
+    value_type scaling_factor = scalar;
+
+    if constexpr (Extents::rank() <= 7) {
+        return MDArray<T, Extents, Layout, Container>(
+            std::experimental::linalg::scaled(scaling_factor, v.view()));
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = v;
+        return res *= scalar;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
