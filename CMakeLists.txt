@@ -101,7 +101,7 @@ if(MSVC)
 endif()
 if (Scilib_CODE_COVERAGE)
     set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-error=unused-parameter -Wno-maybe-uninitialized)
-    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -O0 -g -fprofile-arcs -ftest-coverage)
+    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -O0 -g --coverage)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
