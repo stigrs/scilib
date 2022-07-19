@@ -22,6 +22,7 @@ endif()
 option(Scilib_BUILD_TESTS "Build tests." ${Scilib_STANDALONE_PROJECT})
 option(Scilib_BUILD_BENCH "Build benchmarks." ${Scilib_STANDALONE_PROJECT})
 option(Scilib_BUILD_EXAMPLES "Build examples." ${Scilib_STANDALONE_PROJECT})
+option(Scilib_CODE_COVERAGE "Enable code coverage." OFF)
 
 ################################################################################
 
@@ -98,6 +99,13 @@ if(MSVC)
         set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O2)
     endif()
 endif()
+if (Scilib_CODE_COVERAGE)
+    set(Scilib_BUILD_BENCH OFF)
+    set(Scilib_BUILD_EXAMPLES OFF)
+    set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-error=unused-parameter -Wno-maybe-uninitialized)
+    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -O0 -g -fprofile-arcs -ftest-coverage --coverage)
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ################################################################################
@@ -182,6 +190,8 @@ endif()
 add_library(scilib INTERFACE)
 add_library(scilib::scilib ALIAS scilib)
 
+target_link_libraries(scilib INTERFACE std::mdspan std::linalg Microsoft.GSL::GSL)
+
 target_include_directories(scilib INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${BLAS_INCLUDE_DIRS}>
@@ -189,7 +199,7 @@ target_include_directories(scilib INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-install(TARGETS scilib
+install(TARGETS scilib mdspan linalg GSL
     EXPORT scilibTargets
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
 )

@@ -11,37 +11,37 @@
 int main()
 {
     Sci::Vector<int> v1 = {10, 20, 30, 40};
-    std::cout << "v1 = " << v1 << "\n\n";
+    std::cout << "v1 = \n" << v1 << "\n\n";
 
     Sci::Vector<int> v2(5);
     Sci::Linalg::fill(v2, 1);
-    std::cout << "v2 = " << v2 << '\n';
+    std::cout << "v2 = \n" << v2 << '\n';
 
     Sci::Matrix<int> m1 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
     std::cout << "m1.rank() =    " << m1.rank() << '\n';
     std::cout << "m1.extent(0) = " << m1.extent(0) << '\n';
     std::cout << "m1.extent(1) = " << m1.extent(1) << "\n\n";
-    std::cout << "m1 = " << m1 << '\n';
+    std::cout << "m1 = \n" << m1 << '\n';
 
     Sci::Matrix<int> m2(m1);
     m2(0, 0) = 0;
     std::cout << "m2.size() =    " << m2.size() << '\n';
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
-    std::cout << "m2 = " << m2 << '\n';
+    std::cout << "m2 = \n" << m2 << '\n';
 
     m2.resize(4, 4);
     m2 = 5;
     std::cout << "m2.size() =    " << m2.size() << '\n';
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
-    std::cout << "m2 = " << m2 << "\n\n";
+    std::cout << "m2 = \n" << m2 << "\n\n";
 
     Sci::Linalg::fill(Sci::diag(m2), 0);
     std::cout << "m2.size() =    " << m2.size() << '\n';
     std::cout << "m2.extent(0) = " << m2.extent(0) << '\n';
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
-    std::cout << "m2 = " << m2 << "\n\n";
+    std::cout << "m2 = \n" << m2 << "\n\n";
 
     using const_view_type = Sci::Matrix<int>::const_view_type;
 
@@ -49,7 +49,7 @@ int main()
     std::cout << "m2_view.size() =    " << m2_view.size() << '\n';
     std::cout << "m2_view.extent(0) = " << m2_view.extent(0) << '\n';
     std::cout << "m2_view.extent(1) = " << m2_view.extent(1) << "\n\n";
-    std::cout << "m2_view = ";
+    std::cout << "m2_view = \n";
     Sci::print(std::cout, m2_view);
     std::cout << "\n\n";
 

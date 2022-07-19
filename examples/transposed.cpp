@@ -11,8 +11,10 @@
 int main()
 {
     Sci::Matrix<int> m = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
-    std::cout << "matrix:\n" << m << '\n';
+    std::cout << "matrix:\n" << m << "\n\n";
 
     auto mt = Sci::Linalg::transposed(m);
+    std::cout << "transposed matrix:\n";
     Sci::print(std::cout, mt.view());
+    std::cout << '\n';
 }

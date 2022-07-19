@@ -147,16 +147,34 @@ template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res *= scalar;
+    using value_type = std::remove_cv_t<T>;
+    value_type scaling_factor = scalar;
+
+    if constexpr (Extents::rank() <= 7) {
+        return MDArray<T, Extents, Layout, Container>(
+            std::experimental::linalg::scaled(scaling_factor, v.view()));
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = v;
+        return res *= scalar;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res *= scalar;
+    using value_type = std::remove_cv_t<T>;
+    value_type scaling_factor = scalar;
+
+    if constexpr (Extents::rank() <= 7) {
+        return MDArray<T, Extents, Layout, Container>(
+            std::experimental::linalg::scaled(scaling_factor, v.view()));
+    }
+    else {
+        MDArray<T, Extents, Layout, Container> res = v;
+        return res *= scalar;
+    }
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -230,14 +248,14 @@ inline void print(std::ostream& ostrm,
 {
     using index_type = IndexType;
 
-    ostrm << v.extent(0) << '\n' << '{';
+    ostrm << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
             ostrm << "\n  ";
         }
     }
-    ostrm << "}\n";
+    ostrm << '}';
 }
 
 template <class T, class Layout, class Container>
@@ -245,14 +263,14 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, Con
 {
     using index_type = typename Vector<T, Layout, Container>::index_type;
 
-    ostrm << v.size() << '\n' << '{';
+    ostrm << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
         ostrm << std::setw(9) << v(i) << " ";
         if (!((i + 1) % 7) && (i != (v.extent(0) - 1))) {
             ostrm << "\n  ";
         }
     }
-    ostrm << "}\n";
+    ostrm << '}';
     return ostrm;
 }
 
@@ -287,7 +305,7 @@ inline void print(std::ostream& ostrm,
 {
     using index_type = IndexType;
 
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    ostrm << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
         for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
@@ -296,7 +314,7 @@ inline void print(std::ostream& ostrm,
             ostrm << "\n ";
         }
     }
-    ostrm << "}\n";
+    ostrm << '}';
 }
 
 template <class T, class Layout, class Container>
@@ -304,7 +322,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, Con
 {
     using index_type = typename Matrix<T, Layout, Container>::index_type;
 
-    ostrm << m.extent(0) << " x " << m.extent(1) << '\n' << '{';
+    ostrm << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
         for (index_type j = 0; j < m.extent(1); ++j) {
             ostrm << std::setw(9) << m(i, j) << " ";
@@ -313,7 +331,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, Con
             ostrm << "\n ";
         }
     }
-    ostrm << "}\n";
+    ostrm << '}';
     return ostrm;
 }
 

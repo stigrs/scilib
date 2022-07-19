@@ -1,4 +1,5 @@
-# Scilib [![Build Status](https://dev.azure.com/stigrs0020/stigrs/_apis/build/status/stigrs.scilib?branchName=main)](https://dev.azure.com/stigrs0020/stigrs/_build/latest?definitionId=8&branchName=main)
+# Scilib 
+[![CMake](https://github.com/stigrs/scilib/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/cmake.yml) [![codecov](https://codecov.io/gh/stigrs/scilib/branch/main/graph/badge.svg?token=IBOP66BJ5C)](https://codecov.io/gh/stigrs/scilib)[![CodeQL](https://github.com/stigrs/scilib/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/codeql-analysis.yml)
 
 Scilib provides a C++ library for linear algebra and scientific computing.
 BLAS and LAPACK are used for fast numerical performance. Currently, OpenBLAS
@@ -22,8 +23,9 @@ Scilib is released under the [MIT](LICENSE) license.
 This project makes use of the following third-party libraries:
 * [GoogleTest](https://github.com/google/googletest) 
 * [mdspan](https://github.com/kokkos/mdspan)
-* [stdBLAS](https://github.com/kokkos/stdBLAS). 
+* [stdBLAS](https://github.com/kokkos/stdBLAS)
 * [Microsoft.GSL](https://github.com/microsoft/GSL)
+
 Please see their websites for details regarding licensing terms.
 
 ## Quick Start
@@ -37,11 +39,11 @@ Please see their websites for details regarding licensing terms.
 
 | Compiler      | Versions Tested |
 |:--------------|----------------:|
-| GCC           | 10              |
-| Clang         | 11              |
-| Visual Studio | VS2022          |
+| GCC           | 9, 10           |
+| Clang         | 10, 11, 12      |
+| Visual Studio | VS2019, VS2022  |
 | XCode         | 13.0            |
-| Intel         | 2021            |
+| Intel         | 2022            |
 
 ### Obtaining the Source Code
 

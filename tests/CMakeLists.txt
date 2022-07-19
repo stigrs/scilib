@@ -31,6 +31,10 @@ if(NOT TARGET Microsoft.GSL::GSL)
     find_package(Microsoft.GSL CONFIG)
 endif()
 
+if(Scilib_CODE_COVERAGE)
+    set(GCOV_LIBRARIES gcov)
+endif()
+
 function(add_scilib_test name)
     add_executable(${name} ${name}.cpp)
     target_link_libraries (
@@ -42,6 +46,7 @@ function(add_scilib_test name)
         Microsoft.GSL::GSL
         gtest_main
 	    ${BLAS_LIBRARIES}
+        ${GCOV_LIBRARIES}
     ) 
     target_compile_options(
         ${name}

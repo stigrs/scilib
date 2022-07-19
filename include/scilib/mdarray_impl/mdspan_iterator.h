@@ -26,7 +26,7 @@ template <class T,
           class Extents = stdex::extents<index, stdex::dynamic_extent>,
           class Layout = stdex::layout_right,
           class Accessor = stdex::default_accessor<T>>
-    requires __Detail::Extents_has_rank<Extents>
+    requires __Detail::Is_extents_v<Extents>
 class MDSpan_iterator {
 public:
     using iterator_category = std::random_access_iterator_tag;
