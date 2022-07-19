@@ -33,7 +33,7 @@ endif()
 
 if(Scilib_CODE_COVERAGE)
     set(GCOV_LIBRARIES gcov)
-endif
+endif()
 
 function(add_scilib_test name)
     add_executable(${name} ${name}.cpp)
