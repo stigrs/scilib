@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Prepare
-      run: sudo apt-get install gfortran libopenblas-dev liblapacke-dev
+      run: sudo apt-get install gfortran libopenblas-dev liblapacke-dev lcov
       
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DScilib_BUILD_BENCH=OFF -DScilib_CODE_COVERAGE=ON
@@ -36,6 +36,9 @@ jobs:
     - name: Code coverage
       working-directory: ${{github.workspace}}/build
       run: |
+        lcov --directory . --capture --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' "${{github.workspace}}"'/build/_deps' "${{github.workspace}}"'/tests/*' --output-file coverage-info
+        lcov --list coverage.info
         curl -Os https://uploader.codecov.io/latest/linux/codecov
         chmod +x codecov
         ./codecov
