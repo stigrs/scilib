@@ -38,6 +38,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Install necessary software
+    - name: Prepare
+      run: sudo apt-get install gfortran libopenblas-dev liblapacke-dev lcov
+      
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
