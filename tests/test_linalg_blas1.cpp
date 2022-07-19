@@ -60,8 +60,8 @@ TEST(TestLinalg, TestIdxAbsMax)
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
-    Sci::Vector<int> v({1, 3, -5, 2}, 4);
-    EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 0UL);
+    Sci::Vector<int> v({4, 3, -5, 2}, 4);
+    EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 3UL);
 }
 
 TEST(TestLinalg, TestNorm2)
