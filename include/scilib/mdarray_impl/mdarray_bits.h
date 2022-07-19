@@ -165,7 +165,7 @@ public:
     constexpr explicit MDArray(container_type&& c, SizeTypes... exts)
         : map(extents_type(exts...)), ctr(std::move(c))
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     // clang-format off
@@ -174,12 +174,12 @@ public:
         : map(exts), ctr(std::move(c))
     // clang-format on
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     constexpr MDArray(container_type&& c, const mapping_type& m) : map(m), ctr(std::move(c))
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     // clang-format off
@@ -305,14 +305,14 @@ public:
     constexpr MDArray(container_type&& c, const extents_type& exts, const Alloc& a)
         : map(exts), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     template <class Alloc>
         requires(std::is_constructible_v<container_type, std::size_t, Alloc>)
     constexpr MDArray(container_type&& c, const mapping_type& m, const Alloc& a) : map(m), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     // clang-format off

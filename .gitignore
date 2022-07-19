@@ -9,12 +9,9 @@
 *.log
 *.tmp
 *.swp
+*.pdb
 .DS_Store
 tmp.*
-.vscode/.cmaketools.json
-.vscode/c_cpp_properties.json
-.vscode/launch.json
-.vscode/settings.json
 
 # Directories:
 build

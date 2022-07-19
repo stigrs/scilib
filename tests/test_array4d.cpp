@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
+#include <utility>
 #include <vector>
 
 template <class Container, class Extents>
@@ -56,5 +57,10 @@ TEST(TestMDArray, TestArray4DVector)
     Sci::Array4D<int> c = make_array4d(data, a.extents());
     for (std::size_t r = 0; r < c.rank(); ++r) {
         EXPECT_EQ(c.extent(r), a.extent(r));
+    }
+
+    Sci::Array4D<int> d(std::move(data), a.mapping());
+    for (std::size_t r = 0; r < c.rank(); ++r) {
+        EXPECT_EQ(d.extent(r), a.extent(r));
     }
 }
