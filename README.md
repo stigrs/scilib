@@ -1,5 +1,5 @@
 # Scilib 
-[![CMake](https://github.com/stigrs/scilib/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/cmake.yml) [![codecov](https://codecov.io/gh/stigrs/scilib/branch/main/graph/badge.svg?token=IBOP66BJ5C)](https://codecov.io/gh/stigrs/scilib)
+[![CMake](https://github.com/stigrs/scilib/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/cmake.yml) [![codecov](https://codecov.io/gh/stigrs/scilib/branch/main/graph/badge.svg?token=IBOP66BJ5C)](https://codecov.io/gh/stigrs/scilib)[![CodeQL](https://github.com/stigrs/scilib/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/codeql-analysis.yml)
 
 Scilib provides a C++ library for linear algebra and scientific computing.
 BLAS and LAPACK are used for fast numerical performance. Currently, OpenBLAS
