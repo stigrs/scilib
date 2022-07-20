@@ -26,6 +26,19 @@ TEST(TestLinAlg, TestAdd)
     }
 }
 
+TEST(TestLinAlg, TestSubtract)
+{
+    std::vector<int> ans = {1, 2, 3};
+
+    Sci::Vector<int> x = {1, 2, 3};
+    Sci::Vector<int> y = {2, 4, 6};
+    Sci::Vector<int> z = y - x;
+
+    for (std::size_t i = 0; i < z.size(); ++i) {
+        EXPECT_EQ(z(i), ans[i]);
+    }
+}
+
 TEST(TestLinalg, TestAbsSum)
 {
     Sci::Vector<int> v({1, 2, 3, -4}, 4);
