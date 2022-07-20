@@ -140,8 +140,9 @@ TEST(TestMatrix, TestMDArrayInit)
 TEST(TestMatrix, TestSetValue)
 {
     Sci::Matrix<int> m(5, 3);
-    m = 3;
-    for (const auto& mi : m) {
+    Sci::Matrix<int> mm(m.mapping());
+    mm = 3;
+    for (const auto& mi : mm) {
         EXPECT_EQ(mi, 3);
     }
 }
