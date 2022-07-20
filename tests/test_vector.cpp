@@ -5,6 +5,7 @@
 // and conditions.
 
 #include <gtest/gtest.h>
+#include <initializer_list>
 #include <scilib/mdarray.h>
 #include <vector>
 
@@ -129,14 +130,14 @@ TEST(TestVector, TestSwap)
     Sci::Vector<int> a(n1);
     Sci::Vector<int> b(n2);
 
-    std::swap(a, b);
+    a.swap(b);
     EXPECT_EQ(a.size(), n2);
     EXPECT_EQ(b.size(), n1);
 }
 
 TEST(TestVector, TestInitializer)
 {
-    auto v = {1, 2, 3, 4, 5};
+    std::initializer_list<int> v = {1, 2, 3, 4, 5};
     Sci::Vector<int> a(v, v.size());
 
     EXPECT_EQ(v.size(), a.size());
@@ -151,7 +152,7 @@ TEST(TestVector, TestMDArrayInit)
 
     EXPECT_EQ(a.size(), 5);
     for (std::size_t i = 0; i < a.size(); ++i) {
-        EXPECT_EQ(i + 1, a(i));
+        EXPECT_EQ(i + 1, a.at(i));
     }
 }
 
