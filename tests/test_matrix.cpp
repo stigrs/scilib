@@ -4,9 +4,10 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#include <array>
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
-#include <array>
+
 
 TEST(TestMatrix, TestSize)
 {
@@ -96,10 +97,10 @@ TEST(TestMatrix, TestSwapElements)
     Sci::Matrix33<int> bb(b, 3, 3);
 
     Sci::swap_elements(aa.view(), bb.view());
-    
+
     int it = 0;
     for (Sci::index i = 0; i < aa.extent(0); ++i) {
-        for (Sci::index j = 0; j < aa. extent(1); ++j) {
+        for (Sci::index j = 0; j < aa.extent(1); ++j) {
             EXPECT_EQ(aa.at(i, j), b[it]);
             EXPECT_EQ(bb.at(i, j), a[it]);
             ++it;
@@ -279,4 +280,11 @@ TEST(TestMatrix, TestDiagIterator)
         EXPECT_EQ((*it), ans(i));
         ++i;
     }
+}
+
+TEST(TestMatrix, TestMatrix33)
+{
+    Sci::Matrix33<int> m(3, 3);
+    EXPECT_EQ(m.extent(0), 3);
+    EXPECT_EQ(m.extent(1), 3);
 }
