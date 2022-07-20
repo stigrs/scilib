@@ -1,5 +1,10 @@
 name: Codecov
 
+ignore:
+  - "bench"
+  - "examples"
+  - "test_*.cpp"
+
 on:
   push:
     branches: [ "main" ]
