@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
+#include <array>
 
 TEST(TestMatrix, TestSize)
 {
@@ -86,17 +87,24 @@ TEST(TestMatrix, TestResize)
     EXPECT_EQ(a.extent(1), nrows);
 }
 
-TEST(TestMatrix, TestSwap)
+TEST(TestMatrix, TestSwapElements)
 {
-    Sci::index n1 = 5;
-    Sci::index n2 = 3;
-    Sci::Matrix<int> a(n1, n2);
-    Sci::Matrix<int> b(n2, n1);
-    std::swap(a, b);
-    EXPECT_EQ(a.extent(0), n2);
-    EXPECT_EQ(a.extent(1), n1);
-    EXPECT_EQ(b.extent(0), n1);
-    EXPECT_EQ(b.extent(1), n2);
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<int, 9> b = {10, 20, 30, 40, 50, 60, 70, 80, 90};
+
+    Sci::Matrix33<int> aa(a, 3, 3);
+    Sci::Matrix33<int> bb(b, 3, 3);
+
+    Sci::swap_elements(aa.view(), bb.view());
+    
+    int it = 0;
+    for (Sci::index i = 0; i < aa.extent(0); ++i) {
+        for (Sci::index j = 0; j < aa. extent(1); ++j) {
+            EXPECT_EQ(aa.at(i, j), b[it]);
+            EXPECT_EQ(bb.at(i, j), a[it]);
+            ++it;
+        }
+    }
 }
 
 TEST(TestMatrix, TestInitializer)
