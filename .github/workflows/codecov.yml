@@ -5,12 +5,6 @@ ignore:
   - "examples"
   - "test_*.cpp"
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Debug
@@ -42,7 +36,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: |
         lcov --directory . --capture --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' "${{github.workspace}}"'/build/_deps' "${{github.workspace}}"'/tests/*' --output-file coverage-info
+        lcov --remove coverage.info '/usr/*' "${{github.workspace}}"'/build/_deps' "${{github.workspace}}"'/tests' --output-file coverage-info
         lcov --list coverage.info
         curl -Os https://uploader.codecov.io/latest/linux/codecov
         chmod +x codecov
