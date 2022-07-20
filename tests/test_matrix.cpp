@@ -8,7 +8,6 @@
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
 
-
 TEST(TestMatrix, TestSize)
 {
     Sci::index nrows = 5;
@@ -287,4 +286,12 @@ TEST(TestMatrix, TestMatrix33)
     Sci::Matrix33<int> m(3, 3);
     EXPECT_EQ(m.extent(0), 3);
     EXPECT_EQ(m.extent(1), 3);
+    EXPECT_EQ(m.stride(0), 3);
+    EXPECT_EQ(m.stride(1), 1);
+    EXPECT_EQ(m.is_unique(), true);
+    EXPECT_EQ(m.is_always_unique(), true);
+    EXPECT_EQ(m.is_strided(), true);
+    EXPECT_EQ(m.is_always_strided(), true);
+    EXPECT_EQ(m.is_exhaustive(), true);
+    EXPECT_EQ(m.is_always_exhaustive(), true);
 }
