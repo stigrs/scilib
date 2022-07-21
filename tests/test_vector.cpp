@@ -9,27 +9,14 @@
 #include <scilib/mdarray.h>
 #include <vector>
 
-TEST(TestMDArray, TestSizeStaticMDArray)
+TEST(TestMDArray, TestSizeStaticVector)
 {
-    const int nr = 2;
-    const int nc = 3;
-    const int sz = nr * nc;
+    const int sz = 4;
 
-    Sci::MDArray<int, stdex::extents<int, nr, nc>, Sci::layout_right, std::array<int, sz>> v(nr,
-                                                                                             nc);
-    EXPECT_EQ(v.extent(0), nr);
-    EXPECT_EQ(v.extent(1), nc);
+    Sci::StaticVector<int, sz> v;
+
+    EXPECT_EQ(v.extent(0), sz);
     EXPECT_EQ(v.size(), sz);
-}
-
-TEST(TestMDArray, TestSizeMatrix33)
-{
-    const int nr = 3;
-    const int nc = 3;
-
-    Sci::Matrix33<int> m;
-    EXPECT_EQ(m.extent(0), nr);
-    EXPECT_EQ(m.extent(1), nc);
 }
 
 TEST(TestVector, TestEmpty)
@@ -102,8 +89,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::MDArray<int, stdex::extents<int, 5>, stdex::layout_right, std::array<int, 5>> a(v,
-                                                                                         v.size());
+    Sci::StaticVector<int, 5> a(v, v.size());
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a(i));

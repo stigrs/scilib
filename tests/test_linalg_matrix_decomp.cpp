@@ -124,7 +124,7 @@ TEST(TestLinalg, TestSVD)
 
     Matrix<double> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());
-    copy(s.view(), sigma_diag);
+    copy_n(s.view(), std::min(m, n), sigma_diag);
 
     auto res = u * sigma * vt;
     for (Sci::index i = 0; i < ans.extent(0); ++i) {
@@ -164,7 +164,7 @@ TEST(TestLinalg, TestSVDColMajor)
 
     Matrix<double, stdex::layout_left> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());
-    copy(s.view(), sigma_diag);
+    copy_n(s.view(), std::min(m, n), sigma_diag);
 
     auto res = u * sigma * vt;
     for (Sci::index j = 0; j < ans.extent(1); ++j) {

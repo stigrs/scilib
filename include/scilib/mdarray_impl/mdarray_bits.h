@@ -247,9 +247,11 @@ public:
     // clang-format on
     constexpr MDArray(
         stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor> other)
-        : map(extents_type(__Detail::extents(other))), ctr(other.size())
+        : map(extents_type(__Detail::extents(other))),
+          ctr(__Detail::Container_is_array<container_type>::construct(map.required_span_size()))
     {
         static_assert(other.rank() <= 7);
+        Expects(ctr.size() == other.size());
         for (std::size_t r = 0; r < other.rank(); ++r) {
             Expects(static_extent(r) == gsl::narrow_cast<index_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<index_type>(other.extent(r)));

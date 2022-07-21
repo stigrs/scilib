@@ -48,19 +48,18 @@ class MDArray;
 // Stack-allocated MDArrays:
 
 template <class ElementType,
+          std::size_t ext,
           class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 3>>
-using Vector3 = MDArray<ElementType, stdex::extents<index, 3>, LayoutPolicy, Container>;
+          class Container = std::array<ElementType, ext>>
+using StaticVector = MDArray<ElementType, stdex::extents<index, ext>, LayoutPolicy, Container>;
 
 template <class ElementType,
+          std::size_t nrows,
+          std::size_t ncols,
           class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 4>>
-using Vector4 = MDArray<ElementType, stdex::extents<index, 4>, LayoutPolicy, Container>;
-
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 9>>
-using Matrix33 = MDArray<ElementType, stdex::extents<index, 3, 3>, LayoutPolicy, Container>;
+          class Container = std::array<ElementType, nrows * ncols>>
+using StaticMatrix =
+    MDArray<ElementType, stdex::extents<index, nrows, ncols>, LayoutPolicy, Container>;
 
 //--------------------------------------------------------------------------------------------------
 // Heap-allocated MDArrays:

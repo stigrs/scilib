@@ -92,8 +92,8 @@ TEST(TestMatrix, TestSwapElements)
     std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::array<int, 9> b = {10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    Sci::Matrix33<int> aa(a, 3, 3);
-    Sci::Matrix33<int> bb(b, 3, 3);
+    Sci::StaticMatrix<int, 3, 3> aa(a);
+    Sci::StaticMatrix<int, 3, 3> bb(b);
 
     Sci::swap_elements(aa.view(), bb.view());
 
@@ -281,9 +281,10 @@ TEST(TestMatrix, TestDiagIterator)
     }
 }
 
-TEST(TestMatrix, TestMatrix33)
+TEST(TestMatrix, TestStaticMatrix33)
 {
-    Sci::Matrix33<int> m(3, 3);
+    Sci::StaticMatrix<int, 3, 3> m(3, 3);
+    EXPECT_EQ(m.size(), 9);
     EXPECT_EQ(m.extent(0), 3);
     EXPECT_EQ(m.extent(1), 3);
     EXPECT_EQ(m.stride(0), 3);
@@ -294,4 +295,23 @@ TEST(TestMatrix, TestMatrix33)
     EXPECT_EQ(m.is_always_strided(), true);
     EXPECT_EQ(m.is_exhaustive(), true);
     EXPECT_EQ(m.is_always_exhaustive(), true);
+}
+
+TEST(TestMatrix, TestStaticMatrix53)
+{
+    Sci::StaticMatrix<int, 5, 3> m;
+    EXPECT_EQ(m.size(), 5 * 3);
+    EXPECT_EQ(m.extent(0), 5);
+    EXPECT_EQ(m.extent(1), 3);
+    EXPECT_EQ(m.stride(0), 3);
+    EXPECT_EQ(m.stride(1), 1);
+}
+
+TEST(TestMatrix, TestStaticMatrixMdspan)
+{
+    Sci::Matrix<int> md = {{1, 2, 3, 4}, {5, 6, 7, 8}};
+    Sci::StaticMatrix<int, 2, 4> ms(md.view());
+
+    EXPECT_EQ(md.extent(0), ms.extent(0));
+    EXPECT_EQ(md.extent(1), ms.extent(1));
 }
