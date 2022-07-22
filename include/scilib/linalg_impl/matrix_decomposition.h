@@ -7,19 +7,6 @@
 #ifndef SCILIB_LINALG_MATRIX_DECOMPOSITION_H
 #define SCILIB_LINALG_MATRIX_DECOMPOSITION_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
-#endif
-#include <lapacke.h>
-#ifdef __clang__
-#pragma clang diagnostic pop
-#endif
-#endif
-
 #include "lapack_types.h"
 #include <cassert>
 #include <exception>

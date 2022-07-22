@@ -7,12 +7,6 @@
 #ifndef SCILIB_LINALG_LSTSQ_H
 #define SCILIB_LINALG_LSTSQ_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <lapacke.h>
-#endif
-
 #include "lapack_types.h"
 #include <algorithm>
 #include <exception>

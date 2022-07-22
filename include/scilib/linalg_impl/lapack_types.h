@@ -7,10 +7,13 @@
 #ifndef SCILIB_LINALG_LAPACK_TYPES_H
 #define SCILIB_LINALG_LAPACK_TYPES_H
 
-//--------------------------------------------------------------------------------------------------
-// Define integer type for use with BLAS, LAPACK and Intel MKL.
+#include <complex>
 
 #ifdef USE_MKL
+#define MKL_Complex8 std::complex<float>
+#define MKL_Complex16 std::complex<double>
+#define BLAS_COMPLEX_FLOAT MKL_Complex8
+#define BLAS_COMPLEX_DOUBLE MKL_Complex16
 #include <mkl.h>
 #define BLAS_INT MKL_INT
 #else
@@ -20,15 +23,11 @@
 #else
 #define BLAS_INT int
 #endif
-#endif
-
-//--------------------------------------------------------------------------------------------------
-// Define complex type for use with LAPACK.
-
-#ifndef USE_MKL
-#include <complex>
 #define lapack_complex_float std::complex<float>
 #define lapack_complex_double std::complex<double>
+#define BLAS_COMPLEX_FLOAT lapack_complex_float
+#define BLAS_COMPLEX_DOUBLE lapack_complex_double
+#include <lapacke.h>
 #endif
 
 #endif // SCILIB_LINALG_LAPACK_TYPES_H

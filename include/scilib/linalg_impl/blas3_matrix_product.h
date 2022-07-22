@@ -7,12 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS3_MATRIX_PRODUCT_H
 #define SCILIB_LINALG_BLAS3_MATRIX_PRODUCT_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <cblas.h>
-#endif
-
 #include "lapack_types.h"
 #include <complex>
 #include <experimental/linalg>

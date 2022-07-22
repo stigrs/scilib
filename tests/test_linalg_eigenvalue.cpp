@@ -10,7 +10,7 @@
 #include <scilib/mdarray.h>
 #include <vector>
 
-TEST(TestLinalg, TestEigs)
+TEST(TestLinalg, TestEighReal)
 {
     // Intel MKL example:
     // clang-format off
@@ -36,7 +36,7 @@ TEST(TestLinalg, TestEigs)
 
     Sci::Matrix<double> a(a_data, 5, 5);
     Sci::Vector<double> w(5);
-    Sci::Linalg::eigs(a, w);
+    Sci::Linalg::eigh(a, w);
 
     for (int i = 0; i < 5; ++i) {
         EXPECT_NEAR(w(i), eval[i], 1.0e-6);
@@ -45,6 +45,38 @@ TEST(TestLinalg, TestEigs)
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
             EXPECT_NEAR(std::abs(a(i, j)), std::abs(evec(i, j)), 1.0e-6);
+        }
+    }
+}
+
+TEST(TestLinalg, TestEighComplex)
+{
+    // Intel MKL example:
+    // clang-format off
+    Sci::Matrix<std::complex<double>> a = {
+        {{-2.16,  0.00}, { 0.00,  0.00}, { 0.00,  0.00}, { 0.00,  0.00}},
+        {{-0.16,  4.86}, { 7.45,  0.00}, { 0.00,  0.00}, { 0.00,  0.00}},
+        {{-7.23,  9.38}, { 4.39, -6.29}, {-9.03,  0.00}, { 0.00,  0.00}},
+        {{-0.04, -6.86}, {-8.11,  4.41}, {-6.89,  7.66}, { 7.76,  0.00}}
+    };
+    Sci::Matrix<std::complex<double>> evec = {
+        {{ 0.68, 0.00}, { 0.38,  0.00}},
+        {{ 0.03, 0.18}, { 0.54, -0.57}},
+        {{-0.03, 0.21}, {-0.40,  0.04}},
+        {{ 0.20, 0.64}, {-0.14, -0.26}}
+    };
+    Sci::Vector<double> eval = {-4.18, 3.57};
+    // clang-format on
+
+    Sci::Vector<double> w(a.extent(1));
+    Sci::Linalg::eigh(a, w, 'L');
+
+    for (int i = 1; i < 3; ++i) {
+        EXPECT_NEAR(w(i), eval(i - 1), 5.0e-3);
+    }
+    for (int i = 0; i < a.extent(0); ++i) {
+        for (int j = 1; j < 3; ++j) {
+            EXPECT_NEAR(std::abs(a(i, j)), std::abs(evec(i, j - 1)), 5.0e-3);
         }
     }
 }

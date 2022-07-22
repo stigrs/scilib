@@ -7,12 +7,6 @@
 #ifndef SCILIB_LINALG_BLAS2_MATRIX_VECTOR_PRODUCT_H
 #define SCILIB_LINALG_BLAS2_MATRIX_VECTOR_PRODUCT_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <cblas.h>
-#endif
-
 #include "lapack_types.h"
 #include <cassert>
 #include <complex>

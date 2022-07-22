@@ -7,12 +7,6 @@
 #ifndef SCILIB_LINALG_MATRIX_NORM_H
 #define SCILIB_LINALG_MATRIX_NORM_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <lapacke.h>
-#endif
-
 #include "lapack_types.h"
 #include <type_traits>
 
