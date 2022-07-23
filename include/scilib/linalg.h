@@ -37,7 +37,7 @@
 #include "linalg_impl/inv.h"
 #include "linalg_impl/expm.h"
 #include "linalg_impl/matrix_power.h"
-#include "linalg_impl/linsolve.h"
+#include "linalg_impl/solve.h"
 #include "linalg_impl/lstsq.h"
 // clang-format on
 

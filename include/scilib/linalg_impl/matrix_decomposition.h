@@ -7,6 +7,7 @@
 #ifndef SCILIB_LINALG_MATRIX_DECOMPOSITION_H
 #define SCILIB_LINALG_MATRIX_DECOMPOSITION_H
 
+#include "auxiliary.h"
 #include "lapack_types.h"
 #include <cassert>
 #include <exception>
@@ -17,6 +18,36 @@ namespace Sci {
 namespace Linalg {
 
 namespace stdex = std::experimental;
+
+// Cholesky factorization.
+template <std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
+inline void cholesky(stdex::mdspan<double, stdex::extents<index, nrows, ncols>, Layout, Accessor> a)
+{
+    Expects(a.extent(0) == a.extent(1));
+
+    const BLAS_INT lda = gsl::narrow_cast<BLAS_INT>(a.extent(0));
+    const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
+
+    auto matrix_layout = LAPACK_ROW_MAJOR;
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+        matrix_layout = LAPACK_COL_MAJOR;
+    }
+    to_lower_triangular(a);
+
+    BLAS_INT info = LAPACKE_dpotrf(matrix_layout, 'L', n, a.data_handle(), lda);
+    if (info < 0) {
+        throw std::runtime_error("dgetrf: illegal input parameter");
+    }
+    if (info > 0) {
+        throw std::runtime_error("dpotrf: A matrix is not positive-definitive");
+    }
+}
+
+template <class Layout, class Container>
+inline void cholesky(Sci::Matrix<double, Layout, Container>& a)
+{
+    cholesky(a.view());
+}
 
 // LU factorization.
 template <std::size_t nrows,

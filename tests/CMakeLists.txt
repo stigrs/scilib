@@ -71,7 +71,7 @@ set(PROGRAMS
     test_linalg_eigenvalue
     test_linalg_element_wise_math
     test_linalg_expm
-    test_linalg_linsolve
+    test_linalg_solve
     test_linalg_lstsq
     test_linalg_matrix_decomp
     test_linalg_matrix_det

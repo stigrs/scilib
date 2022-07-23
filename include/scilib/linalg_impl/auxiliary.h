@@ -338,6 +338,27 @@ Sci::Vector<T, Layout, Container> linspace(T start, T stop, int num = 50)
     return res;
 }
 
+template <class T, class Extents, class Layout, class Accessor>
+void to_lower_triangular(stdex::mdspan<T, Extents, Layout, Accessor> a)
+{
+    Expects(a.extent(0) == a.extent(1));
+
+    using index_type = typename Extents::index_type;
+    using value_type = std::remove_cv_t<T>;
+
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = i + 1; j < a.extent(0); ++j) {
+            a(i, j) = value_type{0};
+        }
+    }
+}
+
+template <class T, class Layout, class Container>
+void to_lower_triangular(Sci::Matrix<T, Layout, Container>& a)
+{
+    to_lower_triangular(a.view());
+}
+
 } // namespace Linalg
 } // namespace Sci
 
