@@ -11,20 +11,17 @@
 
 TEST(TestLinalg, TestCholeskyRowMajor)
 {
-    using namespace Sci;
-    using namespace Sci::Linalg;
-
     Sci::Matrix<double> A = {{4.0, 12.0, -16.0}, {12.0, 37.0, -43.0}, {-16.0, -43.0, 98}};
 
     auto L = A;
 
-    cholesky(L);
+    Sci::Linalg::cholesky(L);
 
-    auto LT = transposed(L);
+    auto LT = Sci::Linalg::transposed(L);
     auto LLT = L * LT;
 
-    for (index i = 0; i < A.extent(0); ++i) {
-        for (index j = 0; j < A.extent(1); ++j) {
+    for (Sci::index i = 0; i < A.extent(0); ++i) {
+        for (Sci::index j = 0; j < A.extent(1); ++j) {
             EXPECT_NEAR(A(i, j), LLT(i, j), 1.0e-12);
         }
     }
@@ -32,21 +29,18 @@ TEST(TestLinalg, TestCholeskyRowMajor)
 
 TEST(TestLinalg, TestCholeskyColMajor)
 {
-    using namespace Sci;
-    using namespace Sci::Linalg;
-
     Sci::Matrix<double, stdex::layout_left> A = {
         {4.0, 12.0, -16.0}, {12.0, 37.0, -43.0}, {-16.0, -43.0, 98}};
 
     auto L = A;
 
-    cholesky(L);
+    Sci::Linalg::cholesky(L);
 
-    auto LT = transposed(L);
+    auto LT = Sci::Linalg::transposed(L);
     auto LLT = L * LT;
 
-    for (index i = 0; i < A.extent(0); ++i) {
-        for (index j = 0; j < A.extent(1); ++j) {
+    for (Sci::index i = 0; i < A.extent(0); ++i) {
+        for (Sci::index j = 0; j < A.extent(1); ++j) {
             EXPECT_NEAR(A(i, j), LLT(i, j), 1.0e-12);
         }
     }
