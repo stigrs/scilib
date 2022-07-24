@@ -16,16 +16,19 @@ namespace Sci {
 namespace Linalg {
 
 // Compute the minimum norm-solution to a real linear least squares problem.
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Accessor_b>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
 inline void
-lstsq(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
-      stdex::mdspan<double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b)
+lstsq(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+      stdex::mdspan<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b)
 {
     BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
@@ -51,9 +54,19 @@ lstsq(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Acc
     }
 }
 
-template <class Layout, class Container>
-inline void lstsq(Sci::Matrix<double, Layout, Container>& a,
-                  Sci::Matrix<double, Layout, Container>& b)
+template <class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Container_a,
+          class IndexType_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Container_b>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
+inline void
+lstsq(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+      Sci::MDArray<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Container_b>& b)
 {
     lstsq(a.view(), b.view());
 }

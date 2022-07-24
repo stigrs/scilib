@@ -8,24 +8,27 @@
 #define SCILIB_LINALG_SOLVE_H
 
 #include "lapack_types.h"
-#include <cassert>
 #include <exception>
+#include <gsl/gsl>
 #include <type_traits>
 
 namespace Sci {
 namespace Linalg {
 
 // Solve linear system of equations.
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_b,
           std::size_t nrows_b,
           std::size_t ncols_b,
           class Accessor_b>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
 inline void
-solve(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
-      stdex::mdspan<double, stdex::extents<index, nrows_b, ncols_b>, Layout, Accessor_b> b)
+solve(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+      stdex::mdspan<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b)
 {
     Expects(a.extent(0) == a.extent(1));
     Expects(b.extent(0) == a.extent(1));
@@ -50,9 +53,19 @@ solve(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Acc
     }
 }
 
-template <class Layout, class Container>
-inline void solve(Sci::Matrix<double, Layout, Container>& a,
-                  Sci::Matrix<double, Layout, Container>& b)
+template <class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Container_a,
+          class IndexType_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Container_b>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
+inline void
+solve(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+      Sci::MDArray<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Container_b>& b)
 {
     solve(a.view(), b.view());
 }

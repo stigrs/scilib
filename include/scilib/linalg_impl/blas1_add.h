@@ -27,7 +27,8 @@ template <class T_x,
           std::size_t ext_z,
           class Layout_z,
           class Container_z>
-    requires(!std::is_const_v<T_z>)
+    requires(!std::is_const_v<T_z> && std::is_integral_v<IndexType_x> &&
+             std::is_integral_v<IndexType_y> && std::is_integral_v<IndexType_z>)
 inline void
 add(const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
     const Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,

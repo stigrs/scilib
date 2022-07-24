@@ -29,8 +29,9 @@ template <class T,
           std::size_t ncols,
           class Layout,
           class Accessor>
-    requires(std::is_same_v<std::remove_cv_t<T>, double> ||
-             std::is_same_v<std::remove_cv_t<T>, std::complex<double>>)
+    requires(
+        (std::is_same_v<std::remove_cv_t<T>, double> ||
+         std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) &&std::is_integral_v<IndexType>)
 inline double
 matrix_norm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a,
             char norm)
@@ -64,8 +65,9 @@ template <class T,
           std::size_t ncols,
           class Layout,
           class Container>
-    requires(std::is_same_v<std::remove_cv_t<T>, double> ||
-             std::is_same_v<std::remove_cv_t<T>, std::complex<double>>)
+    requires(
+        (std::is_same_v<std::remove_cv_t<T>, double> ||
+         std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) &&std::is_integral_v<IndexType>)
 inline double
 matrix_norm(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a,
             char norm)

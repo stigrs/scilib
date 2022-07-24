@@ -17,15 +17,18 @@ namespace Sci {
 namespace Linalg {
 
 // Compute eigenvalues and eigenvectors of a real symmetric matrix.
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_w,
           std::size_t ext_w,
           class Accessor_w>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
 inline void
-eigh(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
-     stdex::mdspan<double, stdex::extents<index, ext_w>, Layout, Accessor_w> w,
+eigh(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+     stdex::mdspan<double, stdex::extents<IndexType_w, ext_w>, Layout, Accessor_w> w,
      char uplo = 'U',
      double abstol = -1.0 /* use default value */)
 {
@@ -62,18 +65,22 @@ eigh(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Acce
 }
 
 // Compute eigenvalues and eigenvectors of a complex Hermitian matrix.
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_w,
           std::size_t ext_w,
           class Accessor_w>
-inline void eigh(
-    stdex::mdspan<std::complex<double>, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a>
-        a,
-    stdex::mdspan<double, stdex::extents<index, ext_w>, Layout, Accessor_w> w,
-    char uplo = 'U',
-    double abstol = -1.0 /* use default value */)
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
+inline void eigh(stdex::mdspan<std::complex<double>,
+                               stdex::extents<IndexType_a, nrows_a, ncols_a>,
+                               Layout,
+                               Accessor_a> a,
+                 stdex::mdspan<double, stdex::extents<IndexType_w, ext_w>, Layout, Accessor_w> w,
+                 char uplo = 'U',
+                 double abstol = -1.0 /* use default value */)
 {
     Expects(a.extent(0) == a.extent(1));
     Expects(w.extent(0) == a.extent(0));
@@ -106,18 +113,38 @@ inline void eigh(
     Sci::copy(z.view(), a);
 }
 
-template <class Layout, class Container>
-inline void eigh(Sci::Matrix<double, Layout, Container>& a,
-                 Sci::Vector<double, Layout, Container>& w,
-                 char uplo = 'U',
-                 double abstol = -1.0 /* use default value */)
+template <class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Container_a,
+          class IndexType_w,
+          std::size_t ext_w,
+          class Container_w>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
+inline void
+eigh(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+     Sci::MDArray<double, stdex::extents<IndexType_w, ext_w>, Layout, Container_w>& w,
+     char uplo = 'U',
+     double abstol = -1.0 /* use default value */)
 {
     eigh(a.view(), w.view(), uplo, abstol);
 }
 
-template <class Layout, class Container_a, class Container_w>
-inline void eigh(Sci::Matrix<std::complex<double>, Layout, Container_a>& a,
-                 Sci::Vector<double, Layout, Container_w>& w,
+template <class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Container_a,
+          class IndexType_w,
+          std::size_t ext_w,
+          class Container_w>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
+inline void eigh(Sci::MDArray<std::complex<double>,
+                              stdex::extents<IndexType_a, nrows_a, ncols_a>,
+                              Layout,
+                              Container_a>& a,
+                 Sci::MDArray<double, stdex::extents<IndexType_w, ext_w>, Layout, Container_w>& w,
                  char uplo = 'U',
                  double abstol = -1.0 /* use default value */)
 {
@@ -125,22 +152,29 @@ inline void eigh(Sci::Matrix<std::complex<double>, Layout, Container_a>& a,
 }
 
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
-template <std::size_t nrows_a,
+template <class IndexType_a,
+          std::size_t nrows_a,
           std::size_t ncols_a,
           class Layout,
           class Accessor_a,
+          class IndexType_evec,
           std::size_t nrows_evec,
           std::size_t ncols_evec,
           class Accessor_evec,
+          class IndexType_eval,
           std::size_t ext_eval,
           class Accessor_eval>
-void eig(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, Accessor_a> a,
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_evec>&&
+                 std::is_integral_v<IndexType_eval>)
+void eig(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
          stdex::mdspan<std::complex<double>,
-                       stdex::extents<index, nrows_evec, ncols_evec>,
+                       stdex::extents<IndexType_evec, nrows_evec, ncols_evec>,
                        Layout,
                        Accessor_evec> evec,
-         stdex::mdspan<std::complex<double>, stdex::extents<index, ext_eval>, Layout, Accessor_eval>
-             eval)
+         stdex::mdspan<std::complex<double>,
+                       stdex::extents<IndexType_eval, ext_eval>,
+                       Layout,
+                       Accessor_eval> eval)
 {
     using namespace Sci;
 
@@ -183,10 +217,30 @@ void eig(stdex::mdspan<double, stdex::extents<index, nrows_a, ncols_a>, Layout, 
     }
 }
 
-template <class Layout, class Container_a, class Container_evec, class Container_eval>
-void eig(Sci::Matrix<double, Layout, Container_a>& a,
-         Sci::Matrix<std::complex<double>, Layout, Container_evec>& evec,
-         Sci::Vector<std::complex<double>, Layout, Container_eval>& eval)
+template <class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout,
+          class Container_a,
+          class IndexType_evec,
+          std::size_t nrows_evec,
+          std::size_t ncols_evec,
+          class Container_evec,
+          class IndexType_eval,
+          std::size_t ext_eval,
+          class Container_eval>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_evec>&&
+                 std::is_integral_v<IndexType_eval>)
+void eig(
+    Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+    Sci::MDArray<std::complex<double>,
+                 stdex::extents<IndexType_evec, nrows_evec, ncols_evec>,
+                 Layout,
+                 Container_evec>& evec,
+    Sci::MDArray<std::complex<double>,
+                 stdex::extents<IndexType_eval, ext_eval>,
+                 Layout,
+                 Container_eval>& eval)
 {
     eig(a.view(), evec.view(), eval.view());
 }

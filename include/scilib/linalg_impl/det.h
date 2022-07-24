@@ -16,9 +16,14 @@ namespace Sci {
 namespace Linalg {
 
 // Determinant of square matrix.
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-    requires(std::is_same_v<std::remove_cv_t<T>, double>)
-auto det(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
+auto det(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
 {
     Expects(a.extent(0) == a.extent(1));
 
@@ -51,9 +56,17 @@ auto det(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor>
     return ddet;
 }
 
-template <class T, class Layout, class Container>
-    requires(std::is_same_v<std::remove_cv_t<T>, double>)
-inline T det(const Sci::Matrix<T, Layout, Container>& a) { return det(a.view()); }
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
+inline T det(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
+{
+    return det(a.view());
+}
 
 } // namespace Linalg
 } // namespace Sci

@@ -15,6 +15,7 @@ namespace Linalg {
 namespace stdex = std::experimental;
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
 inline IndexType
 idx_abs_max(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {

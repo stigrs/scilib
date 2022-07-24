@@ -13,6 +13,7 @@ namespace Sci {
 namespace Linalg {
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
 inline T vector_norm2(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return std::experimental::linalg::vector_norm2(x.view());

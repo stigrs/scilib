@@ -218,7 +218,7 @@ inline void matrix_vector_product(
                 incx, &beta, y.data_handle(), incy);
 }
 
-template <class T,
+template <class T_a,
           class IndexType_a,
           std::size_t nrows_a,
           std::size_t ncols_a,
@@ -226,27 +226,31 @@ template <class T,
           class Container_a,
           class IndexType_x,
           std::size_t ext_x,
+          class T_x,
           class Layout_x,
           class Container_x,
+          class T_y,
           class IndexType_y,
           std::size_t ext_y,
           class Layout_y,
           class Container_y>
+    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_a> &&
+             std::is_integral_v<IndexType_x> && std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    const Sci::MDArray<T, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>& a,
-    const Sci::MDArray<T, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-    Sci::MDArray<T, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
+    const Sci::MDArray<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>&
+        a,
+    const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+    Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     Expects(y.size() == gsl::narrow_cast<std::size_t>(a.extent(0)));
     matrix_vector_product(a.view(), x.view(), y.view());
 }
 
-template <class T, class Layout, class Container>
-inline Sci::Vector<T, Layout, Container>
-matrix_vector_product(const Sci::Matrix<T, Layout, Container>& a,
-                      const Sci::Vector<T, Layout, Container>& x)
+template <class T, class Layout>
+inline Sci::Vector<T, Layout> matrix_vector_product(const Sci::Matrix<T, Layout>& a,
+                                                    const Sci::Vector<T, Layout>& x)
 {
-    Sci::Vector<T, Layout, Container> res(a.extent(0));
+    Sci::Vector<T, Layout> res(a.extent(0));
     matrix_vector_product(a, x, res);
     return res;
 }

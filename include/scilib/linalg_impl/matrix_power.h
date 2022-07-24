@@ -11,19 +11,26 @@ namespace Sci {
 namespace Linalg {
 
 #include <cmath>
+#include <gsl/gsl>
 #include <type_traits>
 
 // Raise a square matrix to the (integer) power n.
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline auto matrix_power(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m,
-                         int n)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto
+matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m, int n)
 {
     using namespace Sci;
     using namespace Sci::Linalg;
 
     using value_type = std::remove_cv_t<T>;
 
-    assert(m.extent(0) == m.extent(1));
+    Expects(m.extent(0) == m.extent(1));
 
     Matrix<value_type, Layout> tmp(m);
 
@@ -60,9 +67,8 @@ inline auto matrix_power(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, L
     return res;
 }
 
-template <class T, class Layout, class Container>
-inline Sci::Matrix<T, Layout, Container> matrix_power(const Sci::Matrix<T, Layout, Container>& m,
-                                                      int n)
+template <class T, class Layout>
+inline Sci::Matrix<T, Layout> matrix_power(const Sci::Matrix<T, Layout>& m, int n)
 {
     return matrix_power(m.view(), n);
 }

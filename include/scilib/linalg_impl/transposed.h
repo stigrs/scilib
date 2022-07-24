@@ -8,14 +8,23 @@
 #define SCILIB_LINALG_TRANSPOSED_H
 
 #include <experimental/linalg>
+#include <type_traits>
 
 namespace Sci {
 namespace Linalg {
 
-template <class T, class Layout, class Container>
-inline Sci::Matrix<T, Layout, Container> transposed(const Sci::Matrix<T, Layout, Container>& a)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline Sci::MDArray<T, stdex::extents<IndexType, ncols, nrows>, Layout, Container>
+transposed(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
-    return Sci::Matrix<T, Layout, Container>(std::experimental::linalg::transposed(a.view()));
+    return Sci::MDArray<T, stdex::extents<IndexType, ncols, nrows>, Layout, Container>(
+        std::experimental::linalg::transposed(a.view()));
 }
 
 } // namespace Linalg

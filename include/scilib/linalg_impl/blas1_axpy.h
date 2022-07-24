@@ -25,7 +25,8 @@ template <class T_scalar,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-    requires(!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
+             std::is_integral_v<IndexType_y>)
 inline void axpy(const T_scalar& scalar,
                  stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
                  stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
@@ -50,7 +51,8 @@ template <class T_scalar,
           std::size_t ext_y,
           class Layout_y,
           class Container_y>
-    requires(!std::is_const_v<T_y>)
+    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
+             std::is_integral_v<IndexType_y>)
 inline void
 axpy(const T_scalar& scalar,
      const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,

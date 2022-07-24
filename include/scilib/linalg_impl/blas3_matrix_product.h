@@ -231,26 +231,48 @@ inline void matrix_product(stdex::mdspan<const std::complex<double>,
                 b.data_handle(), ldb, &beta, c.data_handle(), ldc);
 }
 
-template <class T, class Layout, class Container>
-inline Sci::Matrix<T, Layout, Container> matrix_product(const Sci::Matrix<T, Layout, Container>& a,
-                                                        const Sci::Matrix<T, Layout, Container>& b)
+template <class T_a,
+          class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Container_a,
+          class T_b,
+          class IndexType_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Layout_b,
+          class Container_b,
+          class T_c,
+          class IndexType_c,
+          std::size_t nrows_c,
+          std::size_t ncols_c,
+          class Layout_c,
+          class Container_c>
+    requires(!std::is_const_v<T_c> && std::is_integral_v<IndexType_a> &&
+             std::is_integral_v<IndexType_b> && std::is_integral_v<IndexType_c>)
+inline void matrix_product(
+    const Sci::MDArray<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>&
+        a,
+    const Sci::MDArray<T_b, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Container_b>&
+        b,
+    Sci::MDArray<T_c, stdex::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Container_c>& c)
 {
-    using index_type = index;
+    matrix_product(a.view(), b.view(), c.view());
+}
+
+template <class T, class Layout>
+inline Sci::Matrix<T, Layout> matrix_product(const Sci::Matrix<T, Layout>& a,
+                                             const Sci::Matrix<T, Layout>& b)
+{
+    using index_type = typename Sci::Matrix<T, Layout>::index_type;
 
     const index_type n = a.extent(0);
     const index_type p = b.extent(1);
 
-    Sci::Matrix<T, Layout, Container> res(n, p);
+    Sci::Matrix<T, Layout> res(n, p);
     matrix_product(a.view(), b.view(), res.view());
     return res;
-}
-
-template <class T, class Layout, class Container>
-inline void matrix_product(const Sci::Matrix<T, Layout, Container>& a,
-                           const Sci::Matrix<T, Layout, Container>& b,
-                           Sci::Matrix<T, Layout, Container>& c)
-{
-    matrix_product(a.view(), b.view(), c.view());
 }
 
 } // namespace Linalg

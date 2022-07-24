@@ -9,16 +9,22 @@
 
 #include "auxiliary.h"
 #include "matrix_norm.h"
-#include <cassert>
 #include <experimental/linalg>
+#include <gsl/gsl>
 #include <type_traits>
+
 
 namespace Sci {
 namespace Linalg {
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-    requires(std::is_same_v<std::remove_cv_t<T>, double>)
-auto expm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
+auto expm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
 {
     // Algorithm: Matlab expm1 (demo directory).
     //
@@ -31,7 +37,7 @@ auto expm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor
 
     using value_type = std::remove_cv_t<T>;
 
-    assert(a.extent(0) == a.extent(1));
+    Expects(a.extent(0) == a.extent(1));
 
     int e = gsl::narrow_cast<int>(std::log2(matrix_norm(a, 'I')));
     int s = std::max(0, e + 1);
@@ -68,8 +74,8 @@ auto expm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor
     return E;
 }
 
-template <class Layout, class Container>
-inline Sci::Matrix<double, Layout, Container> expm(const Sci::Matrix<double, Layout, Container>& a)
+template <class Layout>
+inline Sci::Matrix<double, Layout> expm(const Sci::Matrix<double, Layout>& a)
 {
     return expm(a.view());
 }

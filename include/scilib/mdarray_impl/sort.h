@@ -14,8 +14,9 @@ namespace stdex = std::experimental;
 
 namespace __Detail {
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline std::size_t partition(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x,
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline std::size_t partition(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x,
                              std::size_t start,
                              std::size_t end)
 {
@@ -31,8 +32,9 @@ inline std::size_t partition(stdex::mdspan<T, stdex::extents<index, ext>, Layout
     return i;
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline void quick_sort(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x,
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline void quick_sort(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x,
                        std::size_t start,
                        std::size_t end)
 {
@@ -46,10 +48,11 @@ inline void quick_sort(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Acce
 } // namespace __Detail
 
 // Quick sort.
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline void sort(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline void sort(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
-    using index_type = index;
+    using index_type = IndexType;
 
     index_type start = 0;
     index_type end = x.extent(0);
