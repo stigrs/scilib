@@ -44,3 +44,9 @@ TEST(TestLinalg, TestMatrixNormColMajor)
     EXPECT_EQ(matrix_norm(A, '1'), 15.0);
     EXPECT_EQ(matrix_norm(A, 'I'), 15.0);
 }
+
+TEST(TestLinalg, TestMatrixNormComplex)
+{
+    Sci::Matrix<std::complex<double>> A = {{{1.0, 0.0}, {0.0, -2.0}}, {{0.0, 2.0}, {5.0, 0.0}}};
+    EXPECT_NEAR(Sci::Linalg::matrix_norm(A, 'F'), 5.830951894845301, 1.0e-9);
+}

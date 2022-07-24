@@ -52,7 +52,7 @@ TEST(TestLinalg, TestAxpy)
     Sci::Vector<int> y({2, 4, 6, 8, 10}, 5);
 
     Sci::Linalg::axpy(2, x, y);
-    for (std::size_t i = 0; i < x.size(); ++i) {
+    for (std::size_t i = 0; i < y.size(); ++i) {
         EXPECT_EQ(y(i), ans[i]);
     }
 }

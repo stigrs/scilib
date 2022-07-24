@@ -7,6 +7,8 @@
 #ifndef SCILIB_LINALG_BLAS1_AXPY_H
 #define SCILIB_LINALG_BLAS1_AXPY_H
 
+#include <gsl/gsl>
+
 namespace Sci {
 namespace Linalg {
 
@@ -14,21 +16,23 @@ namespace stdex = std::experimental;
 
 template <class T_scalar,
           class T_x,
+          class IndexType_x,
           std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
 inline void axpy(const T_scalar& scalar,
-                 stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
-                 stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
+                 stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                 stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
+    Expects(x.extent(0) == y.extent(0));
 
-    using index_type = index;
+    using index_type = IndexType_y;
 
     for (index_type i = 0; i < y.extent(0); ++i) {
         y(i) = scalar * x(i) + y(i);
@@ -37,15 +41,20 @@ inline void axpy(const T_scalar& scalar,
 
 template <class T_scalar,
           class T_x,
+          class IndexType_x,
+          std::size_t ext_x,
           class Layout_x,
           class Container_x,
           class T_y,
+          class IndexType_y,
+          std::size_t ext_y,
           class Layout_y,
           class Container_y>
     requires(!std::is_const_v<T_y>)
-inline void axpy(const T_scalar& scalar,
-                 const Sci::Vector<T_x, Layout_x, Container_x>& x,
-                 Sci::Vector<T_y, Layout_y, Container_y>& y)
+inline void
+axpy(const T_scalar& scalar,
+     const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+     Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     axpy(scalar, x.view(), y.view());
 }
