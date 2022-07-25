@@ -349,15 +349,15 @@ inline M randi(Args... args)
     return res;
 }
 
-template <class T, class Layout, class Container>
+template <class T, class Layout>
     requires(std::is_floating_point_v<T>)
-Sci::Vector<T, Layout, Container> linspace(T start, T stop, int num = 50)
+Sci::Vector<T, Layout> linspace(T start, T stop, int num = 50)
 {
     Expects(stop > start);
     T step_size = (stop - start) / (num - 1);
     T value = start;
 
-    Sci::Vector<T, Layout, Container> res(num);
+    Sci::Vector<T, Layout> res(num);
 
     res(0) = start;
     for (int i = 1; i < num; ++i) {
