@@ -444,6 +444,7 @@ public:
         return map.extents().extent(r);
     }
 
+    constexpr bool empty() const noexcept { return ctr.empty(); }
     constexpr std::size_t size() const noexcept { return ctr.size(); }
 
     // [MDArray.members.iterators], iterators over the data
