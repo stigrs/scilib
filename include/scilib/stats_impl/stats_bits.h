@@ -10,6 +10,7 @@
 #include "../linalg.h"
 #include "../mdarray.h"
 #include <cmath>
+#include <gsl/gsl>
 #include <type_traits>
 
 namespace Sci {
@@ -17,25 +18,28 @@ namespace Stats {
 namespace stdex = std::experimental;
 
 // Arithmetic mean.
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto mean(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto mean(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using value_type = std::remove_cv_t<T>;
     value_type result = Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
     return result;
 }
 
-template <class T, class Layout, class Container>
-inline T mean(const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T mean(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return mean(x.view());
 }
 
 // Median.
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto median(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto median(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     Sci::Vector<value_type> xcopy(x);
@@ -50,17 +54,19 @@ inline auto median(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor
     return med;
 }
 
-template <class T, class Layout, class Container>
-inline T median(const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T median(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return median(x.view());
 }
 
 // Variance.
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto var(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto var(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     // Two-pass algorithm:
@@ -74,30 +80,34 @@ inline auto var(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x
     return sum2 / (n - 1.0);
 }
 
-template <class T, class Layout, class Container>
-inline T var(const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T var(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return var(x.view());
 }
 
 // Standard deviation.
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto stddev(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto stddev(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
     return std::sqrt(var(x));
 }
 
-template <class T, class Layout, class Container>
-inline T stddev(const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T stddev(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return stddev(x.view());
 }
 
 // Root-mean-square deviation.
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto rms(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto rms(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     value_type sum2 = value_type{0};
@@ -107,26 +117,30 @@ inline auto rms(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> x
     return std::sqrt(sum2 / x.extent(0));
 }
 
-template <class T, class Layout, class Container>
-inline T rms(const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T rms(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return rms(x.view());
 }
 
 // Covariance.
 template <class T,
+          class IndexType_x,
           std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
+          class IndexType_y,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline auto cov(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
-                stdex::mdspan<T, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+inline auto cov(stdex::mdspan<T, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                stdex::mdspan<T, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
+    Expects(x.extent(0) == y.extent(0));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
     using value_type = std::remove_cv_t<T>;
 
     value_type xmean = mean(x);
@@ -141,8 +155,18 @@ inline auto cov(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accesso
     return res;
 }
 
-template <class T, class Layout, class Container>
-inline T cov(const Sci::Vector<T, Layout, Container>& x, const Sci::Vector<T, Layout, Container>& y)
+template <class T,
+          class IndexType_x,
+          std::size_t ext_x,
+          class Layout_x,
+          class Container_x,
+          class IndexType_y,
+          std::size_t ext_y,
+          class Layout_y,
+          class Container_y>
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+inline T cov(const Sci::MDArray<T, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+             const Sci::MDArray<T, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     return cov(x.view(), y.view());
 }

@@ -7,25 +7,32 @@
 #ifndef SCILIB_MDARRAY_SWAP_ELEMENTS_H
 #define SCILIB_MDARRAY_SWAP_ELEMENTS_H
 
+#include <gsl/gsl>
+#include <type_traits>
 #include <utility>
+
 
 namespace Sci {
 
 namespace stdex = std::experimental;
 
 template <class T_x,
+          class IndexType_x,
           std::size_t ext_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t ext_y,
           class Layout_y,
           class Accessor_y>
-inline void swap_elements(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x,
-                          stdex::mdspan<T_y, stdex::extents<index, ext_y>, Layout_y, Accessor_y> y)
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+inline void
+swap_elements(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+              stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    using index_type = index;
+    Expects(x.extent(0) == y.extent(0));
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i = 0; i < x.extent(0); ++i) {
         std::swap(x(i), y(i));
@@ -33,23 +40,26 @@ inline void swap_elements(stdex::mdspan<T_x, stdex::extents<index, ext_x>, Layou
 }
 
 template <class T_x,
+          class IndexType_x,
           std::size_t nrows_x,
           std::size_t ncols_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t nrows_y,
           std::size_t ncols_y,
           class Layout_y,
           class Accessor_y>
-inline void
-swap_elements(stdex::mdspan<T_x, stdex::extents<index, nrows_x, ncols_x>, Layout_x, Accessor_x> x,
-              stdex::mdspan<T_y, stdex::extents<index, nrows_y, ncols_y>, Layout_y, Accessor_y> y)
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+inline void swap_elements(
+    stdex::mdspan<T_x, stdex::extents<IndexType_x, nrows_x, ncols_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<IndexType_y, nrows_y, ncols_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
+    Expects(x.extent(0) == y.extent(0));
+    Expects(x.extent(1) == y.extent(1));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i = 0; i < x.extent(0); ++i) {
         for (index_type j = 0; j < x.extent(1); ++j) {
@@ -59,26 +69,29 @@ swap_elements(stdex::mdspan<T_x, stdex::extents<index, nrows_x, ncols_x>, Layout
 }
 
 template <class T_x,
+          class IndexType_x,
           std::size_t n1_x,
           std::size_t n2_x,
           std::size_t n3_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t n1_y,
           std::size_t n2_y,
           std::size_t n3_y,
           class Layout_y,
           class Accessor_y>
-inline void
-swap_elements(stdex::mdspan<T_x, stdex::extents<index, n1_x, n2_x, n3_x>, Layout_x, Accessor_x> x,
-              stdex::mdspan<T_y, stdex::extents<index, n1_y, n2_y, n3_y>, Layout_y, Accessor_y> y)
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+inline void swap_elements(
+    stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
+    Expects(x.extent(0) == y.extent(0));
+    Expects(x.extent(1) == y.extent(1));
+    Expects(x.extent(2) == y.extent(2));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i = 0; i < x.extent(0); ++i) {
         for (index_type j = 0; j < x.extent(1); ++j) {
@@ -90,6 +103,7 @@ swap_elements(stdex::mdspan<T_x, stdex::extents<index, n1_x, n2_x, n3_x>, Layout
 }
 
 template <class T_x,
+          class IndexType_x,
           std::size_t n1_x,
           std::size_t n2_x,
           std::size_t n3_x,
@@ -97,22 +111,24 @@ template <class T_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t n1_y,
           std::size_t n2_y,
           std::size_t n3_y,
           std::size_t n4_y,
           class Layout_y,
           class Accessor_y>
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
 inline void swap_elements(
-    stdex::mdspan<T_x, stdex::extents<index, n1_x, n2_x, n3_x, n4_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T_y, stdex::extents<index, n1_y, n2_y, n3_y, n4_y>, Layout_y, Accessor_y> y)
+    stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x>, Layout_x, Accessor_x> x,
+    stdex::mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
+    Expects(x.extent(0) == y.extent(0));
+    Expects(x.extent(1) == y.extent(1));
+    Expects(x.extent(2) == y.extent(2));
+    Expects(x.extent(3) == y.extent(3));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i = 0; i < x.extent(0); ++i) {
         for (index_type j = 0; j < x.extent(1); ++j) {
@@ -126,6 +142,7 @@ inline void swap_elements(
 }
 
 template <class T_x,
+          class IndexType_x,
           std::size_t n1_x,
           std::size_t n2_x,
           std::size_t n3_x,
@@ -134,6 +151,7 @@ template <class T_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t n1_y,
           std::size_t n2_y,
           std::size_t n3_y,
@@ -141,17 +159,22 @@ template <class T_x,
           std::size_t n5_y,
           class Layout_y,
           class Accessor_y>
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
 inline void swap_elements(
-    stdex::mdspan<T_x, stdex::extents<index, n1_x, n2_x, n3_x, n4_x, n5_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T_y, stdex::extents<index, n1_y, n2_y, n3_y, n4_y, n5_y>, Layout_y, Accessor_y> y)
+    stdex::
+        mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x, n5_x>, Layout_x, Accessor_x>
+            x,
+    stdex::
+        mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y, n5_y>, Layout_y, Accessor_y>
+            y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-    static_assert(x.static_extent(4) == y.static_extent(4));
+    Expects(x.extent(0) == y.extent(0));
+    Expects(x.extent(1) == y.extent(1));
+    Expects(x.extent(2) == y.extent(2));
+    Expects(x.extent(3) == y.extent(3));
+    Expects(x.extent(4) == y.extent(4));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i1 = 0; i1 < x.extent(0); ++i1) {
         for (index_type i2 = 0; i2 < x.extent(1); ++i2) {
@@ -167,6 +190,7 @@ inline void swap_elements(
 }
 
 template <class T_x,
+          class IndexType_x,
           std::size_t n1_x,
           std::size_t n2_x,
           std::size_t n3_x,
@@ -176,6 +200,7 @@ template <class T_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t n1_y,
           std::size_t n2_y,
           std::size_t n3_y,
@@ -184,22 +209,25 @@ template <class T_x,
           std::size_t n6_y,
           class Layout_y,
           class Accessor_y>
-inline void swap_elements(
-    stdex::
-        mdspan<T_x, stdex::extents<index, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>, Layout_x, Accessor_x>
-            x,
-    stdex::
-        mdspan<T_y, stdex::extents<index, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y>, Layout_y, Accessor_y>
-            y)
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+inline void
+swap_elements(stdex::mdspan<T_x,
+                            stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
+                            Layout_x,
+                            Accessor_x> x,
+              stdex::mdspan<T_y,
+                            stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y>,
+                            Layout_y,
+                            Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-    static_assert(x.static_extent(4) == y.static_extent(4));
-    static_assert(x.static_extent(5) == y.static_extent(5));
+    Expects(x.extent(0) == y.extent(0));
+    Expects(x.extent(1) == y.extent(1));
+    Expects(x.extent(2) == y.extent(2));
+    Expects(x.extent(3) == y.extent(3));
+    Expects(x.extent(4) == y.extent(4));
+    Expects(x.extent(5) == y.extent(5));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i1 = 0; i1 < x.extent(0); ++i1) {
         for (index_type i2 = 0; i2 < x.extent(1); ++i2) {
@@ -217,6 +245,7 @@ inline void swap_elements(
 }
 
 template <class T_x,
+          class IndexType_x,
           std::size_t n1_x,
           std::size_t n2_x,
           std::size_t n3_x,
@@ -227,6 +256,7 @@ template <class T_x,
           class Layout_x,
           class Accessor_x,
           class T_y,
+          class IndexType_y,
           std::size_t n1_y,
           std::size_t n2_y,
           std::size_t n3_y,
@@ -236,25 +266,26 @@ template <class T_x,
           std::size_t n7_y,
           class Layout_y,
           class Accessor_y>
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
 inline void
 swap_elements(stdex::mdspan<T_x,
-                            stdex::extents<index, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
+                            stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
                             Layout_x,
                             Accessor_x> x,
               stdex::mdspan<T_y,
-                            stdex::extents<index, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
+                            stdex::extents<IndexType_x, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
                             Layout_y,
                             Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-    static_assert(x.static_extent(4) == y.static_extent(4));
-    static_assert(x.static_extent(5) == y.static_extent(5));
-    static_assert(x.static_extent(6) == y.static_extent(6));
+    Expects(x.extent(0) == y.extent(0));
+    Expects(x.extent(1) == y.extent(1));
+    Expects(x.extent(2) == y.extent(2));
+    Expects(x.extent(3) == y.extent(3));
+    Expects(x.extent(4) == y.extent(4));
+    Expects(x.extent(5) == y.extent(5));
+    Expects(x.extent(6) == y.extent(6));
 
-    using index_type = index;
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
     for (index_type i1 = 0; i1 < x.extent(0); ++i1) {
         for (index_type i2 = 0; i2 < x.extent(1); ++i2) {
