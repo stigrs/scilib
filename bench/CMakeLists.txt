@@ -33,6 +33,7 @@ set(PROGRAMS
     bench_matrix_vector_product
     bench_mkl_dgemm
     bench_transpose
+    bench_views
 )
 
 foreach(program ${PROGRAMS})
