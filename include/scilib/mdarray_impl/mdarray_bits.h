@@ -56,7 +56,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
     using index_type = typename Extents::index_type;
 
-    std::vector<index_type> indexes{static_cast<index_type>(dims)...};
+    std::array<index_type, Extents::rank()> indexes{static_cast<index_type>(dims)...};
     bool result = true;
     for (std::size_t i = 0; i < indexes.size(); ++i) {
         if (!(indexes[i] >= 0 && indexes[i] < exts.extent(i))) {
