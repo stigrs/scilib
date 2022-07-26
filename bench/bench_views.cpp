@@ -5,6 +5,8 @@
 #pragma warning(disable : 5054 4305)
 #include <Eigen/Core>
 #pragma warning(pop)
+#else
+#include <Eigen/Core>
 #endif
 
 #include <chrono>
@@ -47,12 +49,12 @@ template <typename T, int num>
 void run_finite_difference()
 {
 
-    T pi = 4 * std::atan(1.0);
-    T err = 2.;
+    T pi = 4.0 * std::atan(1.0);
+    T err = 2.0;
     int iter = 0;
 
     Sci::StaticVector<T, num> x;
-    for (auto i = 0; i < num; ++i) {
+    for (int i = 0; i < num; ++i) {
         x(i) = i * pi / (num - 1);
     }
 
@@ -60,11 +62,11 @@ void run_finite_difference()
     u = T{0};
 
     auto u_col1 = column(u, 0);
-    for (auto i = 0; i < num; ++i) {
+    for (int i = 0; i < num; ++i) {
         u_col1(i) = std::sin(x(i));
     }
     auto u_col2 = column(u, num - 1);
-    for (auto i = 0; i < num; ++i) {
+    for (int i = 0; i < num; ++i) {
         u_col2(i) = std::sin(x(i)) * std::exp(-pi);
     }
 
@@ -72,7 +74,7 @@ void run_finite_difference()
         err = finite_difference_impl<T, num>(u);
         iter++;
     }
-    std::cout << "Relative error is: " << err << '\n' << "Number of iterations: " << iter << '\n';
+    std::cout << "Relative error is:    " << err << '\n' << "Number of iterations: " << iter << '\n';
 }
 
 template <typename T, int num, int SO, int Rows, int Cols>
@@ -96,16 +98,15 @@ template <typename T, int num>
 void eigen_run_finite_difference()
 {
 
-    T pi = 4 * std::atan(1.0);
-    T err = 2.;
+    T pi = 4.0 * std::atan(1.0);
+    T err = 2.0;
     int iter = 0;
 
     Eigen::Matrix<T, num, 1> x;
-    for (auto i = 0; i < num; ++i) {
+    for (int i = 0; i < num; ++i) {
         x(i) = i * pi / (num - 1);
     }
 
-    // Matrix<T,num,num,RowMajor> u; u.setZero();
     Eigen::Matrix<T, num, num> u;
     u.setZero();
     u.col(0) = x.array().sin();
@@ -115,7 +116,7 @@ void eigen_run_finite_difference()
         err = eigen_finite_difference_impl(u);
         iter++;
     }
-    std::cout << "Relative error is: " << err << '\n' << "Number of iterations: " << iter << '\n';
+    std::cout << "Relative error is:    " << err << '\n' << "Number of iterations: " << iter << '\n';
 }
 
 int main(int argc, char* argv[])
@@ -131,7 +132,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    std::cout << "Scilib run:\n";
+    std::cout << "Scilib run:\n" << "-----------------------------------\n";
     auto t1 = std::chrono::high_resolution_clock::now();
     if (N == 10)
         run_finite_difference<T, 10>();
@@ -142,9 +143,10 @@ int main(int argc, char* argv[])
     if (N == 200)
         run_finite_difference<T, 200>();
     auto t2 = std::chrono::high_resolution_clock::now();
-    Timer time_1 = t2 - t1;
+    Timer t_scilib = t2 - t1;
+    std::cout << "Elapsed time is:      " << t_scilib.count() << " ms\n\n";
 
-    std::cout << "Eigen run:\n";
+    std::cout << "Eigen run:\n" << "-----------------------------------\n";
     t1 = std::chrono::high_resolution_clock::now();
     if (N == 10)
         eigen_run_finite_difference<T, 10>();
@@ -155,6 +157,6 @@ int main(int argc, char* argv[])
     if (N == 200)
         eigen_run_finite_difference<T, 200>();
     t2 = std::chrono::high_resolution_clock::now();
-    Timer time_2 = t2 - t1;
-    std::cout << "Elapsed time is: " << time_1 / time_2 << '\n';
+    Timer t_eigen = t2 - t1;
+    std::cout << "Elapsed time is:      " << t_eigen.count() << " ms\n";
 }
