@@ -80,7 +80,7 @@ endif()
 # Set compiler options.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-error=unused-parameter -Wno-maybe-uninitialized)
-    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -g)
+    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -g -p)
     set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} -O3 -DNDEBUG)
 endif()
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
