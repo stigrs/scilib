@@ -1,3 +1,5 @@
+// Based on https://github.com/romeric/expression_templates_benchmark.git
+
 #define EIGEN_STACK_ALLOCATION_LIMIT 10000000000000
 
 #ifdef _MSC_VER
@@ -74,7 +76,8 @@ void run_finite_difference()
         err = finite_difference_impl<T, num>(u);
         iter++;
     }
-    std::cout << "Relative error is:    " << err << '\n' << "Number of iterations: " << iter << '\n';
+    std::cout << "Relative error is:    " << err << '\n'
+              << "Number of iterations: " << iter << '\n';
 }
 
 template <typename T, int num, int SO, int Rows, int Cols>
@@ -116,7 +119,8 @@ void eigen_run_finite_difference()
         err = eigen_finite_difference_impl(u);
         iter++;
     }
-    std::cout << "Relative error is:    " << err << '\n' << "Number of iterations: " << iter << '\n';
+    std::cout << "Relative error is:    " << err << '\n'
+              << "Number of iterations: " << iter << '\n';
 }
 
 int main(int argc, char* argv[])
@@ -132,7 +136,8 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    std::cout << "Scilib run:\n" << "-----------------------------------\n";
+    std::cout << "Scilib run:\n"
+              << "-----------------------------------\n";
     auto t1 = std::chrono::high_resolution_clock::now();
     if (N == 10)
         run_finite_difference<T, 10>();
@@ -146,7 +151,8 @@ int main(int argc, char* argv[])
     Timer t_scilib = t2 - t1;
     std::cout << "Elapsed time is:      " << t_scilib.count() << " ms\n\n";
 
-    std::cout << "Eigen run:\n" << "-----------------------------------\n";
+    std::cout << "Eigen run:\n"
+              << "-----------------------------------\n";
     t1 = std::chrono::high_resolution_clock::now();
     if (N == 10)
         eigen_run_finite_difference<T, 10>();
