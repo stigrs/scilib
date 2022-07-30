@@ -225,6 +225,30 @@ constexpr void apply(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Ac
     }
 }
 
+template <class T_x,
+          class IndexType_x,
+          std::size_t ext_x,
+          class Layout_x,
+          class Accessor_x,
+          class T_y,
+          class IndexType_y,
+          std::size_t ext_y,
+          class Layout_y,
+          class Accessor_y,
+          class F>
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+constexpr void apply(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                     stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y,
+                     F f)
+{
+    Expects(x.extent(0) == x.extent(1));
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    for (index_type i = 0; i < x.extent(0); ++i) {
+        f(x(i), y(i));
+    }
+}
+
 template <class T,
           class IndexType,
           std::size_t nrows,
@@ -250,6 +274,37 @@ constexpr void apply(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, L
             for (index_type j = 0; j < m.extent(1); ++j) {
                 f(m(i, j));
             }
+        }
+    }
+}
+
+template <class T_a,
+          class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          class T_b,
+          class IndexType_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Layout_b,
+          class Accessor_b,
+          class F>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
+constexpr void
+apply(stdex::mdspan<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+      stdex::mdspan<T_b, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+      F f)
+{
+    Expects(a.extent(0) == b.extent(0));
+    Expects(a.extent(1) == b.extent(1));
+
+    using index_type = std::common_type_t<IndexType_a, IndexType_b>;
+
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = 0; j < a.extent(1); ++j) {
+            f(a(i, j), b(i, j));
         }
     }
 }

@@ -23,6 +23,7 @@ template <typename T, int num>
 T finite_difference_impl(Sci::StaticMatrix<T, num, num>& u)
 {
     using namespace Sci;
+    using index_type = Sci::StaticMatrix<T, num, num>::index_type;
 
     auto u_old = u;
 
@@ -37,8 +38,8 @@ T finite_difference_impl(Sci::StaticMatrix<T, num, num>& u)
 
     auto u_span = slice(u, seq(1, num - 2), seq(1, num - 2));
 
-    for (int i = 0; i < u_span.extent(0); ++i) {
-        for (int j = 0; j < u_span.extent(1); ++j) {
+    for (index_type i = 0; i < u_span.extent(0); ++i) {
+        for (index_type j = 0; j < u_span.extent(1); ++j) {
             u_span(i, j) = ((u_old1(i, j) + u_old2(i, j) + u_old3(i, j) + u_old4(i, j)) * 4.0 +
                             u_old5(i, j) + u_old6(i, j) + u_old7(i, j) + u_old8(i, j)) /
                            20.0;
