@@ -91,6 +91,7 @@ public:
     using const_view_type = stdex::mdspan<const element_type, extents_type, layout_type>;
     using value_type = std::remove_cv_t<element_type>;
     using index_type = typename extents_type::index_type;
+    using rank_type = typename extents_type::rank_type;
     using pointer = typename container_type::pointer;
     using const_pointer = typename container_type::const_pointer;
     using reference = typename container_type::reference;
@@ -379,7 +380,7 @@ public:
     constexpr reference operator()(SizeTypes... indices) noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
@@ -388,9 +389,25 @@ public:
     constexpr const_reference operator()(SizeTypes... indices) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 #endif
+
+    template <class SizeType>
+        requires(std::is_convertible_v<SizeType, index_type>&& extents_type::rank() == 1)
+    constexpr reference operator[](SizeType index) noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), index));
+        return ctr[map(static_cast<index_type>(std::move(index)))];
+    }
+
+    template <class SizeType>
+        requires(std::is_convertible_v<SizeType, index_type>&& extents_type::rank() == 1)
+    constexpr const_reference operator[](SizeType index) const noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), index));
+        return ctr[map(static_cast<index_type>(std::move(index)))];
+    }
 
 #if MDSPAN_USE_BRACKET_OPERATOR
     template <class... SizeTypes>
@@ -399,7 +416,7 @@ public:
     constexpr reference operator[](SizeTypes... indices) noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
@@ -408,7 +425,7 @@ public:
     constexpr const_reference operator[](SizeTypes... indices) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 #endif
 
@@ -418,7 +435,7 @@ public:
     constexpr reference at(SizeTypes... indices) noexcept
     {
         Expects(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
@@ -427,11 +444,11 @@ public:
     constexpr const_reference at(SizeTypes... indices) const noexcept
     {
         Expects(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
-    static constexpr std::size_t rank() noexcept { return extents_type::rank(); }
-    static constexpr std::size_t rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
+    static constexpr rank_type rank() noexcept { return extents_type::rank(); }
+    static constexpr rank_type rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
     static constexpr index_type static_extent(std::size_t r) noexcept
     {
         return extents_type::static_extent(r);

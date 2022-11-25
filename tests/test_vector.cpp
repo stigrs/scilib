@@ -44,7 +44,7 @@ TEST(TestVector, TestElementAccesss)
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
         v(i) = i;
-        EXPECT_EQ(v(i), i);
+        EXPECT_EQ(v[i], i);
     }
 }
 
@@ -52,38 +52,38 @@ TEST(TestVector, TestView)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
     }
     auto vv = v.view();
-    EXPECT_EQ(vv(0), 0);
+    EXPECT_EQ(vv[0], 0);
 }
 
 TEST(TestVector, TestCopy)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
     }
 
     Sci::Vector<int> a(v);
     a(0) = 10;
-    EXPECT_EQ(v(0), 0);
-    EXPECT_EQ(a(0), 10);
-    EXPECT_NE(a(0), v(0));
+    EXPECT_EQ(v[0], 0);
+    EXPECT_EQ(a[0], 10);
+    EXPECT_NE(a[0], v[0]);
 }
 
 TEST(TestVector, TestCopySpan)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
     }
 
     Sci::Vector<int> a = Sci::make_mdarray(v.view());
     a(0) = 10;
-    EXPECT_EQ(v(0), 0);
-    EXPECT_EQ(a(0), 10);
-    EXPECT_NE(a(0), v(0));
+    EXPECT_EQ(v[0], 0);
+    EXPECT_EQ(a[0], 10);
+    EXPECT_NE(a[0], v[0]);
 }
 
 TEST(TestVector, TestCopyVector)
@@ -92,11 +92,11 @@ TEST(TestVector, TestCopyVector)
     Sci::StaticVector<int, 5> a(v, v.size());
 
     for (std::size_t i = 0; i < v.size(); ++i) {
-        EXPECT_EQ(v[i], a(i));
+        EXPECT_EQ(v[i], a[i]);
     }
     a *= 2;
     for (std::size_t i = 0; i < v.size(); ++i) {
-        EXPECT_NE(v[i], a(i));
+        EXPECT_NE(v[i], a[i]);
     }
 }
 
@@ -128,7 +128,7 @@ TEST(TestVector, TestInitializer)
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
-        EXPECT_EQ(i + 1, a(i));
+        EXPECT_EQ(i + 1, a[i]);
     }
 }
 
@@ -200,7 +200,7 @@ TEST(TestVector, TestSort)
     Sci::Vector<int> x(data, data.size());
     Sci::sort(x.view());
     for (size_t i = 0; i < x.size(); ++i) {
-        EXPECT_EQ(x(i), static_cast<int>(i + 1));
+        EXPECT_EQ(x[i], static_cast<int>(i + 1));
     }
 }
 
