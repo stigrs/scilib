@@ -34,7 +34,7 @@ inline void copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x
     Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
 
     for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
-        y(i) = x(i);
+        y[i] = x[i];
     }
 }
 

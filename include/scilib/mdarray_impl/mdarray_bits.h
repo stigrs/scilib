@@ -395,18 +395,18 @@ public:
 
     template <class SizeType>
         requires(std::is_convertible_v<SizeType, index_type>&& extents_type::rank() == 1)
-    constexpr reference operator[](SizeType index) noexcept
+    constexpr reference operator[](SizeType indx) noexcept
     {
-        assert(__Detail::__check_bounds(map.extents(), index));
-        return ctr[map(static_cast<index_type>(std::move(index)))];
+        assert(__Detail::__check_bounds(map.extents(), indx));
+        return ctr[map(static_cast<index_type>(std::move(indx)))];
     }
 
     template <class SizeType>
         requires(std::is_convertible_v<SizeType, index_type>&& extents_type::rank() == 1)
-    constexpr const_reference operator[](SizeType index) const noexcept
+    constexpr const_reference operator[](SizeType indx) const noexcept
     {
-        assert(__Detail::__check_bounds(map.extents(), index));
-        return ctr[map(static_cast<index_type>(std::move(index)))];
+        assert(__Detail::__check_bounds(map.extents(), indx));
+        return ctr[map(static_cast<index_type>(std::move(indx)))];
     }
 
 #if MDSPAN_USE_BRACKET_OPERATOR

@@ -20,15 +20,15 @@ inline std::size_t partition(stdex::mdspan<T, stdex::extents<IndexType, ext>, La
                              std::size_t start,
                              std::size_t end)
 {
-    T xi = x(start);
+    T xi = x[start];
     std::size_t i = start;
     for (std::size_t j = start + 1; j < end; ++j) {
-        if (x(j) <= xi) {
+        if (x[j] <= xi) {
             ++i;
-            std::swap(x(i), x(j));
+            std::swap(x[i], x[j]);
         }
     }
-    std::swap(x(i), x(start));
+    std::swap(x[i], x[start]);
     return i;
 }
 
