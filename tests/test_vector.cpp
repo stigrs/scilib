@@ -43,7 +43,7 @@ TEST(TestVector, TestElementAccesss)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
         EXPECT_EQ(v[i], i);
     }
 }
@@ -66,7 +66,7 @@ TEST(TestVector, TestCopy)
     }
 
     Sci::Vector<int> a(v);
-    a(0) = 10;
+    a[0] = 10;
     EXPECT_EQ(v[0], 0);
     EXPECT_EQ(a[0], 10);
     EXPECT_NE(a[0], v[0]);
@@ -80,7 +80,7 @@ TEST(TestVector, TestCopySpan)
     }
 
     Sci::Vector<int> a = Sci::make_mdarray(v.view());
-    a(0) = 10;
+    a[0] = 10;
     EXPECT_EQ(v[0], 0);
     EXPECT_EQ(a[0], 10);
     EXPECT_NE(a[0], v[0]);
@@ -211,7 +211,7 @@ TEST(TestVector, TestFirst)
 
     auto v_slice = Sci::first(a.view(), v.size());
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
-        EXPECT_EQ(v_slice(i), a(i));
+        EXPECT_EQ(v_slice[i], a[i]);
     }
 }
 
@@ -222,6 +222,6 @@ TEST(TestVector, TestLast)
 
     auto v_slice = Sci::last(a.view(), 3);
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
-        EXPECT_EQ(v_slice(i), a(i + 2));
+        EXPECT_EQ(v_slice[i], a[i + 2]);
     }
 }
