@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(Scilib_examples CXX)
 
+include_directories($ENV{USERPROFILE}/include)
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
