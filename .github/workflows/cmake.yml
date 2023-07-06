@@ -32,7 +32,7 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
   build-macos:
     runs-on: macos-latest
@@ -52,7 +52,7 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
   build-windows:
     runs-on: ${{matrix.os}}
@@ -81,7 +81,7 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
 #  build-intel:
 #    runs-on: ubuntu-latest
@@ -112,4 +112,4 @@ jobs:
 #      working-directory: ${{github.workspace}}/build
 #      run: |
 #        source /opt/intel/oneapi/setvars.sh intel64
-#        ctest -C ${{env.BUILD_TYPE}}
+#        ctest -C ${{env.BUILD_TYPE}} --output-on-failure
