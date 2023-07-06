@@ -7,7 +7,7 @@
 #ifndef SCILIB_LINALG_AUXILIARY_H
 #define SCILIB_LINALG_AUXILIARY_H
 
-#include <cassert>
+#include <gsl/gsl>
 #include <random>
 #include <type_traits>
 
@@ -17,14 +17,22 @@ namespace Linalg {
 //--------------------------------------------------------------------------------------------------
 // Fill mdspan:
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline void fill(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v, const T& value)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline void fill(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v,
+                 const T& value)
 {
     Sci::apply(v, [&](T& vi) { vi = value; });
 }
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline void fill(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m,
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline void fill(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m,
                  const T& value)
 {
     Sci::apply(m, [&](T& mi) { mi = value; });
@@ -40,12 +48,13 @@ inline void fill(Sci::MDArray<T, Extents, Layout, Container>& m, const T& value)
 //--------------------------------------------------------------------------------------------------
 // Limit array values:
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline void clip(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> a,
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline void clip(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> a,
                  const T& a_min,
                  const T& a_max)
 {
-    using index_type = index;
+    using index_type = IndexType;
 
     for (index_type i = 0; i < a.extent(0); ++i) {
         if (a(i) < a_min) {
@@ -57,12 +66,18 @@ inline void clip(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> 
     }
 }
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline void clip(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a,
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline void clip(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a,
                  const T& a_min,
                  const T& a_max)
 {
-    using index_type = index;
+    using index_type = IndexType;
 
     for (index_type i = 0; i < a.extent(0); ++i) {
         for (index_type j = 0; i < a.extent(1); ++i) {
@@ -85,10 +100,11 @@ inline void clip(Sci::MDArray<T, Extents, Layout, Container>& a, const T& a_min,
 //--------------------------------------------------------------------------------------------------
 // Find argmax, argmin, max, min, sum, and product of elements:
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline std::size_t argmax(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline std::size_t argmax(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     index_type max_idx = 0;
@@ -102,16 +118,19 @@ inline std::size_t argmax(stdex::mdspan<T, stdex::extents<index, ext>, Layout, A
     return max_idx;
 }
 
-template <class T, class Layout, class Container>
-inline std::size_t argmax(const Sci::Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline std::size_t
+argmax(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
     return argmax(v.view());
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline std::size_t argmin(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline std::size_t argmin(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     index_type min_idx = 0;
@@ -125,16 +144,19 @@ inline std::size_t argmin(stdex::mdspan<T, stdex::extents<index, ext>, Layout, A
     return min_idx;
 }
 
-template <class T, class Layout, class Container>
-inline std::size_t argmin(const Sci::Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline std::size_t
+argmin(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
     return argmin(v.view());
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto max(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto max(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = v(0);
@@ -146,16 +168,18 @@ inline auto max(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v
     return result;
 }
 
-template <class T, class Layout, class Container>
-inline T max(const Sci::Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T max(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
     return max(v.view());
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto min(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto min(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = v(0);
@@ -167,16 +191,18 @@ inline auto min(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v
     return result;
 }
 
-template <class T, class Layout, class Container>
-inline T min(const Sci::Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T min(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
     return min(v.view());
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto sum(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto sum(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 0;
@@ -186,16 +212,18 @@ inline auto sum(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v
     return result;
 }
 
-template <class T, class Layout, class Container>
-inline T sum(const Sci::Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T sum(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
     return sum(v.view());
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto prod(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto prod(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
     value_type result = 1;
@@ -205,8 +233,9 @@ inline auto prod(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> 
     return result;
 }
 
-template <class T, class Layout, class Container>
-inline T prod(const Sci::Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline T prod(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
     return prod(v.view());
 }
@@ -320,15 +349,15 @@ inline M randi(Args... args)
     return res;
 }
 
-template <class T, class Layout, class Container>
+template <class T, class Layout>
     requires(std::is_floating_point_v<T>)
-Sci::Vector<T, Layout, Container> linspace(T start, T stop, int num = 50)
+Sci::Vector<T, Layout> linspace(T start, T stop, int num = 50)
 {
-    assert(stop > start);
+    Expects(stop > start);
     T step_size = (stop - start) / (num - 1);
     T value = start;
 
-    Sci::Vector<T, Layout, Container> res(num);
+    Sci::Vector<T, Layout> res(num);
 
     res(0) = start;
     for (int i = 1; i < num; ++i) {
@@ -336,6 +365,41 @@ Sci::Vector<T, Layout, Container> linspace(T start, T stop, int num = 50)
         res(i) = value;
     }
     return res;
+}
+
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
+void to_lower_triangular(
+    stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
+{
+    Expects(a.extent(0) == a.extent(1));
+
+    using index_type = IndexType;
+    using value_type = std::remove_cv_t<T>;
+
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = i + 1; j < a.extent(0); ++j) {
+            a(i, j) = value_type{0};
+        }
+    }
+}
+
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+void to_lower_triangular(
+    Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
+{
+    to_lower_triangular(a.view());
 }
 
 } // namespace Linalg

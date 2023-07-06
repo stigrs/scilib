@@ -56,7 +56,7 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 {
     using index_type = typename Extents::index_type;
 
-    std::vector<index_type> indexes{static_cast<index_type>(dims)...};
+    std::array<index_type, Extents::rank()> indexes{static_cast<index_type>(dims)...};
     bool result = true;
     for (std::size_t i = 0; i < indexes.size(); ++i) {
         if (!(indexes[i] >= 0 && indexes[i] < exts.extent(i))) {
@@ -91,6 +91,7 @@ public:
     using const_view_type = stdex::mdspan<const element_type, extents_type, layout_type>;
     using value_type = std::remove_cv_t<element_type>;
     using index_type = typename extents_type::index_type;
+    using rank_type = typename extents_type::rank_type;
     using pointer = typename container_type::pointer;
     using const_pointer = typename container_type::const_pointer;
     using reference = typename container_type::reference;
@@ -165,7 +166,7 @@ public:
     constexpr explicit MDArray(container_type&& c, SizeTypes... exts)
         : map(extents_type(exts...)), ctr(std::move(c))
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     // clang-format off
@@ -174,12 +175,12 @@ public:
         : map(exts), ctr(std::move(c))
     // clang-format on
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     constexpr MDArray(container_type&& c, const mapping_type& m) : map(m), ctr(std::move(c))
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     // clang-format off
@@ -247,9 +248,11 @@ public:
     // clang-format on
     constexpr MDArray(
         stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor> other)
-        : map(extents_type(__Detail::extents(other))), ctr(other.size())
+        : map(extents_type(__Detail::extents(other))),
+          ctr(__Detail::Container_is_array<container_type>::construct(map.required_span_size()))
     {
         static_assert(other.rank() <= 7);
+        Expects(ctr.size() == other.size());
         for (std::size_t r = 0; r < other.rank(); ++r) {
             Expects(static_extent(r) == gsl::narrow_cast<index_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<index_type>(other.extent(r)));
@@ -305,14 +308,14 @@ public:
     constexpr MDArray(container_type&& c, const extents_type& exts, const Alloc& a)
         : map(exts), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     template <class Alloc>
         requires(std::is_constructible_v<container_type, std::size_t, Alloc>)
     constexpr MDArray(container_type&& c, const mapping_type& m, const Alloc& a) : map(m), ctr(c, a)
     {
-        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(c.size()));
+        Expects(map.required_span_size() == gsl::narrow_cast<index_type>(ctr.size()));
     }
 
     // clang-format off
@@ -377,7 +380,7 @@ public:
     constexpr reference operator()(SizeTypes... indices) noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
@@ -386,9 +389,25 @@ public:
     constexpr const_reference operator()(SizeTypes... indices) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 #endif
+
+    template <class SizeType>
+        requires(std::is_convertible_v<SizeType, index_type>&& extents_type::rank() == 1)
+    constexpr reference operator[](SizeType indx) noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), indx));
+        return ctr[map(static_cast<index_type>(std::move(indx)))];
+    }
+
+    template <class SizeType>
+        requires(std::is_convertible_v<SizeType, index_type>&& extents_type::rank() == 1)
+    constexpr const_reference operator[](SizeType indx) const noexcept
+    {
+        assert(__Detail::__check_bounds(map.extents(), indx));
+        return ctr[map(static_cast<index_type>(std::move(indx)))];
+    }
 
 #if MDSPAN_USE_BRACKET_OPERATOR
     template <class... SizeTypes>
@@ -397,7 +416,7 @@ public:
     constexpr reference operator[](SizeTypes... indices) noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
@@ -406,7 +425,7 @@ public:
     constexpr const_reference operator[](SizeTypes... indices) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 #endif
 
@@ -416,7 +435,7 @@ public:
     constexpr reference at(SizeTypes... indices) noexcept
     {
         Expects(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
@@ -425,11 +444,11 @@ public:
     constexpr const_reference at(SizeTypes... indices) const noexcept
     {
         Expects(__Detail::__check_bounds(map.extents(), indices...));
-        return ctr[map(indices...)];
+        return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
-    static constexpr std::size_t rank() noexcept { return extents_type::rank(); }
-    static constexpr std::size_t rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
+    static constexpr rank_type rank() noexcept { return extents_type::rank(); }
+    static constexpr rank_type rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
     static constexpr index_type static_extent(std::size_t r) noexcept
     {
         return extents_type::static_extent(r);
@@ -442,6 +461,7 @@ public:
         return map.extents().extent(r);
     }
 
+    constexpr bool empty() const noexcept { return ctr.empty(); }
     constexpr std::size_t size() const noexcept { return ctr.size(); }
 
     // [MDArray.members.iterators], iterators over the data

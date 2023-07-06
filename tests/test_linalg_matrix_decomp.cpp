@@ -9,6 +9,43 @@
 #include <scilib/mdarray.h>
 #include <vector>
 
+TEST(TestLinalg, TestCholeskyRowMajor)
+{
+    Sci::Matrix<double> A = {{4.0, 12.0, -16.0}, {12.0, 37.0, -43.0}, {-16.0, -43.0, 98}};
+
+    auto L = A;
+
+    Sci::Linalg::cholesky(L);
+
+    auto LT = Sci::Linalg::transposed(L);
+    auto LLT = L * LT;
+
+    for (Sci::index i = 0; i < A.extent(0); ++i) {
+        for (Sci::index j = 0; j < A.extent(1); ++j) {
+            EXPECT_NEAR(A(i, j), LLT(i, j), 1.0e-12);
+        }
+    }
+}
+
+TEST(TestLinalg, TestCholeskyColMajor)
+{
+    Sci::Matrix<double, stdex::layout_left> A = {
+        {4.0, 12.0, -16.0}, {12.0, 37.0, -43.0}, {-16.0, -43.0, 98}};
+
+    auto L = A;
+
+    Sci::Linalg::cholesky(L);
+
+    auto LT = Sci::Linalg::transposed(L);
+    auto LLT = L * LT;
+
+    for (Sci::index i = 0; i < A.extent(0); ++i) {
+        for (Sci::index j = 0; j < A.extent(1); ++j) {
+            EXPECT_NEAR(A(i, j), LLT(i, j), 1.0e-12);
+        }
+    }
+}
+
 TEST(TestLinalg, TestLU)
 {
     using namespace Sci;
@@ -124,7 +161,7 @@ TEST(TestLinalg, TestSVD)
 
     Matrix<double> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());
-    copy(s.view(), sigma_diag);
+    copy_n(s.view(), std::min(m, n), sigma_diag);
 
     auto res = u * sigma * vt;
     for (Sci::index i = 0; i < ans.extent(0); ++i) {
@@ -164,7 +201,7 @@ TEST(TestLinalg, TestSVDColMajor)
 
     Matrix<double, stdex::layout_left> sigma(a.extent(0), a.extent(1));
     auto sigma_diag = diag(sigma.view());
-    copy(s.view(), sigma_diag);
+    copy_n(s.view(), std::min(m, n), sigma_diag);
 
     auto res = u * sigma * vt;
     for (Sci::index j = 0; j < ans.extent(1); ++j) {

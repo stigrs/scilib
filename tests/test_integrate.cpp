@@ -4,12 +4,14 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#include <array>
 #include <gtest/gtest.h>
 #include <limits>
 #include <scilib/constants.h>
 #include <scilib/integrate.h>
 #include <scilib/mdarray.h>
 #include <vector>
+
 
 Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
 {
@@ -26,9 +28,9 @@ Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
     return ydot;
 }
 
-Sci::Vector<double> fsys_stiff(double, const Sci::Vector<double>& y)
+Sci::StaticVector<double, 3> fsys_stiff(double, const Sci::StaticVector<double, 3>& y)
 {
-    Sci::Vector<double> ydot(3);
+    Sci::StaticVector<double, 3> ydot(3);
 
     ydot(0) = -0.04 * y(0) + 1.0e4 * y(1) * y(2);
     ydot(2) = 3.0e7 * y(1) * y(1);
@@ -113,8 +115,8 @@ TEST(TestIntegrate, TestStiff)
     // clang-format on
     Matrix<double> ans(ans_data, 3, 3);
 
-    std::vector<double> y0 = {1.0, 0.0, 0.0};
-    Vector<double> y(y0, 3);
+    std::array<double, 3> y0 = {1.0, 0.0, 0.0};
+    StaticVector<double, 3> y(y0, 3);
 
     double t0 = 0.0;
     double tf = 0.4;

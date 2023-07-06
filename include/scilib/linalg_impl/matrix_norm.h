@@ -7,12 +7,6 @@
 #ifndef SCILIB_LINALG_MATRIX_NORM_H
 #define SCILIB_LINALG_MATRIX_NORM_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <lapacke.h>
-#endif
-
 #include "lapack_types.h"
 #include <type_traits>
 
@@ -29,10 +23,18 @@ namespace stdex = std::experimental;
 // - I, i:       infinity norm of the matrix (maximum row sum)
 // - F, f, E, e: Frobenius norm of the matrix (square root of sum of squares)
 //
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-    requires(std::is_same_v<std::remove_cv_t<T>, double>)
-inline auto matrix_norm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> a,
-                        char norm)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(
+        (std::is_same_v<std::remove_cv_t<T>, double> ||
+         std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) &&std::is_integral_v<IndexType>)
+inline double
+matrix_norm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a,
+            char norm)
 {
     Expects(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' || norm == 'o' ||
             norm == 'I' || norm == 'i' || norm == 'F' || norm == 'f' || norm == 'E' || norm == 'e');
@@ -46,11 +48,29 @@ inline auto matrix_norm(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, La
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
-    return LAPACKE_dlange(matrix_layout, norm, m, n, a.data_handle(), lda);
+
+    double res = 0.0;
+    if constexpr (std::is_same_v<std::remove_cv_t<T>, double>) {
+        res = LAPACKE_dlange(matrix_layout, norm, m, n, a.data_handle(), lda);
+    }
+    if constexpr (std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) {
+        res = LAPACKE_zlange(matrix_layout, norm, m, n, a.data_handle(), lda);
+    }
+    return res;
 }
 
-template <class Layout, class Container>
-inline double matrix_norm(const Sci::Matrix<double, Layout, Container>& a, char norm)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(
+        (std::is_same_v<std::remove_cv_t<T>, double> ||
+         std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) &&std::is_integral_v<IndexType>)
+inline double
+matrix_norm(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a,
+            char norm)
 {
     return matrix_norm(a.view(), norm);
 }

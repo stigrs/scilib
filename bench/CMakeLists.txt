@@ -28,7 +28,8 @@ endif()
 set(PROGRAMS 
     bench_axpy 
     bench_dot 
-    bench_eigs
+    bench_eigh
+    bench_finite_difference
     bench_matrix_product
     bench_matrix_vector_product
     bench_mkl_dgemm

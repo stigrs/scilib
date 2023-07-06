@@ -40,9 +40,22 @@ inline void copy_n(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout
     }
 }
 
-template <class T, class Layout>
-inline void
-copy_n(const Vector<T, Layout>& x, std::size_t count, Vector<T, Layout>& y, std::size_t offset = 0)
+template <class T_x,
+          class IndexType_x,
+          std::size_t ext_x,
+          class Layout_x,
+          class Container_x,
+          class T_y,
+          class IndexType_y,
+          std::size_t ext_y,
+          class Layout_y,
+          class Container_y>
+    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
+             std::is_integral_v<IndexType_y>)
+inline void copy_n(const MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+                   std::size_t count,
+                   MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
+                   std::size_t offset = 0)
 {
     copy_n(x.view(), count, y.view(), offset);
 }

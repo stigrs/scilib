@@ -47,50 +47,42 @@ class MDArray;
 //--------------------------------------------------------------------------------------------------
 // Stack-allocated MDArrays:
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 3>>
-using Vector3 = MDArray<ElementType, stdex::extents<index, 3>, LayoutPolicy, Container>;
+template <class ElementType, std::size_t ext, class LayoutPolicy = stdex::layout_right>
+using StaticVector =
+    MDArray<ElementType, stdex::extents<index, ext>, LayoutPolicy, std::array<ElementType, ext>>;
 
 template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 4>>
-using Vector4 = MDArray<ElementType, stdex::extents<index, 4>, LayoutPolicy, Container>;
-
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::array<ElementType, 9>>
-using Matrix33 = MDArray<ElementType, stdex::extents<index, 3, 3>, LayoutPolicy, Container>;
+          std::size_t nrows,
+          std::size_t ncols,
+          class LayoutPolicy = stdex::layout_right>
+using StaticMatrix = MDArray<ElementType,
+                             stdex::extents<index, nrows, ncols>,
+                             LayoutPolicy,
+                             std::array<ElementType, nrows * ncols>>;
 
 //--------------------------------------------------------------------------------------------------
 // Heap-allocated MDArrays:
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
-using Vector =
-    MDArray<ElementType, stdex::extents<index, stdex::dynamic_extent>, LayoutPolicy, Container>;
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
+using Vector = MDArray<ElementType,
+                       stdex::extents<index, stdex::dynamic_extent>,
+                       LayoutPolicy,
+                       std::vector<ElementType>>;
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Matrix = MDArray<ElementType,
                        stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
                        LayoutPolicy,
-                       Container>;
+                       std::vector<ElementType>>;
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Array3D = MDArray<
     ElementType,
     stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent, stdex::dynamic_extent>,
     LayoutPolicy,
-    Container>;
+    std::vector<ElementType>>;
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Array4D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
@@ -98,11 +90,9 @@ using Array4D = MDArray<ElementType,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
                         LayoutPolicy,
-                        Container>;
+                        std::vector<ElementType>>;
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Array5D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
@@ -111,11 +101,9 @@ using Array5D = MDArray<ElementType,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
                         LayoutPolicy,
-                        Container>;
+                        std::vector<ElementType>>;
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Array6D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
@@ -125,11 +113,9 @@ using Array6D = MDArray<ElementType,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
                         LayoutPolicy,
-                        Container>;
+                        std::vector<ElementType>>;
 
-template <class ElementType,
-          class LayoutPolicy = stdex::layout_right,
-          class Container = std::vector<ElementType>>
+template <class ElementType, class LayoutPolicy = stdex::layout_right>
 using Array7D = MDArray<ElementType,
                         stdex::extents<index,
                                        stdex::dynamic_extent,
@@ -140,7 +126,7 @@ using Array7D = MDArray<ElementType,
                                        stdex::dynamic_extent,
                                        stdex::dynamic_extent>,
                         LayoutPolicy,
-                        Container>;
+                        std::vector<ElementType>>;
 
 } // namespace Sci
 

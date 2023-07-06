@@ -26,6 +26,19 @@ TEST(TestLinAlg, TestAdd)
     }
 }
 
+TEST(TestLinAlg, TestSubtract)
+{
+    std::vector<int> ans = {1, 2, 3};
+
+    Sci::Vector<int> x = {1, 2, 3};
+    Sci::Vector<int> y = {2, 4, 6};
+    Sci::Vector<int> z = y - x;
+
+    for (std::size_t i = 0; i < z.size(); ++i) {
+        EXPECT_EQ(z(i), ans[i]);
+    }
+}
+
 TEST(TestLinalg, TestAbsSum)
 {
     Sci::Vector<int> v({1, 2, 3, -4}, 4);
@@ -39,7 +52,7 @@ TEST(TestLinalg, TestAxpy)
     Sci::Vector<int> y({2, 4, 6, 8, 10}, 5);
 
     Sci::Linalg::axpy(2, x, y);
-    for (std::size_t i = 0; i < x.size(); ++i) {
+    for (std::size_t i = 0; i < y.size(); ++i) {
         EXPECT_EQ(y(i), ans[i]);
     }
 }
@@ -60,8 +73,8 @@ TEST(TestLinalg, TestIdxAbsMax)
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
-    Sci::Vector<int> v({1, 3, -5, 2}, 4);
-    EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 0UL);
+    Sci::Vector<int> v({4, 3, -5, 2}, 4);
+    EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 3UL);
 }
 
 TEST(TestLinalg, TestNorm2)

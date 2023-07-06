@@ -21,86 +21,137 @@ inline std::tuple<std::size_t, std::size_t> seq(std::size_t first, std::size_t l
     return std::tuple<std::size_t, std::size_t>{first, last};
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto first(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v,
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto first(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v,
                   std::size_t count)
 {
     std::pair<std::size_t, std::size_t> slice{0, count};
     return stdex::submdspan(v, slice);
 }
 
-template <class T, class Layout, class Container>
-inline auto first(Vector<T, Layout, Container>& v, std::size_t count)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto first(MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
+                  std::size_t count)
 {
     return first(v.view(), count);
 }
 
-template <class T, class Layout, class Container>
-inline auto first(const Vector<T, Layout, Container>& v, std::size_t count)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto first(const MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
+                  std::size_t count)
 {
     return first(v.view(), count);
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto last(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v,
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto last(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v,
                  std::size_t count)
 {
     std::pair<std::size_t, std::size_t> slice{v.extent(0) - count, v.extent(0)};
     return stdex::submdspan(v, slice);
 }
 
-template <class T, class Layout, class Container>
-inline auto last(Vector<T, Layout, Container>& x, std::size_t count)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto last(MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
+                 std::size_t count)
 {
-    return last(x.view(), count);
+    return last(v.view(), count);
 }
 
-template <class T, class Layout, class Container>
-inline auto last(const Vector<T, Layout, Container>& x, std::size_t count)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto last(const MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
+                 std::size_t count)
 {
-    return last(x.view(), count);
+    return last(v.view(), count);
 }
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline auto row(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m,
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto row(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m,
                 std::size_t i)
 {
     return stdex::submdspan(m, i, stdex::full_extent);
 }
 
-template <class T, class Layout, class Container>
-inline auto row(Matrix<T, Layout, Container>& m, std::size_t i)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto row(MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
+                std::size_t i)
 {
     return row(m.view(), i);
 }
 
-template <class T, class Layout, class Container>
-inline auto row(const Matrix<T, Layout, Container>& m, std::size_t i)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto row(const MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
+                std::size_t i)
 {
     return row(m.view(), i);
 }
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
-inline auto column(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m,
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto column(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m,
                    std::size_t j)
 {
     return stdex::submdspan(m, stdex::full_extent, j);
 }
 
-template <class T, class Layout, class Container>
-inline auto column(Matrix<T, Layout, Container>& m, std::size_t i)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto column(MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
+                   std::size_t i)
 {
     return column(m.view(), i);
 }
 
-template <class T, class Layout, class Container>
-inline auto column(const Matrix<T, Layout, Container>& m, std::size_t i)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto column(const MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
+                   std::size_t i)
 {
     return column(m.view(), i);
 }
 
-template <class T, std::size_t ext, class Layout, class Accessor>
-inline auto diag(stdex::mdspan<T, stdex::extents<index, ext, ext>, Layout, Accessor> m)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline auto diag(stdex::mdspan<T, stdex::extents<IndexType, ext, ext>, Layout, Accessor> m)
 {
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
         return stdex::mdspan<T, stdex::extents<index, stdex::dynamic_extent>, stdex::layout_stride>{
@@ -114,14 +165,16 @@ inline auto diag(stdex::mdspan<T, stdex::extents<index, ext, ext>, Layout, Acces
     }
 }
 
-template <class T, class Layout, class Container>
-inline auto diag(Matrix<T, Layout, Container>& m)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto diag(MDArray<T, stdex::extents<IndexType, ext, ext>, Layout, Container>& m)
 {
     return diag(m.view());
 }
 
-template <class T, class Layout, class Container>
-inline auto diag(const Matrix<T, Layout, Container>& m)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline auto diag(const MDArray<T, stdex::extents<IndexType, ext, ext>, Layout, Container>& m)
 {
     return diag(m.view());
 }

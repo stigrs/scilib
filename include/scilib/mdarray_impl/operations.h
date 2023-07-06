@@ -196,9 +196,8 @@ operator%(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 //--------------------------------------------------------------------------------------------------
 // Matrix-matrix product:
 
-template <class T, class Layout, class Container>
-constexpr Matrix<T, Layout, Container> operator*(const Matrix<T, Layout, Container>& a,
-                                                 const Matrix<T, Layout, Container>& b)
+template <class T, class Layout>
+constexpr Matrix<T, Layout> operator*(const Matrix<T, Layout>& a, const Matrix<T, Layout>& b)
 {
     return Sci::Linalg::matrix_product(a, b);
 }
@@ -206,9 +205,8 @@ constexpr Matrix<T, Layout, Container> operator*(const Matrix<T, Layout, Contain
 //--------------------------------------------------------------------------------------------------
 // Matrix-vector product:
 
-template <class T, class Layout, class Container>
-constexpr Vector<T, Layout, Container> operator*(const Matrix<T, Layout, Container>& a,
-                                                 const Vector<T, Layout, Container>& x)
+template <class T, class Layout>
+constexpr Vector<T, Layout> operator*(const Matrix<T, Layout>& a, const Vector<T, Layout>& x)
 {
     return Sci::Linalg::matrix_vector_product(a, x);
 }
@@ -216,24 +214,97 @@ constexpr Vector<T, Layout, Container> operator*(const Matrix<T, Layout, Contain
 //--------------------------------------------------------------------------------------------------
 // Apply operations:
 
-template <class T, std::size_t ext, class Layout, class Accessor, class F>
-constexpr void apply(stdex::mdspan<T, stdex::extents<index, ext>, Layout, Accessor> v, F f)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor, class F>
+    requires(std::is_integral_v<IndexType>)
+constexpr void apply(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v, F f)
 {
-    using index_type = index;
+    using index_type = IndexType;
 
     for (index_type i = 0; i < v.extent(0); ++i) {
         f(v(i));
     }
 }
 
-template <class T, std::size_t nrows, std::size_t ncols, class Layout, class Accessor, class F>
-constexpr void apply(stdex::mdspan<T, stdex::extents<index, nrows, ncols>, Layout, Accessor> m, F f)
+template <class T_x,
+          class IndexType_x,
+          std::size_t ext_x,
+          class Layout_x,
+          class Accessor_x,
+          class T_y,
+          class IndexType_y,
+          std::size_t ext_y,
+          class Layout_y,
+          class Accessor_y,
+          class F>
+    requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
+constexpr void apply(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                     stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y,
+                     F f)
 {
-    using index_type = index;
+    Expects(x.extent(0) == x.extent(1));
+    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
-    for (index_type i = 0; i < m.extent(0); ++i) {
+    for (index_type i = 0; i < x.extent(0); ++i) {
+        f(x(i), y(i));
+    }
+}
+
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Accessor,
+          class F>
+    requires(std::is_integral_v<IndexType>)
+constexpr void apply(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m,
+                     F f)
+{
+    using index_type = IndexType;
+
+    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
         for (index_type j = 0; j < m.extent(1); ++j) {
-            f(m(i, j));
+            for (index_type i = 0; i < m.extent(0); ++i) {
+                f(m(i, j));
+            }
+        }
+    }
+    else {
+        for (index_type i = 0; i < m.extent(0); ++i) {
+            for (index_type j = 0; j < m.extent(1); ++j) {
+                f(m(i, j));
+            }
+        }
+    }
+}
+
+template <class T_a,
+          class IndexType_a,
+          std::size_t nrows_a,
+          std::size_t ncols_a,
+          class Layout_a,
+          class Accessor_a,
+          class T_b,
+          class IndexType_b,
+          std::size_t nrows_b,
+          std::size_t ncols_b,
+          class Layout_b,
+          class Accessor_b,
+          class F>
+    requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
+constexpr void
+apply(stdex::mdspan<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+      stdex::mdspan<T_b, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+      F f)
+{
+    Expects(a.extent(0) == b.extent(0));
+    Expects(a.extent(1) == b.extent(1));
+
+    using index_type = std::common_type_t<IndexType_a, IndexType_b>;
+
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = 0; j < a.extent(1); ++j) {
+            f(a(i, j), b(i, j));
         }
     }
 }
@@ -258,10 +329,13 @@ inline void print(std::ostream& ostrm,
     ostrm << '}';
 }
 
-template <class T, class Layout, class Container>
-inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, Container>& v)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline std::ostream&
+operator<<(std::ostream& ostrm,
+           const MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    using index_type = typename Vector<T, Layout, Container>::index_type;
+    using index_type = IndexType;
 
     ostrm << '{';
     for (index_type i = 0; i < v.extent(0); ++i) {
@@ -274,10 +348,10 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Vector<T, Layout, Con
     return ostrm;
 }
 
-template <class T, class Layout, class Container>
-inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout, Container>& v)
+template <class T, class Layout>
+inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout>& v)
 {
-    using index_type = typename Vector<T, Layout, Container>::index_type;
+    using index_type = typename Vector<T, Layout>::index_type;
 
     index_type n;
     istrm >> n;
@@ -289,7 +363,7 @@ inline std::istream& operator>>(std::istream& istrm, Vector<T, Layout, Container
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    v = Vector<T, Layout, Container>(tmp, tmp.size());
+    v = Vector<T, Layout>(tmp, tmp.size());
     return istrm;
 }
 
@@ -317,10 +391,18 @@ inline void print(std::ostream& ostrm,
     ostrm << '}';
 }
 
-template <class T, class Layout, class Container>
-inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, Container>& m)
+template <class T,
+          class IndexType,
+          std::size_t nrows,
+          std::size_t ncols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline std::ostream&
+operator<<(std::ostream& ostrm,
+           const MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m)
 {
-    using index_type = typename Matrix<T, Layout, Container>::index_type;
+    using index_type = IndexType;
 
     ostrm << '{';
     for (index_type i = 0; i < m.extent(0); ++i) {
@@ -335,10 +417,10 @@ inline std::ostream& operator<<(std::ostream& ostrm, const Matrix<T, Layout, Con
     return ostrm;
 }
 
-template <class T, class Layout, class Container>
-inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout, Container>& m)
+template <class T, class Layout>
+inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
 {
-    using index_type = typename Matrix<T, Layout, Container>::index_type;
+    using index_type = typename Matrix<T, Layout>::index_type;
 
     index_type nr;
     index_type nc;
@@ -352,7 +434,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout, Container
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    auto mtmp = Matrix<T, stdex::layout_right, Container>(tmp, nr, nc);
+    auto mtmp = Matrix<T, stdex::layout_right>(tmp, nr, nc);
     m = mtmp.view();
     return istrm;
 }

@@ -5,30 +5,18 @@
 // and conditions.
 
 #include <gtest/gtest.h>
+#include <initializer_list>
 #include <scilib/mdarray.h>
 #include <vector>
 
-TEST(TestMDArray, TestSizeStaticMDArray)
+TEST(TestMDArray, TestSizeStaticVector)
 {
-    const int nr = 2;
-    const int nc = 3;
-    const int sz = nr * nc;
+    const int sz = 4;
 
-    Sci::MDArray<int, stdex::extents<int, nr, nc>, Sci::layout_right, std::array<int, sz>> v(nr,
-                                                                                             nc);
-    EXPECT_EQ(v.extent(0), nr);
-    EXPECT_EQ(v.extent(1), nc);
+    Sci::StaticVector<int, sz> v;
+
+    EXPECT_EQ(v.extent(0), sz);
     EXPECT_EQ(v.size(), sz);
-}
-
-TEST(TestMDArray, TestSizeMatrix33)
-{
-    const int nr = 3;
-    const int nc = 3;
-
-    Sci::Matrix33<int> m;
-    EXPECT_EQ(m.extent(0), nr);
-    EXPECT_EQ(m.extent(1), nc);
 }
 
 TEST(TestVector, TestEmpty)
@@ -55,8 +43,8 @@ TEST(TestVector, TestElementAccesss)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
-        EXPECT_EQ(v(i), i);
+        v[i] = i;
+        EXPECT_EQ(v[i], i);
     }
 }
 
@@ -64,52 +52,51 @@ TEST(TestVector, TestView)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
     }
     auto vv = v.view();
-    EXPECT_EQ(vv(0), 0);
+    EXPECT_EQ(vv[0], 0);
 }
 
 TEST(TestVector, TestCopy)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
     }
 
     Sci::Vector<int> a(v);
-    a(0) = 10;
-    EXPECT_EQ(v(0), 0);
-    EXPECT_EQ(a(0), 10);
-    EXPECT_NE(a(0), v(0));
+    a[0] = 10;
+    EXPECT_EQ(v[0], 0);
+    EXPECT_EQ(a[0], 10);
+    EXPECT_NE(a[0], v[0]);
 }
 
 TEST(TestVector, TestCopySpan)
 {
     Sci::Vector<int> v(5);
     for (int i = 0; i < 5; ++i) {
-        v(i) = i;
+        v[i] = i;
     }
 
     Sci::Vector<int> a = Sci::make_mdarray(v.view());
-    a(0) = 10;
-    EXPECT_EQ(v(0), 0);
-    EXPECT_EQ(a(0), 10);
-    EXPECT_NE(a(0), v(0));
+    a[0] = 10;
+    EXPECT_EQ(v[0], 0);
+    EXPECT_EQ(a[0], 10);
+    EXPECT_NE(a[0], v[0]);
 }
 
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::MDArray<int, stdex::extents<int, 5>, stdex::layout_right, std::array<int, 5>> a(v,
-                                                                                         v.size());
+    Sci::StaticVector<int, 5> a(v, v.size());
 
     for (std::size_t i = 0; i < v.size(); ++i) {
-        EXPECT_EQ(v[i], a(i));
+        EXPECT_EQ(v[i], a[i]);
     }
     a *= 2;
     for (std::size_t i = 0; i < v.size(); ++i) {
-        EXPECT_NE(v[i], a(i));
+        EXPECT_NE(v[i], a[i]);
     }
 }
 
@@ -129,19 +116,19 @@ TEST(TestVector, TestSwap)
     Sci::Vector<int> a(n1);
     Sci::Vector<int> b(n2);
 
-    std::swap(a, b);
+    a.swap(b);
     EXPECT_EQ(a.size(), n2);
     EXPECT_EQ(b.size(), n1);
 }
 
 TEST(TestVector, TestInitializer)
 {
-    auto v = {1, 2, 3, 4, 5};
+    std::initializer_list<int> v = {1, 2, 3, 4, 5};
     Sci::Vector<int> a(v, v.size());
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
-        EXPECT_EQ(i + 1, a(i));
+        EXPECT_EQ(i + 1, a[i]);
     }
 }
 
@@ -151,7 +138,7 @@ TEST(TestVector, TestMDArrayInit)
 
     EXPECT_EQ(a.size(), 5);
     for (std::size_t i = 0; i < a.size(); ++i) {
-        EXPECT_EQ(i + 1, a(i));
+        EXPECT_EQ(i + 1, a.at(i));
     }
 }
 
@@ -213,7 +200,7 @@ TEST(TestVector, TestSort)
     Sci::Vector<int> x(data, data.size());
     Sci::sort(x.view());
     for (size_t i = 0; i < x.size(); ++i) {
-        EXPECT_EQ(x(i), static_cast<int>(i + 1));
+        EXPECT_EQ(x[i], static_cast<int>(i + 1));
     }
 }
 
@@ -224,7 +211,7 @@ TEST(TestVector, TestFirst)
 
     auto v_slice = Sci::first(a.view(), v.size());
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
-        EXPECT_EQ(v_slice(i), a(i));
+        EXPECT_EQ(v_slice[i], a[i]);
     }
 }
 
@@ -235,6 +222,6 @@ TEST(TestVector, TestLast)
 
     auto v_slice = Sci::last(a.view(), 3);
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
-        EXPECT_EQ(v_slice(i), a(i + 2));
+        EXPECT_EQ(v_slice[i], a[i + 2]);
     }
 }

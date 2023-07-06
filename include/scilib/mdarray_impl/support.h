@@ -45,7 +45,7 @@ inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
     for (std::size_t i = 0; i < m.rank(); ++i) {
         res[i] = m.extent(i);
     }
-    return res;
+    return Extents(res);
 }
 
 //--------------------------------------------------------------------------------------------------

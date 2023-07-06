@@ -7,6 +7,7 @@
 #ifndef SCILIB_MDARRAY_COPY_H
 #define SCILIB_MDARRAY_COPY_H
 
+#include <gsl/gsl>
 #include <type_traits>
 
 namespace Sci {
@@ -28,12 +29,12 @@ template <class T_x,
 inline void copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
                  stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+
     for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
-        y(i) = x(i);
+        y[i] = x[i];
     }
 }
 
@@ -55,10 +56,10 @@ inline void
 copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, nrows_x, ncols_x>, Layout_x, Accessor_x> x,
      stdex::mdspan<T_y, stdex::extents<IndexType_y, nrows_y, ncols_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
 
     for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
         for (index_type j = 0; j < gsl::narrow_cast<index_type>(y.extent(1)); ++j) {
@@ -87,11 +88,11 @@ inline void
 copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x>, Layout_x, Accessor_x> x,
      stdex::mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
 
     for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
         for (index_type j = 0; j < gsl::narrow_cast<index_type>(y.extent(1)); ++j) {
@@ -124,12 +125,12 @@ inline void copy(
     stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x>, Layout_x, Accessor_x> x,
     stdex::mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y>, Layout_y, Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
 
     for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
         for (index_type j = 0; j < gsl::narrow_cast<index_type>(y.extent(1)); ++j) {
@@ -170,13 +171,13 @@ inline void copy(
         mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y, n5_y>, Layout_y, Accessor_y>
             y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-    static_assert(x.static_extent(4) == y.static_extent(4));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
 
     for (index_type i1 = 0; i1 < gsl::narrow_cast<index_type>(y.extent(0)); ++i1) {
         for (index_type i2 = 0; i2 < gsl::narrow_cast<index_type>(y.extent(1)); ++i2) {
@@ -222,14 +223,14 @@ inline void copy(stdex::mdspan<T_x,
                                Layout_y,
                                Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-    static_assert(x.static_extent(4) == y.static_extent(4));
-    static_assert(x.static_extent(5) == y.static_extent(5));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(5)) == gsl::narrow_cast<index_type>(y.extent(5)));
 
     // clang-format off
     for (index_type i1 = 0; i1 < gsl::narrow_cast<index_type>(y.extent(0)); ++i1) {
@@ -282,15 +283,15 @@ copy(stdex::mdspan<T_x,
                    Layout_y,
                    Accessor_y> y)
 {
-    static_assert(x.static_extent(0) == y.static_extent(0));
-    static_assert(x.static_extent(1) == y.static_extent(1));
-    static_assert(x.static_extent(2) == y.static_extent(2));
-    static_assert(x.static_extent(3) == y.static_extent(3));
-    static_assert(x.static_extent(4) == y.static_extent(4));
-    static_assert(x.static_extent(5) == y.static_extent(5));
-    static_assert(x.static_extent(6) == y.static_extent(6));
-
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
+
+    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(5)) == gsl::narrow_cast<index_type>(y.extent(5)));
+    Expects(gsl::narrow_cast<index_type>(x.extent(6)) == gsl::narrow_cast<index_type>(y.extent(6)));
 
     // clang-format off
     for (index_type i1 = 0; i1 < gsl::narrow_cast<index_type>(y.extent(0)); ++i1) {

@@ -4,6 +4,7 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#include <array>
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
 
@@ -86,17 +87,24 @@ TEST(TestMatrix, TestResize)
     EXPECT_EQ(a.extent(1), nrows);
 }
 
-TEST(TestMatrix, TestSwap)
+TEST(TestMatrix, TestSwapElements)
 {
-    Sci::index n1 = 5;
-    Sci::index n2 = 3;
-    Sci::Matrix<int> a(n1, n2);
-    Sci::Matrix<int> b(n2, n1);
-    std::swap(a, b);
-    EXPECT_EQ(a.extent(0), n2);
-    EXPECT_EQ(a.extent(1), n1);
-    EXPECT_EQ(b.extent(0), n1);
-    EXPECT_EQ(b.extent(1), n2);
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<int, 9> b = {10, 20, 30, 40, 50, 60, 70, 80, 90};
+
+    Sci::StaticMatrix<int, 3, 3> aa(a);
+    Sci::StaticMatrix<int, 3, 3> bb(b);
+
+    Sci::swap_elements(aa.view(), bb.view());
+
+    int it = 0;
+    for (Sci::index i = 0; i < aa.extent(0); ++i) {
+        for (Sci::index j = 0; j < aa.extent(1); ++j) {
+            EXPECT_EQ(aa.at(i, j), b[it]);
+            EXPECT_EQ(bb.at(i, j), a[it]);
+            ++it;
+        }
+    }
 }
 
 TEST(TestMatrix, TestInitializer)
@@ -132,8 +140,9 @@ TEST(TestMatrix, TestMDArrayInit)
 TEST(TestMatrix, TestSetValue)
 {
     Sci::Matrix<int> m(5, 3);
-    m = 3;
-    for (const auto& mi : m) {
+    Sci::Matrix<int> mm(m.mapping());
+    mm = 3;
+    for (const auto& mi : mm) {
         EXPECT_EQ(mi, 3);
     }
 }
@@ -270,4 +279,39 @@ TEST(TestMatrix, TestDiagIterator)
         EXPECT_EQ((*it), ans(i));
         ++i;
     }
+}
+
+TEST(TestMatrix, TestStaticMatrix33)
+{
+    Sci::StaticMatrix<int, 3, 3> m(3, 3);
+    EXPECT_EQ(m.size(), 9);
+    EXPECT_EQ(m.extent(0), 3);
+    EXPECT_EQ(m.extent(1), 3);
+    EXPECT_EQ(m.stride(0), 3);
+    EXPECT_EQ(m.stride(1), 1);
+    EXPECT_EQ(m.is_unique(), true);
+    EXPECT_EQ(m.is_always_unique(), true);
+    EXPECT_EQ(m.is_strided(), true);
+    EXPECT_EQ(m.is_always_strided(), true);
+    EXPECT_EQ(m.is_exhaustive(), true);
+    EXPECT_EQ(m.is_always_exhaustive(), true);
+}
+
+TEST(TestMatrix, TestStaticMatrix53)
+{
+    Sci::StaticMatrix<int, 5, 3> m;
+    EXPECT_EQ(m.size(), 5 * 3);
+    EXPECT_EQ(m.extent(0), 5);
+    EXPECT_EQ(m.extent(1), 3);
+    EXPECT_EQ(m.stride(0), 3);
+    EXPECT_EQ(m.stride(1), 1);
+}
+
+TEST(TestMatrix, TestStaticMatrixMdspan)
+{
+    Sci::Matrix<int> md = {{1, 2, 3, 4}, {5, 6, 7, 8}};
+    Sci::StaticMatrix<int, 2, 4> ms(md.view());
+
+    EXPECT_EQ(md.extent(0), ms.extent(0));
+    EXPECT_EQ(md.extent(1), ms.extent(1));
 }

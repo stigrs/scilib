@@ -7,15 +7,9 @@
 #ifndef SCILIB_LINALG_INV_H
 #define SCILIB_LINALG_INV_H
 
-#ifdef USE_MKL
-#include <mkl.h>
-#else
-#include <lapacke.h>
-#endif
-
 #include "lapack_types.h"
-#include <cassert>
 #include <exception>
+#include <gsl/gsl>
 #include <type_traits>
 
 namespace Sci {
@@ -23,15 +17,17 @@ namespace Linalg {
 
 // Matrix inversion.
 template <class T_a,
+          class IndexType,
           std::size_t nrows,
           std::size_t ncols,
           class Layout,
           class Accessor_a,
           class T_res,
           class Accessor_res>
-    requires(std::is_same_v<std::remove_cv_t<T_a>, double>)
-inline void inv(stdex::mdspan<T_a, stdex::extents<index, nrows, ncols>, Layout, Accessor_a> a,
-                stdex::mdspan<T_res, stdex::extents<index, nrows, ncols>, Layout, Accessor_res> res)
+    requires(std::is_same_v<std::remove_cv_t<T_a>, double>&& std::is_integral_v<IndexType>)
+inline void
+inv(stdex::mdspan<T_a, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor_a> a,
+    stdex::mdspan<T_res, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor_res> res)
 {
     Expects(a.extent(0) == a.extent(1));
 
@@ -58,10 +54,10 @@ inline void inv(stdex::mdspan<T_a, stdex::extents<index, nrows, ncols>, Layout, 
     }
 }
 
-template <class Layout, class Container>
-inline Sci::Matrix<double, Layout, Container> inv(const Sci::Matrix<double, Layout, Container>& a)
+template <class Layout>
+inline Sci::Matrix<double, Layout> inv(const Sci::Matrix<double, Layout>& a)
 {
-    Sci::Matrix<double, Layout, Container> res(a.extent(0), a.extent(1));
+    Sci::Matrix<double, Layout> res(a.extent(0), a.extent(1));
     inv(a.view(), res.view());
     return res;
 }

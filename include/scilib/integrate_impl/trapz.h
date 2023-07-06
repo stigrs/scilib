@@ -35,8 +35,9 @@ inline auto trapz(T_scalar xlo,
     return ans *= step;
 }
 
-template <class T, class Layout, class Container>
-inline auto trapz(T xlo, T xup, const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+inline auto
+trapz(T xlo, T xup, const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return trapz(xlo, xup, x.view());
 }

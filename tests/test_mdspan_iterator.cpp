@@ -83,7 +83,10 @@ TEST(TestMDSpanIterator, BeginEnd)
     EXPECT_TRUE(it == beyond);
     EXPECT_TRUE(it - beyond == 0);
 
-    for (auto iter = Sci::begin(s); iter != Sci::end(s); ++iter) {
+    for (auto iter = Sci::cbegin(s); iter != Sci::cend(s); ++iter) {
+        EXPECT_TRUE((*iter) == 5);
+    }
+    for (auto iter = Sci::end(s); iter-- != Sci::begin(s);) {
         EXPECT_TRUE((*iter) == 5);
     }
 }

@@ -12,8 +12,12 @@
 namespace Sci {
 namespace Linalg {
 
-template <class T, class Layout, class Container>
-inline index idx_abs_max(const Sci::Vector<T, Layout, Container>& x)
+namespace stdex = std::experimental;
+
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline IndexType
+idx_abs_max(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return std::experimental::linalg::idx_abs_max(x.view());
 }

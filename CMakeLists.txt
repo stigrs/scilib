@@ -6,6 +6,13 @@ project(Scilib
 
 ################################################################################
 
+# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24:
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+	cmake_policy(SET CMP0135 NEW)
+endif()
+
+################################################################################
+
 include(GNUInstallDirs)
 
 ################################################################################
@@ -80,23 +87,23 @@ endif()
 # Set compiler options.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow -Wno-error=unused-parameter -Wno-maybe-uninitialized)
-    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -g)
-    set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} -O3)
+    set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -g -p)
+    set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} -O3 -DNDEBUG)
 endif()
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(Scilib_CMAKE_CXX_FLAGS ${Scilib_CXX_FLAGS} -Wpedantic -Wall -Wshadow -Wextra -Wno-missing-braces -Werror -Wno-error=strict-overflow)
     set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} -g)
-    set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} -O3)
+    set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} -O3 -DNDEBUG)
 endif()
 if(MSVC)
     if (CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
-        set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /Qstd:c++20)
+        set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /Qstd:c++20 /EHsc)
         set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od /Qopenmp)
-        set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O3 /Qopenmp)
+        set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O3 /Qopenmp /DNDEBUG)
     else()
         set(Scilib_CXX_FLAGS ${Scilib_CXX_FLAGS} /W4 /WX) 
         set(Scilib_CXX_FLAGS_DEBUG ${Scilib_CXX_FLAGS} /Zi /Od)
-        set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O2)
+        set(Scilib_CXX_FLAGS_RELEASE ${Scilib_CXX_FLAGS} /O2 /DNDEBUG)
     endif()
 endif()
 if (Scilib_CODE_COVERAGE)
@@ -118,7 +125,7 @@ if (NOT mdspan_FOUND)
     FetchContent_Declare(
         mdspan
         GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-        GIT_TAG         stable
+        GIT_TAG         mdspan-0.6.0
     )
     FetchContent_MakeAvailable(mdspan)
 endif()

@@ -45,7 +45,7 @@ void benchmark(int n)
     matrix_product(transposed(b1_t), b1, b2);
     Vector<double> wr(n);
     t1 = std::chrono::high_resolution_clock::now();
-    eigs(b2.view(), wr.view());
+    eigh(b2.view(), wr.view());
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_sci = t2 - t1;
 

@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
 project(Scilib_tests CXX)
 
+# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24:
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+	cmake_policy(SET CMP0135 NEW)
+endif()
+
 include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
@@ -71,7 +76,7 @@ set(PROGRAMS
     test_linalg_eigenvalue
     test_linalg_element_wise_math
     test_linalg_expm
-    test_linalg_linsolve
+    test_linalg_solve
     test_linalg_lstsq
     test_linalg_matrix_decomp
     test_linalg_matrix_det

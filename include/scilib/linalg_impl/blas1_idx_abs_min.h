@@ -15,11 +15,11 @@ namespace Linalg {
 
 namespace stdex = std::experimental;
 
-template <class T, std::size_t ext_x, class Layout_x, class Accessor_x>
-inline std::size_t
-idx_abs_min(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x> x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
+    requires(std::is_integral_v<IndexType>)
+inline IndexType idx_abs_min(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
 {
-    using index_type = index;
+    using index_type = IndexType;
     using magn_type = std::remove_cv_t<decltype(std::abs(x(0)))>;
 
     index_type min_idx = 0;
@@ -33,8 +33,10 @@ idx_abs_min(stdex::mdspan<T, stdex::extents<index, ext_x>, Layout_x, Accessor_x>
     return min_idx;
 }
 
-template <class T, class Layout, class Container>
-inline std::size_t idx_abs_min(const Sci::Vector<T, Layout, Container>& x)
+template <class T, class IndexType, std::size_t ext, class Layout, class Container>
+    requires(std::is_integral_v<IndexType>)
+inline IndexType
+idx_abs_min(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
     return idx_abs_min(x.view());
 }
