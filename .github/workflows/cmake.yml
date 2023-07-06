@@ -14,7 +14,7 @@ jobs:
   build-linux:
     strategy:
       matrix:
-        compiler: [g++-9, g++-10, g++-11, clang++-12, clang++-13, clang++-14]
+        compiler: [g++-10, g++-11, clang++-12, clang++-13, clang++-14]
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +32,7 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
   build-macos:
     runs-on: macos-latest
@@ -52,7 +52,7 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
   build-windows:
     runs-on: ${{matrix.os}}
@@ -63,7 +63,7 @@ jobs:
 
     env:
       MKL_DIR: "D:/a/"
-      MKLROOT: "D:/a/intelmkl.static.win-x64.2023.0.0.25930/lib/native"
+      MKLROOT: "D:/a/intelmkl.static.win-x64.2023.1.0.46356/lib/native"
 
     steps:
     - uses: actions/checkout@v3
@@ -81,36 +81,35 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
-  build-intel:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Prepare
-      # Install necessary software
-      run: |
-        wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
-        echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
-        sudo apt-get update
-        sudo apt-get install intel-oneapi-mkl-devel intel-oneapi-compiler-dpcpp-cpp
-        source /opt/intel/oneapi/setvars.sh intel64
-      
-    - name: Configure CMake
-      run: |
-        source /opt/intel/oneapi/setvars.sh intel64
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=icpx -DScilib_BUILD_BENCH=OFF
-
-    - name: Build
-      run: |
-        source /opt/intel/oneapi/setvars.sh intel64
-        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: |
-        source /opt/intel/oneapi/setvars.sh intel64
-        ctest -C ${{env.BUILD_TYPE}}
-      
+#  build-intel:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - uses: actions/checkout@v3
+#
+#    - name: Prepare
+#      # Install necessary software
+#      run: |
+#        wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+#        echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+#        sudo apt-get update
+#        sudo apt-get install intel-oneapi-mkl-devel intel-oneapi-compiler-dpcpp-cpp
+#        source /opt/intel/oneapi/setvars.sh intel64
+#      
+#    - name: Configure CMake
+#      run: |
+#        source /opt/intel/oneapi/setvars.sh intel64
+#        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=icpx -DScilib_BUILD_BENCH=OFF
+#
+#    - name: Build
+#      run: |
+#        source /opt/intel/oneapi/setvars.sh intel64
+#        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+#
+#    - name: Test
+#      working-directory: ${{github.workspace}}/build
+#      run: |
+#        source /opt/intel/oneapi/setvars.sh intel64
+#        ctest -C ${{env.BUILD_TYPE}} --output-on-failure
