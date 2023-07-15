@@ -118,17 +118,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ################################################################################
 
 # mdspan is required.
-find_package(mdspan QUIET)
-if (NOT mdspan_FOUND)
-    message(STATUS "No installed mdspan found, fetching from Github")
-    include(FetchContent)
-    FetchContent_Declare(
-        mdspan
-        GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-        GIT_TAG         mdspan-0.6.0
-    )
-    FetchContent_MakeAvailable(mdspan)
-endif()
+message(STATUS "Fetch mdspan from Github")
+include(FetchContent)
+FetchContent_Declare(
+    mdspan
+    GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
+    GIT_TAG         mdspan-0.6.0
+)
+FetchContent_MakeAvailable(mdspan)
 
 if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
