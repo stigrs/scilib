@@ -25,6 +25,10 @@ if(NOT TARGET Microsoft.GSL::GSL)
     find_package(Microsoft.GSL CONFIG)
 endif()
 
+if(NOT TARGET range-v3)
+    find_package(range-v3 CONFIG)
+endif()
+
 set(PROGRAMS 
     bench_axpy 
     bench_dot 
@@ -44,6 +48,7 @@ foreach(program ${PROGRAMS})
         scilib::scilib
         std::mdspan
         std::linalg
+        range-v3
         Microsoft.GSL::GSL
         Eigen3::Eigen
 	    ${BLAS_LIBRARIES}

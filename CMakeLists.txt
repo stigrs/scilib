@@ -159,6 +159,20 @@ if(NOT TARGET Microsoft.GSL::GSL)
     find_package(Microsoft.GSL CONFIG)
 endif()
 
+# ranges-v3 is required.
+message(STATUS "Fetch range-v3 from Github")
+include(FetchContent)
+FetchContent_Declare(
+    range-v3
+    GIT_REPOSITORY  https://github.com/ericniebler/range-v3.git
+    GIT_TAG         master
+)
+FetchContent_MakeAvailable(range-v3)
+
+if(NOT TARGET range-v3)
+    find_package(range-v3 CONFIG)
+endif()
+
 # BLAS and LAPACKE are required.
 if(DEFINED ENV{MKLROOT})
 	find_package(MKL)

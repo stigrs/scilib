@@ -22,10 +22,15 @@ if(NOT TARGET Microsoft.GSL::GSL)
     find_package(Microsoft.GSL CONFIG)
 endif()
 
+if(NOT TARGET range-v3)
+    find_package(range-v3 CONFIG)
+endif()
+
 set(PROGRAMS 
     aliasing
     arithmetic
     const_correctness
+    for_each_extents
     matrix_diag
     matrix_io
     matrix_power
@@ -44,6 +49,7 @@ foreach(program ${PROGRAMS})
         std::mdspan
         std::linalg
         Microsoft.GSL::GSL
+        range-v3
 	    ${BLAS_LIBRARIES}
 	) 
     target_compile_options(
