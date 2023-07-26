@@ -315,3 +315,15 @@ TEST(TestMatrix, TestStaticMatrixMdspan)
     EXPECT_EQ(md.extent(0), ms.extent(0));
     EXPECT_EQ(md.extent(1), ms.extent(1));
 }
+
+TEST(TestMatrix, TestCopyRowMajorColMajor)
+{
+    Sci::Matrix<int> a = {{1, 2, 3}, {4, 5, 6}};
+    Sci::Matrix<int> b(a.view());
+
+    for (Sci::index j = 0; j < a.extent(1); ++j) {
+        for (Sci::index i = 0; i < a.extent(0); ++i) {
+            EXPECT_EQ(a(i, j), b(i, j));
+        }
+    }
+}

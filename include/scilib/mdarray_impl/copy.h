@@ -14,6 +14,17 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
+// forward declaration
+template <class Callable,
+          class ElementType,
+          class IndexType,
+          std::size_t... Extents,
+          class Layout,
+          class Accessor>
+void for_each_in_extents(
+    Callable&& f,
+    stdex::mdspan<ElementType, stdex::extents<IndexType, Extents...>, Layout, Accessor> m);
+
 template <class T_x,
           class IndexType_x,
           std::size_t ext_x,
@@ -61,11 +72,8 @@ copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, nrows_x, ncols_x>, Layout_x,
     Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
     Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
 
-    for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
-        for (index_type j = 0; j < gsl::narrow_cast<index_type>(y.extent(1)); ++j) {
-            y(i, j) = x(i, j);
-        }
-    }
+    auto copy_fn = [&](index_type i, index_type j) { y(i, j) = x(i, j); };
+    for_each_in_extents(copy_fn, x);
 }
 
 template <class T_x,
@@ -94,13 +102,8 @@ copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x>, Layout_x,
     Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
     Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
 
-    for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
-        for (index_type j = 0; j < gsl::narrow_cast<index_type>(y.extent(1)); ++j) {
-            for (index_type k = 0; k < gsl::narrow_cast<index_type>(y.extent(2)); ++k) {
-                y(i, j, k) = x(i, j, k);
-            }
-        }
-    }
+    auto copy_fn = [&](index_type i, index_type j, index_type k) { y(i, j, k) = x(i, j, k); };
+    for_each_in_extents(copy_fn, x);
 }
 
 template <class T_x,
@@ -132,15 +135,8 @@ inline void copy(
     Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
     Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
 
-    for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
-        for (index_type j = 0; j < gsl::narrow_cast<index_type>(y.extent(1)); ++j) {
-            for (index_type k = 0; gsl::narrow_cast<index_type>(k < y.extent(2)); ++k) {
-                for (index_type l = 0; l < gsl::narrow_cast<index_type>(y.extent(3)); ++l) {
-                    y(i, j, k, l) = x(i, j, k, l);
-                }
-            }
-        }
-    }
+    auto copy_fn = [&](index_type i, index_type j, index_type k, index_type l) { y(i, j, k, l) = x(i, j, k, l); };
+    for_each_in_extents(copy_fn, x);
 }
 
 template <class T_x,
@@ -179,17 +175,10 @@ inline void copy(
     Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
     Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
 
-    for (index_type i1 = 0; i1 < gsl::narrow_cast<index_type>(y.extent(0)); ++i1) {
-        for (index_type i2 = 0; i2 < gsl::narrow_cast<index_type>(y.extent(1)); ++i2) {
-            for (index_type i3 = 0; i3 < gsl::narrow_cast<index_type>(y.extent(2)); ++i3) {
-                for (index_type i4 = 0; i4 < gsl::narrow_cast<index_type>(y.extent(3)); ++i4) {
-                    for (index_type i5 = 0; i5 < gsl::narrow_cast<index_type>(y.extent(4)); ++i5) {
-                        y(i1, i2, i3, i4, i5) = x(i1, i2, i3, i4, i5);
-                    }
-                }
-            }
-        }
-    }
+    auto copy_fn = [&](index_type i1, index_type i2, index_type i3, index_type i4, index_type i5) {
+        y(i1, i2, i3, i4, i5) = x(i1, i2, i3, i4, i5);
+    };
+    for_each_in_extents(copy_fn, x);
 }
 
 template <class T_x,
@@ -232,21 +221,10 @@ inline void copy(stdex::mdspan<T_x,
     Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
     Expects(gsl::narrow_cast<index_type>(x.extent(5)) == gsl::narrow_cast<index_type>(y.extent(5)));
 
-    // clang-format off
-    for (index_type i1 = 0; i1 < gsl::narrow_cast<index_type>(y.extent(0)); ++i1) {
-        for (index_type i2 = 0; i2 < gsl::narrow_cast<index_type>(y.extent(1)); ++i2) {
-            for (index_type i3 = 0; i3 < gsl::narrow_cast<index_type>(y.extent(2)); ++i3) {
-                for (index_type i4 = 0; i4 < gsl::narrow_cast<index_type>(y.extent(3)); ++i4) {
-                    for (index_type i5 = 0; i5 < gsl::narrow_cast<index_type>(y.extent(4)); ++i5) {
-                        for (index_type i6 = 0; i6 < gsl::narrow_cast<index_type>(y.extent(5)); ++i6) {
-                            y(i1, i2, i3, i4, i5, i6) = x(i1, i2, i3, i4, i5, i6);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    // clang-format on
+    auto copy_fn = [&](index_type i1, index_type i2, index_type i3, index_type i4, index_type i5, index_type i6) {
+        y(i1, i2, i3, i4, i5, i6) = x(i1, i2, i3, i4, i5, i6);
+    };
+    for_each_in_extents(copy_fn, x);
 }
 
 template <class T_x,
@@ -293,23 +271,11 @@ copy(stdex::mdspan<T_x,
     Expects(gsl::narrow_cast<index_type>(x.extent(5)) == gsl::narrow_cast<index_type>(y.extent(5)));
     Expects(gsl::narrow_cast<index_type>(x.extent(6)) == gsl::narrow_cast<index_type>(y.extent(6)));
 
-    // clang-format off
-    for (index_type i1 = 0; i1 < gsl::narrow_cast<index_type>(y.extent(0)); ++i1) {
-        for (index_type i2 = 0; i2 < gsl::narrow_cast<index_type>(y.extent(1)); ++i2) {
-            for (index_type i3 = 0; i3 < gsl::narrow_cast<index_type>(y.extent(2)); ++i3) {
-                for (index_type i4 = 0; i4 < gsl::narrow_cast<index_type>(y.extent(3)); ++i4) {
-                    for (index_type i5 = 0; i5 < gsl::narrow_cast<index_type>(y.extent(4)); ++i5) {
-                        for (index_type i6 = 0; i6 < gsl::narrow_cast<index_type>(y.extent(5)); ++i6) {
-                            for (index_type i7 = 0; i7 < gsl::narrow_cast<index_type>(y.extent(6)); ++i7) {
-                                y(i1, i2, i3, i4, i5, i6, i7) = x(i1, i2, i3, i4, i5, i6, i7);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    // clang-format on
+    auto copy_fn = [&](index_type i1, index_type i2, index_type i3, index_type i4, index_type i5,
+                       index_type i6, index_type i7) {
+        y(i1, i2, i3, i4, i5, i6, i7) = x(i1, i2, i3, i4, i5, i6, i7);
+    };
+    for_each_in_extents(copy_fn, x);
 }
 
 } // namespace Sci

@@ -64,3 +64,23 @@ TEST(TestMDArray, TestArray4DVector)
         EXPECT_EQ(d.extent(r), a.extent(r));
     }
 }
+
+TEST(TestMDArray, TestCopyArrayRowMajorColMajor)
+{
+    using index_type = Sci::Array4D<int>::index_type;
+
+    std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
+    Sci::Array4D<int> a(2, 2, 2, 2);
+    Sci::Array4D<int, stdex::layout_left> b(a.view());
+
+    for (index_type i = 0; i < a.extent(0); ++i) {
+        for (index_type j = 0; j < a.extent(1); ++j) {
+            for (index_type k = 0; k < a.extent(2); ++k) {
+                for (index_type l = 0; l < a.extent(3); ++l) {
+                    EXPECT_EQ(a(i, j, k, l), b(i, j, k, l));
+                }
+            }
+        }
+    }
+}
