@@ -30,7 +30,7 @@ set(PROGRAMS
     aliasing
     arithmetic
     const_correctness
-    for_each_extents
+    for_each_in_extents
     matrix_diag
     matrix_io
     matrix_power

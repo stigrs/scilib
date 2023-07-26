@@ -94,7 +94,7 @@ void for_each_in_extents_impl(Callable&& f,
         }
     }(rank_sequence);
 }
-}
+} // namespace __Detail
 
 template <class Callable, class IndexType, std::size_t... Extents, class Layout>
 void for_each_in_extents(Callable&& f, stdex::extents<IndexType, Extents...> e, Layout)
@@ -102,7 +102,7 @@ void for_each_in_extents(Callable&& f, stdex::extents<IndexType, Extents...> e, 
     using layout_type = std::remove_cvref_t<Layout>;
     if constexpr (std::is_same_v<layout_type, stdex::layout_left>) {
         __Detail::for_each_in_extents_impl(std::forward<Callable>(f), e,
-                                 __Detail::make_reverse_index_sequence<e.rank()>());
+                                           __Detail::make_reverse_index_sequence<e.rank()>());
     }
     else { // layout_right or any other layout
         __Detail::for_each_in_extents_impl(std::forward<Callable>(f), e,
