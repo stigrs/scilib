@@ -14,10 +14,11 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
+#include <range/v3/view/cartesian_product.hpp>
+#include <range/v3/view/iota.hpp>
 #include <type_traits>
 #include <utility>
-#include <range/v3/view/cartesian_product.hpp>
-#include <range/v3/view/indices.hpp>
+
 
 namespace Sci {
 
@@ -46,7 +47,7 @@ make_mdarray(stdex::mdspan<T, Extents, Layout, Accessor> m)
 }
 
 //--------------------------------------------------------------------------------------------------
-// For each extents:
+// For each in extents:
 //
 // Copyright (2022) National Technology & Engineering Solutions of Sandia, LLC (NTESS).
 // See https://kokkos.org/LICENSE for license information.
@@ -79,20 +80,24 @@ void for_each_in_extents_impl(Callable&& f,
                               stdex::extents<IndexType, Extents...> e,
                               std::index_sequence<RankIndices...> rank_sequence)
 {
-  // In the layout_left case, caller passes in N-1, N-2, ..., 1, 0.
-  // This reverses the order of the Cartesian product,
-  // but also reverses the order of indices in each tuple.
-    [&]<std::size_t... Indices>(std::index_sequence<Indices...>) {
+    // In the layout_left case, caller passes in N-1, N-2, ..., 1, 0.
+    // This reverses the order of the Cartesian product,
+    // but also reverses the order of indices in each tuple.
+    [&]<std::size_t... Indices>(std::index_sequence<Indices...>)
+    {
         auto v = ranges::views::cartesian_product(
-            ranges::views::indices(IndexType(0), e.extent(Indices))...);
+            ranges::views::iota(IndexType(0), e.extent(Indices))...);
         for (const auto& tuple_of_indices : v) {
             // In the layout_left case, we undo the reversal of each tuple
             // by getting its elements in reverse order.
-            [&]<std::size_t... InnerIndices>(std::index_sequence<InnerIndices...>) {
+            [&]<std::size_t... InnerIndices>(std::index_sequence<InnerIndices...>)
+            {
                 std::forward<Callable>(f)(std::get<InnerIndices>(tuple_of_indices)...);
-            }(rank_sequence);
+            }
+            (rank_sequence);
         }
-    }(rank_sequence);
+    }
+    (rank_sequence);
 }
 } // namespace __Detail
 
@@ -120,7 +125,7 @@ void for_each_in_extents(
     Callable&& f,
     stdex::mdspan<ElementType, stdex::extents<IndexType, Extents...>, Layout, Accessor> m)
 {
-    Layout layout_type; 
+    Layout layout_type;
     for_each_in_extents(f, m.extents(), layout_type);
 }
 
