@@ -75,14 +75,14 @@ inline bool __check_bounds(const Extents& exts, Dims... dims)
 
 template <class Extents>
     requires __Detail::Is_extents_v<Extents>
-std::size_t size_of_extents(const Extents& exts) 
+inline std::size_t size_of_extents(const Extents& exts) 
 {
-   std::size_t size = 1;
+    std::size_t size = 1;
     for (std::size_t r = 0; r < exts.rank(); ++r) {
         size *= exts.extent(r);
     }
     return size;
-};
+}
 
 } // namespace __Detail
 
@@ -485,7 +485,7 @@ public:
     constexpr stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>
     to_mdspan(const OtherAccessorType& a = stdex::default_accessor<element_type>())
     {
-        Expects(size() >= map.required_span_size());
+        Expects(size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
         return stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>(
             container_data(), map, a);
     }
