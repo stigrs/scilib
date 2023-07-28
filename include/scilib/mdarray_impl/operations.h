@@ -132,7 +132,7 @@ void for_each_in_extents(
 template <class Callable, class T, class Extents, class Layout, class Container>
 void for_each_in_extents(Callable&& f, MDArray<T, Extents, Layout, Container>& m)
 {
-    for_each_in_extents(f, m.view());
+    for_each_in_extents(f, m.to_mdspan());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ operator+(const MDArray<T, Extents, Layout, Container>& a,
 {
     if constexpr (Extents::rank() <= 1) {
         MDArray<T, Extents, Layout, Container> res(a.extents());
-        std::experimental::linalg::add(a.view(), b.view(), res.view());
+        std::experimental::linalg::add(a.to_mdspan(), b.to_mdspan(), res.to_mdspan());
         return res;
     }
     else {
@@ -245,7 +245,7 @@ operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 
     if constexpr (Extents::rank() <= 7) {
         return MDArray<T, Extents, Layout, Container>(
-            std::experimental::linalg::scaled(scaling_factor, v.view()));
+            std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
     }
     else {
         MDArray<T, Extents, Layout, Container> res = v;
@@ -262,7 +262,7 @@ operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
 
     if constexpr (Extents::rank() <= 7) {
         return MDArray<T, Extents, Layout, Container>(
-            std::experimental::linalg::scaled(scaling_factor, v.view()));
+            std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
     }
     else {
         MDArray<T, Extents, Layout, Container> res = v;
@@ -528,7 +528,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
     }
     istrm >> ch; // }
     auto mtmp = Matrix<T, stdex::layout_right>(tmp, nr, nc);
-    m = mtmp.view();
+    m = mtmp.to_mdspan();
     return istrm;
 }
 

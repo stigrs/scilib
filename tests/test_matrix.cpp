@@ -38,7 +38,7 @@ TEST(TestMatrix, TestView)
 {
     Sci::Matrix<int> m(5, 3);
     m = 2;
-    auto mm = m.view();
+    auto mm = m.to_mdspan();
     EXPECT_EQ(mm(0, 0), 2);
 }
 
@@ -54,7 +54,7 @@ TEST(TestMatrix, TestCopySpan)
 {
     Sci::Matrix<int> a(5, 3);
     a = 2;
-    Sci::Matrix<int> b(a.view());
+    Sci::Matrix<int> b(a.to_mdspan());
     b(0, 0) = 3;
     EXPECT_EQ(a(0, 0), 2);
     EXPECT_EQ(b(0, 0), 3);
@@ -69,7 +69,7 @@ TEST(TestMatrix, TestAssignSpan)
             a(i, j) = i + j;
         }
     }
-    Sci::Matrix<int> b = a.view();
+    Sci::Matrix<int> b = a.to_mdspan();
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 3; ++j) {
             EXPECT_EQ(a(i, j), b(i, j));
@@ -95,7 +95,7 @@ TEST(TestMatrix, TestSwapElements)
     Sci::StaticMatrix<int, 3, 3> aa(a);
     Sci::StaticMatrix<int, 3, 3> bb(b);
 
-    Sci::swap_elements(aa.view(), bb.view());
+    Sci::swap_elements(aa.to_mdspan(), bb.to_mdspan());
 
     int it = 0;
     for (Sci::index i = 0; i < aa.extent(0); ++i) {
@@ -259,18 +259,8 @@ TEST(TestMatrix, TestColIterator)
 
 TEST(TestMatrix, TestDiagIterator)
 {
-    // clang-format off
-    std::vector<int> data = {
-        1,  2,  3, 
-        4,  5,  6, 
-        7,  8,  9
-    };
-    std::vector<int> ans_data = {
-        1, 5, 9
-    };
-    // clang-format on
-    Sci::Vector<int, stdex::layout_left> ans(ans_data, 3);
-    Sci::Matrix<int, stdex::layout_left> m(data, 3, 3);
+    Sci::Vector<int, stdex::layout_left> ans = {1, 5, 9};
+    Sci::Matrix<int, stdex::layout_left> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
     auto d = Sci::diag(m);
 
@@ -310,7 +300,7 @@ TEST(TestMatrix, TestStaticMatrix53)
 TEST(TestMatrix, TestStaticMatrixMdspan)
 {
     Sci::Matrix<int> md = {{1, 2, 3, 4}, {5, 6, 7, 8}};
-    Sci::StaticMatrix<int, 2, 4> ms(md.view());
+    Sci::StaticMatrix<int, 2, 4> ms(md.to_mdspan());
 
     EXPECT_EQ(md.extent(0), ms.extent(0));
     EXPECT_EQ(md.extent(1), ms.extent(1));
@@ -319,7 +309,7 @@ TEST(TestMatrix, TestStaticMatrixMdspan)
 TEST(TestMatrix, TestCopyRowMajorColMajor)
 {
     Sci::Matrix<int> a = {{1, 2, 3}, {4, 5, 6}};
-    Sci::Matrix<int> b(a.view());
+    Sci::Matrix<int> b(a.to_mdspan());
 
     for (Sci::index j = 0; j < a.extent(1); ++j) {
         for (Sci::index i = 0; i < a.extent(0); ++i) {

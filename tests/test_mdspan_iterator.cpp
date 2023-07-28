@@ -7,7 +7,6 @@
 #include <experimental/mdspan>
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
-#include <vector>
 
 TEST(TestMDSpanIterator, IteratorDefaultInit)
 {
@@ -18,10 +17,9 @@ TEST(TestMDSpanIterator, IteratorDefaultInit)
 
 TEST(TestMDSpanIterator, IteratorComparisons)
 {
-    std::vector<int> a{1, 2, 3, 4};
-    Sci::Vector<int> va(a, a.size());
+    Sci::Vector<int> va = {1, 2, 3, 4};
 
-    auto s = va.view();
+    auto s = va.to_mdspan();
 
     auto it = Sci::begin(s);
     auto it2 = it + 1;
@@ -49,10 +47,9 @@ TEST(TestMDSpanIterator, IteratorComparisons)
 
 TEST(TestMDSpanIterator, BeginEnd)
 {
-    std::vector<int> a{1, 2, 3, 4};
-    Sci::Vector<int> va(a, a.size());
+    Sci::Vector<int> va = {1, 2, 3, 4};
 
-    auto s = va.view();
+    auto s = va.to_mdspan();
 
     auto it = Sci::begin(s);
     auto first = it;

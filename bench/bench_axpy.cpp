@@ -65,8 +65,8 @@ void benchmark(int n)
 
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10000; ++it) {
-        std::experimental::linalg::add(std::experimental::linalg::scaled(2.0, va.view()), vb.view(),
-                                       vb.view());
+        std::experimental::linalg::add(std::experimental::linalg::scaled(2.0, va.to_mdspan()), vb.to_mdspan(),
+                                       vb.to_mdspan());
     }
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_axpy = t2 - t1;

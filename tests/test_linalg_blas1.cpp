@@ -91,7 +91,7 @@ TEST(TestLinalg, TestNorm2Row)
                               4, 5, 6};
     // clang-format on
     Sci::Matrix<double> ma(aa, 2, 3);
-    auto ans = std::experimental::linalg::vector_norm2(Sci::row(ma.view(), 0));
+    auto ans = std::experimental::linalg::vector_norm2(Sci::row(ma.to_mdspan(), 0));
     EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }
 

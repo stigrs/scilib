@@ -46,9 +46,9 @@ inv(stdex::mdspan<T_a, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor
     Sci::copy(a, res);
 
     Sci::Vector<BLAS_INT, Layout> ipiv(n);
-    Sci::Linalg::lu(res, ipiv.view()); // perform LU factorization
+    Sci::Linalg::lu(res, ipiv.to_mdspan()); // perform LU factorization
 
-    BLAS_INT info = LAPACKE_dgetri(matrix_layout, n, res.data_handle(), lda, ipiv.data());
+    BLAS_INT info = LAPACKE_dgetri(matrix_layout, n, res.data_handle(), lda, ipiv.container_data());
     if (info != 0) {
         throw std::runtime_error("dgetri: matrix inversion failed");
     }
@@ -58,7 +58,7 @@ template <class Layout>
 inline Sci::Matrix<double, Layout> inv(const Sci::Matrix<double, Layout>& a)
 {
     Sci::Matrix<double, Layout> res(a.extent(0), a.extent(1));
-    inv(a.view(), res.view());
+    inv(a.to_mdspan(), res.to_mdspan());
     return res;
 }
 

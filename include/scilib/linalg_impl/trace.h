@@ -27,7 +27,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline T trace(const Sci::MDArray<T, stdex::extents<IndexType, ext, ext>, Layout, Container>& m)
 {
     Expects(m.extent(0) == m.extent(1));
-    return trace(m.view());
+    return trace(m.to_mdspan());
 }
 
 } // namespace Linalg

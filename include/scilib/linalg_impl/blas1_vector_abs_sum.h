@@ -16,7 +16,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T vector_abs_sum(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return std::experimental::linalg::vector_abs_sum(x.view());
+    return std::experimental::linalg::vector_abs_sum(x.to_mdspan());
 }
 
 } // namespace Linalg

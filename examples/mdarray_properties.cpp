@@ -43,9 +43,9 @@ int main()
     std::cout << "m2.extent(1) = " << m2.extent(1) << "\n\n";
     std::cout << "m2 = \n" << m2 << "\n\n";
 
-    using const_view_type = Sci::Matrix<int>::const_view_type;
+    using const_mdspan_type = Sci::Matrix<int>::const_mdspan_type;
 
-    const_view_type m2_view = m2.view();
+    const_mdspan_type m2_view = m2.to_mdspan();
     std::cout << "m2_view.size() =    " << m2_view.size() << '\n';
     std::cout << "m2_view.extent(0) = " << m2_view.extent(0) << '\n';
     std::cout << "m2_view.extent(1) = " << m2_view.extent(1) << "\n\n";

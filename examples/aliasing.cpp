@@ -21,6 +21,6 @@ int main()
 
     Matrix<int> bv = slice(mat, seq(0, 2), seq(0, 2));
     sub1 = slice(mat, seq(1, 3), seq(1, 3));
-    copy(bv.view(), sub1);
+    copy(bv.to_mdspan(), sub1);
     std::cout << "After:\n" << mat << '\n';
 }

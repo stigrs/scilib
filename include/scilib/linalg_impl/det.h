@@ -42,7 +42,7 @@ auto det(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Acces
         Sci::Matrix<value_type, Layout> tmp(a);
         Sci::Vector<BLAS_INT, Layout> ipiv(n);
 
-        Sci::Linalg::lu(tmp.view(), ipiv.view());
+        Sci::Linalg::lu(tmp.to_mdspan(), ipiv.to_mdspan());
 
         BLAS_INT permut = 0;
         for (BLAS_INT i = 1; i <= n; ++i) {
@@ -50,7 +50,7 @@ auto det(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Acces
                 permut++;
             }
         }
-        ddet = Sci::Linalg::prod(Sci::diag(tmp.view()));
+        ddet = Sci::Linalg::prod(Sci::diag(tmp.to_mdspan()));
         ddet *= std::pow(-1.0, gsl::narrow_cast<value_type>(permut));
     }
     return ddet;
@@ -65,7 +65,7 @@ template <class T,
     requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
 inline T det(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
-    return det(a.view());
+    return det(a.to_mdspan());
 }
 
 } // namespace Linalg

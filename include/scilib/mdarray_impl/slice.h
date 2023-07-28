@@ -35,7 +35,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline auto first(MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
                   std::size_t count)
 {
-    return first(v.view(), count);
+    return first(v.to_mdspan(), count);
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
@@ -43,7 +43,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline auto first(const MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
                   std::size_t count)
 {
-    return first(v.view(), count);
+    return first(v.to_mdspan(), count);
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -60,7 +60,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline auto last(MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
                  std::size_t count)
 {
-    return last(v.view(), count);
+    return last(v.to_mdspan(), count);
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
@@ -68,7 +68,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline auto last(const MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v,
                  std::size_t count)
 {
-    return last(v.view(), count);
+    return last(v.to_mdspan(), count);
 }
 
 template <class T,
@@ -94,7 +94,7 @@ template <class T,
 inline auto row(MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
                 std::size_t i)
 {
-    return row(m.view(), i);
+    return row(m.to_mdspan(), i);
 }
 
 template <class T,
@@ -107,7 +107,7 @@ template <class T,
 inline auto row(const MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
                 std::size_t i)
 {
-    return row(m.view(), i);
+    return row(m.to_mdspan(), i);
 }
 
 template <class T,
@@ -133,7 +133,7 @@ template <class T,
 inline auto column(MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
                    std::size_t i)
 {
-    return column(m.view(), i);
+    return column(m.to_mdspan(), i);
 }
 
 template <class T,
@@ -146,7 +146,7 @@ template <class T,
 inline auto column(const MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m,
                    std::size_t i)
 {
-    return column(m.view(), i);
+    return column(m.to_mdspan(), i);
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -169,14 +169,14 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline auto diag(MDArray<T, stdex::extents<IndexType, ext, ext>, Layout, Container>& m)
 {
-    return diag(m.view());
+    return diag(m.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
 inline auto diag(const MDArray<T, stdex::extents<IndexType, ext, ext>, Layout, Container>& m)
 {
-    return diag(m.view());
+    return diag(m.to_mdspan());
 }
 
 template <class T, class Extents, class Layout, class Accessor, class... SliceSpecs>
@@ -189,13 +189,13 @@ inline auto slice(stdex::mdspan<T, Extents, Layout, Accessor> m, SliceSpecs... s
 template <class T, class Extents, class Layout, class Container, class... SliceSpecs>
 inline auto slice(MDArray<T, Extents, Layout, Container>& m, SliceSpecs... slices)
 {
-    return slice(m.view(), slices...);
+    return slice(m.to_mdspan(), slices...);
 }
 
 template <class T, class Extents, class Layout, class Container, class... SliceSpecs>
 inline auto slice(const MDArray<T, Extents, Layout, Container>& m, SliceSpecs... slices)
 {
-    return slice(m.view(), slices...);
+    return slice(m.to_mdspan(), slices...);
 }
 
 } // namespace Sci

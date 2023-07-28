@@ -42,7 +42,7 @@ template <class T, class Extents, class Layout, class Container>
 inline void fill(Sci::MDArray<T, Extents, Layout, Container>& m, const T& value)
 {
     static_assert(Extents::rank() <= 2);
-    fill(m.view(), value);
+    fill(m.to_mdspan(), value);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ inline void clip(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layou
 template <class T, class Extents, class Layout, class Container>
 inline void clip(Sci::MDArray<T, Extents, Layout, Container>& a, const T& a_min, const T& a_max)
 {
-    clip(a.view(), a_min, a_max);
+    clip(a.to_mdspan(), a_min, a_max);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline std::size_t
 argmax(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return argmax(v.view());
+    return argmax(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -149,7 +149,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline std::size_t
 argmin(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return argmin(v.view());
+    return argmin(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -172,7 +172,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T max(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return max(v.view());
+    return max(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -195,7 +195,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T min(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return min(v.view());
+    return min(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -216,7 +216,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T sum(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return sum(v.view());
+    return sum(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -237,7 +237,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T prod(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return prod(v.view());
+    return prod(v.to_mdspan());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,7 +279,7 @@ inline M identity(std::size_t n)
     using index_type = typename M::index_type;
 
     M res(n, n);
-    auto res_diag = Sci::diag(res.view());
+    auto res_diag = Sci::diag(res.to_mdspan());
     for (index_type i = 0; i < res_diag.extent(0); ++i) {
         res_diag(i) = value_type{1};
     }
@@ -399,7 +399,7 @@ template <class T,
 void to_lower_triangular(
     Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
-    to_lower_triangular(a.view());
+    to_lower_triangular(a.to_mdspan());
 }
 
 } // namespace Linalg

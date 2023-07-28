@@ -38,7 +38,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline IndexType
 idx_abs_min(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return idx_abs_min(x.view());
+    return idx_abs_min(x.to_mdspan());
 }
 
 } // namespace Linalg

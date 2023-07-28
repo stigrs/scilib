@@ -19,7 +19,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline IndexType
 idx_abs_max(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return std::experimental::linalg::idx_abs_max(x.view());
+    return std::experimental::linalg::idx_abs_max(x.to_mdspan());
 }
 
 } // namespace Linalg

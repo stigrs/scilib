@@ -34,7 +34,7 @@ add(const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Contai
     const Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
     Sci::MDArray<T_z, stdex::extents<IndexType_z, ext_z>, Layout_z, Container_z>& z)
 {
-    std::experimental::linalg::add(x.view(), y.view(), z.view());
+    std::experimental::linalg::add(x.to_mdspan(), y.to_mdspan(), z.to_mdspan());
 }
 
 } // namespace Linalg

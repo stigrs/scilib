@@ -24,7 +24,7 @@ inline Sci::MDArray<T, stdex::extents<IndexType, ncols, nrows>, Layout, Containe
 transposed(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
     return Sci::MDArray<T, stdex::extents<IndexType, ncols, nrows>, Layout, Container>(
-        std::experimental::linalg::transposed(a.view()));
+        std::experimental::linalg::transposed(a.to_mdspan()));
 }
 
 } // namespace Linalg

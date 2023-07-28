@@ -72,7 +72,7 @@ inline double
 matrix_norm(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a,
             char norm)
 {
-    return matrix_norm(a.view(), norm);
+    return matrix_norm(a.to_mdspan(), norm);
 }
 
 } // namespace Linalg

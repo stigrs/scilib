@@ -35,7 +35,7 @@ matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, A
     Matrix<value_type, Layout> tmp(m);
 
     if (n < 0) {
-        inv(tmp.view(), tmp.view());
+        inv(tmp.to_mdspan(), tmp.to_mdspan());
     }
     int nn = std::abs(n);
 
@@ -49,7 +49,7 @@ matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, A
     }
     else if (nn == 2) {
 #ifdef USE_MKL
-        matrix_product(tmp.view(), tmp.view(), res.view());
+        matrix_product(tmp.to_mdspan(), tmp.to_mdspan(), res.to_mdspan());
 #else
         res = tmp * tmp;
 #endif
@@ -58,7 +58,7 @@ matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, A
         res = tmp;
         for (int ni = 1; ni < nn; ++ni) {
 #ifdef USE_MKL
-            matrix_product(res.view(), tmp.view(), res.view());
+            matrix_product(res.to_mdspan(), tmp.to_mdspan(), res.to_mdspan());
 #else
             res = res * tmp;
 #endif
@@ -70,7 +70,7 @@ matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, A
 template <class T, class Layout>
 inline Sci::Matrix<T, Layout> matrix_power(const Sci::Matrix<T, Layout>& m, int n)
 {
-    return matrix_power(m.view(), n);
+    return matrix_power(m.to_mdspan(), n);
 }
 
 } // namespace Linalg

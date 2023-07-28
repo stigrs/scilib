@@ -243,7 +243,7 @@ inline void matrix_vector_product(
     Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     Expects(y.size() == gsl::narrow_cast<std::size_t>(a.extent(0)));
-    matrix_vector_product(a.view(), x.view(), y.view());
+    matrix_vector_product(a.to_mdspan(), x.to_mdspan(), y.to_mdspan());
 }
 
 template <class T, class Layout>

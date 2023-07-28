@@ -12,7 +12,7 @@
 template <class Container, class Extents>
 Sci::Array4D<int> make_array4d(const Container& ctr, const Extents& exts)
 {
-    return Sci::Array4D<int>(ctr, exts);
+    return Sci::Array4D<int>(exts, ctr);
 }
 
 TEST(TestMDArray, TestArray4D)
@@ -40,7 +40,7 @@ TEST(TestMDArray, TestArray4DVector)
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
     Sci::Array4D<int> a(2, 2, 2, 2);
-    Sci::Array4D<int> b(data, a.mapping());
+    Sci::Array4D<int> b(a.mapping(), data);
 
     int it = 1;
     for (index_type i = 0; i < b.extent(0); ++i) {
@@ -59,7 +59,7 @@ TEST(TestMDArray, TestArray4DVector)
         EXPECT_EQ(c.extent(r), a.extent(r));
     }
 
-    Sci::Array4D<int> d(std::move(data), a.mapping());
+    Sci::Array4D<int> d(a.mapping(), std::move(data));
     for (std::size_t r = 0; r < c.rank(); ++r) {
         EXPECT_EQ(d.extent(r), a.extent(r));
     }
@@ -72,7 +72,7 @@ TEST(TestMDArray, TestCopyArrayRowMajorColMajor)
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
     Sci::Array4D<int> a(data, 2, 2, 2, 2);
-    Sci::Array4D<int, stdex::layout_left> b(a.view());
+    Sci::Array4D<int, stdex::layout_left> b(a.to_mdspan());
 
     for (index_type i = 0; i < a.extent(0); ++i) {
         for (index_type j = 0; j < a.extent(1); ++j) {
@@ -92,7 +92,7 @@ TEST(TestMDArray, TestCopyArrayColMajorRowMajor)
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
     Sci::Array4D<int, stdex::layout_left> a(data, 2, 2, 2, 2);
-    Sci::Array4D<int> b(a.view());
+    Sci::Array4D<int> b(a.to_mdspan());
 
     for (index_type i = 0; i < b.extent(0); ++i) {
         for (index_type j = 0; j < b.extent(1); ++j) {

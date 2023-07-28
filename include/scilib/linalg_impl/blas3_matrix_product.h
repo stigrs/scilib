@@ -258,7 +258,7 @@ inline void matrix_product(
         b,
     Sci::MDArray<T_c, stdex::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Container_c>& c)
 {
-    matrix_product(a.view(), b.view(), c.view());
+    matrix_product(a.to_mdspan(), b.to_mdspan(), c.to_mdspan());
 }
 
 template <class T, class Layout>
@@ -271,7 +271,7 @@ inline Sci::Matrix<T, Layout> matrix_product(const Sci::Matrix<T, Layout>& a,
     const index_type p = b.extent(1);
 
     Sci::Matrix<T, Layout> res(n, p);
-    matrix_product(a.view(), b.view(), res.view());
+    matrix_product(a.to_mdspan(), b.to_mdspan(), res.to_mdspan());
     return res;
 }
 
