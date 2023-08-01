@@ -81,18 +81,18 @@ void run_finite_difference()
               << "Number of iterations: " << iter << '\n';
 }
 
-template <typename T, int num, int SO, int Rows, int Cols>
-T eigen_finite_difference_impl(Eigen::Matrix<T, num, num, SO, Rows, Cols>& u)
+template <typename T, int num, int SO>
+T eigen_finite_difference_impl(Eigen::Matrix<T, num, num, SO>& u)
 {
     using namespace Eigen;
-    Eigen::Matrix<T, num, num, SO, Rows, Cols> u_old = u;
+    Eigen::Matrix<T, num, num, SO> u_old = u;
 
-    u.block(1, 1, num - 2, num - 2) =
-        ((u_old.block(0, 1, num - 2, num - 2) + u_old.block(2, 1, num - 1, num - 2) +
-          u_old.block(1, 0, num - 2, num - 3) + u_old.block(1, 2, num - 2, num - 1)) *
+    u(seq(1, num - 2), seq(1, num - 2)) =
+        ((u_old(seq(0, num - 3), seq(1, num - 2)) + u_old(seq(2, num - 1), seq(1, num - 2)) +
+          u_old(seq(1, num - 2), seq(0, num - 3)) + u_old(seq(1, num - 2), seq(2, num - 1))) *
              4.0 +
-         u_old.block(0, 0, num - 3, num - 3) + u_old.block(0, 2, num - 3, num - 1) +
-         u_old.block(2, 0, num - 1, num - 3) + u_old.block(2, 2, num - 1, num - 1)) /
+         u_old(seq(0, num - 3), seq(0, num - 3)) + u_old(seq(0, num - 3), seq(2, num - 1)) +
+         u_old(seq(2, num - 1), seq(0, num - 3)) + u_old(seq(2, num - 1), seq(2, num - 1))) /
         20.0;
 
     return (u - u_old).norm();
