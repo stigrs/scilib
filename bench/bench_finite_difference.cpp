@@ -23,7 +23,7 @@ template <typename T, int num>
 T finite_difference_impl(Sci::StaticMatrix<T, num, num>& u)
 {
     using namespace Sci;
-    using index_type = Sci::StaticMatrix<T, num, num>::index_type;
+    using index_type = typename Sci::StaticMatrix<T, num, num>::index_type;
 
     auto u_old = u;
 
