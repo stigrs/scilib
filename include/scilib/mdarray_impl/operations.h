@@ -60,7 +60,7 @@ auto concat_index_sequence(std::index_sequence<Lefts...>, std::index_sequence<Ri
     return std::index_sequence<Lefts..., Rights...>{};
 }
 
-auto reverse_index_sequence(std::index_sequence<> x) { return x; }
+inline auto reverse_index_sequence(std::index_sequence<> x) { return x; }
 
 template <std::size_t First, std::size_t... Rest>
 auto reverse_index_sequence(std::index_sequence<First, Rest...>)
