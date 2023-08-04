@@ -208,7 +208,7 @@ endif()
 add_library(scilib INTERFACE)
 add_library(scilib::scilib ALIAS scilib)
 
-target_link_libraries(scilib INTERFACE std::mdspan std::linalg Microsoft.GSL::GSL range-v3)
+target_link_libraries(scilib INTERFACE std::mdspan std::linalg Microsoft.GSL::GSL range-v3-meta range-v3-concepts range-v3)
 
 target_include_directories(scilib INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -217,7 +217,7 @@ target_include_directories(scilib INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-install(TARGETS scilib mdspan linalg GSL range-v3
+install(TARGETS scilib mdspan linalg GSL range-v3-meta range-v3-concepts range-v3
     EXPORT scilibTargets
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
 )
