@@ -14,8 +14,6 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
-#include <range/v3/view/cartesian_product.hpp>
-#include <range/v3/view/iota.hpp>
 #include <type_traits>
 #include <utility>
 
@@ -46,6 +44,7 @@ make_mdarray(stdex::mdspan<T, Extents, Layout, Accessor> m)
     return MDArray<T, Extents, Layout, Container>(m);
 }
 
+#if 0
 //--------------------------------------------------------------------------------------------------
 // For each in extents:
 //
@@ -134,6 +133,7 @@ void for_each_in_extents(Callable&& f, MDArray<T, Extents, Layout, Container>& m
 {
     for_each_in_extents(f, m.to_mdspan());
 }
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Equality comparisons:

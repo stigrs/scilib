@@ -14,6 +14,7 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
+#if 0
 // forward declaration
 template <class Callable,
           class ElementType,
@@ -24,7 +25,7 @@ template <class Callable,
 void for_each_in_extents(
     Callable&& f,
     stdex::mdspan<ElementType, stdex::extents<IndexType, Extents...>, Layout, Accessor> m);
-
+#endif
 template <class T_x,
           class IndexType_x,
           std::size_t ext_x,

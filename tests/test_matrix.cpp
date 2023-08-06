@@ -34,6 +34,24 @@ TEST(TestMatrix, TestElementAccess)
 #endif
 }
 
+TEST(TestMatrix, TestElementAccessArray)
+{
+    Sci::Matrix<int> m(5, 3);
+    m = 2;
+    EXPECT_EQ(m[(std::array<Sci::index, 2>{0, 0})], 2);
+    EXPECT_EQ(m[(std::array<Sci::index, 2>{4, 2})], 2);
+}
+
+TEST(TestMatrix, TestElementAccessSpan)
+{
+    Sci::Matrix<int> m(5, 3);
+    m = 2;
+    constexpr Sci::index a[] = {0, 0};
+    constexpr Sci::index b[] = {4, 2};
+    EXPECT_EQ(m[(std::span{a})], 2);
+    EXPECT_EQ(m[(std::span{b})], 2);
+}
+
 TEST(TestMatrix, TestView)
 {
     Sci::Matrix<int> m(5, 3);

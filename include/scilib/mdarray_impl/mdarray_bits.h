@@ -13,6 +13,7 @@
 #include <cassert>
 #include <gsl/gsl>
 #include <initializer_list>
+#include <span>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -36,10 +37,27 @@ struct Is_mdarray<MDArray<ElementType, Extents, LayoutPolicy, Container>> : std:
 template <class M>
 static constexpr bool Is_mdarray_v = Is_mdarray<M>::value;
 
+template <class ValueType, class Index>
+decltype(auto) just_value(Index, ValueType&& t) { return std::forward<ValueType&&>(t); }
+
+template <class ValueType, std::size_t N>
+std::array<ValueType, N> value_to_array(const ValueType& t) 
+{
+    return [&]<std::size_t... Indices>(std::index_sequence<Indices...>) {
+        return std::array<ValueType, N>{just_value(Indices, t)...};
+    }(std::make_index_sequence<N>());
+}
+
 template <class Container>
 struct Container_is_array : std::false_type {
     template <class M>
     static constexpr Container construct(const M& m) { return Container(m.required_span_size()); }
+
+    template <class M, class ValueType>
+    static constexpr Container construct(const M& m, const ValueType& val)
+    {
+        return Container(m.required_span_size(), val);
+    }
 };
 
 template <class ElementType, std::size_t N>
@@ -49,7 +67,16 @@ struct Container_is_array<std::array<ElementType, N>> : std::true_type {
     {
         return std::array<ElementType, N>();
     }
+
+    template <class M, class ValueType>
+    static constexpr std::array<ElementType, N> construct(const M&, const ValueType& val)
+    {
+        return value_to_array<ElementType, N>(val);
+    }
 };
+
+template <class Container>
+static constexpr bool Container_is_array_v = Container_is_array<Container>::value;
 
 //--------------------------------------------------------------------------------------------------
 // Bounds checking:
@@ -100,11 +127,11 @@ template <class ElementType, class Extents, class LayoutPolicy, class Container>
     requires __Detail::Is_extents_v<Extents>
 class MDArray {
 public:
-    using element_type = ElementType;
     using extents_type = Extents;
     using layout_type = LayoutPolicy;
     using container_type = Container;
     using mapping_type = typename layout_type::template mapping<extents_type>;
+    using element_type = ElementType;
     using mdspan_type = stdex::mdspan<element_type, extents_type, layout_type>;
     using const_mdspan_type = stdex::mdspan<const element_type, extents_type, layout_type>;
     using value_type = std::remove_cv_t<element_type>;
@@ -120,6 +147,20 @@ public:
     using reverse_iterator = typename container_type::reverse_iterator;
     using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
+    static constexpr rank_type rank() noexcept { return extents_type::rank(); }
+    static constexpr rank_type rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
+    static constexpr size_type static_extent(rank_type r) noexcept
+    {
+        Expects(r < extents_type::rank());
+        return extents_type::static_extent(r);
+    }
+
+    constexpr index_type extent(rank_type r) const
+    {
+        Expects(r < extents_type::rank());
+        return map.extents().extent(r);
+    }
+
     // [MDArray.ctors], MDArray constructors
 
     constexpr MDArray() requires(extents_type::rank_dynamic() != 0) = default;
@@ -127,76 +168,88 @@ public:
     constexpr MDArray(MDArray&&) = default;
 
     template <class... OtherIndexTypes>
-        requires((extents_type::rank() > 0 || extents_type::rank_dynamic() == 0) &&
-                 std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  std::is_constructible_v<extents_type, OtherIndexTypes...> &&
-                 std::is_constructible_v<mapping_type, extents_type>)
+                 std::is_constructible_v<mapping_type, extents_type> &&
+                 (std::is_constructible_v<container_type, std::size_t> ||
+                  __Detail::Container_is_array_v<container_type>))
     constexpr explicit MDArray(OtherIndexTypes... exts)
-        : map(extents_type(exts...)),
+        : map(extents_type(static_cast<index_type>(std::move(exts))...)),
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  std::is_constructible_v<extents_type, OtherIndexTypes...> &&
-                 std::is_constructible_v<mapping_type, extents_type>)
+                 std::is_constructible_v<mapping_type, extents_type> &&
+                 (std::is_constructible_v<container_type, std::size_t> ||
+                  __Detail::Container_is_array_v<container_type>))
     constexpr explicit MDArray(const container_type& c, OtherIndexTypes... exts)
-        : map(extents_type(exts...)), ctr(c)
+        : map(extents_type(static_cast<index_type>(std::move(exts))...)), ctr(c)
     {
-        Expects(ctr.size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const extents_type& exts)
-        requires(std::is_constructible_v<mapping_type, const extents_type&>)
+        requires(std::is_constructible_v<mapping_type, const extents_type&> &&
+                 (std::is_constructible_v<container_type, std::size_t> ||
+                  __Detail::Container_is_array_v<container_type>) )
         : map(exts), ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
-    }
-
-    constexpr MDArray(const extents_type& exts, const value_type& val)
-        requires(std::is_constructible_v<mapping_type, const extents_type&>)
-        : map(exts), ctr(__Detail::Container_is_array<container_type>::construct(map))
-    {
-        std::fill(ctr.begin(), ctr.end(), val);
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const mapping_type& m)
         requires(std::is_constructible_v<container_type, std::size_t> ||
-                 __Detail::Container_is_array<container_type>::value)
+                 __Detail::Container_is_array_v<container_type>)
         : map(m), ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
+    }
+
+    constexpr MDArray(const extents_type& exts, const value_type& val)
+        requires(std::is_constructible_v<mapping_type, const extents_type&> &&
+                 (std::is_constructible_v<container_type, std::size_t> ||
+                  __Detail::Container_is_array_v<container_type>) )
+        : map(exts), ctr(__Detail::Container_is_array<container_type>::construct(map, val))
+    {
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const mapping_type& m, const value_type& val)
         requires(std::is_constructible_v<container_type, std::size_t> ||
-                 __Detail::Container_is_array<container_type>::value)
-        : map(m), ctr(__Detail::Container_is_array<container_type>::construct(map))
+                 __Detail::Container_is_array_v<container_type>)
+        : map(m), ctr(__Detail::Container_is_array<container_type>::construct(map, val))
     {
-        std::fill(ctr.begin(), ctr.end(), val);
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const extents_type& exts, const container_type& c)
         requires(std::is_constructible_v<mapping_type, const extents_type&>)
         : map(exts), ctr(c)
     {
-        Expects(ctr.size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const mapping_type& m, const container_type& c) : map(m), ctr(c)
     {
-        Expects(ctr.size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const extents_type& exts, container_type&& c) 
         requires(std::is_constructible_v<mapping_type, const extents_type&>)
         : map(exts), ctr(std::move(c))
     {
-        Expects(ctr.size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     constexpr MDArray(const mapping_type& m, container_type&& c) : map(m), ctr(std::move(c))
     {
-        Expects(ctr.size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
     template <class U>
@@ -225,36 +278,52 @@ public:
               class OtherLayoutPolicy,
               class OtherContainer>
         requires(std::is_constructible_v<Container, const OtherContainer&> &&
-                 std::is_constructible_v<extents_type, OtherExtents>)
+                 std::is_constructible_v<extents_type, OtherExtents>) 
     constexpr MDArray(
-        const MDArray<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherContainer> other)
+        const MDArray<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherContainer>& other)
         : map(extents_type(__Detail::extents(other))),
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
-        static_assert(other.rank() <= 7);
-        Expects(ctr.size() >= other.size());
         for (rank_type r = 0; r < other.rank(); ++r) {
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        copy(other, to_mdspan());
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
+#if MDSPAN_USE_BRACKET_OPERATOR
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other[static_cast<index_type>(std::move(indices))...];
+#else
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other(static_cast<index_type>(std::move(indices))...);
+#endif
+        };
+        for_each_in_extents(copy_fn, other);
     }
 
     template <class OtherElementType, class OtherExtents, class OtherLayoutPolicy, class Accessor>
         requires(std::is_constructible_v<extents_type, OtherExtents> &&
-                 std::is_constructible_v<value_type, typename Accessor::reference>)
+                 std::is_constructible_v<value_type, typename Accessor::reference> &&
+                 (std::is_constructible_v<container_type, std::size_t> ||
+                  __Detail::Container_is_array_v<container_type>) )
     constexpr MDArray(
-        stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor> other)
+        const stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other)
         : map(extents_type(__Detail::extents(other))),
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
-        static_assert(other.rank() <= 7);
-        Expects(ctr.size() >= other.size());
         for (rank_type r = 0; r < other.rank(); ++r) {
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        copy(other, to_mdspan());
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
+#if MDSPAN_USE_BRACKET_OPERATOR
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other[static_cast<index_type>(std::move(indices))...];
+#else
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other(static_cast<index_type>(std::move(indices))...);
+#endif
+        };
+        for_each_in_extents(copy_fn, other);
     }
 
     ~MDArray() = default;
@@ -280,17 +349,15 @@ public:
     constexpr MDArray(const extents_type& exts, const value_type& val, const Alloc& a)
         requires(std::is_constructible_v<mapping_type, const extents_type&> &&
                  std::is_constructible_v<container_type, std::size_t, value_type, Alloc>)
-        : map(exts), ctr(map.required_span_size(), a)
+        : map(exts), ctr(map.required_span_size(), val, a)
     {
-        std::fill(ctr.begin(), ctr.end(), val);
     }
 
     template <class Alloc>
     constexpr MDArray(const mapping_type& m, const value_type& val, const Alloc& a)
         requires(std::is_constructible_v<container_type, std::size_t, value_type, Alloc>)
-        : map(m), ctr(map.required_span_size(), a)
+        : map(m), ctr(map.required_span_size(), val, a)
     {
-        std::fill(ctr.begin(), ctr.end(), val);
     }
 
     template <class Alloc>
@@ -330,22 +397,59 @@ public:
     template <class OtherElementType,
               class OtherExtents,
               class OtherLayoutPolicy,
+              class OtherContainer,
+              class Alloc>
+        requires(std::is_constructible_v<Container, OtherContainer, Alloc> &&
+                 std::is_constructible_v<extents_type, OtherExtents>)
+    constexpr MDArray(
+        const MDArray<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherContainer>& other,
+        const Alloc& a)
+        : map(extents_type(__Detail::extents(other))), ctr(map.required_span_size(), a)
+    {
+        for (rank_type r = 0; r < other.rank(); ++r) {
+            Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
+                    static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
+        }
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
+#if MDSPAN_USE_BRACKET_OPERATOR
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other[static_cast<index_type>(std::move(indices))...];
+#else
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other(static_cast<index_type>(std::move(indices))...);
+#endif
+        };
+        for_each_in_extents(copy_fn, other);
+    }
+
+    template <class OtherElementType,
+              class OtherExtents,
+              class OtherLayoutPolicy,
               class Accessor,
               class Alloc>
         requires(std::is_constructible_v<extents_type, OtherExtents> &&
                  std::is_constructible_v<value_type, typename Accessor::reference> &&
                  std::is_constructible_v<container_type, std::size_t, Alloc>)
     constexpr MDArray(
-        stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor> other,
+        const stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other,
         const Alloc& a)
-        : map(extents_type(__Detail::extents(other))), ctr(map.required_span_size(), a)
+        : map(extents_type(__Detail::extents(other))),
+          ctr(map.required_span_size(), a)
     {
-        static_assert(other.rank() <= 7);
         for (rank_type r = 0; r < other.rank(); ++r) {
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        copy(other, to_mdspan());
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
+#if MDSPAN_USE_BRACKET_OPERATOR
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other[static_cast<index_type>(std::move(indices))...];
+#else
+            ctr[map(static_cast<index_type>(std::move(indices))...)] =
+                other(static_cast<index_type>(std::move(indices))...);
+#endif
+        };
+        for_each_in_extents(copy_fn, other);
     }
 
     constexpr MDArray& operator=(const MDArray&) = default;
@@ -355,7 +459,8 @@ public:
 
 #if MDSPAN_USE_PAREN_OPERATOR
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  sizeof...(OtherIndexTypes) == extents_type::rank())
     MDSPAN_FORCE_INLINE_FUNCTION constexpr reference operator()(OtherIndexTypes... indices) noexcept
     {
@@ -364,7 +469,8 @@ public:
     }
 
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  sizeof...(OtherIndexTypes) == extents_type::rank())
     MDSPAN_FORCE_INLINE_FUNCTION const_reference
     operator()(OtherIndexTypes... indices) const noexcept
@@ -375,16 +481,21 @@ public:
 #endif
 
     template <class OtherIndexType>
-        requires(std::is_convertible_v<OtherIndexType, index_type> && extents_type::rank() == 1)
-    MDSPAN_FORCE_INLINE_FUNCTION reference operator[](OtherIndexType indx) noexcept
+        requires(std::is_convertible_v<OtherIndexType, index_type> &&
+                 std::is_nothrow_constructible_v<index_type, OtherIndexType> &&
+                 extents_type::rank() == 1)
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr reference operator[](OtherIndexType indx) noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indx));
         return ctr[map(static_cast<index_type>(std::move(indx)))];
     }
 
     template <class OtherIndexType>
-        requires(std::is_convertible_v<OtherIndexType, index_type>&& extents_type::rank() == 1)
-    MDSPAN_FORCE_INLINE_FUNCTION const_reference operator[](OtherIndexType indx) const noexcept
+        requires(std::is_convertible_v<OtherIndexType, index_type> &&
+                 std::is_nothrow_constructible_v<index_type, OtherIndexType> &&
+                 extents_type::rank() == 1)
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
+    operator[](OtherIndexType indx) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indx));
         return ctr[map(static_cast<index_type>(std::move(indx)))];
@@ -392,26 +503,78 @@ public:
 
 #if MDSPAN_USE_BRACKET_OPERATOR
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  sizeof...(OtherIndexTypes) == extents_type::rank())
-    MDSPAN_FORCE_INLINE_FUNCTION reference operator[](OtherIndexTypes... indices) noexcept
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr reference operator[](OtherIndexTypes... indices) noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
     template <class... SizeTypes>
-        requires(std::conjunction_v<std::is_convertible<SizeTypes, index_type>...> &&
-                 sizeof...(SizeTypes) == extents_type::rank())
-    MDSPAN_FORCE_INLINE_FUNCTION const_reference operator[](SizeTypes... indices) const noexcept
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
+                 sizeof...(OtherIndexTypes) == extents_type::rank())
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
+    operator[](SizeTypes... indices) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 #endif
 
+    template <class OtherIndexType>
+        requires(std::is_convertible_v<OtherIndexType, index_type> &&
+                 std::is_nothrow_constructible_v<index_type, OtherIndexType>)
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr reference
+    operator[](const std::array<OtherIndexType, rank()>& indices) noexcept
+    {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+            return map(indices[Indxs]...);
+        }(std::make_index_sequence<rank()>());
+        return ctr[map_fn]; 
+    }
+
+    template <class OtherIndexType>
+        requires(std::is_convertible_v<OtherIndexType, index_type> &&
+                 std::is_nothrow_constructible_v<index_type, OtherIndexType>)
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
+    operator[](const std::array<OtherIndexType, rank()>& indices) const noexcept
+    {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+            return map(indices[Indxs]...);
+        }(std::make_index_sequence<rank()>());
+        return ctr[map_fn]; 
+    }
+
+    template <class OtherIndexType>
+        requires(std::is_convertible_v<OtherIndexType, index_type> &&
+                 std::is_nothrow_constructible_v<index_type, OtherIndexType>)
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr reference
+    operator[](std::span<OtherIndexType, rank()> indices) noexcept
+    {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+            return map(indices[Indxs]...);
+        }(std::make_index_sequence<rank()>());
+        return ctr[map_fn]; 
+    }
+
+    template <class OtherIndexType>
+        requires(std::is_convertible_v<OtherIndexType, index_type> &&
+                 std::is_nothrow_constructible_v<index_type, OtherIndexType>)
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
+    operator[](std::span<OtherIndexType, rank()> indices) const noexcept
+    {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+            return map(indices[Indxs]...);
+        }(std::make_index_sequence<rank()>());
+        return ctr[map_fn]; 
+    }
+
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  sizeof...(OtherIndexTypes) == extents_type::rank())
     constexpr reference at(OtherIndexTypes... indices) noexcept
     {
@@ -420,7 +583,8 @@ public:
     }
 
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  sizeof...(OtherIndexTypes) == extents_type::rank())
     constexpr const_reference at(OtherIndexTypes... indices) const noexcept
     {
@@ -428,55 +592,61 @@ public:
         return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
-    static constexpr rank_type rank() noexcept { return extents_type::rank(); }
-    static constexpr rank_type rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
-    static constexpr size_type static_extent(rank_type r) noexcept
-    {
-        Expects(r < extents_type::rank());
-        return extents_type::static_extent(r);
-    }
-
     constexpr const extents_type& extents() const noexcept { return map.extents(); }
     constexpr const mapping_type& mapping() const noexcept { return map; }
 
-    constexpr index_type extent(rank_type r) const
+    constexpr bool empty() const noexcept 
     {
-        Expects(r < extents_type::rank());
-        return map.extents().extent(r);
+        return [&]<std::size_t... IndexTypes>(std::index_sequence<IndexTypes...>) {
+            return (rank() > 0) &&
+                   ((map.extents().extent(IndexTypes) == index_type{0}) || ... || false);
+        }(std::make_index_sequence<rank()>());
     }
 
-    constexpr bool empty() const noexcept { return ctr.empty(); }
-    constexpr size_type size() const noexcept { return ctr.size(); }
+    constexpr size_type size() const noexcept 
+    {
+        return [&]<std::size_t... IndexTypes>(std::index_sequence<IndexTypes...>) {
+            return ((static_cast<size_type>(map.extents().extent(IndexTypes))) * ... *
+                    size_type{1});
+        }(std::make_index_sequence<rank()>());
+    }
+
     constexpr size_type container_size() const noexcept { return ctr.size(); }
 
-    // [MDArray.members.iterators], iterators over the data
-
     constexpr iterator begin() noexcept { return ctr.begin(); }
-
     constexpr const_iterator begin() const noexcept { return ctr.begin(); }
     constexpr const_iterator cbegin() const noexcept { return ctr.cbegin(); }
 
     constexpr reverse_iterator rbegin() noexcept { return ctr.rbegin(); }
-
     constexpr const_reverse_iterator rbegin() const noexcept { return ctr.rbegin(); }
     constexpr const_reverse_iterator crbegin() const noexcept { return ctr.crbegin(); }
 
     constexpr iterator end() noexcept { return ctr.end(); }
-
     constexpr const_iterator end() const noexcept { return ctr.end(); }
     constexpr const_iterator cend() const noexcept { return ctr.cend(); }
 
     constexpr reverse_iterator rend() noexcept { return ctr.rend(); }
-
     constexpr const_reverse_iterator rend() const noexcept { return ctr.rend(); }
     constexpr const_reverse_iterator crend() const noexcept { return ctr.crend(); }
-
-    // [MDArray.members.views], views of the data
 
     constexpr pointer container_data() noexcept { return ctr.data(); }
     constexpr const_pointer container_data() const noexcept { return ctr.data(); }
 
     container_type&& extract_container() noexcept { return std::move(ctr); }
+
+    template <class OtherElementType,
+              class OtherExtents,
+              class OtherLayoutType,
+              class OtherAccessorType>
+        requires(std::is_assignable_v<
+                 mdspan_type,
+                 stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutType, OtherAccessorType>>)
+    constexpr
+    operator stdex::mdspan<OtherElementType, OtherElementType, OtherLayoutType, OtherAccessorType>()
+    {
+        Expects(container_size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        return mdspan_type(container_data(), map);
+    }
 
     template <class OtherAccessorType = stdex::default_accessor<element_type>>
         requires(std::is_assignable_v<
@@ -485,7 +655,7 @@ public:
     constexpr stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>
     to_mdspan(const OtherAccessorType& a = stdex::default_accessor<element_type>())
     {
-        Expects(size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(container_size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
         return stdex::mdspan<element_type, extents_type, layout_type, OtherAccessorType>(
             container_data(), map, a);
     }
@@ -497,40 +667,10 @@ public:
     constexpr stdex::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>
     to_mdspan(const OtherAccessorType& a = stdex::default_accessor<const element_type>()) const
     {
-        Expects(size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
+        Expects(container_size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
         return stdex::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>(
             container_data(), map, a);
     }
-
-    template <class OtherElementType,
-              class OtherExtents,
-              class OtherLayoutType,
-              class OtherAccessorType>
-        requires(std::is_assignable_v<
-                 mdspan_type,
-                 stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutType, OtherAccessorType>>)
-    constexpr
-    operator stdex::mdspan<OtherElementType, OtherElementType, OtherLayoutType, OtherAccessorType>()
-    {
-        Expects(size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
-        return mdspan_type(container_data(), map);
-    }
-
-    template <class OtherElementType,
-              class OtherExtents,
-              class OtherLayoutType,
-              class OtherAccessorType>
-        requires(std::is_assignable_v<
-                 const_mdspan_type,
-                 stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutType, OtherAccessorType>>)
-    constexpr
-    operator stdex::mdspan<OtherElementType, OtherElementType, OtherLayoutType, OtherAccessorType>()
-    {
-        Expects(size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
-        return const_mdspan_type(container_data(), map);
-    }
-
-    // [MDArray.members.obs], observers of the mapping
 
     static constexpr bool is_always_unique() noexcept { return mapping_type::is_always_unique(); };
 
@@ -554,16 +694,15 @@ public:
         return map.stride(r);
     };
 
-    // [MDArray.members.modifiers], MDArray modifiers
-
     template <class... OtherIndexTypes>
-        requires(std::conjunction_v<std::is_convertible<OtherIndexTypes, index_type>...> &&
+        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
+                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  std::is_constructible_v<extents_type, OtherIndexTypes...> &&
                  std::is_constructible_v<mapping_type, extents_type> &&
-                 (!__Detail::Container_is_array<container_type>::value))
+                 (!__Detail::Container_is_array_v<container_type>))
     constexpr void resize(OtherIndexTypes... exts) noexcept
     {
-        map = mapping_type(extents_type(exts...));
+        map = mapping_type(extents_type(std::move(exts)...));
         ctr = container_type(map.required_span_size());
     }
 
@@ -573,31 +712,31 @@ public:
         std::swap(x.map, y.map);
     }
 
-    template <class F>
-    constexpr MDArray& apply(F f) noexcept
+    template <class Callable>
+    constexpr MDArray& apply(Callable&& f) noexcept
     {
         for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
-            f(ctr[i]);
+            std::forward<Callable>(f)(ctr[i]);
         }
         return *this;
     }
 
-    template <class F, class U>
-    constexpr MDArray& apply(F f, const U& val) noexcept
+    template <class Callable, class ValueType>
+    constexpr MDArray& apply(Callable&& f, const ValueType& val) noexcept
     {
         for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
-            f(ctr[i], val);
+            std::forward<Callable>(f)(ctr[i], val);
         }
         return *this;
     }
 
-    template <class F>
-    constexpr MDArray& apply(const MDArray& m, F f) noexcept
+    template <class Callable>
+    constexpr MDArray& apply(const MDArray& m, Callable&& f) noexcept
     {
         Expects(extents() == m.extents());
 
         for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
-            f(ctr[i], m.ctr[i]);
+            std::forward<Callable>(f)(ctr[i], m.ctr[i]);
         }
         return *this;
     }
