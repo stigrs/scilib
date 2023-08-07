@@ -48,20 +48,12 @@ matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, A
         res = tmp;
     }
     else if (nn == 2) {
-#ifdef USE_MKL
-        matrix_product(tmp.to_mdspan(), tmp.to_mdspan(), res.to_mdspan());
-#else
         res = tmp * tmp;
-#endif
     }
     else {
         res = tmp;
         for (int ni = 1; ni < nn; ++ni) {
-#ifdef USE_MKL
-            matrix_product(res.to_mdspan(), tmp.to_mdspan(), res.to_mdspan());
-#else
             res = res * tmp;
-#endif
         }
     }
     return res;
