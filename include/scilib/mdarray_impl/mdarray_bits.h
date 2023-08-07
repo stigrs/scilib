@@ -43,9 +43,11 @@ decltype(auto) just_value(Index, ValueType&& t) { return std::forward<ValueType&
 template <class ValueType, std::size_t N>
 std::array<ValueType, N> value_to_array(const ValueType& t) 
 {
-    return [&]<std::size_t... Indices>(std::index_sequence<Indices...>) {
+    return [&]<std::size_t... Indices>(std::index_sequence<Indices...>)
+    {
         return std::array<ValueType, N>{just_value(Indices, t)...};
-    }(std::make_index_sequence<N>());
+    }
+    (std::make_index_sequence<N>());
 }
 
 template <class Container>
