@@ -146,7 +146,7 @@ TEST(TestVector, TestSetValue)
 {
     Sci::Vector<int> v(5);
     v = 4;
-    for (auto i : ranges::view::iota(0, v.extent(0))) {
+    for (auto i : ranges::views::iota(0, v.extent(0))) {
         EXPECT_EQ(v[i], 4);
     }
 }
@@ -156,7 +156,7 @@ TEST(TestVector, TestAddValue)
     Sci::Vector<int> v(5);
     v = 2;
     v += 4;
-    for (auto i : ranges::view::iota(0, v.extent(0))) {
+    for (auto i : ranges::views::iota(0, v.extent(0))) {
         EXPECT_EQ(v[i], 6);
     }
 }
@@ -168,10 +168,10 @@ TEST(TestVector, TestAddVector)
     Sci::Vector<int> b(5);
     b = 1;
     a += b;
-    for (auto i : ranges::view::iota(0, a.extent(0))) {
+    for (auto i : ranges::views::iota(0, a.extent(0))) {
         EXPECT_EQ(a[i], 2);
     }
-    for (auto i : ranges::view::iota(0, b.extent(0))) {
+    for (auto i : ranges::views::iota(0, b.extent(0))) {
         EXPECT_EQ(b[i], 1);
     }
 }
