@@ -723,7 +723,7 @@ public:
         {
             std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)]);
         };
-        for_each_in_extents(apply_fn, to_mdspan());
+        for_each_in_extents(apply_fn, extents(), layout_type{});
 
         return *this;
     }
@@ -735,7 +735,7 @@ public:
         {
             std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)], val);
         };
-        for_each_in_extents(apply_fn, to_mdspan());
+        for_each_in_extents(apply_fn, extents(), layout_type{});
 
         return *this;
     }
@@ -755,7 +755,7 @@ public:
                                       m(static_cast<index_type>(std::move(indices))...));
 #endif
         };
-        for_each_in_extents(apply_fn, to_mdspan());
+        for_each_in_extents(apply_fn, extents(), layout_type{});
 
         return *this;
     }
