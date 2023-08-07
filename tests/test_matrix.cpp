@@ -57,7 +57,11 @@ TEST(TestMatrix, TestView)
     Sci::Matrix<int> m(5, 3);
     m = 2;
     auto mm = m.to_mdspan();
+#if __cpp_multidimensional_subscript
+    EXPECT_EQ(mm[0, 0], 2);
+#else
     EXPECT_EQ(mm(0, 0), 2);
+#endif
 }
 
 TEST(TestMatrix, TestCopy)
@@ -160,8 +164,10 @@ TEST(TestMatrix, TestSetValue)
     Sci::Matrix<int> m(5, 3);
     Sci::Matrix<int> mm(m.mapping());
     mm = 3;
-    for (const auto& mi : mm) {
-        EXPECT_EQ(mi, 3);
+    for (Sci::index i = 0; i < mm.extent(0); ++i) {
+        for (Sci::index j = 0; j < mm.extent(1); ++j) {
+            EXPECT_EQ(mm(i, j), 3);
+        }
     }
 }
 
@@ -170,8 +176,10 @@ TEST(TestMatrix, TestAddValue)
     Sci::Matrix<int> m(5, 3);
     m = 1;
     m += 4;
-    for (const auto& mi : m) {
-        EXPECT_EQ(mi, 5);
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
+            EXPECT_EQ(m(i, j), 5);
+        }
     }
 }
 
@@ -182,8 +190,10 @@ TEST(TestMatrix, TestAddMatrix)
     Sci::Matrix<int> b(5, 3);
     b = 4;
     Sci::Matrix<int> c = a + b;
-    for (const auto& ci : c) {
-        EXPECT_EQ(ci, 5);
+    for (Sci::index i = 0; i < c.extent(0); ++i) {
+        for (Sci::index j = 0; j < c.extent(1); ++j) {
+            EXPECT_EQ(c(i, j), 5);
+        }
     }
 }
 

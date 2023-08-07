@@ -51,46 +51,35 @@ template <class T, class Extents, class Layout, class Container>
 constexpr bool operator==(const MDArray<T, Extents, Layout, Container>& a,
                           const MDArray<T, Extents, Layout, Container>& b)
 {
-    return std::equal(a.begin(), a.end(), b.begin());
+    using index_type = typename Extents::index_type;
+
+    if ((a.rank() != b.rank()) || (a.extents() != b.extents())) {
+        return false;
+    }
+    bool result = true;
+
+    auto is_equal = [&]<class... IndexTypes>(IndexTypes... indices) {
+#if __cpp_multidimensional_subscript
+        if (a[static_cast<index_type>(std::move(indices))...] !=
+            b[static_cast<index_type>(std::move(indices))...]) {
+            result = false;
+        }
+#else
+        if (a(static_cast<index_type>(std::move(indices))...) !=
+            b(static_cast<index_type>(std::move(indices))...)) {
+            result = false;
+        }
+#endif
+    };
+    for_each_in_extents(is_equal, a.extents(), Layout{});
+    return result;
 }
 
 template <class T, class Extents, class Layout, class Container>
 constexpr bool operator!=(const MDArray<T, Extents, Layout, Container>& a,
                           const MDArray<T, Extents, Layout, Container>& b)
 {
-    bool result = true;
-    if (a.extents() == b.extents()) {
-        result = !(a == b);
-    }
-    return result;
-}
-
-template <class T, class Extents, class Layout, class Container>
-constexpr bool operator<(const MDArray<T, Extents, Layout, Container>& a,
-                         const MDArray<T, Extents, Layout, Container>& b)
-{
-    return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end());
-}
-
-template <class T, class Extents, class Layout, class Container>
-constexpr bool operator>(const MDArray<T, Extents, Layout, Container>& a,
-                         const MDArray<T, Extents, Layout, Container>& b)
-{
-    return b < a;
-}
-
-template <class T, class Extents, class Layout, class Container>
-constexpr bool operator<=(const MDArray<T, Extents, Layout, Container>& a,
-                          const MDArray<T, Extents, Layout, Container>& b)
-{
-    return !(a > b);
-}
-
-template <class T, class Extents, class Layout, class Container>
-constexpr bool operator>=(const MDArray<T, Extents, Layout, Container>& a,
-                          const MDArray<T, Extents, Layout, Container>& b)
-{
-    return !(a < b);
+    return !(a == b);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -152,14 +141,8 @@ operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
     using value_type = std::remove_cv_t<T>;
     value_type scaling_factor = scalar;
 
-    if constexpr (Extents::rank() <= 7) {
-        return MDArray<T, Extents, Layout, Container>(
-            std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
-    }
-    else {
-        MDArray<T, Extents, Layout, Container> res = v;
-        return res *= scalar;
-    }
+    return MDArray<T, Extents, Layout, Container>(
+        std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -169,22 +152,19 @@ operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
     using value_type = std::remove_cv_t<T>;
     value_type scaling_factor = scalar;
 
-    if constexpr (Extents::rank() <= 7) {
-        return MDArray<T, Extents, Layout, Container>(
-            std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
-    }
-    else {
-        MDArray<T, Extents, Layout, Container> res = v;
-        return res *= scalar;
-    }
+    return MDArray<T, Extents, Layout, Container>(
+        std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
 }
 
 template <class T, class Extents, class Layout, class Container>
 constexpr MDArray<T, Extents, Layout, Container>
 operator/(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
 {
-    MDArray<T, Extents, Layout, Container> res = v;
-    return res /= scalar;
+    using value_type = std::remove_cv_t<T>;
+    value_type scaling_factor = value_type{1} / scalar;
+
+    return MDArray<T, Extents, Layout, Container>(
+        std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
 }
 
 template <class T, class Extents, class Layout, class Container>

@@ -134,10 +134,6 @@ public:
     using const_pointer = decltype(std::to_address(std::declval<container_type>().cbegin()));
     using reference = typename container_type::reference;
     using const_reference = typename container_type::const_reference;
-    using iterator = typename container_type::iterator;
-    using const_iterator = typename container_type::const_iterator;
-    using reverse_iterator = typename container_type::reverse_iterator;
-    using const_reverse_iterator = typename container_type::const_reverse_iterator;
 
     static constexpr rank_type rank() noexcept { return extents_type::rank(); }
     static constexpr rank_type rank_dynamic() noexcept { return extents_type::rank_dynamic(); }
@@ -506,12 +502,12 @@ public:
         return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
 
-    template <class... SizeTypes>
+    template <class... OtherIndexTypes>
         requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
                  (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  sizeof...(OtherIndexTypes) == extents_type::rank())
     MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
-    operator[](SizeTypes... indices) const noexcept
+    operator[](OtherIndexTypes... indices) const noexcept
     {
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(static_cast<index_type>(std::move(indices))...)];
@@ -618,22 +614,6 @@ public:
     }
 
     constexpr size_type container_size() const noexcept { return ctr.size(); }
-
-    constexpr iterator begin() noexcept { return ctr.begin(); }
-    constexpr const_iterator begin() const noexcept { return ctr.begin(); }
-    constexpr const_iterator cbegin() const noexcept { return ctr.cbegin(); }
-
-    constexpr reverse_iterator rbegin() noexcept { return ctr.rbegin(); }
-    constexpr const_reverse_iterator rbegin() const noexcept { return ctr.rbegin(); }
-    constexpr const_reverse_iterator crbegin() const noexcept { return ctr.crbegin(); }
-
-    constexpr iterator end() noexcept { return ctr.end(); }
-    constexpr const_iterator end() const noexcept { return ctr.end(); }
-    constexpr const_iterator cend() const noexcept { return ctr.cend(); }
-
-    constexpr reverse_iterator rend() noexcept { return ctr.rend(); }
-    constexpr const_reverse_iterator rend() const noexcept { return ctr.rend(); }
-    constexpr const_reverse_iterator crend() const noexcept { return ctr.crend(); }
 
     constexpr pointer container_data() noexcept { return ctr.data(); }
     constexpr const_pointer container_data() const noexcept { return ctr.data(); }
