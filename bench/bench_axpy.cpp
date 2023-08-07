@@ -19,13 +19,19 @@
 
 typedef std::chrono::duration<double, std::milli> Timer;
 
-void print(int n, const Timer& t_eigen, const Timer& t_sci, const Timer& t_val, const Timer& t_axpy)
+void print(int n,
+           const Timer& t_eigen,
+           const Timer& t_sci,
+           const Timer& t_val,
+           const Timer& t_loop,
+           const Timer& t_axpy)
 {
     std::cout << "Vector addition:\n"
               << "----------------\n"
               << "size =         " << n << '\n'
               << "scilib/eigen = " << t_sci.count() / t_eigen.count() << "\n"
               << "scilib/val =   " << t_sci.count() / t_val.count() << "\n"
+              << "scilib/loop =  " << t_sci.count() / t_loop.count() << "\n"
               << "axpy/eigen =   " << t_axpy.count() / t_eigen.count() << "\n\n";
 }
 
@@ -65,6 +71,18 @@ void benchmark(int n)
 
     t1 = std::chrono::high_resolution_clock::now();
     for (int it = 0; it < 10000; ++it) {
+        for (std::size_t i = 0; i < vb.size(); ++i) {
+            vb(i) = 2.0 * va(i) + vb(i);
+        }
+    }
+    t2 = std::chrono::high_resolution_clock::now();
+    Timer t_loop = t2 - t1;
+
+    va = 1.0;
+    vb = 1.0;
+
+    t1 = std::chrono::high_resolution_clock::now();
+    for (int it = 0; it < 10000; ++it) {
         std::experimental::linalg::add(std::experimental::linalg::scaled(2.0, va.to_mdspan()), vb.to_mdspan(),
                                        vb.to_mdspan());
     }
@@ -80,7 +98,7 @@ void benchmark(int n)
     t2 = std::chrono::high_resolution_clock::now();
     Timer t_val = t2 - t1;
 
-    print(n, t_eigen, t_sci, t_val, t_axpy);
+    print(n, t_eigen, t_sci, t_val, t_loop, t_axpy);
 }
 
 int main()

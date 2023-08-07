@@ -22,7 +22,7 @@ template <class T_x,
           class T_y,
           class Layout_y,
           class Accessor_y>
-    requires(!std::is_const_v<T_y>) 
+    requires(!std::is_const_v<T_y>)
 inline void copy(stdex::mdspan<T_x, Extent_x, Layout_x, Accessor_x> x,
                  stdex::mdspan<T_y, Extent_y, Layout_y, Accessor_y> y)
 {
@@ -34,15 +34,16 @@ inline void copy(stdex::mdspan<T_x, Extent_x, Layout_x, Accessor_x> x,
         Expects(gsl::narrow_cast<index_type>(x.extent(r)) ==
                 gsl::narrow_cast<index_type>(y.extent(r)));
     }
-    auto copy_fn = [&]<class... IndexTypes>(IndexTypes... indices) {
-#if MDSPAN_USE_BRACKET_OPERATOR
+    auto copy_fn = [&]<class... IndexTypes>(IndexTypes... indices)
+    {
+#if __cpp_multidimensional_subscript
         y[gsl::narrow_cast<index_type>(std::move(indices))...] =
             x[gsl::narrow_cast<index_type>(std::move(indices))...];
 #else
         y(gsl::narrow_cast<index_type>(std::move(indices))...) =
             x(gsl::narrow_cast<index_type>(std::move(indices))...);
 #endif
-    }; 
+    };
     for_each_in_extents(copy_fn, x);
 }
 

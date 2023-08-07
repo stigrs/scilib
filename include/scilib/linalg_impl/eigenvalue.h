@@ -203,11 +203,11 @@ void eig(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, La
         throw std::runtime_error("dgeev failed");
     }
     for (BLAS_INT i = 0; i < n; ++i) {
-        std::complex<double> wii(wr(i), wi(i));
-        eval(i) = wii;
+        std::complex<double> wii(wr[i], wi[i]);
+        eval[i] = wii;
         BLAS_INT j = 0;
         while (j < n) {
-            if (wi(j) == 0.0) {
+            if (wi[j] == 0.0) {
                 evec(i, j) = std::complex<double>{vr(i, j), 0.0};
                 ++j;
             }

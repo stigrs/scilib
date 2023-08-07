@@ -81,11 +81,11 @@ void run_finite_difference()
               << "Number of iterations: " << iter << '\n';
 }
 
-template <typename T, int num, int SO>
-T eigen_finite_difference_impl(Eigen::Matrix<T, num, num, SO>& u)
+template <typename T, int num, int SO, int Rows, int Cols>
+T eigen_finite_difference_impl(Eigen::Matrix<T, num, num, SO, Rows, Cols>& u)
 {
     using namespace Eigen;
-    Eigen::Matrix<T, num, num, SO> u_old = u;
+    Eigen::Matrix<T, num, num, SO, num, num> u_old = u;
 
     u(seq(1, num - 2), seq(1, num - 2)) =
         ((u_old(seq(0, num - 3), seq(1, num - 2)) + u_old(seq(2, num - 1), seq(1, num - 2)) +

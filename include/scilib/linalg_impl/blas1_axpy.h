@@ -36,7 +36,7 @@ inline void axpy(const T_scalar& scalar,
     using index_type = IndexType_y;
 
     for (index_type i = 0; i < y.extent(0); ++i) {
-        y(i) = scalar * x(i) + y(i);
+        y[i] = scalar * x[i] + y[i];
     }
 }
 

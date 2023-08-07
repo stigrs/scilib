@@ -46,7 +46,7 @@ auto det(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Acces
 
         BLAS_INT permut = 0;
         for (BLAS_INT i = 1; i <= n; ++i) {
-            if (i != ipiv(i - 1)) { // Fortran uses base 1
+            if (i != ipiv[i - 1]) { // Fortran uses base 1
                 permut++;
             }
         }

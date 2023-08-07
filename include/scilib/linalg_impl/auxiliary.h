@@ -57,11 +57,11 @@ inline void clip(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Access
     using index_type = IndexType;
 
     for (index_type i = 0; i < a.extent(0); ++i) {
-        if (a(i) < a_min) {
-            a(i) = a_min;
+        if (a[i] < a_min) {
+            a[i] = a_min;
         }
-        if (a_max < a(i)) {
-            a(i) = a_max;
+        if (a_max < a[i]) {
+            a[i] = a_max;
         }
     }
 }
@@ -108,10 +108,10 @@ inline std::size_t argmax(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layou
     using value_type = std::remove_cv_t<T>;
 
     index_type max_idx = 0;
-    value_type max_val = v(0);
+    value_type max_val = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) > max_val) {
-            max_val = v(i);
+        if (v[i] > max_val) {
+            max_val = v[i];
             max_idx = i;
         }
     }
@@ -134,10 +134,10 @@ inline std::size_t argmin(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layou
     using value_type = std::remove_cv_t<T>;
 
     index_type min_idx = 0;
-    value_type min_val = v(0);
+    value_type min_val = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) < min_val) {
-            min_val = v(i);
+        if (v[i] < min_val) {
+            min_val = v[i];
             min_idx = i;
         }
     }
@@ -159,10 +159,10 @@ inline auto max(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
-    value_type result = v(0);
+    value_type result = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) > result) {
-            result = v(i);
+        if (v[i] > result) {
+            result = v[i];
         }
     }
     return result;
@@ -182,10 +182,10 @@ inline auto min(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
-    value_type result = v(0);
+    value_type result = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) < result) {
-            result = v(i);
+        if (v[i] < result) {
+            result = v[i];
         }
     }
     return result;
@@ -207,7 +207,7 @@ inline auto sum(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
 
     value_type result = 0;
     for (index_type i = 0; i < v.extent(0); ++i) {
-        result += v(i);
+        result += v[i];
     }
     return result;
 }
@@ -228,7 +228,7 @@ inline auto prod(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Access
 
     value_type result = 1;
     for (index_type i = 0; i < v.extent(0); ++i) {
-        result *= v(i);
+        result *= v[i];
     }
     return result;
 }
@@ -281,7 +281,7 @@ inline M identity(std::size_t n)
     M res(n, n);
     auto res_diag = Sci::diag(res.to_mdspan());
     for (index_type i = 0; i < res_diag.extent(0); ++i) {
-        res_diag(i) = value_type{1};
+        res_diag[i] = value_type{1};
     }
     return res;
 }
@@ -359,10 +359,10 @@ Sci::Vector<T, Layout> linspace(T start, T stop, int num = 50)
 
     Sci::Vector<T, Layout> res(num);
 
-    res(0) = start;
+    res[0] = start;
     for (int i = 1; i < num; ++i) {
         value += step_size;
-        res(i) = value;
+        res[i] = value;
     }
     return res;
 }

@@ -11,7 +11,6 @@
 #include <type_traits>
 #include <utility>
 
-
 namespace Sci {
 
 namespace stdex = std::experimental;
@@ -32,19 +31,21 @@ inline void swap_elements(stdex::mdspan<T_x, Extent_x, Layout_x, Accessor_x> x,
     using IndexType_y = typename Extent_y::index_type;
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
+    Expects(x.rank() == y.rank());
     for (std::size_t r = 0; r < x.rank(); ++r) {
         Expects(gsl::narrow_cast<index_type>(x.extent(r)) ==
                 gsl::narrow_cast<index_type>(y.extent(r)));
     }
-    auto swap_fn = [&]<class... IndexTypes>(IndexTypes... indices) {
-#if MDSPAN_USE_BRACKET_OPERATOR
+    auto swap_fn = [&]<class... IndexTypes>(IndexTypes... indices)
+    {
+#if __cpp_multidimensional_subscript
         std::swap(x[gsl::narrow_cast<index_type>(std::move(indices))...],
                   y[gsl::narrow_cast<index_type>(std::move(indices))...]);
 #else
         std::swap(x(gsl::narrow_cast<index_type>(std::move(indices))...),
                   y(gsl::narrow_cast<index_type>(std::move(indices))...));
 #endif
-    }; 
+    };
     for_each_in_extents(swap_fn, x);
 }
 

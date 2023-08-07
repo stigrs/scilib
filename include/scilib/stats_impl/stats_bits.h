@@ -46,10 +46,10 @@ inline auto median(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Acce
     Sci::sort(xcopy.to_mdspan());
 
     index_type n = (xcopy.extent(0) + 1) / 2;
-    value_type med = xcopy(n);
+    value_type med = xcopy[n];
     if (xcopy.extent(0) % 2 == 0) { // even
         n = (xcopy.extent(0) + 1) / 2 - 1;
-        med = (med + xcopy(n)) / 2.0;
+        med = (med + xcopy[n]) / 2.0;
     }
     return med;
 }
@@ -75,7 +75,7 @@ inline auto var(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
     value_type sum2 = value_type{0};
 
     for (index_type i = 0; i < x.extent(0); ++i) {
-        sum2 += std::pow(x(i) - xmean, 2);
+        sum2 += std::pow(x[i] - xmean, 2);
     }
     return sum2 / (n - 1.0);
 }
@@ -112,7 +112,7 @@ inline auto rms(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
 
     value_type sum2 = value_type{0};
     for (index_type i = 0; i < x.extent(0); ++i) {
-        sum2 += x(i) * x(i);
+        sum2 += x[i] * x[i];
     }
     return std::sqrt(sum2 / x.extent(0));
 }
@@ -148,8 +148,8 @@ inline auto cov(stdex::mdspan<T, stdex::extents<IndexType_x, ext_x>, Layout_x, A
     value_type res = value_type{0};
 
     for (index_type i = 0; i < x.extent(0); ++i) {
-        value_type a = x(i) - xmean;
-        value_type b = y(i) - ymean;
+        value_type a = x[i] - xmean;
+        value_type b = y[i] - ymean;
         res += a * b / (x.extent(0) - T{1});
     }
     return res;

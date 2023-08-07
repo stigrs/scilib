@@ -278,8 +278,9 @@ public:
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
-#if MDSPAN_USE_BRACKET_OPERATOR
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
+        {
+#if __cpp_multidimensional_subscript
             ctr[map(static_cast<index_type>(std::move(indices))...)] =
                 other[static_cast<index_type>(std::move(indices))...];
 #else
@@ -304,8 +305,9 @@ public:
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
-#if MDSPAN_USE_BRACKET_OPERATOR
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
+        {
+#if __cpp_multidimensional_subscript
             ctr[map(static_cast<index_type>(std::move(indices))...)] =
                 other[static_cast<index_type>(std::move(indices))...];
 #else
@@ -400,8 +402,9 @@ public:
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
-#if MDSPAN_USE_BRACKET_OPERATOR
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
+        {
+#if __cpp_multidimensional_subscript
             ctr[map(static_cast<index_type>(std::move(indices))...)] =
                 other[static_cast<index_type>(std::move(indices))...];
 #else
@@ -430,8 +433,9 @@ public:
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices) {
-#if MDSPAN_USE_BRACKET_OPERATOR
+        auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
+        {
+#if __cpp_multidimensional_subscript
             ctr[map(static_cast<index_type>(std::move(indices))...)] =
                 other[static_cast<index_type>(std::move(indices))...];
 #else
@@ -447,7 +451,6 @@ public:
 
     // [MDArray.members], MDArray members
 
-#if MDSPAN_USE_PAREN_OPERATOR
     template <class... OtherIndexTypes>
         requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
                  (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
@@ -468,7 +471,6 @@ public:
         assert(__Detail::__check_bounds(map.extents(), indices...));
         return ctr[map(static_cast<index_type>(std::move(indices))...)];
     }
-#endif
 
     template <class OtherIndexType>
         requires(std::is_convertible_v<OtherIndexType, index_type> &&
@@ -491,7 +493,7 @@ public:
         return ctr[map(static_cast<index_type>(std::move(indx)))];
     }
 
-#if MDSPAN_USE_BRACKET_OPERATOR
+#if __cpp_multidimensional_subscript
     template <class... OtherIndexTypes>
         requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
                  (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
@@ -520,9 +522,11 @@ public:
     MDSPAN_FORCE_INLINE_FUNCTION constexpr reference
     operator[](const std::array<OtherIndexType, rank()>& indices) noexcept
     {
-        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>)
+        {
             return map(indices[Indxs]...);
-        }(std::make_index_sequence<rank()>());
+        }
+        (std::make_index_sequence<rank()>());
         return ctr[map_fn]; 
     }
 
@@ -532,9 +536,11 @@ public:
     MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
     operator[](const std::array<OtherIndexType, rank()>& indices) const noexcept
     {
-        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>)
+        {
             return map(indices[Indxs]...);
-        }(std::make_index_sequence<rank()>());
+        }
+        (std::make_index_sequence<rank()>());
         return ctr[map_fn]; 
     }
 
@@ -544,9 +550,11 @@ public:
     MDSPAN_FORCE_INLINE_FUNCTION constexpr reference
     operator[](std::span<OtherIndexType, rank()> indices) noexcept
     {
-        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>)
+        {
             return map(indices[Indxs]...);
-        }(std::make_index_sequence<rank()>());
+        }
+        (std::make_index_sequence<rank()>());
         return ctr[map_fn]; 
     }
 
@@ -556,9 +564,11 @@ public:
     MDSPAN_FORCE_INLINE_FUNCTION constexpr const_reference
     operator[](std::span<OtherIndexType, rank()> indices) const noexcept
     {
-        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>) {
+        auto map_fn = [&]<std::size_t... Indxs>(std::index_sequence<Indxs...>)
+        {
             return map(indices[Indxs]...);
-        }(std::make_index_sequence<rank()>());
+        }
+        (std::make_index_sequence<rank()>());
         return ctr[map_fn]; 
     }
 
@@ -587,18 +597,22 @@ public:
 
     constexpr bool empty() const noexcept 
     {
-        return [&]<std::size_t... IndexTypes>(std::index_sequence<IndexTypes...>) {
+        return [&]<std::size_t... IndexTypes>(std::index_sequence<IndexTypes...>)
+        {
             return (rank() > 0) &&
                    ((map.extents().extent(IndexTypes) == index_type{0}) || ... || false);
-        }(std::make_index_sequence<rank()>());
+        }
+        (std::make_index_sequence<rank()>());
     }
 
     constexpr size_type size() const noexcept 
     {
-        return [&]<std::size_t... IndexTypes>(std::index_sequence<IndexTypes...>) {
+        return [&]<std::size_t... IndexTypes>(std::index_sequence<IndexTypes...>)
+        {
             return ((static_cast<size_type>(map.extents().extent(IndexTypes))) * ... *
                     size_type{1});
-        }(std::make_index_sequence<rank()>());
+        }
+        (std::make_index_sequence<rank()>());
     }
 
     constexpr size_type container_size() const noexcept { return ctr.size(); }
@@ -705,18 +719,24 @@ public:
     template <class Callable>
     constexpr MDArray& apply(Callable&& f) noexcept
     {
-        for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
-            std::forward<Callable>(f)(ctr[i]);
-        }
+        auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
+        {
+            std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)]);
+        };
+        for_each_in_extents(apply_fn, to_mdspan());
+
         return *this;
     }
 
     template <class Callable, class ValueType>
     constexpr MDArray& apply(Callable&& f, const ValueType& val) noexcept
     {
-        for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
-            std::forward<Callable>(f)(ctr[i], val);
-        }
+        auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
+        {
+            std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)], val);
+        };
+        for_each_in_extents(apply_fn, to_mdspan());
+
         return *this;
     }
 
@@ -725,9 +745,18 @@ public:
     {
         Expects(extents() == m.extents());
 
-        for (index_type i = 0; i < gsl::narrow_cast<index_type>(size()); ++i) {
-            std::forward<Callable>(f)(ctr[i], m.ctr[i]);
-        }
+        auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
+        {
+#if __cpp_multidimensional_subscript
+            std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)],
+                                      m[static_cast<index_type>(std::move(indices))...]);
+#else
+            std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)],
+                                      m(static_cast<index_type>(std::move(indices))...));
+#endif
+        };
+        for_each_in_extents(apply_fn, to_mdspan());
+
         return *this;
     }
 

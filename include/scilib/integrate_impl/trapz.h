@@ -30,11 +30,7 @@ inline auto trapz(T_scalar xlo,
     value_type ans = value_type{0};
 
     for (index_type i = 1; i < x.extent(0); ++i) {
-#ifdef MDSPAN_USE_BRACKET_OPERATOR
         ans += 0.5 * (x[i] + x[i - 1]);
-#else
-        ans += 0.5 * (x(i) + x(i - 1));
-#endif
     }
     return ans *= step;
 }
