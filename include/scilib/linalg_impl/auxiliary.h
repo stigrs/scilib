@@ -243,36 +243,28 @@ inline T prod(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Cont
 //--------------------------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
-// clang-format off
 template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M> && M::rank() == sizeof...(Args))
-// clang-format on
+    requires(__Detail::Is_mdarray_v<M>&& M::rank() == sizeof...(Args))
 inline M zeros(Args... args)
 {
     using value_type = typename M::value_type;
+    using index_type = typename M::index_type;
 
-    M res(args...);
-    res = value_type{0};
-    return res;
+    return M(stdex::extents<index_type, args...>{}, value_type{0});
 }
 
-// clang-format off
 template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M> && M::rank() == sizeof...(Args))
-// clang-format on
+    requires(__Detail::Is_mdarray_v<M>&& M::rank() == sizeof...(Args))
 inline M ones(Args... args)
 {
     using value_type = typename M::value_type;
+    using index_type = typename M::index_type;
 
-    M res(args...);
-    res = value_type{1};
-    return res;
+    return M(stdex::extents<index_type, args...>{}, value_type{1});
 }
 
-// clang-format off
 template <class M = Sci::Matrix<double>>
-    requires(__Detail::Is_mdarray_v<M> && M::rank() == 2)
-// clang-format on
+    requires(__Detail::Is_mdarray_v<M>&& M::rank() == 2)
 inline M identity(std::size_t n)
 {
     using value_type = typename M::value_type;
@@ -295,15 +287,12 @@ inline M randn(Args... args)
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
-    M res(args...);
-
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::normal_distribution<value_type> nd{};
 
-    for (auto& x : res) {
-        x = nd(gen);
-    }
+    M res(args...);
+    res.apply([&](value_type& x) { x = nd(gen); });
     return res;
 }
 
@@ -316,15 +305,12 @@ inline M randu(Args... args)
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
-    M res(args...);
-
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::uniform_real_distribution<value_type> ur{};
 
-    for (auto& x : res) {
-        x = ur(gen);
-    }
+    M res(args...);
+    res.apply([&](value_type& x) { x = ur(gen); });
     return res;
 }
 
@@ -337,15 +323,12 @@ inline M randi(Args... args)
     static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
-    M res(args...);
-
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::uniform_int_distribution<value_type> ui{};
 
-    for (auto& x : res) {
-        x = ui(gen);
-    }
+    M res(args...);
+    res.apply([&](value_type& x) { x = ui(gen); });
     return res;
 }
 

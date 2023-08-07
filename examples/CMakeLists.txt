@@ -35,6 +35,7 @@ set(PROGRAMS
     matrix_io
     matrix_power
     mdarray_properties
+    random_matrix
     solve_ivp
     submatrix_views 
     transposed
