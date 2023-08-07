@@ -14,268 +14,35 @@ namespace Sci {
 
 namespace stdex = std::experimental;
 
-#if 0
-// forward declaration
-template <class Callable,
-          class ElementType,
-          class IndexType,
-          std::size_t... Extents,
-          class Layout,
-          class Accessor>
-void for_each_in_extents(
-    Callable&& f,
-    stdex::mdspan<ElementType, stdex::extents<IndexType, Extents...>, Layout, Accessor> m);
-#endif
 template <class T_x,
-          class IndexType_x,
-          std::size_t ext_x,
+          class Extent_x,
           class Layout_x,
           class Accessor_x,
-          class IndexType_y,
-          std::size_t ext_y,
+          class Extent_y,
           class T_y,
           class Layout_y,
           class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-                 stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+    requires(!std::is_const_v<T_y>) 
+inline void copy(stdex::mdspan<T_x, Extent_x, Layout_x, Accessor_x> x,
+                 stdex::mdspan<T_y, Extent_y, Layout_y, Accessor_y> y)
 {
+    using IndexType_x = typename Extent_x::index_type;
+    using IndexType_y = typename Extent_y::index_type;
     using index_type = std::common_type_t<IndexType_x, IndexType_y>;
 
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-
-    for (index_type i = 0; i < gsl::narrow_cast<index_type>(y.extent(0)); ++i) {
-        y[i] = x[i];
+    for (std::size_t r = 0; r < x.rank(); ++r) {
+        Expects(gsl::narrow_cast<index_type>(x.extent(r)) ==
+                gsl::narrow_cast<index_type>(y.extent(r)));
     }
-}
-
-template <class T_x,
-          class IndexType_x,
-          std::size_t nrows_x,
-          std::size_t ncols_x,
-          class Layout_x,
-          class Accessor_x,
-          class IndexType_y,
-          std::size_t nrows_y,
-          std::size_t ncols_y,
-          class T_y,
-          class Layout_y,
-          class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void
-copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, nrows_x, ncols_x>, Layout_x, Accessor_x> x,
-     stdex::mdspan<T_y, stdex::extents<IndexType_y, nrows_y, ncols_y>, Layout_y, Accessor_y> y)
-{
-    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
-
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
-
-    auto copy_fn = [&](index_type i, index_type j) { y(i, j) = x(i, j); };
-    for_each_in_extents(copy_fn, x);
-}
-
-template <class T_x,
-          class IndexType_x,
-          std::size_t n1_x,
-          std::size_t n2_x,
-          std::size_t n3_x,
-          class Layout_x,
-          class Accessor_x,
-          class T_y,
-          class IndexType_y,
-          std::size_t n1_y,
-          std::size_t n2_y,
-          std::size_t n3_y,
-          class Layout_y,
-          class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void
-copy(stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x>, Layout_x, Accessor_x> x,
-     stdex::mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y>, Layout_y, Accessor_y> y)
-{
-    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
-
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
-
-    auto copy_fn = [&](index_type i, index_type j, index_type k) { y(i, j, k) = x(i, j, k); };
-    for_each_in_extents(copy_fn, x);
-}
-
-template <class T_x,
-          class IndexType_x,
-          std::size_t n1_x,
-          std::size_t n2_x,
-          std::size_t n3_x,
-          std::size_t n4_x,
-          class Layout_x,
-          class Accessor_x,
-          class T_y,
-          class IndexType_y,
-          std::size_t n1_y,
-          std::size_t n2_y,
-          std::size_t n3_y,
-          std::size_t n4_y,
-          class Layout_y,
-          class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void copy(
-    stdex::mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y>, Layout_y, Accessor_y> y)
-{
-    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
-
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
-
-    auto copy_fn = [&](index_type i, index_type j, index_type k, index_type l) { y(i, j, k, l) = x(i, j, k, l); };
-    for_each_in_extents(copy_fn, x);
-}
-
-template <class T_x,
-          class IndexType_x,
-          std::size_t n1_x,
-          std::size_t n2_x,
-          std::size_t n3_x,
-          std::size_t n4_x,
-          std::size_t n5_x,
-          class Layout_x,
-          class Accessor_x,
-          class T_y,
-          class IndexType_y,
-          std::size_t n1_y,
-          std::size_t n2_y,
-          std::size_t n3_y,
-          std::size_t n4_y,
-          std::size_t n5_y,
-          class Layout_y,
-          class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void copy(
-    stdex::
-        mdspan<T_x, stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x, n5_x>, Layout_x, Accessor_x>
-            x,
-    stdex::
-        mdspan<T_y, stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y, n5_y>, Layout_y, Accessor_y>
-            y)
-{
-    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
-
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
-
-    auto copy_fn = [&](index_type i1, index_type i2, index_type i3, index_type i4, index_type i5) {
-        y(i1, i2, i3, i4, i5) = x(i1, i2, i3, i4, i5);
-    };
-    for_each_in_extents(copy_fn, x);
-}
-
-template <class T_x,
-          class IndexType_x,
-          std::size_t n1_x,
-          std::size_t n2_x,
-          std::size_t n3_x,
-          std::size_t n4_x,
-          std::size_t n5_x,
-          std::size_t n6_x,
-          class Layout_x,
-          class Accessor_x,
-          class T_y,
-          class IndexType_y,
-          std::size_t n1_y,
-          std::size_t n2_y,
-          std::size_t n3_y,
-          std::size_t n4_y,
-          std::size_t n5_y,
-          std::size_t n6_y,
-          class Layout_y,
-          class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void copy(stdex::mdspan<T_x,
-                               stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x>,
-                               Layout_x,
-                               Accessor_x> x,
-                 stdex::mdspan<T_y,
-                               stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y>,
-                               Layout_y,
-                               Accessor_y> y)
-{
-    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
-
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(5)) == gsl::narrow_cast<index_type>(y.extent(5)));
-
-    auto copy_fn = [&](index_type i1, index_type i2, index_type i3, index_type i4, index_type i5, index_type i6) {
-        y(i1, i2, i3, i4, i5, i6) = x(i1, i2, i3, i4, i5, i6);
-    };
-    for_each_in_extents(copy_fn, x);
-}
-
-template <class T_x,
-          class IndexType_x,
-          std::size_t n1_x,
-          std::size_t n2_x,
-          std::size_t n3_x,
-          std::size_t n4_x,
-          std::size_t n5_x,
-          std::size_t n6_x,
-          std::size_t n7_x,
-          class Layout_x,
-          class Accessor_x,
-          class T_y,
-          class IndexType_y,
-          std::size_t n1_y,
-          std::size_t n2_y,
-          std::size_t n3_y,
-          std::size_t n4_y,
-          std::size_t n5_y,
-          std::size_t n6_y,
-          std::size_t n7_y,
-          class Layout_y,
-          class Accessor_y>
-    requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
-             std::is_integral_v<IndexType_y>)
-inline void
-copy(stdex::mdspan<T_x,
-                   stdex::extents<IndexType_x, n1_x, n2_x, n3_x, n4_x, n5_x, n6_x, n7_x>,
-                   Layout_x,
-                   Accessor_x> x,
-     stdex::mdspan<T_y,
-                   stdex::extents<IndexType_y, n1_y, n2_y, n3_y, n4_y, n5_y, n6_y, n7_y>,
-                   Layout_y,
-                   Accessor_y> y)
-{
-    using index_type = std::common_type_t<IndexType_x, IndexType_y>;
-
-    Expects(gsl::narrow_cast<index_type>(x.extent(0)) == gsl::narrow_cast<index_type>(y.extent(0)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(1)) == gsl::narrow_cast<index_type>(y.extent(1)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(2)) == gsl::narrow_cast<index_type>(y.extent(2)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(3)) == gsl::narrow_cast<index_type>(y.extent(3)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(4)) == gsl::narrow_cast<index_type>(y.extent(4)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(5)) == gsl::narrow_cast<index_type>(y.extent(5)));
-    Expects(gsl::narrow_cast<index_type>(x.extent(6)) == gsl::narrow_cast<index_type>(y.extent(6)));
-
-    auto copy_fn = [&](index_type i1, index_type i2, index_type i3, index_type i4, index_type i5,
-                       index_type i6, index_type i7) {
-        y(i1, i2, i3, i4, i5, i6, i7) = x(i1, i2, i3, i4, i5, i6, i7);
-    };
+    auto copy_fn = [&]<class... IndexTypes>(IndexTypes... indices) {
+#if MDSPAN_USE_BRACKET_OPERATOR
+        y[gsl::narrow_cast<index_type>(std::move(indices))...] =
+            x[gsl::narrow_cast<index_type>(std::move(indices))...];
+#else
+        y(gsl::narrow_cast<index_type>(std::move(indices))...) =
+            x(gsl::narrow_cast<index_type>(std::move(indices))...);
+#endif
+    }; 
     for_each_in_extents(copy_fn, x);
 }
 

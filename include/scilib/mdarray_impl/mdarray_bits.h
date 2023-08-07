@@ -81,34 +81,24 @@ static constexpr bool Container_is_array_v = Container_is_array<Container>::valu
 //--------------------------------------------------------------------------------------------------
 // Bounds checking:
 
-template <class Extents, class... Dims>
-    requires __Detail::Is_extents_v<Extents>
-inline bool __check_bounds(const Extents& exts, Dims... dims)
+template <class IndexType, class From>
+    requires(std::is_integral_v<From>)
+constexpr bool __is_index_in_extent(IndexType extent, From value)
 {
-    using index_type = typename Extents::index_type;
-
-    std::array<index_type, Extents::rank()> indexes{static_cast<index_type>(dims)...};
-    bool result = true;
-    for (std::size_t i = 0; i < indexes.size(); ++i) {
-        if (!(indexes[i] >= 0 && indexes[i] < exts.extent(i))) {
-            result = false;
-        }
-    }
-    return result;
+    using index_type = std::common_type_t<IndexType, From>;
+    return value >= 0 && gsl::narrow_cast<index_type>(value) < gsl::narrow_cast<index_type>(extent);
 }
 
-//--------------------------------------------------------------------------------------------------
-// Size of extents:
-
-template <class Extents>
-    requires __Detail::Is_extents_v<Extents>
-inline std::size_t size_of_extents(const Extents& exts) 
+template <std::size_t... Idxs, class Extents, class... From>
+constexpr bool
+__check_bounds_impl(std::index_sequence<Idxs...>, const Extents& exts, From... values)
 {
-    std::size_t size = 1;
-    for (std::size_t r = 0; r < exts.rank(); ++r) {
-        size *= exts.extent(r);
-    }
-    return size;
+    return (__is_index_in_extent(exts.extent(Idxs), values) && ...);
+}
+
+template <class Extents, class... From>
+constexpr bool __check_bounds(const Extents& exts, From... values) {
+    return __check_bounds_impl(std::make_index_sequence<Extents::rank()>(), exts, values...);
 }
 
 } // namespace __Detail
@@ -281,7 +271,7 @@ public:
                  std::is_constructible_v<extents_type, OtherExtents>) 
     constexpr MDArray(
         const MDArray<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherContainer>& other)
-        : map(extents_type(__Detail::extents(other))),
+        : map(extents_type(other.extents())),
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
@@ -307,7 +297,7 @@ public:
                   __Detail::Container_is_array_v<container_type>) )
     constexpr MDArray(
         const stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other)
-        : map(extents_type(__Detail::extents(other))),
+        : map(extents_type(other.extents())),
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
@@ -404,7 +394,7 @@ public:
     constexpr MDArray(
         const MDArray<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherContainer>& other,
         const Alloc& a)
-        : map(extents_type(__Detail::extents(other))), ctr(map.required_span_size(), a)
+        : map(extents_type(other.extents())), ctr(map.required_span_size(), a)
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(stdex::dynamic_extent) ||
@@ -433,7 +423,7 @@ public:
     constexpr MDArray(
         const stdex::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other,
         const Alloc& a)
-        : map(extents_type(__Detail::extents(other))),
+        : map(extents_type(other.extents())),
           ctr(map.required_span_size(), a)
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
@@ -798,6 +788,67 @@ private:
     container_type ctr;
 };
 
+template <class IndexType, std::size_t... Extents, class Container>
+MDArray(const stdex::extents<IndexType, Extents...>&, const Container&)
+    -> MDArray<typename Container::value_type,
+               stdex::extents<IndexType, Extents...>,
+               stdex::layout_right,
+               Container>;
+
+template <class Mapping, class Container>
+MDArray(const Mapping&, const Container&) -> MDArray<typename Container::value_type,
+                                                     typename Mapping::extents_type,
+                                                     typename Mapping::layout_type,
+                                                     Container>;
+
+template <class IndexType, std::size_t... Extents, class Container>
+MDArray(const stdex::extents<IndexType, Extents...>&, Container&&)
+    -> MDArray<typename Container::value_type,
+               stdex::extents<IndexType, Extents...>,
+               stdex::layout_right,
+               Container>;
+
+template <class Mapping, class Container>
+MDArray(const Mapping&, Container&&) -> MDArray<typename Container::value_type,
+                                                typename Mapping::extents_type,
+                                                typename Mapping::layout_type,
+                                                Container>;
+
+template <class ElementType, class Extents, class Layout, class Accessor>
+MDArray(const stdex::mdspan<ElementType, Extents, Layout, Accessor>&)
+    -> MDArray<std::remove_cv_t<ElementType>, Extents, Layout>;
+
+template <class IndexType, std::size_t... Extents, class Container, class Alloc>
+MDArray(const stdex::extents<IndexType, Extents...>&, const Container&, const Alloc&)
+    -> MDArray<typename Container::value_type,
+               stdex::extents<IndexType, Extents...>,
+               stdex::layout_right,
+               Container>;
+
+template <class Mapping, class Container, class Alloc>
+MDArray(const Mapping&, const Container&, const Alloc&)
+    -> MDArray<typename Container::value_type,
+               typename Mapping::extents_type,
+               typename Mapping::layout_type,
+               Container>;
+
+template <class IndexType, std::size_t... Extents, class Container, class Alloc>
+MDArray(const stdex::extents<IndexType, Extents...>&, Container&&, const Alloc&)
+    -> MDArray<typename Container::value_type,
+               stdex::extents<IndexType, Extents...>,
+               stdex::layout_right,
+               Container>;
+
+template <class Mapping, class Container, class Alloc>
+MDArray(const Mapping&, Container&&, const Alloc&) -> MDArray<typename Container::value_type,
+                                                              typename Mapping::extents_type,
+                                                              typename Mapping::layout_type,
+                                                              Container>;
+
+template <class ElementType, class Extents, class Layout, class Accessor, class Alloc>
+MDArray(const stdex::mdspan<ElementType, Extents, Layout, Accessor>&, const Alloc&)
+    -> MDArray<std::remove_cv_t<ElementType>, Extents, Layout>;
+
 } // namespace Sci
 
-#endif // SCILIB_MDARRAY_BITS_H
+#endif // SCILIB_MDArray_BITS_H

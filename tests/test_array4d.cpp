@@ -104,3 +104,25 @@ TEST(TestMDArray, TestCopyArrayColMajorRowMajor)
         }
     }
 }
+
+TEST(TestMDArray, TestCopyArrayColMajorRowMajor2)
+{
+    using index_type = Sci::Array4D<int>::index_type;
+
+    std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+
+    Sci::Array4D<int, stdex::layout_left> a(data, 2, 2, 2, 2);
+    Sci::Array4D<int> b(2, 2, 2, 2);
+
+    Sci::copy(a.to_mdspan(), b.to_mdspan());
+
+    for (index_type i = 0; i < b.extent(0); ++i) {
+        for (index_type j = 0; j < b.extent(1); ++j) {
+            for (index_type k = 0; k < b.extent(2); ++k) {
+                for (index_type l = 0; l < b.extent(3); ++l) {
+                    EXPECT_EQ(b(i, j, k, l), a(i, j, k, l));
+                }
+            }
+        }
+    }
+}
