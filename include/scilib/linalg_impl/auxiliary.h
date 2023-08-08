@@ -243,28 +243,28 @@ inline T prod(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Cont
 //--------------------------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& M::rank() == sizeof...(Args))
-inline M zeros(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)))
+inline M zeros(IndexTypes... exts)
 {
+    using extents_type = typename M::extents_type;
     using value_type = typename M::value_type;
-    using index_type = typename M::index_type;
 
-    return M(stdex::extents<index_type, args...>{}, value_type{0});
+    return M(extents_type(exts...), value_type{0});
 }
 
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& M::rank() == sizeof...(Args))
-inline M ones(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)))
+inline M ones(IndexTypes... exts)
 {
+    using extents_type = typename M::extents_type;
     using value_type = typename M::value_type;
-    using index_type = typename M::index_type;
 
-    return M(stdex::extents<index_type, args...>{}, value_type{1});
+    return M(extents_type(exts...), value_type{1});
 }
 
 template <class M = Sci::Matrix<double>>
-    requires(__Detail::Is_mdarray_v<M>&& M::rank() == 2)
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == 2))
 inline M identity(std::size_t n)
 {
     using value_type = typename M::value_type;
@@ -280,54 +280,54 @@ inline M identity(std::size_t n)
 
 // Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& std::is_floating_point_v<typename M::value_type>)
-inline M randn(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)) &&
+             std::is_floating_point_v<typename M::value_type>)
+inline M randn(IndexTypes... exts)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::normal_distribution<value_type> nd{};
 
-    M res(args...);
+    M res(exts...);
     res.apply([&](value_type& x) { x = nd(gen); });
     return res;
 }
 
 // Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& std::is_floating_point_v<typename M::value_type>)
-inline M randu(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)) &&
+             std::is_floating_point_v<typename M::value_type>)
+inline M randu(IndexTypes... exts)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::uniform_real_distribution<value_type> ur{};
 
-    M res(args...);
+    M res(exts...);
     res.apply([&](value_type& x) { x = ur(gen); });
     return res;
 }
 
 // Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& std::is_integral_v<typename M::value_type>)
-inline M randi(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)) &&
+             std::is_integral_v<typename M::value_type>)
+inline M randi(IndexTypes... exts)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::uniform_int_distribution<value_type> ui{};
 
-    M res(args...);
+    M res(exts...);
     res.apply([&](value_type& x) { x = ui(gen); });
     return res;
 }

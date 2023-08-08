@@ -35,3 +35,23 @@ TEST(TestLinalg, TestSumProd)
     EXPECT_EQ(Sci::Linalg::sum(v), 10);
     EXPECT_EQ(Sci::Linalg::prod(v), 24);
 }
+
+TEST(TestLinalg, TestZerosMatrix)
+{
+    auto m = Sci::Linalg::zeros<Sci::Matrix<int>>(2, 2);
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
+            EXPECT_EQ(m(i, j), 0);
+        }
+    }
+}
+
+TEST(TestLinalg, TestOnesMatrix)
+{
+    auto m = Sci::Linalg::ones<Sci::Matrix<int>>(2, 2);
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
+            EXPECT_EQ(m(i, j), 1);
+        }
+    }
+}
