@@ -41,8 +41,7 @@ Sci::StaticVector<double, 3> fsys_stiff(double, const Sci::StaticVector<double, 
 
 TEST(TestIntegrate, TestTrapz)
 {
-    std::vector<double> y_data = {3.2, 2.7, 2.9, 3.5, 4.1, 5.2};
-    Sci::Vector<double> y(y_data, y_data.size());
+    Sci::Vector<double> y = {3.2, 2.7, 2.9, 3.5, 4.1, 5.2};
 
     double xlo = 2.1;
     double xup = 3.6;
@@ -84,10 +83,11 @@ TEST(TestIntegrate, TestDormandPrince)
         -6.217033890199554, -8.278471219613175, 25.168552598624345
     };
     // clang-format on
-    Matrix<double> ans(ans_data, 5, 3);
+    using extents_type = typename Matrix<double>::extents_type;
+    Matrix<double> ans(extents_type(5, 3), ans_data);
 
     std::vector<double> y0 = {10.0, 1.0, 1.0};
-    Vector<double> y(y0, 3);
+    Vector<double> y(stdex::dextents<Sci::index, 1>(y0.size()), y0);
 
     double t0 = 0.0;
     double tf = 0.1;
@@ -113,10 +113,13 @@ TEST(TestIntegrate, TestStiff)
         7.158403e-01, 9.186334e-06, 2.841505e-01,
     };
     // clang-format on
-    Matrix<double> ans(ans_data, 3, 3);
+    using extents_type_mat = typename Matrix<double>::extents_type;
+    using extents_type_vec = typename StaticVector<double, 3>::extents_type;
+
+    Matrix<double> ans(extents_type_mat(3, 3), ans_data);
 
     std::array<double, 3> y0 = {1.0, 0.0, 0.0};
-    StaticVector<double, 3> y(y0, 3);
+    StaticVector<double, 3> y(extents_type_vec(3), y0);
 
     double t0 = 0.0;
     double tf = 0.4;

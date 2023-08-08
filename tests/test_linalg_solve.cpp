@@ -27,8 +27,11 @@ TEST(TestLinalg, TestSolve)
     };
     std::vector<double> x = {1.0, 2.0, 3.0};
     // clang-format on
-    Matrix<double> A(A_data, 3, 3);
-    Matrix<double> B(B_data, 3, 1);
+
+    using extents_type = typename Matrix<double>::extents_type;
+
+    Matrix<double> A(extents_type(3, 3), A_data);
+    Matrix<double> B(extents_type(3, 1), B_data);
 
     solve(A, B);
 
@@ -55,8 +58,11 @@ TEST(TestLinalg, TestSolveColMajor)
     };
     std::vector<double> x = {1.0, 2.0, 3.0};
     // clang-format on
-    Matrix<double, stdex::layout_left> A(A_data, 3, 3);
-    Matrix<double, stdex::layout_left> B(B_data, 3, 1);
+
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+
+    Matrix<double, stdex::layout_left> A(extents_type(3, 3), A_data);
+    Matrix<double, stdex::layout_left> B(extents_type(3, 1), B_data);
 
     solve(A, B);
 

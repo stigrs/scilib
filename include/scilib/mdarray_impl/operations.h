@@ -17,7 +17,6 @@
 #include <type_traits>
 #include <utility>
 
-
 namespace Sci {
 
 namespace stdex = std::experimental;
@@ -58,7 +57,8 @@ constexpr bool operator==(const MDArray<T, Extents, Layout, Container>& a,
     }
     bool result = true;
 
-    auto is_equal = [&]<class... IndexTypes>(IndexTypes... indices) {
+    auto is_equal = [&]<class... IndexTypes>(IndexTypes... indices)
+    {
 #if __cpp_multidimensional_subscript
         if (a[static_cast<index_type>(std::move(indices))...] !=
             b[static_cast<index_type>(std::move(indices))...]) {
@@ -365,6 +365,7 @@ operator<<(std::ostream& ostrm,
 template <class T, class Layout>
 inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
 {
+    using extents_type = typename Matrix<T, Layout>::extents_type;
     using index_type = typename Matrix<T, Layout>::index_type;
 
     index_type nr;
@@ -379,7 +380,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    auto mtmp = Matrix<T, stdex::layout_right>(tmp, nr, nc);
+    auto mtmp = Matrix<T, stdex::layout_right>(extents_type(nr, nc), tmp);
     m = mtmp.to_mdspan();
     return istrm;
 }

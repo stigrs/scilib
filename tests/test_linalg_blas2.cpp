@@ -13,9 +13,9 @@
 TEST(TestLinalg, TestMatrixVectorProduct)
 {
     std::vector<int> va = {1, -1, 2, 0, -3, 1};
-    Sci::Matrix<int> a(va, 2, 3);
-    Sci::Vector<int> x({2, 1, 0}, 3);
-    Sci::Vector<int> y({1, -3}, 2);
+    Sci::Matrix<int> a(stdex::dextents<Sci::index, 2>(2, 3), va);
+    Sci::Vector<int> x(stdex::dextents<Sci::index, 1>(3), {2, 1, 0});
+    Sci::Vector<int> y(stdex::dextents<Sci::index, 1>(2), {1, -3});
     EXPECT_EQ((a * x), y);
 }
 
@@ -28,9 +28,9 @@ TEST(TestLinalg, TestMatrixVectorProductRowMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Sci::Matrix<double> a(a_data, 2, 3);
-    Sci::Vector<double> x(x_data, x_data.size());
-    Sci::Vector<double> y(y_data, y_data.size());
+    Sci::Matrix<double> a(stdex::dextents<Sci::index, 2>(2, 3), a_data, 2, 3);
+    Sci::Vector<double> x(stdex::dextents<Sci::index, 1>(x_data.size()), x_data);
+    Sci::Vector<double> y(stdex::dextents<Sci::index, 1>(y_data.size()), y_data);
     Sci::Vector<double> res(y.size());
 
     Sci::Linalg::matrix_vector_product(a, x, res);
@@ -47,9 +47,11 @@ TEST(TestLinalg, TestMatrixVectorProductColMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Sci::Matrix<double, stdex::layout_left> a(a_data, 2, 3);
-    Sci::Vector<double, stdex::layout_left> x(x_data, x_data.size());
-    Sci::Vector<double, stdex::layout_left> y(y_data, y_data.size());
+    Sci::Matrix<double, stdex::layout_left> a(stdex::dextents<Sci::index, 2>(2, 3), a_data, 2, 3);
+    Sci::Vector<double, stdex::layout_left> x(stdex::dextents<Sci::index, 1>(x_data.size()),
+                                              x_data);
+    Sci::Vector<double, stdex::layout_left> y(stdex::dextents<Sci::index, 1>(y_data.size()),
+                                              y_data);
     EXPECT_EQ((a * x), y);
 }
 
@@ -68,9 +70,9 @@ TEST(TestLinalg, TestComplexMatrixVectorProduct)
         {-15.0, 87.0}, {-15.0, 139.0}
     };
     // clang-format on
-    Sci::Matrix<std::complex<double>> A(A_data, 2, 2);
-    Sci::Vector<std::complex<double>> x(x_data, 2);
-    Sci::Vector<std::complex<double>> z(z_data, 2);
+    Sci::Matrix<std::complex<double>> A(stdex::dextents<Sci::index, 2>(2, 2), A_data);
+    Sci::Vector<std::complex<double>> x(stdex::dextents<Sci::index, 1>(x_data.size()), x_data);
+    Sci::Vector<std::complex<double>> z(stdex::dextents<Sci::index, 1>(z_data.size()), z_data);
 
     EXPECT_EQ((A * x), z);
 }
