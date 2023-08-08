@@ -359,7 +359,7 @@ TEST(TestMatrix, TestStaticMatrixMdspan)
 TEST(TestMatrix, TestCopyRowMajorColMajor)
 {
     Sci::Matrix<int> a = {{1, 2, 3}, {4, 5, 6}};
-    Sci::Matrix<int> b(a.to_mdspan());
+    Sci::Matrix<int, stdex::layout_left> b(a.to_mdspan());
 
     for (Sci::index j = 0; j < a.extent(1); ++j) {
         for (Sci::index i = 0; i < a.extent(0); ++i) {
