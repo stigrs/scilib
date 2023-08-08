@@ -28,7 +28,7 @@ TEST(TestLinalg, TestMatrixVectorProductRowMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Sci::Matrix<double> a(stdex::dextents<Sci::index, 2>(2, 3), a_data, 2, 3);
+    Sci::Matrix<double> a(stdex::dextents<Sci::index, 2>(2, 3), a_data);
     Sci::Vector<double> x(stdex::dextents<Sci::index, 1>(x_data.size()), x_data);
     Sci::Vector<double> y(stdex::dextents<Sci::index, 1>(y_data.size()), y_data);
     Sci::Vector<double> res(y.size());
@@ -47,7 +47,7 @@ TEST(TestLinalg, TestMatrixVectorProductColMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Sci::Matrix<double, stdex::layout_left> a(stdex::dextents<Sci::index, 2>(2, 3), a_data, 2, 3);
+    Sci::Matrix<double, stdex::layout_left> a(stdex::dextents<Sci::index, 2>(2, 3), a_data);
     Sci::Vector<double, stdex::layout_left> x(stdex::dextents<Sci::index, 1>(x_data.size()),
                                               x_data);
     Sci::Vector<double, stdex::layout_left> y(stdex::dextents<Sci::index, 1>(y_data.size()),

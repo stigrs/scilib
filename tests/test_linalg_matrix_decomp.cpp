@@ -65,9 +65,10 @@ TEST(TestLinalg, TestLU)
         0.714286, -0.44000, -0.461538, 7.46154 
     };
     // clang-format on
+    using extents_type = typename Matrix<double>::extents_type;
 
-    Matrix<double> ans(ans_data, 4, 4);
-    Matrix<double> a(a_data, 4, 4);
+    Matrix<double> ans(extents_type(4, 4), ans_data);
+    Matrix<double> a(extents_type(4, 4), a_data);
     Vector<BLAS_INT> ipiv(4);
 
     lu(a, ipiv);
@@ -89,10 +90,13 @@ TEST(TestLinalg, TestQR)
         12.0, -51.0,   4.0,
          6.0, 167.0, -68.0,
         -4.0,  24.0, -41.0
-    }; // clang-format on
+    }; 
+    // clang-format on
 
-    Matrix<double> ans(data, 3, 3);
-    Matrix<double> a(data, 3, 3);
+    using extents_type = typename Matrix<double>::extents_type;
+
+    Matrix<double> ans(extents_type(3, 3), data);
+    Matrix<double> a(extents_type(3, 3), data);
     Matrix<double> q(a.extent(0), a.extent(1));
     Matrix<double> r(a.extent(0), a.extent(1));
 
@@ -115,10 +119,13 @@ TEST(TestLinalg, TestQRColMajor)
          12.0,  6.0,  -4.0,
         -51.0, 167.0, 24.0,
           4.0, -68.0, -41.0
-    }; // clang-format on
+    };
+    // clang-format on
 
-    Matrix<double, stdex::layout_left> ans(data, 3, 3);
-    Matrix<double, stdex::layout_left> a(data, 3, 3);
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+
+    Matrix<double, stdex::layout_left> ans(extents_type(3, 3), data);
+    Matrix<double, stdex::layout_left> a(extents_type(3, 3), data);
     Matrix<double, stdex::layout_left> q(a.extent(0), a.extent(1));
     Matrix<double, stdex::layout_left> r(a.extent(0), a.extent(1));
 
@@ -151,8 +158,10 @@ TEST(TestLinalg, TestSVD)
     int ldu = m;
     int ldvt = n;
 
-    Matrix<double> ans(data, m, n);
-    Matrix<double> a(data, m, n);
+    using extents_type = typename Matrix<double>::extents_type;
+
+    Matrix<double> ans(extents_type(m, n), data);
+    Matrix<double> a(extents_type(m, n), data);
     Vector<double> s(std::min(m, n));
     Matrix<double> u(m, ldu);
     Matrix<double> vt(n, ldvt);
@@ -191,15 +200,17 @@ TEST(TestLinalg, TestSVDColMajor)
     int ldu = m;
     int ldvt = n;
 
-    Matrix<double, stdex::layout_left> ans(data, m, n);
-    Matrix<double, stdex::layout_left> a(data, m, n);
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+
+    Matrix<double, stdex::layout_left> ans(extents_type(m, n), data);
+    Matrix<double, stdex::layout_left> a(extents_type(m, n), data);
     Vector<double, stdex::layout_left> s(std::min(m, n));
     Matrix<double, stdex::layout_left> u(m, ldu);
     Matrix<double, stdex::layout_left> vt(n, ldvt);
 
     svd(a, s, u, vt);
 
-    Matrix<double, stdex::layout_left> sigma(a.extent(0), a.extent(1));
+    Matrix<double, stdex::layout_left> sigma(a.extents());
     auto sigma_diag = diag(sigma.to_mdspan());
     copy_n(s.to_mdspan(), std::min(m, n), sigma_diag);
 

@@ -11,8 +11,7 @@
 
 TEST(TestLinalg, TestArgMaxArgMin)
 {
-    std::vector<int> data = {1, 2, 3, -4};
-    Sci::Vector<int> v(data, data.size());
+    Sci::Vector<int> v = {1, 2, 3, -4};
 
     EXPECT_EQ(Sci::Linalg::argmax(v), 2UL);
     EXPECT_EQ(Sci::Linalg::argmin(v), 3UL);
@@ -20,8 +19,7 @@ TEST(TestLinalg, TestArgMaxArgMin)
 
 TEST(TestLinalg, TestMaxMin)
 {
-    std::vector<int> data = {1, 2, 3, -4};
-    Sci::Vector<int> v(data, data.size());
+    Sci::Vector<int> v = {1, 2, 3, -4};
 
     EXPECT_EQ(Sci::Linalg::max(v), 3);
     EXPECT_EQ(Sci::Linalg::min(v), -4);
@@ -29,8 +27,7 @@ TEST(TestLinalg, TestMaxMin)
 
 TEST(TestLinalg, TestSumProd)
 {
-    std::vector<int> data = {1, 2, 3, 4};
-    Sci::Vector<int, stdex::layout_left> v(data, data.size());
+    Sci::Vector<int, stdex::layout_left> v = {1, 2, 3, 4};
 
     EXPECT_EQ(Sci::Linalg::sum(v), 10);
     EXPECT_EQ(Sci::Linalg::prod(v), 24);
@@ -43,7 +40,7 @@ TEST(TestLinalg, TestZerosMatrix)
         for (Sci::index j = 0; j < m.extent(1); ++j) {
             EXPECT_EQ(m(i, j), 0);
         }
-    }
+   }
 }
 
 TEST(TestLinalg, TestOnesMatrix)

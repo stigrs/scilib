@@ -31,9 +31,10 @@ TEST(TestLinalg, TestInv)
         -0.60330579,  0.61157025,  0.23966942,  0.31404959
     };
     // clang-format on
+    using extents_type = typename Matrix<double>::extents_type;
 
-    Matrix<double> a(a_data, 4, 4);
-    Matrix<double> ans(ainv_data, 4, 4);
+    Matrix<double> a(extents_type(4, 4), a_data);
+    Matrix<double> ans(extents_type(4, 4), ainv_data);
 
     auto res = inv(a);
 
@@ -64,9 +65,10 @@ TEST(TestLinalg, TestInvColMajor)
         -0.60330579,  0.61157025,  0.23966942,  0.31404959
     };
     // clang-format on
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
 
-    Matrix<double, stdex::layout_left> a(a_data, 4, 4);
-    Matrix<double> ans_t(ainv_data, 4, 4);
+    Matrix<double, stdex::layout_left> a(extents_type(4, 4), a_data);
+    Matrix<double> ans_t(extents_type(4, 4), ainv_data);
     Matrix<double, stdex::layout_left> ans(transposed(ans_t).to_mdspan());
 
     auto res = inv(a);

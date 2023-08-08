@@ -177,19 +177,6 @@ public:
         Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
     }
 
-    template <class... OtherIndexTypes>
-        requires((std::is_convertible_v<OtherIndexTypes, index_type> && ...) &&
-                 (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
-                 std::is_constructible_v<extents_type, OtherIndexTypes...> &&
-                 std::is_constructible_v<mapping_type, extents_type> &&
-                 (std::is_constructible_v<container_type, std::size_t> ||
-                  __Detail::Container_is_array_v<container_type>) )
-    constexpr explicit MDArray(const container_type& c, OtherIndexTypes... exts)
-        : map(extents_type(static_cast<index_type>(std::move(exts))...)), ctr(c)
-    {
-        Expects(gsl::narrow_cast<size_type>(map.required_span_size()) <= ctr.size());
-    }
-
     constexpr MDArray(const extents_type& exts) requires(
         std::is_constructible_v<mapping_type, const extents_type&> &&
         (std::is_constructible_v<container_type, std::size_t> ||

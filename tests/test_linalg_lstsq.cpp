@@ -37,9 +37,11 @@ TEST(TestLinalg, TestLstsq)
          0.00,  0.00,  0.00
     };
     // clang-format on
-    Matrix<double> xans(xans_data, 5, 3);
-    Matrix<double> a(a_data, 4, 5);
-    Matrix<double> b(b_data, 5, 3);
+    using extents_type = typename Matrix<double>::extents_type;
+
+    Matrix<double> xans(extents_type(5, 3), xans_data);
+    Matrix<double> a(extents_type(4, 5), a_data);
+    Matrix<double> b(extents_type(5, 3), b_data);
 
     lstsq(a, b);
 
@@ -75,9 +77,11 @@ TEST(TestLinalg, TestLstsqColMajor)
         -6.28, -3.42,  3.46,  0.41,  0.00
     };
     // clang-format on
-    Matrix<double, stdex::layout_left> xans(xans_data, 5, 3);
-    Matrix<double, stdex::layout_left> a(a_data, 4, 5);
-    Matrix<double, stdex::layout_left> b(b_data, 5, 3);
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+
+    Matrix<double, stdex::layout_left> xans(extents_type(5, 3), xans_data);
+    Matrix<double, stdex::layout_left> a(extents_type(4, 5), a_data);
+    Matrix<double, stdex::layout_left> b(extents_type(5, 3), b_data);
 
     lstsq(a, b);
 

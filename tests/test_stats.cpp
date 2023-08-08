@@ -11,80 +11,43 @@
 
 TEST(TestStats, TestMean)
 {
-    // clang-format off
-    std::vector<double> data = {
-        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
-        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
-    };
-    // clang-format on
-    Sci::Vector<double> v(data, data.size());
-
+    Sci::Vector<double> v = {3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+                             40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0};
     EXPECT_NEAR(Sci::Stats::mean(v), 22.066666666666666, 1.0e-8);
 }
 
 TEST(TestStats, TestMedianOdd)
 {
-    // clang-format off
-    std::vector<double> data = {
-        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
-        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
-    };
-    // clang-format on
-    Sci::Vector<double> v(data, data.size());
+    Sci::Vector<double> v = {3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+                             40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0};
     EXPECT_EQ(Sci::Stats::median(v), 23.0);
 }
 
 TEST(TestStats, TestMedianEven)
 {
-    // clang-format off
-    std::vector<double> data = {
-        3.0,  13.0, 7.0,  5.0, 21.0, 39.0, 40.0, 23.0, 14.0, 12.0, 56.0, 29.0
-    };
-    // clang-format on
-    Sci::Vector<double> v(data, data.size());
+    Sci::Vector<double> v = {3.0, 13.0, 7.0, 5.0, 21.0, 39.0, 40.0, 23.0, 14.0, 12.0, 56.0, 29.0};
     EXPECT_EQ(Sci::Stats::median(v), 17.5);
 }
 
 TEST(TestStats, TestStddev)
 {
-    // clang-format off
-    std::vector<double> data = {
-        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
-        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
-    };
-    // clang-format on
-    Sci::Vector<double> v(data, data.size());
-
+    Sci::Vector<double> v = {3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+                             40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0};
     EXPECT_NEAR(Sci::Stats::stddev(v), 14.49860420211283, 1.0e-8);
 }
 
 TEST(TestStats, TestRMS)
 {
-    // clang-format off
-    std::vector<double> data = {
-        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
-        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
-    };
-    // clang-format on
-    Sci::Vector<double> v(data, data.size());
-
+    Sci::Vector<double> v = {3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0, 23.0,
+                             40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0};
     EXPECT_NEAR(Sci::Stats::rms(v), 26.136819495365792, 1.0e-8);
 }
 
 TEST(TestStats, TestCov)
 {
-    // clang-format off
-    std::vector<double> b_data = {
-        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 23.0,
-        40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0
-    };
-    std::vector<double> c_data = {
-        3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0,
-        23.0, 40.0, 23.0, 14.0, 12.0, 56.0, 23.0
-    };
-    // clang-format on
-    Sci::Vector<double> b(b_data, b_data.size());
-    Sci::Vector<double> c(c_data, c_data.size());
-
+    Sci::Vector<double> b = {3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 23.0,
+                             40.0, 23.0, 14.0, 12.0, 56.0, 23.0, 29.0};
+    Sci::Vector<double> c = {3.0,  13.0, 7.0,  5.0,  21.0, 23.0, 39.0,
+                             23.0, 40.0, 23.0, 14.0, 12.0, 56.0, 23.0};
     EXPECT_NEAR(Sci::Stats::cov(b, c), 59.78021978, 1.0e-8);
 }

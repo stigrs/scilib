@@ -12,12 +12,11 @@
 
 TEST(TestLinAlg, TestAdd)
 {
-    std::vector<int> data = {1, 2, 3};
     std::vector<int> ans = {2, 4, 6};
 
-    Sci::Vector<int> x(data, data.size());
-    Sci::Vector<int> y(data, data.size());
-    Sci::Vector<int> z(data.size());
+    Sci::Vector<int> x = {1, 2, 3};
+    Sci::Vector<int> y = {1, 2, 3};
+    Sci::Vector<int> z(x.size());
 
     Sci::Linalg::add(x, y, z);
 
@@ -41,15 +40,15 @@ TEST(TestLinAlg, TestSubtract)
 
 TEST(TestLinalg, TestAbsSum)
 {
-    Sci::Vector<int> v({1, 2, 3, -4}, 4);
+    Sci::Vector<int> v = {1, 2, 3, -4};
     EXPECT_EQ(Sci::Linalg::vector_abs_sum(v), 10);
 }
 
 TEST(TestLinalg, TestAxpy)
 {
     std::vector<int> ans = {4, 8, 12, 16, 20};
-    Sci::Vector<int> x({1, 2, 3, 4, 5}, 5);
-    Sci::Vector<int> y({2, 4, 6, 8, 10}, 5);
+    Sci::Vector<int> x = {1, 2, 3, 4, 5};
+    Sci::Vector<int> y = {2, 4, 6, 8, 10};
 
     Sci::Linalg::axpy(2, x, y);
     for (std::size_t i = 0; i < y.size(); ++i) {
@@ -59,27 +58,27 @@ TEST(TestLinalg, TestAxpy)
 
 TEST(TestLinalg, TestDot)
 {
-    Sci::Vector<int> a({1, 3, -5}, 3);
-    Sci::Vector<int> b({4, -2, -1}, 3);
+    Sci::Vector<int> a = {1, 3, -5};
+    Sci::Vector<int> b = {4, -2, -1};
 
     EXPECT_EQ(Sci::Linalg::dot(a, b), 3);
 }
 
 TEST(TestLinalg, TestIdxAbsMax)
 {
-    Sci::Vector<int> v({1, 3, -5, 2}, 4);
+    Sci::Vector<int> v = {1, 3, -5, 2};
     EXPECT_EQ(Sci::Linalg::idx_abs_max(v), 2UL);
 }
 
 TEST(TestLinalg, TestIdxAbsMin)
 {
-    Sci::Vector<int> v({4, 3, -5, 2}, 4);
+    Sci::Vector<int> v = {4, 3, -5, 2};
     EXPECT_EQ(Sci::Linalg::idx_abs_min(v), 3UL);
 }
 
 TEST(TestLinalg, TestNorm2)
 {
-    Sci::Vector<double> v({1.0, 2.0, 3.0}, 3);
+    Sci::Vector<double> v = {1.0, 2.0, 3.0};
     auto ans = Sci::Linalg::vector_norm2(v);
     EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }
@@ -87,20 +86,16 @@ TEST(TestLinalg, TestNorm2)
 TEST(TestLinalg, TestNorm2Row)
 {
     // clang-format off
-    std::vector<double> aa = {1, 2, 3, 
-                              4, 5, 6};
+    Sci::Matrix<double> ma = {{1, 2, 3}, 
+                              {4, 5, 6}};
     // clang-format on
-    Sci::Matrix<double> ma(aa, 2, 3);
     auto ans = std::experimental::linalg::vector_norm2(Sci::row(ma.to_mdspan(), 0));
     EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }
 
 TEST(TestLinalg, TestScaled)
 {
-    // clang-format off
-    std::vector<double> a_data = {1, 2, 3, 4, 5, 6};
-    // clang-format on
-    Sci::Vector<double> a(a_data, 6);
+    Sci::Vector<double> a = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
     auto ans = Sci::Linalg::scaled(2.0, a);
 
     for (std::size_t i = 0; i < ans.size(); ++i) {

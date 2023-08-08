@@ -124,7 +124,7 @@ TEST(TestVector, TestSwap)
 TEST(TestVector, TestInitializer)
 {
     std::initializer_list<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(stdex::extents<Sci::index, v.size()>(), v);
+    Sci::Vector<int> a(stdex::dextents<Sci::index, 1>(v.size()), v);
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -200,8 +200,7 @@ TEST(TestVector, TestAnotequalB)
 
 TEST(TestVector, TestSort)
 {
-    std::vector<int> data = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    Sci::Vector<int> x(data, data.size());
+    Sci::Vector<int> x = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     Sci::sort(x.to_mdspan());
     for (size_t i = 0; i < x.size(); ++i) {
         EXPECT_EQ(x[i], static_cast<int>(i + 1));
@@ -211,7 +210,7 @@ TEST(TestVector, TestSort)
 TEST(TestVector, TestFirst)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(v, v.size());
+    Sci::Vector<int> a(stdex::dextents<Sci::index, 1>(v.size()), v);
 
     auto v_slice = Sci::first(a.to_mdspan(), v.size());
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
