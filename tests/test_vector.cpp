@@ -54,7 +54,7 @@ TEST(TestVector, TestView)
     for (int i = 0; i < 5; ++i) {
         v[i] = i;
     }
-    auto vv = v.view();
+    auto vv = v.to_mdspan();
     EXPECT_EQ(vv[0], 0);
 }
 
@@ -79,7 +79,7 @@ TEST(TestVector, TestCopySpan)
         v[i] = i;
     }
 
-    Sci::Vector<int> a = Sci::make_mdarray(v.view());
+    Sci::Vector<int> a = Sci::make_mdarray(v.to_mdspan());
     a[0] = 10;
     EXPECT_EQ(v[0], 0);
     EXPECT_EQ(a[0], 10);
@@ -89,7 +89,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::StaticVector<int, 5> a(v, v.size());
+    Sci::StaticVector<int, 5> a(stdex::extents<Sci::index, v.size()>(), v);
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a[i]);
@@ -116,7 +116,7 @@ TEST(TestVector, TestSwap)
     Sci::Vector<int> a(n1);
     Sci::Vector<int> b(n2);
 
-    a.swap(b);
+    std::swap(a, b);
     EXPECT_EQ(a.size(), n2);
     EXPECT_EQ(b.size(), n1);
 }
@@ -124,7 +124,7 @@ TEST(TestVector, TestSwap)
 TEST(TestVector, TestInitializer)
 {
     std::initializer_list<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(v, v.size());
+    Sci::Vector<int> a(stdex::dextents<Sci::index, 1>(v.size()), v);
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -146,8 +146,8 @@ TEST(TestVector, TestSetValue)
 {
     Sci::Vector<int> v(5);
     v = 4;
-    for (const auto& vi : v) {
-        EXPECT_EQ(vi, 4);
+    for (auto i : ranges::views::iota(0, v.extent(0))) {
+        EXPECT_EQ(v[i], 4);
     }
 }
 
@@ -156,8 +156,8 @@ TEST(TestVector, TestAddValue)
     Sci::Vector<int> v(5);
     v = 2;
     v += 4;
-    for (const auto& vi : v) {
-        EXPECT_EQ(vi, 6);
+    for (auto i : ranges::views::iota(0, v.extent(0))) {
+        EXPECT_EQ(v[i], 6);
     }
 }
 
@@ -168,11 +168,11 @@ TEST(TestVector, TestAddVector)
     Sci::Vector<int> b(5);
     b = 1;
     a += b;
-    for (const auto& ai : a) {
-        EXPECT_EQ(ai, 2);
+    for (auto i : ranges::views::iota(0, a.extent(0))) {
+        EXPECT_EQ(a[i], 2);
     }
-    for (const auto& bi : b) {
-        EXPECT_EQ(bi, 1);
+    for (auto i : ranges::views::iota(0, b.extent(0))) {
+        EXPECT_EQ(b[i], 1);
     }
 }
 
@@ -188,17 +188,20 @@ TEST(TestVector, TestAequalB)
 TEST(TestVector, TestAnotequalB)
 {
     Sci::Vector<int> a(5);
+    Sci::Vector<int> b(5);
+    Sci::Vector<int> c(4);
     a = 1;
-    Sci::Vector<int> b(4);
     b = 2;
+    c = 1;
     EXPECT_TRUE(a != b);
+    EXPECT_TRUE(a != c);
+    EXPECT_TRUE(b != c);
 }
 
 TEST(TestVector, TestSort)
 {
-    std::vector<int> data = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    Sci::Vector<int> x(data, data.size());
-    Sci::sort(x.view());
+    Sci::Vector<int> x = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    Sci::sort(x.to_mdspan());
     for (size_t i = 0; i < x.size(); ++i) {
         EXPECT_EQ(x[i], static_cast<int>(i + 1));
     }
@@ -207,9 +210,9 @@ TEST(TestVector, TestSort)
 TEST(TestVector, TestFirst)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(v, v.size());
+    Sci::Vector<int> a(stdex::dextents<Sci::index, 1>(v.size()), v);
 
-    auto v_slice = Sci::first(a.view(), v.size());
+    auto v_slice = Sci::first(a.to_mdspan(), v.size());
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
         EXPECT_EQ(v_slice[i], a[i]);
     }
@@ -217,10 +220,9 @@ TEST(TestVector, TestFirst)
 
 TEST(TestVector, TestLast)
 {
-    std::vector<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(v, v.size());
+    Sci::Vector<int> a = {1, 2, 3, 4, 5};
 
-    auto v_slice = Sci::last(a.view(), 3);
+    auto v_slice = Sci::last(a.to_mdspan(), 3);
     for (std::size_t i = 0; i < v_slice.size(); ++i) {
         EXPECT_EQ(v_slice[i], a[i + 2]);
     }

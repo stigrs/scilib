@@ -42,7 +42,7 @@ template <class T, class Extents, class Layout, class Container>
 inline void fill(Sci::MDArray<T, Extents, Layout, Container>& m, const T& value)
 {
     static_assert(Extents::rank() <= 2);
-    fill(m.view(), value);
+    fill(m.to_mdspan(), value);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,11 +57,11 @@ inline void clip(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Access
     using index_type = IndexType;
 
     for (index_type i = 0; i < a.extent(0); ++i) {
-        if (a(i) < a_min) {
-            a(i) = a_min;
+        if (a[i] < a_min) {
+            a[i] = a_min;
         }
-        if (a_max < a(i)) {
-            a(i) = a_max;
+        if (a_max < a[i]) {
+            a[i] = a_max;
         }
     }
 }
@@ -94,7 +94,7 @@ inline void clip(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layou
 template <class T, class Extents, class Layout, class Container>
 inline void clip(Sci::MDArray<T, Extents, Layout, Container>& a, const T& a_min, const T& a_max)
 {
-    clip(a.view(), a_min, a_max);
+    clip(a.to_mdspan(), a_min, a_max);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,10 +108,10 @@ inline std::size_t argmax(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layou
     using value_type = std::remove_cv_t<T>;
 
     index_type max_idx = 0;
-    value_type max_val = v(0);
+    value_type max_val = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) > max_val) {
-            max_val = v(i);
+        if (v[i] > max_val) {
+            max_val = v[i];
             max_idx = i;
         }
     }
@@ -123,7 +123,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline std::size_t
 argmax(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return argmax(v.view());
+    return argmax(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -134,10 +134,10 @@ inline std::size_t argmin(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layou
     using value_type = std::remove_cv_t<T>;
 
     index_type min_idx = 0;
-    value_type min_val = v(0);
+    value_type min_val = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) < min_val) {
-            min_val = v(i);
+        if (v[i] < min_val) {
+            min_val = v[i];
             min_idx = i;
         }
     }
@@ -149,7 +149,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline std::size_t
 argmin(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return argmin(v.view());
+    return argmin(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -159,10 +159,10 @@ inline auto max(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
-    value_type result = v(0);
+    value_type result = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) > result) {
-            result = v(i);
+        if (v[i] > result) {
+            result = v[i];
         }
     }
     return result;
@@ -172,7 +172,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T max(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return max(v.view());
+    return max(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -182,10 +182,10 @@ inline auto min(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
 
-    value_type result = v(0);
+    value_type result = v[0];
     for (index_type i = 0; i < v.extent(0); ++i) {
-        if (v(i) < result) {
-            result = v(i);
+        if (v[i] < result) {
+            result = v[i];
         }
     }
     return result;
@@ -195,7 +195,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T min(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return min(v.view());
+    return min(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -207,7 +207,7 @@ inline auto sum(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
 
     value_type result = 0;
     for (index_type i = 0; i < v.extent(0); ++i) {
-        result += v(i);
+        result += v[i];
     }
     return result;
 }
@@ -216,7 +216,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T sum(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return sum(v.view());
+    return sum(v.to_mdspan());
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
@@ -228,7 +228,7 @@ inline auto prod(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Access
 
     value_type result = 1;
     for (index_type i = 0; i < v.extent(0); ++i) {
-        result *= v(i);
+        result *= v[i];
     }
     return result;
 }
@@ -237,115 +237,98 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T prod(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
 {
-    return prod(v.view());
+    return prod(v.to_mdspan());
 }
 
 //--------------------------------------------------------------------------------------------------
 // Create special vectors and matrices:
 
-// clang-format off
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M> && M::rank() == sizeof...(Args))
-// clang-format on
-inline M zeros(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)))
+inline M zeros(IndexTypes... exts)
 {
+    using extents_type = typename M::extents_type;
     using value_type = typename M::value_type;
 
-    M res(args...);
-    res = value_type{0};
-    return res;
+    return M(extents_type(exts...), value_type{0});
 }
 
-// clang-format off
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M> && M::rank() == sizeof...(Args))
-// clang-format on
-inline M ones(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)))
+inline M ones(IndexTypes... exts)
 {
+    using extents_type = typename M::extents_type;
     using value_type = typename M::value_type;
 
-    M res(args...);
-    res = value_type{1};
-    return res;
+    return M(extents_type(exts...), value_type{1});
 }
 
-// clang-format off
 template <class M = Sci::Matrix<double>>
-    requires(__Detail::Is_mdarray_v<M> && M::rank() == 2)
-// clang-format on
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == 2))
 inline M identity(std::size_t n)
 {
     using value_type = typename M::value_type;
     using index_type = typename M::index_type;
 
     M res(n, n);
-    auto res_diag = Sci::diag(res.view());
+    auto res_diag = Sci::diag(res.to_mdspan());
     for (index_type i = 0; i < res_diag.extent(0); ++i) {
-        res_diag(i) = value_type{1};
+        res_diag[i] = value_type{1};
     }
     return res;
 }
 
 // Create a random MDArray from a normal distribution with zero mean and unit
 // variance.
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& std::is_floating_point_v<typename M::value_type>)
-inline M randn(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)) &&
+             std::is_floating_point_v<typename M::value_type>)
+inline M randn(IndexTypes... exts)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
-
-    M res(args...);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::normal_distribution<value_type> nd{};
 
-    for (auto& x : res) {
-        x = nd(gen);
-    }
+    M res(exts...);
+    res.apply([&](value_type& x) { x = nd(gen); });
     return res;
 }
 
 // Create a random MDArray from a uniform real distribution on the
 // interval [0, 1).
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& std::is_floating_point_v<typename M::value_type>)
-inline M randu(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)) &&
+             std::is_floating_point_v<typename M::value_type>)
+inline M randu(IndexTypes... exts)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
-
-    M res(args...);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::uniform_real_distribution<value_type> ur{};
 
-    for (auto& x : res) {
-        x = ur(gen);
-    }
+    M res(exts...);
+    res.apply([&](value_type& x) { x = ur(gen); });
     return res;
 }
 
 // Create a random MDArray from a uniform integer distribution on the
 // interval [0, 1].
-template <class M, class... Args>
-    requires(__Detail::Is_mdarray_v<M>&& std::is_integral_v<typename M::value_type>)
-inline M randi(Args... args)
+template <class M, class... IndexTypes>
+    requires(__Detail::Is_mdarray_v<M> && (M::rank() == sizeof...(IndexTypes)) &&
+             std::is_integral_v<typename M::value_type>)
+inline M randi(IndexTypes... exts)
 {
-    static_assert(M::rank() == sizeof...(Args));
     using value_type = typename M::value_type;
-
-    M res(args...);
 
     std::random_device rd{};
     std::mt19937_64 gen{rd()};
     std::uniform_int_distribution<value_type> ui{};
 
-    for (auto& x : res) {
-        x = ui(gen);
-    }
+    M res(exts...);
+    res.apply([&](value_type& x) { x = ui(gen); });
     return res;
 }
 
@@ -359,10 +342,10 @@ Sci::Vector<T, Layout> linspace(T start, T stop, int num = 50)
 
     Sci::Vector<T, Layout> res(num);
 
-    res(0) = start;
+    res[0] = start;
     for (int i = 1; i < num; ++i) {
         value += step_size;
-        res(i) = value;
+        res[i] = value;
     }
     return res;
 }
@@ -399,7 +382,7 @@ template <class T,
 void to_lower_triangular(
     Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
-    to_lower_triangular(a.view());
+    to_lower_triangular(a.to_mdspan());
 }
 
 } // namespace Linalg

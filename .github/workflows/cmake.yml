@@ -63,7 +63,7 @@ jobs:
 
     env:
       MKL_DIR: "D:/a/"
-      MKLROOT: "D:/a/intelmkl.static.win-x64.2023.1.0.46356/lib/native"
+      MKLROOT: "D:/a/intelmkl.static.win-x64.2023.2.0.49496/lib/native"
 
     steps:
     - uses: actions/checkout@v3
@@ -71,7 +71,7 @@ jobs:
     - name: Prepare
       # Install necessary software
       shell: pwsh
-      run: nuget install intelmkl.static.win-x64 -o ${{env.MKL_DIR}}
+      run: nuget install intelmkl.static.win-x64 -Version 2023.2.0.49496 -o ${{env.MKL_DIR}}
       
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DScilib_BUILD_BENCH=OFF

@@ -19,7 +19,21 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline void scale(const T& scalar,
                   Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& m)
 {
-    std::experimental::linalg::scale(scalar, m.view());
+    std::experimental::linalg::scale(scalar, m.to_mdspan());
+}
+
+template <class T,
+          class IndexType,
+          std::size_t numrows,
+          std::size_t numcols,
+          class Layout,
+          class Container>
+    requires(std::is_integral_v<IndexType>)
+inline void
+scale(const T& scalar,
+      Sci::MDArray<T, stdex::extents<IndexType, numrows, numcols>, Layout, Container>& m)
+{
+    std::experimental::linalg::scale(scalar, m.to_mdspan());
 }
 
 } // namespace Linalg

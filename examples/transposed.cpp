@@ -15,6 +15,6 @@ int main()
 
     auto mt = Sci::Linalg::transposed(m);
     std::cout << "transposed matrix:\n";
-    Sci::print(std::cout, mt.view());
+    Sci::print(std::cout, mt.to_mdspan());
     std::cout << '\n';
 }

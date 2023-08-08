@@ -23,20 +23,20 @@ template <typename T, int num>
 T finite_difference_impl(Sci::StaticMatrix<T, num, num>& u)
 {
     using namespace Sci;
-    using index_type = Sci::StaticMatrix<T, num, num>::index_type;
+    using index_type = typename Sci::StaticMatrix<T, num, num>::index_type;
 
     auto u_old = u;
 
-    auto u_old1 = slice(u_old, seq(0, num - 3), seq(1, num - 2));
-    auto u_old2 = slice(u_old, seq(2, num - 1), seq(1, num - 2));
-    auto u_old3 = slice(u_old, seq(1, num - 2), seq(0, num - 3));
-    auto u_old4 = slice(u_old, seq(1, num - 2), seq(2, num - 1));
-    auto u_old5 = slice(u_old, seq(0, num - 3), seq(0, num - 3));
-    auto u_old6 = slice(u_old, seq(0, num - 3), seq(2, num - 1));
-    auto u_old7 = slice(u_old, seq(2, num - 1), seq(0, num - 3));
-    auto u_old8 = slice(u_old, seq(2, num - 1), seq(2, num - 1));
+    auto u_old1 = slice(u_old, seq(0, num - 2), seq(1, num - 1));
+    auto u_old2 = slice(u_old, seq(2, num), seq(1, num - 1));
+    auto u_old3 = slice(u_old, seq(1, num - 1), seq(0, num - 2));
+    auto u_old4 = slice(u_old, seq(1, num - 1), seq(2, num));
+    auto u_old5 = slice(u_old, seq(0, num - 2), seq(0, num - 2));
+    auto u_old6 = slice(u_old, seq(0, num - 2), seq(2, num));
+    auto u_old7 = slice(u_old, seq(2, num), seq(0, num - 2));
+    auto u_old8 = slice(u_old, seq(2, num), seq(2, num));
 
-    auto u_span = slice(u, seq(1, num - 2), seq(1, num - 2));
+    auto u_span = slice(u, seq(1, num - 1), seq(1, num - 1));
 
     for (index_type i = 0; i < u_span.extent(0); ++i) {
         for (index_type j = 0; j < u_span.extent(1); ++j) {
@@ -85,14 +85,14 @@ template <typename T, int num, int SO, int Rows, int Cols>
 T eigen_finite_difference_impl(Eigen::Matrix<T, num, num, SO, Rows, Cols>& u)
 {
     using namespace Eigen;
-    Eigen::Matrix<T, num, num, SO, Rows, Cols> u_old = u;
+    Eigen::Matrix<T, num, num, SO, num, num> u_old = u;
 
-    u.block(1, 1, num - 2, num - 2) =
-        ((u_old.block(0, 1, num - 2, num - 2) + u_old.block(2, 1, num - 1, num - 2) +
-          u_old.block(1, 0, num - 2, num - 3) + u_old.block(1, 2, num - 2, num - 1)) *
+    u(seq(1, num - 2), seq(1, num - 2)) =
+        ((u_old(seq(0, num - 3), seq(1, num - 2)) + u_old(seq(2, num - 1), seq(1, num - 2)) +
+          u_old(seq(1, num - 2), seq(0, num - 3)) + u_old(seq(1, num - 2), seq(2, num - 1))) *
              4.0 +
-         u_old.block(0, 0, num - 3, num - 3) + u_old.block(0, 2, num - 3, num - 1) +
-         u_old.block(2, 0, num - 1, num - 3) + u_old.block(2, 2, num - 1, num - 1)) /
+         u_old(seq(0, num - 3), seq(0, num - 3)) + u_old(seq(0, num - 3), seq(2, num - 1)) +
+         u_old(seq(2, num - 1), seq(0, num - 3)) + u_old(seq(2, num - 1), seq(2, num - 1))) /
         20.0;
 
     return (u - u_old).norm();

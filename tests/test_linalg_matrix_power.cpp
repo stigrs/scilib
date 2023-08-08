@@ -33,13 +33,14 @@ TEST(TestLinalg, TestMatrixPower)
          0.0, 1.0, 
         -1.0, 0.0};
     // clang-format on
+    using extents_type = typename Matrix<double>::extents_type;
 
-    Matrix<double> ans1(ans1_data, 2, 2);
-    Matrix<double> ans2(ans2_data, 2, 2);
-    Matrix<double> ans3(ans3_data, 2, 2);
-    Matrix<double> ans4(ans4_data, 2, 2);
+    Matrix<double> ans1(extents_type(2, 2), ans1_data);
+    Matrix<double> ans2(extents_type(2, 2), ans2_data);
+    Matrix<double> ans3(extents_type(2, 2), ans3_data);
+    Matrix<double> ans4(extents_type(2, 2), ans4_data);
 
-    Matrix<double> M(M_data, 2, 2);
+    Matrix<double> M(extents_type(2, 2), M_data);
 
     auto res = matrix_power(M, 0);
     for (Sci::index i = 0; i < res.extent(0); ++i) {
@@ -102,13 +103,14 @@ TEST(TestLinalg, TestMatrixPowerColMajor)
         0.0, -1.0, 
         1.0,  0.0};
     // clang-format on
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
 
-    Matrix<double, stdex::layout_left> ans1(ans1_data, 2, 2);
-    Matrix<double, stdex::layout_left> ans2(ans2_data, 2, 2);
-    Matrix<double, stdex::layout_left> ans3(ans3_data, 2, 2);
-    Matrix<double, stdex::layout_left> ans4(ans4_data, 2, 2);
+    Matrix<double, stdex::layout_left> ans1(extents_type(2, 2), ans1_data);
+    Matrix<double, stdex::layout_left> ans2(extents_type(2, 2), ans2_data);
+    Matrix<double, stdex::layout_left> ans3(extents_type(2, 2), ans3_data);
+    Matrix<double, stdex::layout_left> ans4(extents_type(2, 2), ans4_data);
 
-    Matrix<double, stdex::layout_left> M(M_data, 2, 2);
+    Matrix<double, stdex::layout_left> M(extents_type(2, 2), M_data);
 
     auto res = matrix_power(M, 0);
     for (Sci::index j = 0; j < res.extent(1); ++j) {

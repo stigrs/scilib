@@ -21,7 +21,8 @@ TEST(TestLinalg, TestMatrixNorm)
          0.0, 2.0, 8.0
     };
     // clang-format on
-    Matrix<double> A(a_data, 2, 3);
+    using extents_type = typename Matrix<double>::extents_type;
+    Matrix<double> A(extents_type(2, 3), a_data);
 
     EXPECT_EQ(matrix_norm(A, '1'), 15.0);
     EXPECT_EQ(matrix_norm(A, 'I'), 15.0);
@@ -39,7 +40,8 @@ TEST(TestLinalg, TestMatrixNormColMajor)
          7.0, 8.0
     };
     // clang-format on
-    Matrix<double, stdex::layout_left> A(a_data, 2, 3);
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+    Matrix<double, stdex::layout_left> A(extents_type(2, 3), a_data);
 
     EXPECT_EQ(matrix_norm(A, '1'), 15.0);
     EXPECT_EQ(matrix_norm(A, 'I'), 15.0);

@@ -46,8 +46,8 @@ solve(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layou
         matrix_layout = LAPACK_COL_MAJOR;
         ldb = n;
     }
-    BLAS_INT info = LAPACKE_dgesv(matrix_layout, n, nrhs, a.data_handle(), lda, ipiv.data(),
-                                  b.data_handle(), ldb);
+    BLAS_INT info = LAPACKE_dgesv(matrix_layout, n, nrhs, a.data_handle(), lda,
+                                  ipiv.container_data(), b.data_handle(), ldb);
     if (info != 0) {
         throw std::runtime_error("dgesv: factor U is singular");
     }
@@ -67,7 +67,7 @@ inline void
 solve(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
       Sci::MDArray<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Container_b>& b)
 {
-    solve(a.view(), b.view());
+    solve(a.to_mdspan(), b.to_mdspan());
 }
 
 } // namespace Linalg

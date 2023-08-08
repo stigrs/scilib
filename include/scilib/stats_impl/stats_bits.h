@@ -31,7 +31,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T mean(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return mean(x.view());
+    return mean(x.to_mdspan());
 }
 
 // Median.
@@ -43,13 +43,13 @@ inline auto median(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Acce
     using value_type = std::remove_cv_t<T>;
 
     Sci::Vector<value_type> xcopy(x);
-    Sci::sort(xcopy.view());
+    Sci::sort(xcopy.to_mdspan());
 
     index_type n = (xcopy.extent(0) + 1) / 2;
-    value_type med = xcopy(n);
+    value_type med = xcopy[n];
     if (xcopy.extent(0) % 2 == 0) { // even
         n = (xcopy.extent(0) + 1) / 2 - 1;
-        med = (med + xcopy(n)) / 2.0;
+        med = (med + xcopy[n]) / 2.0;
     }
     return med;
 }
@@ -58,7 +58,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T median(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return median(x.view());
+    return median(x.to_mdspan());
 }
 
 // Variance.
@@ -75,7 +75,7 @@ inline auto var(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
     value_type sum2 = value_type{0};
 
     for (index_type i = 0; i < x.extent(0); ++i) {
-        sum2 += std::pow(x(i) - xmean, 2);
+        sum2 += std::pow(x[i] - xmean, 2);
     }
     return sum2 / (n - 1.0);
 }
@@ -84,7 +84,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T var(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return var(x.view());
+    return var(x.to_mdspan());
 }
 
 // Standard deviation.
@@ -99,7 +99,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T stddev(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return stddev(x.view());
+    return stddev(x.to_mdspan());
 }
 
 // Root-mean-square deviation.
@@ -112,7 +112,7 @@ inline auto rms(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
 
     value_type sum2 = value_type{0};
     for (index_type i = 0; i < x.extent(0); ++i) {
-        sum2 += x(i) * x(i);
+        sum2 += x[i] * x[i];
     }
     return std::sqrt(sum2 / x.extent(0));
 }
@@ -121,7 +121,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline T rms(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return rms(x.view());
+    return rms(x.to_mdspan());
 }
 
 // Covariance.
@@ -148,8 +148,8 @@ inline auto cov(stdex::mdspan<T, stdex::extents<IndexType_x, ext_x>, Layout_x, A
     value_type res = value_type{0};
 
     for (index_type i = 0; i < x.extent(0); ++i) {
-        value_type a = x(i) - xmean;
-        value_type b = y(i) - ymean;
+        value_type a = x[i] - xmean;
+        value_type b = y[i] - ymean;
         res += a * b / (x.extent(0) - T{1});
     }
     return res;
@@ -168,7 +168,7 @@ template <class T,
 inline T cov(const Sci::MDArray<T, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
              const Sci::MDArray<T, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
-    return cov(x.view(), y.view());
+    return cov(x.to_mdspan(), y.to_mdspan());
 }
 
 } // namespace Stats

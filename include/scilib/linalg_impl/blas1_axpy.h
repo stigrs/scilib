@@ -36,7 +36,7 @@ inline void axpy(const T_scalar& scalar,
     using index_type = IndexType_y;
 
     for (index_type i = 0; i < y.extent(0); ++i) {
-        y(i) = scalar * x(i) + y(i);
+        y[i] = scalar * x[i] + y[i];
     }
 }
 
@@ -58,7 +58,7 @@ axpy(const T_scalar& scalar,
      const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
      Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
-    axpy(scalar, x.view(), y.view());
+    axpy(scalar, x.to_mdspan(), y.to_mdspan());
 }
 
 } // namespace Linalg

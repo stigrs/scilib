@@ -30,7 +30,7 @@ inline auto trapz(T_scalar xlo,
     value_type ans = value_type{0};
 
     for (index_type i = 1; i < x.extent(0); ++i) {
-        ans += 0.5 * (x(i) + x(i - 1));
+        ans += 0.5 * (x[i] + x[i - 1]);
     }
     return ans *= step;
 }
@@ -39,7 +39,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
 inline auto
 trapz(T xlo, T xup, const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return trapz(xlo, xup, x.view());
+    return trapz(xlo, xup, x.to_mdspan());
 }
 
 } // namespace Integrate

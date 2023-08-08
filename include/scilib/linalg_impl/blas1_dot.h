@@ -30,7 +30,7 @@ inline auto
 dot(const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
     const Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
-    return std::experimental::linalg::dot(x.view(), y.view());
+    return std::experimental::linalg::dot(x.to_mdspan(), y.to_mdspan());
 }
 
 } // namespace Linalg

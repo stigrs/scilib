@@ -20,9 +20,11 @@ TEST(TestLinalg, TestMatrixMatrixProductInt)
                            139, 154};
     // clang-format on
 
-    Sci::Matrix<int> ma(aa, 2, 3);
-    Sci::Matrix<int> mb(bb, 3, 2);
-    Sci::Matrix<int> ans(rr, 2, 2);
+    using extents_type = typename Sci::Matrix<int>::extents_type;
+
+    Sci::Matrix<int> ma(extents_type(2, 3), aa);
+    Sci::Matrix<int> mb(extents_type(3, 2), bb);
+    Sci::Matrix<int> ans(extents_type(2, 2), rr);
     Sci::Matrix<int> res = ma * mb;
 
     EXPECT_EQ(ans, res);
@@ -40,9 +42,11 @@ TEST(TestLinalg, TestMatrixMatrixProductDouble)
                               139, 154};
     // clang-format on
 
-    Sci::Matrix<double> ma(aa, 2, 3);
-    Sci::Matrix<double> mb(bb, 3, 2);
-    Sci::Matrix<double> ans(rr, 2, 2);
+    using extents_type = typename Sci::Matrix<double>::extents_type;
+
+    Sci::Matrix<double> ma(extents_type(2, 3), aa);
+    Sci::Matrix<double> mb(extents_type(3, 2), bb);
+    Sci::Matrix<double> ans(extents_type(2, 2), rr);
     Sci::Matrix<double> res(2, 2);
 
     Sci::Linalg::matrix_product(ma, mb, res);
@@ -61,10 +65,11 @@ TEST(TestLinalg, TestMatrixMatrixProductDoubleColMajor)
     std::vector<double> rr = { 58,  139, 
                                64, 154};
     // clang-format on
+    using extents_type = Sci::Matrix<double, stdex::layout_left>::extents_type;
 
-    Sci::Matrix<double, stdex::layout_left> ma(aa, 2, 3);
-    Sci::Matrix<double, stdex::layout_left> mb(bb, 3, 2);
-    Sci::Matrix<double, stdex::layout_left> ans(rr, 2, 2);
+    Sci::Matrix<double, stdex::layout_left> ma(extents_type(2, 3), aa);
+    Sci::Matrix<double, stdex::layout_left> mb(extents_type(3, 2), bb);
+    Sci::Matrix<double, stdex::layout_left> ans(extents_type(2, 2), rr);
     Sci::Matrix<double, stdex::layout_left> res(2, 2);
 
     Sci::Linalg::matrix_product(ma, mb, res);
@@ -82,10 +87,11 @@ TEST(TestLinalg, TestMatrixMatrixProductComplex)
     std::vector<std::complex<double>> rr = {{44.0, 2.0}, {64.0, 6.0}, 
                                             {100.0, -6.0}, {152.0, -2.0}};
     // clang-format on
+    using extents_type = typename Sci::Matrix<double, stdex::layout_left>::extents_type;
 
-    Sci::Matrix<std::complex<double>> ma(aa, 2, 2);
-    Sci::Matrix<std::complex<double>> mb(bb, 2, 2);
-    Sci::Matrix<std::complex<double>> ans(rr, 2, 2);
+    Sci::Matrix<std::complex<double>> ma(extents_type(2, 2), aa);
+    Sci::Matrix<std::complex<double>> mb(extents_type(2, 2), bb);
+    Sci::Matrix<std::complex<double>> ans(extents_type(2, 2), rr);
     Sci::Matrix<std::complex<double>> res(2, 2);
 
     Sci::Linalg::matrix_product(ma, mb, res);

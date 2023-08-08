@@ -77,7 +77,7 @@ auto expm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Acce
 template <class Layout>
 inline Sci::Matrix<double, Layout> expm(const Sci::Matrix<double, Layout>& a)
 {
-    return expm(a.view());
+    return expm(a.to_mdspan());
 }
 
 } // namespace Linalg

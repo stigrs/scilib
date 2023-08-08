@@ -36,10 +36,11 @@ TEST(TestLinalg, TestDet)
          2.0, 3.0, -4.0,  0.0
     };
     // clang-format on
+    using extents_type = typename Matrix<double>::extents_type;
 
-    Matrix<double> a2(a2_data, 2, 2);
-    Matrix<double> a3(a3_data, 3, 3);
-    Matrix<double> a4(a4_data, 4, 4);
+    Matrix<double> a2(extents_type(2, 2), a2_data);
+    Matrix<double> a3(extents_type(3, 3), a3_data);
+    Matrix<double> a4(extents_type(4, 4), a4_data);
 
     EXPECT_NEAR(det(a2), ans2, 1.0e-12);
     EXPECT_NEAR(det(a3), ans3, 1.0e-12);
@@ -60,7 +61,8 @@ TEST(TestLinalg, TestDetColMajor)
          4.0,  6.0,  0.0, -4.0,
          2.0,  4.0, -1.0,  0.0};
     // clang-format on
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
 
-    Matrix<double, stdex::layout_left> a4(a4_data, 4, 4);
+    Matrix<double, stdex::layout_left> a4(extents_type(4, 4), a4_data);
     EXPECT_NEAR(det(a4), ans4, 1.0e-12);
 }

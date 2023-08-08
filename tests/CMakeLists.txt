@@ -36,6 +36,10 @@ if(NOT TARGET Microsoft.GSL::GSL)
     find_package(Microsoft.GSL CONFIG)
 endif()
 
+if(NOT TARGET range-v3)
+    find_package(range-v3 CONFIG)
+endif()
+
 if(Scilib_CODE_COVERAGE)
     set(GCOV_LIBRARIES gcov)
 endif()
@@ -49,6 +53,7 @@ function(add_scilib_test name)
         std::mdspan
         scilib::scilib
         Microsoft.GSL::GSL
+        range-v3
         gtest_main
 	    ${BLAS_LIBRARIES}
         ${GCOV_LIBRARIES}

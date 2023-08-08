@@ -118,17 +118,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ################################################################################
 
 # mdspan is required.
-find_package(mdspan QUIET)
-if (NOT mdspan_FOUND)
-    message(STATUS "No installed mdspan found, fetching from Github")
-    include(FetchContent)
-    FetchContent_Declare(
-        mdspan
-        GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-        GIT_TAG         mdspan-0.6.0
-    )
-    FetchContent_MakeAvailable(mdspan)
-endif()
+message(STATUS "Fetch mdspan from Github")
+include(FetchContent)
+FetchContent_Declare(
+    mdspan
+    GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
+    GIT_TAG         mdspan-0.6.0
+)
+FetchContent_MakeAvailable(mdspan)
 
 if(NOT TARGET std::mdspan)
     find_package(mdspan REQUIRED)
@@ -160,6 +157,20 @@ FetchContent_MakeAvailable(GSL)
 
 if(NOT TARGET Microsoft.GSL::GSL)
     find_package(Microsoft.GSL CONFIG)
+endif()
+
+# ranges-v3 is required.
+message(STATUS "Fetch range-v3 from Github")
+include(FetchContent)
+FetchContent_Declare(
+    range-v3
+    GIT_REPOSITORY  https://github.com/ericniebler/range-v3.git
+    GIT_TAG         master
+)
+FetchContent_MakeAvailable(range-v3)
+
+if(NOT TARGET range-v3)
+    find_package(range-v3 CONFIG)
 endif()
 
 # BLAS and LAPACKE are required.
@@ -197,7 +208,7 @@ endif()
 add_library(scilib INTERFACE)
 add_library(scilib::scilib ALIAS scilib)
 
-target_link_libraries(scilib INTERFACE std::mdspan std::linalg Microsoft.GSL::GSL)
+target_link_libraries(scilib INTERFACE std::mdspan std::linalg Microsoft.GSL::GSL range-v3-meta range-v3-concepts range-v3)
 
 target_include_directories(scilib INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -206,7 +217,7 @@ target_include_directories(scilib INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-install(TARGETS scilib mdspan linalg GSL
+install(TARGETS scilib mdspan linalg GSL range-v3-meta range-v3-concepts range-v3
     EXPORT scilibTargets
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
 )

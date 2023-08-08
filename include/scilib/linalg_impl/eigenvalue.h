@@ -57,11 +57,12 @@ eigh(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout
     }
 
     info = LAPACKE_dsyevr(matrix_layout, 'V', 'A', uplo, n, a.data_handle(), lda, vl, vu, il, iu,
-                          abstol, &m, w.data_handle(), z.data(), ldz, isuppz.data());
+                          abstol, &m, w.data_handle(), z.container_data(), ldz,
+                          isuppz.container_data());
     if (info != 0) {
         throw std::runtime_error("dsyevr failed");
     }
-    Sci::copy(z.view(), a);
+    Sci::copy(z.to_mdspan(), a);
 }
 
 // Compute eigenvalues and eigenvectors of a complex Hermitian matrix.
@@ -106,11 +107,12 @@ inline void eigh(stdex::mdspan<std::complex<double>,
     }
 
     info = LAPACKE_zheevr(matrix_layout, 'V', 'A', uplo, n, a.data_handle(), lda, vl, vu, il, iu,
-                          abstol, &m, w.data_handle(), z.data(), ldz, isuppz.data());
+                          abstol, &m, w.data_handle(), z.container_data(), ldz,
+                          isuppz.container_data());
     if (info != 0) {
         throw std::runtime_error("zheevr failed");
     }
-    Sci::copy(z.view(), a);
+    Sci::copy(z.to_mdspan(), a);
 }
 
 template <class IndexType_a,
@@ -128,7 +130,7 @@ eigh(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout,
      char uplo = 'U',
      double abstol = -1.0 /* use default value */)
 {
-    eigh(a.view(), w.view(), uplo, abstol);
+    eigh(a.to_mdspan(), w.to_mdspan(), uplo, abstol);
 }
 
 template <class IndexType_a,
@@ -148,7 +150,7 @@ inline void eigh(Sci::MDArray<std::complex<double>,
                  char uplo = 'U',
                  double abstol = -1.0 /* use default value */)
 {
-    eigh(a.view(), w.view(), uplo, abstol);
+    eigh(a.to_mdspan(), w.to_mdspan(), uplo, abstol);
 }
 
 // Compute eigenvalues and eigenvectors of a real non-symmetric matrix.
@@ -194,17 +196,18 @@ void eig(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, La
     if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
-    BLAS_INT info = LAPACKE_dgeev(matrix_layout, 'N', 'V', n, a.data_handle(), n, wr.data(),
-                                  wi.data(), vl.data(), n, vr.data(), n);
+    BLAS_INT info =
+        LAPACKE_dgeev(matrix_layout, 'N', 'V', n, a.data_handle(), n, wr.container_data(),
+                      wi.container_data(), vl.container_data(), n, vr.container_data(), n);
     if (info != 0) {
         throw std::runtime_error("dgeev failed");
     }
     for (BLAS_INT i = 0; i < n; ++i) {
-        std::complex<double> wii(wr(i), wi(i));
-        eval(i) = wii;
+        std::complex<double> wii(wr[i], wi[i]);
+        eval[i] = wii;
         BLAS_INT j = 0;
         while (j < n) {
-            if (wi(j) == 0.0) {
+            if (wi[j] == 0.0) {
                 evec(i, j) = std::complex<double>{vr(i, j), 0.0};
                 ++j;
             }
@@ -242,7 +245,7 @@ void eig(
                  Layout,
                  Container_eval>& eval)
 {
-    eig(a.view(), evec.view(), eval.view());
+    eig(a.to_mdspan(), evec.to_mdspan(), eval.to_mdspan());
 }
 
 } // namespace Linalg

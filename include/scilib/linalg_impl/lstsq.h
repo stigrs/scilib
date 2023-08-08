@@ -48,7 +48,7 @@ lstsq(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layou
         ldb = n;
     }
     BLAS_INT info = LAPACKE_dgelsd(matrix_layout, m, n, nrhs, a.data_handle(), lda, b.data_handle(),
-                                   ldb, s.data(), rcond, &rank);
+                                   ldb, s.container_data(), rcond, &rank);
     if (info != 0) {
         throw std::runtime_error("dgelsd failed");
     }
@@ -68,7 +68,7 @@ inline void
 lstsq(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
       Sci::MDArray<double, stdex::extents<IndexType_b, nrows_b, ncols_b>, Layout, Container_b>& b)
 {
-    lstsq(a.view(), b.view());
+    lstsq(a.to_mdspan(), b.to_mdspan());
 }
 
 } // namespace Linalg

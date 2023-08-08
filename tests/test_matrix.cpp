@@ -34,12 +34,34 @@ TEST(TestMatrix, TestElementAccess)
 #endif
 }
 
+TEST(TestMatrix, TestElementAccessArray)
+{
+    Sci::Matrix<int> m(5, 3);
+    m = 2;
+    EXPECT_EQ(m[(std::array<Sci::index, 2>{0, 0})], 2);
+    EXPECT_EQ(m[(std::array<Sci::index, 2>{4, 2})], 2);
+}
+
+TEST(TestMatrix, TestElementAccessSpan)
+{
+    Sci::Matrix<int> m(5, 3);
+    m = 2;
+    constexpr Sci::index a[] = {0, 0};
+    constexpr Sci::index b[] = {4, 2};
+    EXPECT_EQ(m[(std::span{a})], 2);
+    EXPECT_EQ(m[(std::span{b})], 2);
+}
+
 TEST(TestMatrix, TestView)
 {
     Sci::Matrix<int> m(5, 3);
     m = 2;
-    auto mm = m.view();
+    auto mm = m.to_mdspan();
+#if __cpp_multidimensional_subscript
+    EXPECT_EQ(mm[0, 0], 2);
+#else
     EXPECT_EQ(mm(0, 0), 2);
+#endif
 }
 
 TEST(TestMatrix, TestCopy)
@@ -54,7 +76,7 @@ TEST(TestMatrix, TestCopySpan)
 {
     Sci::Matrix<int> a(5, 3);
     a = 2;
-    Sci::Matrix<int> b(a.view());
+    Sci::Matrix<int> b(a.to_mdspan());
     b(0, 0) = 3;
     EXPECT_EQ(a(0, 0), 2);
     EXPECT_EQ(b(0, 0), 3);
@@ -69,7 +91,7 @@ TEST(TestMatrix, TestAssignSpan)
             a(i, j) = i + j;
         }
     }
-    Sci::Matrix<int> b = a.view();
+    Sci::Matrix<int> b = a.to_mdspan();
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 3; ++j) {
             EXPECT_EQ(a(i, j), b(i, j));
@@ -92,10 +114,12 @@ TEST(TestMatrix, TestSwapElements)
     std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::array<int, 9> b = {10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    Sci::StaticMatrix<int, 3, 3> aa(a);
-    Sci::StaticMatrix<int, 3, 3> bb(b);
+    using extents_type = typename Sci::StaticMatrix<int, 3, 3>::extents_type;
 
-    Sci::swap_elements(aa.view(), bb.view());
+    Sci::StaticMatrix<int, 3, 3> aa(extents_type(3, 3), a);
+    Sci::StaticMatrix<int, 3, 3> bb(extents_type(3, 3), b);
+
+    Sci::swap_elements(aa.to_mdspan(), bb.to_mdspan());
 
     int it = 0;
     for (Sci::index i = 0; i < aa.extent(0); ++i) {
@@ -107,13 +131,41 @@ TEST(TestMatrix, TestSwapElements)
     }
 }
 
+TEST(TestMatrix, TestAeqB)
+{
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<int, 9> b = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    using extents_type = typename Sci::StaticMatrix<int, 3, 3>::extents_type;
+
+    Sci::StaticMatrix<int, 3, 3> aa(extents_type(3, 3), a);
+    Sci::StaticMatrix<int, 3, 3> bb(extents_type(3, 3), b);
+
+    EXPECT_TRUE(a == b);
+}
+
+TEST(TestMatrix, TestAnoteqB)
+{
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<int, 9> b = {10, 20, 30, 40, 50, 60, 70, 80, 90};
+
+    using extents_type = typename Sci::StaticMatrix<int, 3, 3>::extents_type;
+
+    Sci::StaticMatrix<int, 3, 3> aa(extents_type(3, 3), a);
+    Sci::StaticMatrix<int, 3, 3> bb(extents_type(3, 3), b);
+
+    EXPECT_TRUE(a != b);
+}
+
 TEST(TestMatrix, TestInitializer)
 {
     // clang-format off
     std::vector<int> v = {1, 2, 3,  
                           4, 5, 6};
     // clang-format on
-    Sci::Matrix<int> m(v, 2, 3);
+    using extents_type = typename Sci::Matrix<int>::extents_type;
+
+    Sci::Matrix<int> m(extents_type(2, 3), v);
 
     int val = 1;
     for (Sci::index i = 0; i < m.extent(0); ++i) {
@@ -142,8 +194,10 @@ TEST(TestMatrix, TestSetValue)
     Sci::Matrix<int> m(5, 3);
     Sci::Matrix<int> mm(m.mapping());
     mm = 3;
-    for (const auto& mi : mm) {
-        EXPECT_EQ(mi, 3);
+    for (Sci::index i = 0; i < mm.extent(0); ++i) {
+        for (Sci::index j = 0; j < mm.extent(1); ++j) {
+            EXPECT_EQ(mm(i, j), 3);
+        }
     }
 }
 
@@ -152,8 +206,10 @@ TEST(TestMatrix, TestAddValue)
     Sci::Matrix<int> m(5, 3);
     m = 1;
     m += 4;
-    for (const auto& mi : m) {
-        EXPECT_EQ(mi, 5);
+    for (Sci::index i = 0; i < m.extent(0); ++i) {
+        for (Sci::index j = 0; j < m.extent(1); ++j) {
+            EXPECT_EQ(m(i, j), 5);
+        }
     }
 }
 
@@ -164,8 +220,10 @@ TEST(TestMatrix, TestAddMatrix)
     Sci::Matrix<int> b(5, 3);
     b = 4;
     Sci::Matrix<int> c = a + b;
-    for (const auto& ci : c) {
-        EXPECT_EQ(ci, 5);
+    for (Sci::index i = 0; i < c.extent(0); ++i) {
+        for (Sci::index j = 0; j < c.extent(1); ++j) {
+            EXPECT_EQ(c(i, j), 5);
+        }
     }
 }
 
@@ -175,7 +233,9 @@ TEST(TestMatrix, TestRow)
     std::vector<int> aa = {1, 2, 3, 
                            4, 5, 6};
     // clang-format on
-    Sci::Matrix<int> ma(aa, 2, 3);
+    using extents_type = typename Sci::Matrix<int>::extents_type;
+
+    Sci::Matrix<int> ma(extents_type(2, 3), aa);
 
     auto r0 = Sci::row(ma, 0);
     auto r1 = Sci::row(ma, 1);
@@ -202,8 +262,11 @@ TEST(TestMatrix, TestDiag)
         7,  8,  0
     };
     // clang-format on
-    Sci::Matrix<int> ans(ans_data, 3, 3);
-    Sci::Matrix<int> m(data, 3, 3);
+    using extents_type = typename Sci::Matrix<int>::extents_type;
+
+    Sci::Matrix<int> ans(extents_type(3, 3), ans_data);
+    Sci::Matrix<int> m(extents_type(3, 3), data);
+
     auto d = Sci::diag(m);
     Sci::apply(d, [&](int& i) { i = 0; });
     EXPECT_EQ(m, ans);
@@ -229,7 +292,9 @@ TEST(TestMatrix, TestRowIterator)
     std::vector<int> aa = {1, 2, 3, 
                            4, 5, 6};
     // clang-format on
-    Sci::Matrix<int> ma(aa, 2, 3);
+    using extents_type = typename Sci::Matrix<int>::extents_type;
+
+    Sci::Matrix<int> ma(extents_type(2, 3), aa);
 
     auto r0 = Sci::row(ma, 0);
 
@@ -246,7 +311,9 @@ TEST(TestMatrix, TestColIterator)
     std::vector<int> aa = {1, 2, 3, 
                            4, 5, 6};
     // clang-format on
-    Sci::Matrix<int> ma(aa, 2, 3);
+    using extents_type = typename Sci::Matrix<int>::extents_type;
+
+    Sci::Matrix<int> ma(extents_type(2, 3), aa);
 
     auto c1 = Sci::column(ma, 1);
 
@@ -259,18 +326,8 @@ TEST(TestMatrix, TestColIterator)
 
 TEST(TestMatrix, TestDiagIterator)
 {
-    // clang-format off
-    std::vector<int> data = {
-        1,  2,  3, 
-        4,  5,  6, 
-        7,  8,  9
-    };
-    std::vector<int> ans_data = {
-        1, 5, 9
-    };
-    // clang-format on
-    Sci::Vector<int, stdex::layout_left> ans(ans_data, 3);
-    Sci::Matrix<int, stdex::layout_left> m(data, 3, 3);
+    Sci::Vector<int, stdex::layout_left> ans = {1, 5, 9};
+    Sci::Matrix<int, stdex::layout_left> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
     auto d = Sci::diag(m);
 
@@ -310,8 +367,20 @@ TEST(TestMatrix, TestStaticMatrix53)
 TEST(TestMatrix, TestStaticMatrixMdspan)
 {
     Sci::Matrix<int> md = {{1, 2, 3, 4}, {5, 6, 7, 8}};
-    Sci::StaticMatrix<int, 2, 4> ms(md.view());
+    Sci::StaticMatrix<int, 2, 4> ms(md.to_mdspan());
 
     EXPECT_EQ(md.extent(0), ms.extent(0));
     EXPECT_EQ(md.extent(1), ms.extent(1));
+}
+
+TEST(TestMatrix, TestCopyRowMajorColMajor)
+{
+    Sci::Matrix<int> a = {{1, 2, 3}, {4, 5, 6}};
+    Sci::Matrix<int, stdex::layout_left> b(a.to_mdspan());
+
+    for (Sci::index j = 0; j < a.extent(1); ++j) {
+        for (Sci::index i = 0; i < a.extent(0); ++i) {
+            EXPECT_EQ(a(i, j), b(i, j));
+        }
+    }
 }

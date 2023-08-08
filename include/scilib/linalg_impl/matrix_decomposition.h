@@ -50,7 +50,7 @@ template <class IndexType, std::size_t nrows, std::size_t ncols, class Layout, c
 inline void
 cholesky(Sci::MDArray<double, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
-    cholesky(a.view());
+    cholesky(a.to_mdspan());
 }
 
 // LU factorization.
@@ -102,7 +102,7 @@ inline void
 lu(Sci::MDArray<double, stdex::extents<IndexType_a, nrows, ncols>, Layout, Container_a>& a,
    Sci::MDArray<BLAS_INT, stdex::extents<IndexType_ipiv, ext_ipiv>, Layout, Container_ipiv>& ipiv)
 {
-    lu(a.view(), ipiv.view());
+    lu(a.to_mdspan(), ipiv.to_mdspan());
 }
 
 // QR factorization.
@@ -144,14 +144,14 @@ qr(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, 
 
     // Compute QR factorization:
 
-    BLAS_INT info = LAPACKE_dgeqrf(matrix_layout, m, n, q.data_handle(), lda, tau.data());
+    BLAS_INT info = LAPACKE_dgeqrf(matrix_layout, m, n, q.data_handle(), lda, tau.container_data());
     if (info != 0) {
         throw std::runtime_error("dgeqrf failed");
     }
 
     // Compute Q:
 
-    info = LAPACKE_dorgqr(matrix_layout, m, n, n, q.data_handle(), lda, tau.data());
+    info = LAPACKE_dorgqr(matrix_layout, m, n, n, q.data_handle(), lda, tau.container_data());
     if (info != 0) {
         throw std::runtime_error("dorgqr failed");
     }
@@ -182,7 +182,7 @@ qr(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, C
    Sci::MDArray<double, stdex::extents<IndexType_q, nrows_q, ncols_q>, Layout, Container_q>& q,
    Sci::MDArray<double, stdex::extents<IndexType_r, nrows_r, ncols_r>, Layout, Container_r>& r)
 {
-    qr(a.view(), q.view(), r.view());
+    qr(a.to_mdspan(), q.to_mdspan(), r.to_mdspan());
 }
 
 // Singular value decomposition.
@@ -233,7 +233,7 @@ svd(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout,
 
     BLAS_INT info =
         LAPACKE_dgesvd(matrix_layout, 'A', 'A', m, n, a.data_handle(), lda, s.data_handle(),
-                       u.data_handle(), ldu, vt.data_handle(), ldvt, superb.data());
+                       u.data_handle(), ldu, vt.data_handle(), ldvt, superb.container_data());
     if (info != 0) {
         throw std::runtime_error("dgesvd failed");
     }
@@ -264,7 +264,7 @@ svd(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, 
     Sci::MDArray<double, stdex::extents<IndexType_vt, nrows_vt, ncols_vt>, Layout, Container_vt>&
         vt)
 {
-    svd(a.view(), s.view(), u.view(), vt.view());
+    svd(a.to_mdspan(), s.to_mdspan(), u.to_mdspan(), vt.to_mdspan());
 }
 
 } // namespace Linalg

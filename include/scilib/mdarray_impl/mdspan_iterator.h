@@ -154,7 +154,7 @@ public:
     constexpr reference operator*() const noexcept
     {
         assert(0 <= current_ && current_ < size_);
-        return x_(current_);
+        return x_[current_];
     }
 
     constexpr data_handle_type operator->() const noexcept

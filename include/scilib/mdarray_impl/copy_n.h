@@ -36,7 +36,7 @@ inline void copy_n(stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout
     Expects(count > 0 && offset + count <= gsl::narrow_cast<std::size_t>(y.extent(0)));
 
     for (std::size_t i = 0; i < count; ++i) {
-        y(i + offset) = x(i);
+        y[i + offset] = x[i];
     }
 }
 
@@ -57,7 +57,7 @@ inline void copy_n(const MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout
                    MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
                    std::size_t offset = 0)
 {
-    copy_n(x.view(), count, y.view(), offset);
+    copy_n(x.to_mdspan(), count, y.to_mdspan(), offset);
 }
 
 } // namespace Sci

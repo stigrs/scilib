@@ -32,9 +32,9 @@ TEST(TestLinalg, TestEighReal)
         0.46, -0.48,  1.10, -0.98,  3.54
     };
     // clang-format on
-    Sci::Matrix<double> evec(evec_data, 5, 5);
+    Sci::Matrix<double> evec(stdex::dextents<Sci::index, 2>(5, 5), evec_data);
 
-    Sci::Matrix<double> a(a_data, 5, 5);
+    Sci::Matrix<double> a(stdex::dextents<Sci::index, 2>(5, 5), a_data);
     Sci::Vector<double> w(5);
     Sci::Linalg::eigh(a, w);
 
@@ -108,10 +108,11 @@ TEST(TestLinalg, TestEig)
          2.0, 3.0, -4.0,  0.0
     };
     // clang-format on
+    using extents_type = typename Sci::Matrix<double>::extents_type;
 
-    Sci::Matrix<double> evec_re(evec_re_data, 4, 4);
-    Sci::Matrix<double> evec_im(evec_im_data, 4, 4);
-    Sci::Matrix<double> a(a_data, 4, 4);
+    Sci::Matrix<double> evec_re(extents_type(4, 4), evec_re_data);
+    Sci::Matrix<double> evec_im(extents_type(4, 4), evec_im_data);
+    Sci::Matrix<double> a(extents_type(4, 4), a_data);
 
     Sci::Vector<std::complex<double>> eval(4);
     Sci::Matrix<std::complex<double>> evec(4, 4);
@@ -161,10 +162,11 @@ TEST(TestLinalg, TestEigColMajor)
          2.0,  4.0, -1.0,  0.0
     };
     // clang-format on
+    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
 
-    Matrix<double, stdex::layout_left> evec_re(evec_re_data, 4, 4);
-    Matrix<double, stdex::layout_left> evec_im(evec_im_data, 4, 4);
-    Matrix<double, stdex::layout_left> a(a_data, 4, 4);
+    Matrix<double, stdex::layout_left> evec_re(extents_type(4, 4), evec_re_data);
+    Matrix<double, stdex::layout_left> evec_im(extents_type(4, 4), evec_im_data);
+    Matrix<double, stdex::layout_left> a(extents_type(4, 4), a_data);
 
     Vector<std::complex<double>, stdex::layout_left> eval(4);
     Matrix<std::complex<double>, stdex::layout_left> evec(4, 4);
