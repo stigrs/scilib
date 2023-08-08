@@ -129,6 +129,28 @@ TEST(TestMatrix, TestSwapElements)
     }
 }
 
+TEST(TestMatrix, TestAeqB)
+{
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<int, 9> b = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    Sci::StaticMatrix<int, 3, 3> aa(a);
+    Sci::StaticMatrix<int, 3, 3> bb(b);
+
+    EXPECT_TRUE(a == b);
+}
+
+TEST(TestMatrix, TestAnoteqB)
+{
+    std::array<int, 9> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<int, 9> b = {10, 20, 30, 40, 50, 60, 70, 80, 90};
+
+    Sci::StaticMatrix<int, 3, 3> aa(a);
+    Sci::StaticMatrix<int, 3, 3> bb(b);
+
+    EXPECT_TRUE(a != b);
+}
+
 TEST(TestMatrix, TestInitializer)
 {
     // clang-format off

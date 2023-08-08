@@ -188,10 +188,14 @@ TEST(TestVector, TestAequalB)
 TEST(TestVector, TestAnotequalB)
 {
     Sci::Vector<int> a(5);
-    a = 1;
     Sci::Vector<int> b(5);
+    Sci::Vector<int> c(4);
+    a = 1;
     b = 2;
+    c = 1;
     EXPECT_TRUE(a != b);
+    EXPECT_TRUE(a != c);
+    EXPECT_TRUE(b != c);
 }
 
 TEST(TestVector, TestSort)
