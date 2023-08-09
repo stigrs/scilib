@@ -88,7 +88,7 @@ TEST(TestIntegrate, TestDormandPrince)
     };
     // clang-format on
     using extents_type = typename Matrix<double>::extents_type;
-    Matrix<double> ans(extents_type(5, 3), ans_data);
+    Matrix<double> ans(extents_type(10, 3), ans_data);
 
     std::vector<double> y0 = {10.0, 1.0, 1.0};
     Vector<double> y(stdex::dextents<Sci::index, 1>(y0.size()), y0);
@@ -96,9 +96,9 @@ TEST(TestIntegrate, TestDormandPrince)
     double t0 = 0.0;
     double tf = 0.1;
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < ans.extent(0); ++i) {
         solve_ivp(lorentz, t0, tf, y, 1.0e-7, 1.0e-7);
-        for (Sci::index j = 0; j < y.extent(0); ++j) {
+        for (Sci::index j = 0; j < ans.extent(1); ++j) {
             EXPECT_NEAR(y(j), ans(i, j), 1.6e-6);
         }
         tf += 0.1;
