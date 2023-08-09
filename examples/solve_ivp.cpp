@@ -1,3 +1,4 @@
+#include <format>
 #include <iostream>
 #include <scilib/integrate.h>
 #include <scilib/mdarray.h>
@@ -27,9 +28,12 @@ int main()
     double t0 = 0.0;
     double tf = 0.1;
 
-    for (int i = 0; i < 5; ++i) {
+    std::cout << std::format("At t = {0:.1f}, y = {1:10.6f} {2:10.6f} {3:10.6f}\n", t0, y[0], y[1],
+                             y[2]);
+    for (int i = 0; i < 10; ++i) {
         Sci::Integrate::solve_ivp(lorentz, t0, tf, y);
         tf += 0.1;
-        std::cout << "At t = " << t0 << ", y = " << y(0) << " " << y(1) << " " << y(2) << '\n';
+        std::cout << std::format("At t = {0:.1f}, y = {1:10.6f} {2:10.6f} {3:10.6f}\n", t0, y[0],
+                                 y[1], y[2]);
     }
 }

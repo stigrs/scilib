@@ -31,10 +31,10 @@ error_norm(const Sci::MDArray<double, stdex::extents<IndexType, ext>, Layout, Co
     assert(y.size() == ynew.size());
     assert(y.size() == err_vec.size());
 
-    double max_norm = std::abs(err_vec[0]) / (atol + std::max(y[0], ynew[0]) * rtol);
+    double max_norm = std::abs(err_vec[0]) / (atol + std::max(std::abs(y[0]), std::abs(ynew[0])) * rtol);
     for (index_type i = 1; i < err_vec.extent(0); ++i) {
-        double tol = atol + std::max(std::abs(y[0]), std::abs(ynew[0])) * rtol;
-        double val = std::abs(err_vec[0]) / tol;
+        double tol = atol + std::max(std::abs(y[i]), std::abs(ynew[i])) * rtol;
+        double val = std::abs(err_vec[i]) / tol;
         if (val > max_norm) {
             max_norm = val;
         }

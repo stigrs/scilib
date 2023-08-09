@@ -12,7 +12,6 @@
 #include <scilib/mdarray.h>
 #include <vector>
 
-
 Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
 {
     const double sigma = 10.0;
@@ -75,12 +74,17 @@ TEST(TestIntegrate, TestDormandPrince)
     using namespace Sci::Integrate;
 
     // clang-format off
-    std::vector<double> ans_data = { // result from Matlab
-        12.420121076782189, 22.132678932307815, 11.996473826705991,
-        19.500081683089384, 16.224736836476261, 45.258556702999961,
-         6.613599319856808, -7.931580903108999, 37.735650643710017,
-        -2.963989264539828, -8.250556890143775, 28.287476810924446,
-        -6.217033890199554, -8.278471219613175, 25.168552598624345
+    std::vector<double> ans_data = { // from Scipy using DOP853 with atol=1.0e-y, rtol=1.0e-7
+        12.4201224814, 22.1326749017,  11.9964784533,
+        19.5000801046, 16.2247395620,  45.2585473265,
+         6.6136027295, -7.9315751250,  37.7356530183,
+        -2.9639869312, -8.2505557857,  28.2874739170,
+        -6.2170338617, -8.2784722478,  25.1685488579,
+        -7.9977242247, -9.6524544581,  24.9327594749,
+        -9.4444100181, -10.5068331831, 27.0135732175,
+        -9.7570772218, -9.2388972510,  29.2558718461,
+        -8.6291856308, -7.1555905793,  29.0007439931,
+        -7.3535355376, -6.4755890802,  26.8363589291
     };
     // clang-format on
     using extents_type = typename Matrix<double>::extents_type;
@@ -92,10 +96,10 @@ TEST(TestIntegrate, TestDormandPrince)
     double t0 = 0.0;
     double tf = 0.1;
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 10; ++i) {
         solve_ivp(lorentz, t0, tf, y, 1.0e-7, 1.0e-7);
         for (Sci::index j = 0; j < y.extent(0); ++j) {
-            EXPECT_NEAR(y(j), ans(i, j), 5.0e-5);
+            EXPECT_NEAR(y(j), ans(i, j), 1.6e-6);
         }
         tf += 0.1;
     }
@@ -129,7 +133,7 @@ TEST(TestIntegrate, TestStiff)
         solve_ivp(fsys_stiff, t0, tf, y, 1.0e-7, 1.0e-7);
         if (it == 0 || it == 9 || it == 99) {
             for (Sci::index j = 0; j < y.extent(0); ++j) {
-                EXPECT_NEAR(y(j), ans(i, j), 5.0e-3);
+                EXPECT_NEAR(y(j), ans(i, j), 1.5e-5);
             }
             ++i;
         }
