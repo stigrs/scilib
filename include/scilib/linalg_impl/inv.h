@@ -10,6 +10,7 @@
 #include "lapack_types.h"
 #include <exception>
 #include <gsl/gsl>
+#include <limits>
 #include <type_traits>
 
 namespace Sci {
@@ -31,7 +32,8 @@ inv(stdex::mdspan<T_a, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor
 {
     Expects(a.extent(0) == a.extent(1));
 
-    if (det(a) == 0.0) {
+    auto det_a = det(a);
+    if (std::abs(det_a) <= std::abs(det_a) * std::numeric_limits<T_a>::epsilon()) {
         throw std::runtime_error("inv: matrix not invertible");
     }
     const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(0));

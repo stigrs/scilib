@@ -79,3 +79,12 @@ TEST(TestLinalg, TestInvColMajor)
         }
     }
 }
+
+TEST(TestLinalg, TestNotInvertible)
+{
+     using namespace Sci;
+     using namespace Sci::Linalg;
+
+     Matrix<double> A = {{1.0, 1.0, -2.0}, {1.0, -2.0, 1.0}, {-2.0, 1.0, 1.0}};
+     EXPECT_ANY_THROW(inv(A));
+}

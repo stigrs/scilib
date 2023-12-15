@@ -66,3 +66,12 @@ TEST(TestLinalg, TestDetColMajor)
     Matrix<double, stdex::layout_left> a4(extents_type(4, 4), a4_data);
     EXPECT_NEAR(det(a4), ans4, 1.0e-12);
 }
+
+TEST(TestLinalg, TestZeroDet)
+{
+     using namespace Sci;
+     using namespace Sci::Linalg;
+
+     Matrix<double> A = {{1.0, 1.0, -2.0}, {1.0, -2.0, 1.0}, {-2.0, 1.0, 1.0}};
+     EXPECT_NEAR(det(A), 0.0, 1.0e-16);
+}

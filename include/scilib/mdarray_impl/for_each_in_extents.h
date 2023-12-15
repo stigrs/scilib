@@ -92,8 +92,7 @@ void for_each_in_extents(
     Callable&& f,
     stdex::mdspan<ElementType, stdex::extents<IndexType, Extents...>, Layout, Accessor> m)
 {
-    Layout layout_type;
-    for_each_in_extents(f, m.extents(), layout_type);
+    for_each_in_extents(f, m.extents(), Layout{});
 }
 
 template <class Callable, class T, class Extents, class Layout, class Container>

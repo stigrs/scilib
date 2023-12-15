@@ -9,6 +9,7 @@
 
 #include "auxiliary.h"
 #include "lapack_types.h"
+#include <iostream>
 #include <cassert>
 #include <exception>
 #include <experimental/linalg>
@@ -41,7 +42,9 @@ cholesky(stdex::mdspan<double, stdex::extents<IndexType, nrows, ncols>, Layout, 
         throw std::runtime_error("dgetrf: illegal input parameter");
     }
     if (info > 0) {
-        throw std::runtime_error("dpotrf: A matrix is not positive-definitive");
+#ifdef NDEBUG
+        std::cout << "Warning (dpotrf): A matrix is not positive-definitive\n";
+#endif
     }
 }
 
@@ -85,7 +88,9 @@ lu(stdex::mdspan<double, stdex::extents<IndexType_a, nrows, ncols>, Layout, Acce
         throw std::runtime_error("dgetrf: illegal input parameter");
     }
     if (info > 0) {
-        throw std::runtime_error("dgetrf: U matrix is singular");
+#ifdef NDEBUG
+        std::cout << "Warning (dgetrf): U matrix is singular\n";
+#endif
     }
 }
 
