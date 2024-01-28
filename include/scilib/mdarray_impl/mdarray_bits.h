@@ -87,6 +87,17 @@ struct Container_is_array<std::array<ElementType, N>> : std::true_type {
 template <class Container>
 static constexpr bool Container_is_array_v = Container_is_array<Container>::value;
 
+template <class Container>
+struct Container_is_vector : std::false_type {
+};
+
+template <class ElementType, class Allocator>
+struct Container_is_vector<std::vector<ElementType, Allocator>> : std::true_type {
+};
+
+template <class Container>
+static constexpr bool Container_is_vector_v = Container_is_vector<Container>::value;
+
 //--------------------------------------------------------------------------------------------------
 // Bounds checking:
 
@@ -679,7 +690,7 @@ public:
                  (std::is_nothrow_constructible_v<index_type, OtherIndexTypes> && ...) &&
                  std::is_constructible_v<extents_type, OtherIndexTypes...> &&
                  std::is_constructible_v<mapping_type, extents_type> &&
-                 (!__Detail::Container_is_array_v<container_type>) )
+                 __Detail::Container_is_vector_v<container_type> )
     constexpr void resize(OtherIndexTypes... exts) noexcept
     {
         map = mapping_type(extents_type(std::move(exts)...));
