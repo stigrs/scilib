@@ -151,7 +151,7 @@ include(FetchContent)
 FetchContent_Declare(
     GSL
     GIT_REPOSITORY  https://github.com/microsoft/GSL.git
-    GIT_TAG         main
+    GIT_TAG         v4.0.0
 )
 FetchContent_MakeAvailable(GSL)
 
