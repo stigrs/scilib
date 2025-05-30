@@ -24,7 +24,7 @@
 #define MDARRAY_ALLOCATOR(X) std::allocator<X>
 #endif
 
-namespace stdex = std::experimental;
+namespace stdex = MDSPAN_IMPL_SPANDARD_NAMESPACE::MDSPAN_IMPL_PROPOSED_NAMESPACE;
 
 namespace Sci {
 
