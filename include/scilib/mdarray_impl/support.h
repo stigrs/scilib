@@ -16,7 +16,7 @@ namespace Sci {
 
 namespace __Detail {
 
-namespace stdex = std::experimental;
+namespace stdex = MDSPAN_IMPL_STANDARD_NAMESPACE::MDSPAN_IMPL_PROPOSED_NAMESPACE;
 
 //--------------------------------------------------------------------------------------------------
 // Type traits:
@@ -26,7 +26,7 @@ struct Is_extents : std::false_type {
 };
 
 template <class IndexType, std::size_t... SizeTypes>
-struct Is_extents<std::experimental::extents<IndexType, SizeTypes...>> : std::true_type {
+struct Is_extents<stdex::extents<IndexType, SizeTypes...>> : std::true_type {
 };
 
 template <class E>
