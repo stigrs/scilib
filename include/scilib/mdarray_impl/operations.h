@@ -19,7 +19,7 @@
 
 namespace Sci {
 
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 //--------------------------------------------------------------------------------------------------
 // Utility functions for making mdspans and mdarrays:
@@ -28,17 +28,17 @@ template <class T,
           class Extents,
           class Layout,
           class Container,
-          class Accessor = stdex::default_accessor<T>>
-constexpr stdex::mdspan<T, Extents, Layout, Accessor>
+          class Accessor = Mdspan::default_accessor<T>>
+constexpr Mdspan::mdspan<T, Extents, Layout, Accessor>
 make_mdspan(MDArray<T, Extents, Layout, Container>& m,
-            const Accessor& a = stdex::default_accessor<T>())
+            const Accessor& a = Mdspan::default_accessor<T>())
 {
-    return stdex::mdspan<T, Extents, Layout>(m.container_data(), m.mapping(), a);
+    return Mdspan::mdspan<T, Extents, Layout>(m.container_data(), m.mapping(), a);
 }
 
 template <class T, class Extents, class Layout, class Container = std::vector<T>, class Accessor>
 constexpr MDArray<T, Extents, Layout, Container>
-make_mdarray(stdex::mdspan<T, Extents, Layout, Accessor> m)
+make_mdarray(Mdspan::mdspan<T, Extents, Layout, Accessor> m)
 {
     return MDArray<T, Extents, Layout, Container>(m);
 }
@@ -197,7 +197,7 @@ constexpr Vector<T, Layout> operator*(const Matrix<T, Layout>& a, const Vector<T
 // Apply operations:
 
 template <class T, class Extents, class Layout, class Accessor, class Callable>
-constexpr void apply(stdex::mdspan<T, Extents, Layout, Accessor> v, Callable&& f)
+constexpr void apply(Mdspan::mdspan<T, Extents, Layout, Accessor> v, Callable&& f)
 {
     using index_type = typename Extents::index_type;
     auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
@@ -220,8 +220,8 @@ template <class T_x,
           class Layout_y,
           class Accessor_y,
           class Callable>
-constexpr void apply(stdex::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
-                     stdex::mdspan<T_y, Extents_y, Layout_y, Accessor_y> y,
+constexpr void apply(Mdspan::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
+                     Mdspan::mdspan<T_y, Extents_y, Layout_y, Accessor_y> y,
                      Callable&& f)
 {
     using IndexType_x = typename Extents_x::index_type;
@@ -252,7 +252,7 @@ constexpr void apply(stdex::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> v)
+                  Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> v)
 {
     using index_type = IndexType;
 
@@ -270,7 +270,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline std::ostream&
 operator<<(std::ostream& ostrm,
-           const MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& v)
+           const MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& v)
 {
     using index_type = IndexType;
 
@@ -312,7 +312,7 @@ template <class T,
           class Accessor>
     requires(std::is_integral_v<IndexType>)
 inline void print(std::ostream& ostrm,
-                  stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m)
+                  Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> m)
 {
     using index_type = IndexType;
 
@@ -341,7 +341,7 @@ template <class T,
     requires(std::is_integral_v<IndexType>)
 inline std::ostream&
 operator<<(std::ostream& ostrm,
-           const MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& m)
+           const MDArray<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Container>& m)
 {
     using index_type = IndexType;
 
@@ -380,7 +380,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    auto mtmp = Matrix<T, stdex::layout_right>(extents_type(nr, nc), tmp);
+    auto mtmp = Matrix<T, Mdspan::layout_right>(extents_type(nr, nc), tmp);
     m = mtmp.to_mdspan();
     return istrm;
 }

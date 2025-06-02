@@ -12,11 +12,11 @@
 #include <gsl/gsl>
 #include <initializer_list>
 
+
+namespace Mdspan = MDSPAN_IMPL_STANDARD_NAMESPACE;
+
 namespace Sci {
-
 namespace __Detail {
-
-namespace stdex = MDSPAN_IMPL_STANDARD_NAMESPACE::MDSPAN_IMPL_PROPOSED_NAMESPACE;
 
 //--------------------------------------------------------------------------------------------------
 // Type traits:
@@ -26,7 +26,7 @@ struct Is_extents : std::false_type {
 };
 
 template <class IndexType, std::size_t... SizeTypes>
-struct Is_extents<stdex::extents<IndexType, SizeTypes...>> : std::true_type {
+struct Is_extents<Mdspan::extents<IndexType, SizeTypes...>> : std::true_type {
 };
 
 template <class E>
@@ -36,7 +36,7 @@ static constexpr bool Is_extents_v = Is_extents<E>::value;
 // mdspan returns m.extents() by reference, create a copy:
 
 template <class T, class Extents, class Layout, class Accessor>
-inline Extents extents(stdex::mdspan<T, Extents, Layout, Accessor> m)
+inline Extents extents(Mdspan::mdspan<T, Extents, Layout, Accessor> m)
 {
     // mdspan returns m.extents() by reference, need to make a copy
     using index_type = typename Extents::index_type;

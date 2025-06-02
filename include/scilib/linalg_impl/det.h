@@ -23,7 +23,7 @@ template <class T,
           class Layout,
           class Accessor>
     requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
-auto det(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
+auto det(Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
 {
     Expects(a.extent(0) == a.extent(1));
 
@@ -63,7 +63,7 @@ template <class T,
           class Layout,
           class Container>
     requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
-inline T det(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a)
+inline T det(const Sci::MDArray<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
     return det(a.to_mdspan());
 }

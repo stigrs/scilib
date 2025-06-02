@@ -27,8 +27,8 @@ template <class IndexType_a,
           class Accessor_w>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
 inline void
-eigh(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
-     stdex::mdspan<double, stdex::extents<IndexType_w, ext_w>, Layout, Accessor_w> w,
+eigh(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+     Mdspan::mdspan<double, Mdspan::extents<IndexType_w, ext_w>, Layout, Accessor_w> w,
      char uplo = 'U',
      double abstol = -1.0 /* use default value */)
 {
@@ -52,7 +52,7 @@ eigh(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout
     Sci::Matrix<double, Layout> z(ldz, n);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
-    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
 
@@ -75,11 +75,11 @@ template <class IndexType_a,
           std::size_t ext_w,
           class Accessor_w>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
-inline void eigh(stdex::mdspan<std::complex<double>,
-                               stdex::extents<IndexType_a, nrows_a, ncols_a>,
+inline void eigh(Mdspan::mdspan<std::complex<double>,
+                               Mdspan::extents<IndexType_a, nrows_a, ncols_a>,
                                Layout,
                                Accessor_a> a,
-                 stdex::mdspan<double, stdex::extents<IndexType_w, ext_w>, Layout, Accessor_w> w,
+                 Mdspan::mdspan<double, Mdspan::extents<IndexType_w, ext_w>, Layout, Accessor_w> w,
                  char uplo = 'U',
                  double abstol = -1.0 /* use default value */)
 {
@@ -102,7 +102,7 @@ inline void eigh(stdex::mdspan<std::complex<double>,
     Sci::Matrix<std::complex<double>, Layout> z(ldz, n);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
-    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
 
@@ -125,8 +125,8 @@ template <class IndexType_a,
           class Container_w>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
 inline void
-eigh(Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
-     Sci::MDArray<double, stdex::extents<IndexType_w, ext_w>, Layout, Container_w>& w,
+eigh(Sci::MDArray<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+     Sci::MDArray<double, Mdspan::extents<IndexType_w, ext_w>, Layout, Container_w>& w,
      char uplo = 'U',
      double abstol = -1.0 /* use default value */)
 {
@@ -143,10 +143,10 @@ template <class IndexType_a,
           class Container_w>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_w>)
 inline void eigh(Sci::MDArray<std::complex<double>,
-                              stdex::extents<IndexType_a, nrows_a, ncols_a>,
+                              Mdspan::extents<IndexType_a, nrows_a, ncols_a>,
                               Layout,
                               Container_a>& a,
-                 Sci::MDArray<double, stdex::extents<IndexType_w, ext_w>, Layout, Container_w>& w,
+                 Sci::MDArray<double, Mdspan::extents<IndexType_w, ext_w>, Layout, Container_w>& w,
                  char uplo = 'U',
                  double abstol = -1.0 /* use default value */)
 {
@@ -168,13 +168,13 @@ template <class IndexType_a,
           class Accessor_eval>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_evec>&&
                  std::is_integral_v<IndexType_eval>)
-void eig(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
-         stdex::mdspan<std::complex<double>,
-                       stdex::extents<IndexType_evec, nrows_evec, ncols_evec>,
+void eig(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+         Mdspan::mdspan<std::complex<double>,
+                       Mdspan::extents<IndexType_evec, nrows_evec, ncols_evec>,
                        Layout,
                        Accessor_evec> evec,
-         stdex::mdspan<std::complex<double>,
-                       stdex::extents<IndexType_eval, ext_eval>,
+         Mdspan::mdspan<std::complex<double>,
+                       Mdspan::extents<IndexType_eval, ext_eval>,
                        Layout,
                        Accessor_eval> eval)
 {
@@ -193,7 +193,7 @@ void eig(stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, La
     Sci::Matrix<double, Layout> vl(n, n);
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
-    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
     BLAS_INT info =
@@ -235,13 +235,13 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_evec>&&
                  std::is_integral_v<IndexType_eval>)
 void eig(
-    Sci::MDArray<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+    Sci::MDArray<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
     Sci::MDArray<std::complex<double>,
-                 stdex::extents<IndexType_evec, nrows_evec, ncols_evec>,
+                 Mdspan::extents<IndexType_evec, nrows_evec, ncols_evec>,
                  Layout,
                  Container_evec>& evec,
     Sci::MDArray<std::complex<double>,
-                 stdex::extents<IndexType_eval, ext_eval>,
+                 Mdspan::extents<IndexType_eval, ext_eval>,
                  Layout,
                  Container_eval>& eval)
 {

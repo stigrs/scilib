@@ -7,7 +7,7 @@ using namespace Sci;
 int main()
 {
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    Matrix<int> mat(stdex::dextents<Sci::index, 2>(3, 3), data);
+    Matrix<int> mat(Mdspan::dextents<Sci::index, 2>(3, 3), data);
 
     std::cout << "Before:\n" << mat << '\n';
 
@@ -16,7 +16,7 @@ int main()
     copy(sub2, sub1);
     std::cout << "After:\n" << mat << '\n';
 
-    mat = Matrix<int>(stdex::dextents<Sci::index, 2>(3, 3), data);
+    mat = Matrix<int>(Mdspan::dextents<Sci::index, 2>(3, 3), data);
     std::cout << "Before:\n" << mat << '\n';
 
     Matrix<int> bv = slice(mat, seq(0, 2), seq(0, 2));

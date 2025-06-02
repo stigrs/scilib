@@ -44,7 +44,7 @@ auto make_reverse_index_sequence()
 
 template <class Callable, class IndexType, std::size_t... Extents, std::size_t... RankIndices>
 void for_each_in_extents_impl(Callable&& f,
-                              stdex::extents<IndexType, Extents...> e,
+                              Mdspan::extents<IndexType, Extents...> e,
                               std::index_sequence<RankIndices...> rank_sequence)
 {
     // In the layout_left case, caller passes in N-1, N-2, ..., 1, 0.
@@ -69,10 +69,10 @@ void for_each_in_extents_impl(Callable&& f,
 } // namespace __Detail
 
 template <class Callable, class IndexType, std::size_t... Extents, class Layout>
-void for_each_in_extents(Callable&& f, stdex::extents<IndexType, Extents...> e, Layout)
+void for_each_in_extents(Callable&& f, Mdspan::extents<IndexType, Extents...> e, Layout)
 {
     using layout_type = std::remove_cvref_t<Layout>;
-    if constexpr (std::is_same_v<layout_type, stdex::layout_left>) {
+    if constexpr (std::is_same_v<layout_type, Mdspan::layout_left>) {
         __Detail::for_each_in_extents_impl(std::forward<Callable>(f), e,
                                            __Detail::make_reverse_index_sequence<e.rank()>());
     }
@@ -90,7 +90,7 @@ template <class Callable,
           class Accessor>
 void for_each_in_extents(
     Callable&& f,
-    stdex::mdspan<ElementType, stdex::extents<IndexType, Extents...>, Layout, Accessor> m)
+    Mdspan::mdspan<ElementType, Mdspan::extents<IndexType, Extents...>, Layout, Accessor> m)
 {
     for_each_in_extents(f, m.extents(), Layout{});
 }

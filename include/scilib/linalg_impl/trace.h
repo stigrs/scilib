@@ -13,18 +13,18 @@
 namespace Sci {
 namespace Linalg {
 
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto trace(stdex::mdspan<T, stdex::extents<IndexType, ext, ext>, Layout, Accessor> m)
+inline auto trace(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext, ext>, Layout, Accessor> m)
 {
     return Sci::Linalg::sum(Sci::diag(m));
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T trace(const Sci::MDArray<T, stdex::extents<IndexType, ext, ext>, Layout, Container>& m)
+inline T trace(const Sci::MDArray<T, Mdspan::extents<IndexType, ext, ext>, Layout, Container>& m)
 {
     Expects(m.extent(0) == m.extent(1));
     return trace(m.to_mdspan());

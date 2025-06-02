@@ -59,10 +59,10 @@ TEST(TestLinalg, TestSolveColMajor)
     std::vector<double> x = {1.0, 2.0, 3.0};
     // clang-format on
 
-    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+    using extents_type = typename Matrix<double, Mdspan::layout_left>::extents_type;
 
-    Matrix<double, stdex::layout_left> A(extents_type(3, 3), A_data);
-    Matrix<double, stdex::layout_left> B(extents_type(3, 1), B_data);
+    Matrix<double, Mdspan::layout_left> A(extents_type(3, 3), A_data);
+    Matrix<double, Mdspan::layout_left> B(extents_type(3, 1), B_data);
 
     solve(A, B);
 

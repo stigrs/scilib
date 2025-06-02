@@ -28,8 +28,8 @@ TEST(TestLinalg, TestExpm)
         0.0, 0.0, -1.0
     };
     // clang-format off
-    Matrix<double> ans(stdex::dextents<Sci::index, 2>(3, 3), ans_data);
-    Matrix<double> A(stdex::dextents<Sci::index, 2>(3, 3), A_data);
+    Matrix<double> ans(Mdspan::dextents<Sci::index, 2>(3, 3), ans_data);
+    Matrix<double> A(Mdspan::dextents<Sci::index, 2>(3, 3), A_data);
 
     auto res = expm(A);
 
@@ -58,8 +58,8 @@ TEST(TestLinalg, TestExpmColMajor)
         0.0, 2.0, -1.0
     };
     // clang-format off
-    Matrix<double, stdex::layout_left> ans(stdex::dextents<Sci::index, 2>(3, 3), ans_data);
-    Matrix<double, stdex::layout_left> A(stdex::dextents<Sci::index, 2>(3, 3), A_data);
+    Matrix<double, Mdspan::layout_left> ans(Mdspan::dextents<Sci::index, 2>(3, 3), ans_data);
+    Matrix<double, Mdspan::layout_left> A(Mdspan::dextents<Sci::index, 2>(3, 3), A_data);
 
     auto res = expm(A);
 

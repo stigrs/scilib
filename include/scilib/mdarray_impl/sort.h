@@ -10,13 +10,13 @@
 #include <algorithm>
 
 namespace Sci {
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 namespace __Detail {
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline std::size_t partition(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x,
+inline std::size_t partition(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x,
                              std::size_t start,
                              std::size_t end)
 {
@@ -34,7 +34,7 @@ inline std::size_t partition(stdex::mdspan<T, stdex::extents<IndexType, ext>, La
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline void quick_sort(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x,
+inline void quick_sort(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x,
                        std::size_t start,
                        std::size_t end)
 {
@@ -50,7 +50,7 @@ inline void quick_sort(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, 
 // Quick sort.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline void sort(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline void sort(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
 

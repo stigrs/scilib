@@ -65,11 +65,11 @@ TEST(TestLinalg, TestInvColMajor)
         -0.60330579,  0.61157025,  0.23966942,  0.31404959
     };
     // clang-format on
-    using extents_type = typename Matrix<double, stdex::layout_left>::extents_type;
+    using extents_type = typename Matrix<double, Mdspan::layout_left>::extents_type;
 
-    Matrix<double, stdex::layout_left> a(extents_type(4, 4), a_data);
+    Matrix<double, Mdspan::layout_left> a(extents_type(4, 4), a_data);
     Matrix<double> ans_t(extents_type(4, 4), ainv_data);
-    Matrix<double, stdex::layout_left> ans(transposed(ans_t).to_mdspan());
+    Matrix<double, Mdspan::layout_left> ans(transposed(ans_t).to_mdspan());
 
     auto res = inv(a);
 

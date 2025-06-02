@@ -24,7 +24,7 @@ template <class T,
           class Layout,
           class Accessor>
     requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
-auto expm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
+auto expm(Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
 {
     // Algorithm: Matlab expm1 (demo directory).
     //

@@ -9,7 +9,7 @@
 
 void beast(const Sci::Array3D<int>& a)
 {
-    Sci::Array3D<int> b = Sci::slice(a, stdex::full_extent, stdex::full_extent, stdex::full_extent);
+    Sci::Array3D<int> b = Sci::slice(a, Mdspan::full_extent, Mdspan::full_extent, Mdspan::full_extent);
     b(1, 1, 1) = 666;
 }
 

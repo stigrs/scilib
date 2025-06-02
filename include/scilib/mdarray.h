@@ -11,6 +11,7 @@
 #include <array>
 #include <cstddef>
 #include <experimental/mdspan>
+#include <experimental/__p2630_bits/submdspan.hpp>
 #include <gsl/gsl>
 #include <utility>
 #include <valarray>
@@ -24,22 +25,21 @@
 #define MDARRAY_ALLOCATOR(X) std::allocator<X>
 #endif
 
-namespace stdex = MDSPAN_IMPL_SPANDARD_NAMESPACE::MDSPAN_IMPL_PROPOSED_NAMESPACE;
+namespace Mdspan = MDSPAN_IMPL_STANDARD_NAMESPACE;
 
-namespace Sci {
-
+namespace Sci { 
 #ifndef SCILIB_INDEX_TYPE
 #define SCILIB_INDEX_TYPE gsl::index
 #endif
 using index = SCILIB_INDEX_TYPE;
 
-using layout_left = stdex::layout_left;
-using layout_right = stdex::layout_right;
-using layout_stride = stdex::layout_stride;
+using layout_left = Mdspan::layout_left;
+using layout_right = Mdspan::layout_right;
+using layout_stride = Mdspan::layout_stride;
 
 template <class ElementType,
           class Extents,
-          class LayoutPolicy = stdex::layout_right,
+          class LayoutPolicy = Mdspan::layout_right,
           class Container = std::vector<ElementType>>
     requires __Detail::Is_extents_v<Extents>
 class MDArray;
@@ -47,84 +47,84 @@ class MDArray;
 //--------------------------------------------------------------------------------------------------
 // Stack-allocated MDArrays:
 
-template <class ElementType, std::size_t ext, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, std::size_t ext, class LayoutPolicy = Mdspan::layout_right>
 using StaticVector =
-    MDArray<ElementType, stdex::extents<index, ext>, LayoutPolicy, std::array<ElementType, ext>>;
+    MDArray<ElementType, Mdspan::extents<index, ext>, LayoutPolicy, std::array<ElementType, ext>>;
 
 template <class ElementType,
           std::size_t nrows,
           std::size_t ncols,
-          class LayoutPolicy = stdex::layout_right>
+          class LayoutPolicy = Mdspan::layout_right>
 using StaticMatrix = MDArray<ElementType,
-                             stdex::extents<index, nrows, ncols>,
+                             Mdspan::extents<index, nrows, ncols>,
                              LayoutPolicy,
                              std::array<ElementType, nrows * ncols>>;
 
 //--------------------------------------------------------------------------------------------------
 // Heap-allocated MDArrays:
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Vector = MDArray<ElementType,
-                       stdex::extents<index, stdex::dynamic_extent>,
+                       Mdspan::extents<index, Mdspan::dynamic_extent>,
                        LayoutPolicy,
                        std::vector<ElementType>>;
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Matrix = MDArray<ElementType,
-                       stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent>,
+                       Mdspan::extents<index, Mdspan::dynamic_extent, Mdspan::dynamic_extent>,
                        LayoutPolicy,
                        std::vector<ElementType>>;
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Array3D = MDArray<
     ElementType,
-    stdex::extents<index, stdex::dynamic_extent, stdex::dynamic_extent, stdex::dynamic_extent>,
+    Mdspan::extents<index, Mdspan::dynamic_extent, Mdspan::dynamic_extent, Mdspan::dynamic_extent>,
     LayoutPolicy,
     std::vector<ElementType>>;
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Array4D = MDArray<ElementType,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
+                        Mdspan::extents<index,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent>,
                         LayoutPolicy,
                         std::vector<ElementType>>;
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Array5D = MDArray<ElementType,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
+                        Mdspan::extents<index,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent>,
                         LayoutPolicy,
                         std::vector<ElementType>>;
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Array6D = MDArray<ElementType,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
+                        Mdspan::extents<index,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent>,
                         LayoutPolicy,
                         std::vector<ElementType>>;
 
-template <class ElementType, class LayoutPolicy = stdex::layout_right>
+template <class ElementType, class LayoutPolicy = Mdspan::layout_right>
 using Array7D = MDArray<ElementType,
-                        stdex::extents<index,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent,
-                                       stdex::dynamic_extent>,
+                        Mdspan::extents<index,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent,
+                                       Mdspan::dynamic_extent>,
                         LayoutPolicy,
                         std::vector<ElementType>>;
 

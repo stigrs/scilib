@@ -18,21 +18,21 @@
 #include <iostream>
 #include <iterator>
 
+namespace Mdspan = MDSPAN_IMPL_STANDARD_NAMESPACE;
+
 namespace Sci {
 
-namespace stdex = std::experimental;
-
 template <class T,
-          class Extents = stdex::extents<index, stdex::dynamic_extent>,
-          class Layout = stdex::layout_right,
-          class Accessor = stdex::default_accessor<T>>
+          class Extents = Mdspan::extents<index, Mdspan::dynamic_extent>,
+          class Layout = Mdspan::layout_right,
+          class Accessor = Mdspan::default_accessor<T>>
     requires __Detail::Is_extents_v<Extents>
 class MDSpan_iterator {
 public:
     using iterator_category = std::random_access_iterator_tag;
     using value_type = std::remove_cv_t<T>;
     using extents_type = Extents;
-    using mdspan_type = stdex::mdspan<T, Extents, Layout, Accessor>;
+    using mdspan_type = Mdspan::mdspan<T, Extents, Layout, Accessor>;
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     using difference_type = std::ptrdiff_t;
     using reference = typename mdspan_type::reference;
@@ -170,32 +170,16 @@ private:
 };
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<T, Extents, Layout, Accessor> begin(stdex::mdspan<T, Extents, Layout, Accessor> x)
+MDSpan_iterator<T, Extents, Layout, Accessor> begin(Mdspan::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
     return iterator(x);
 }
 
 template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<const T, Extents, Layout, Accessor>
-cbegin(stdex::mdspan<T, Extents, Layout, Accessor> x)
-{
-    using iterator = MDSpan_iterator<const T, Extents, Layout, Accessor>;
-    return iterator(x);
-}
-
-template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<T, Extents, Layout, Accessor> end(stdex::mdspan<T, Extents, Layout, Accessor> x)
+MDSpan_iterator<T, Extents, Layout, Accessor> end(Mdspan::mdspan<T, Extents, Layout, Accessor> x)
 {
     using iterator = MDSpan_iterator<T, Extents, Layout, Accessor>;
-    return iterator(x, x.extent(0));
-}
-
-template <class T, class Extents, class Layout, class Accessor>
-MDSpan_iterator<const T, Extents, Layout, Accessor>
-cend(stdex::mdspan<T, Extents, Layout, Accessor> x)
-{
-    using iterator = MDSpan_iterator<const T, Extents, Layout, Accessor>;
     return iterator(x, x.extent(0));
 }
 

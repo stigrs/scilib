@@ -5,7 +5,7 @@ void beast(const Sci::Matrix<int>& a)
 {
     using namespace Sci;
 
-    Matrix<int> b = slice(a, stdex::full_extent, stdex::full_extent);
+    Matrix<int> b = slice(a, Mdspan::full_extent, Mdspan::full_extent);
     b(1, 1) = 666;
 }
 

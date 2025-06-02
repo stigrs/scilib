@@ -58,7 +58,8 @@ TEST(TestMatrix, TestView)
     m = 2;
     auto mm = m.to_mdspan();
 #if __cpp_multidimensional_subscript
-    EXPECT_EQ(mm[0, 0], 2);
+    auto val = mm[0, 0]; // EXPECT_EQ(mm[0, 0], 2) does not work with some compilers
+    EXPECT_EQ(val, 2);
 #else
     EXPECT_EQ(mm(0, 0), 2);
 #endif
@@ -241,10 +242,10 @@ TEST(TestMatrix, TestRow)
     auto r1 = Sci::row(ma, 1);
 
     for (std::size_t i = 0; i < r0.size(); ++i) {
-        EXPECT_EQ(r0(i), static_cast<int>(i + 1));
+        EXPECT_EQ(r0[i], static_cast<int>(i + 1));
     }
     for (std::size_t i = 0; i < r1.size(); ++i) {
-        EXPECT_EQ(r1(i), static_cast<int>(i + 4));
+        EXPECT_EQ(r1[i], static_cast<int>(i + 4));
     }
 }
 
@@ -275,7 +276,7 @@ TEST(TestMatrix, TestDiag)
 TEST(TestMatrix, TestColMajor)
 {
     std::vector<int> ans = {1, 4, 2, 5, 3, 6};
-    Sci::Matrix<int, stdex::layout_left> m = {{1, 2, 3}, {4, 5, 6}};
+    Sci::Matrix<int, Mdspan::layout_left> m = {{1, 2, 3}, {4, 5, 6}};
 
     int it = 0;
     for (Sci::index j = 0; j < m.extent(1); ++j) {
@@ -296,10 +297,10 @@ TEST(TestMatrix, TestRowIterator)
 
     Sci::Matrix<int> ma(extents_type(2, 3), aa);
 
-    auto r0 = Sci::row(ma, 0);
+    const auto r0 = Sci::row(ma, 0);
 
     int i = 1;
-    for (auto it = Sci::cbegin(r0); it != Sci::cend(r0); ++it) {
+    for (auto it = Sci::begin(r0); it != Sci::end(r0); ++it) {
         EXPECT_EQ((*it), i);
         ++i;
     }
@@ -318,7 +319,7 @@ TEST(TestMatrix, TestColIterator)
     auto c1 = Sci::column(ma, 1);
 
     int i = 2;
-    for (auto it = Sci::cbegin(c1); it != Sci::cend(c1); ++it) {
+    for (auto it = Sci::begin(c1); it != Sci::end(c1); ++it) {
         EXPECT_EQ((*it), i);
         i += 3;
     }
@@ -326,8 +327,8 @@ TEST(TestMatrix, TestColIterator)
 
 TEST(TestMatrix, TestDiagIterator)
 {
-    Sci::Vector<int, stdex::layout_left> ans = {1, 5, 9};
-    Sci::Matrix<int, stdex::layout_left> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Sci::Vector<int, Mdspan::layout_left> ans = {1, 5, 9};
+    Sci::Matrix<int, Mdspan::layout_left> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
     auto d = Sci::diag(m);
 
@@ -376,7 +377,7 @@ TEST(TestMatrix, TestStaticMatrixMdspan)
 TEST(TestMatrix, TestCopyRowMajorColMajor)
 {
     Sci::Matrix<int> a = {{1, 2, 3}, {4, 5, 6}};
-    Sci::Matrix<int, stdex::layout_left> b(a.to_mdspan());
+    Sci::Matrix<int, Mdspan::layout_left> b(a.to_mdspan());
 
     for (Sci::index j = 0; j < a.extent(1); ++j) {
         for (Sci::index i = 0; i < a.extent(0); ++i) {

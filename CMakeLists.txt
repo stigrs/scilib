@@ -123,7 +123,7 @@ include(FetchContent)
 FetchContent_Declare(
     mdspan
     GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-    GIT_TAG         mdspan-0.6.0
+    GIT_TAG         stable
 )
 FetchContent_MakeAvailable(mdspan)
 

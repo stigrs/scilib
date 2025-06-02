@@ -13,7 +13,7 @@
 namespace Sci {
 namespace Linalg {
 
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 template <class T_x,
           class IndexType_x,
@@ -27,8 +27,8 @@ template <class T_x,
           class Container_y>
     requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
 inline auto
-dot(const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-    const Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
+dot(const Sci::MDArray<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+    const Sci::MDArray<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     return std::experimental::linalg::dot(x.to_mdspan(), y.to_mdspan());
 }

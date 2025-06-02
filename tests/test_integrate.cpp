@@ -91,7 +91,7 @@ TEST(TestIntegrate, TestDormandPrince)
     Matrix<double> ans(extents_type(10, 3), ans_data);
 
     std::vector<double> y0 = {10.0, 1.0, 1.0};
-    Vector<double> y(stdex::dextents<Sci::index, 1>(y0.size()), y0);
+    Vector<double> y(Mdspan::dextents<Sci::index, 1>(y0.size()), y0);
 
     double t0 = 0.0;
     double tf = 0.1;

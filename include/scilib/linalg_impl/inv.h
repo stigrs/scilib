@@ -27,8 +27,8 @@ template <class T_a,
           class Accessor_res>
     requires(std::is_same_v<std::remove_cv_t<T_a>, double>&& std::is_integral_v<IndexType>)
 inline void
-inv(stdex::mdspan<T_a, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor_a> a,
-    stdex::mdspan<T_res, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor_res> res)
+inv(Mdspan::mdspan<T_a, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor_a> a,
+    Mdspan::mdspan<T_res, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor_res> res)
 {
     Expects(a.extent(0) == a.extent(1));
 
@@ -41,7 +41,7 @@ inv(stdex::mdspan<T_a, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
 

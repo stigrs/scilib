@@ -15,12 +15,12 @@
 
 namespace Sci {
 namespace Stats {
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 // Arithmetic mean.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto mean(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto mean(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using value_type = std::remove_cv_t<T>;
     value_type result = Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
@@ -29,7 +29,7 @@ inline auto mean(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Access
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T mean(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
+inline T mean(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
 {
     return mean(x.to_mdspan());
 }
@@ -37,7 +37,7 @@ inline T mean(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Cont
 // Median.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto median(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto median(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
@@ -56,7 +56,7 @@ inline auto median(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Acce
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T median(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
+inline T median(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
 {
     return median(x.to_mdspan());
 }
@@ -64,7 +64,7 @@ inline T median(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Co
 // Variance.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto var(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto var(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
@@ -82,7 +82,7 @@ inline auto var(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T var(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
+inline T var(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
 {
     return var(x.to_mdspan());
 }
@@ -90,14 +90,14 @@ inline T var(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Conta
 // Standard deviation.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto stddev(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto stddev(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     return std::sqrt(var(x));
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T stddev(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
+inline T stddev(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
 {
     return stddev(x.to_mdspan());
 }
@@ -105,7 +105,7 @@ inline T stddev(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Co
 // Root-mean-square deviation.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto rms(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto rms(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
@@ -119,7 +119,7 @@ inline auto rms(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accesso
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T rms(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
+inline T rms(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
 {
     return rms(x.to_mdspan());
 }
@@ -135,8 +135,8 @@ template <class T,
           class Layout_y,
           class Accessor_y>
     requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
-inline auto cov(stdex::mdspan<T, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-                stdex::mdspan<T, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+inline auto cov(Mdspan::mdspan<T, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                Mdspan::mdspan<T, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     Expects(x.extent(0) == y.extent(0));
 
@@ -165,8 +165,8 @@ template <class T,
           class Layout_y,
           class Container_y>
     requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
-inline T cov(const Sci::MDArray<T, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-             const Sci::MDArray<T, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
+inline T cov(const Sci::MDArray<T, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+             const Sci::MDArray<T, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     return cov(x.to_mdspan(), y.to_mdspan());
 }

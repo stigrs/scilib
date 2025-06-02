@@ -23,7 +23,7 @@ template <class T,
           class Accessor>
     requires(std::is_integral_v<IndexType>)
 inline auto
-matrix_power(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> m, int n)
+matrix_power(Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> m, int n)
 {
     using namespace Sci;
     using namespace Sci::Linalg;

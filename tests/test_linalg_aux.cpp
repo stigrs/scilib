@@ -27,7 +27,7 @@ TEST(TestLinalg, TestMaxMin)
 
 TEST(TestLinalg, TestSumProd)
 {
-    Sci::Vector<int, stdex::layout_left> v = {1, 2, 3, 4};
+    Sci::Vector<int, Mdspan::layout_left> v = {1, 2, 3, 4};
 
     EXPECT_EQ(Sci::Linalg::sum(v), 10);
     EXPECT_EQ(Sci::Linalg::prod(v), 24);

@@ -13,11 +13,11 @@
 namespace Sci {
 namespace Linalg {
 
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline IndexType idx_abs_min(stdex::mdspan<T, stdex::extents<IndexType, ext>, Layout, Accessor> x)
+inline IndexType idx_abs_min(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using magn_type = std::remove_cv_t<decltype(std::abs(x[0]))>;
@@ -36,7 +36,7 @@ inline IndexType idx_abs_min(stdex::mdspan<T, stdex::extents<IndexType, ext>, La
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
 inline IndexType
-idx_abs_min(const Sci::MDArray<T, stdex::extents<IndexType, ext>, Layout, Container>& x)
+idx_abs_min(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
 {
     return idx_abs_min(x.to_mdspan());
 }

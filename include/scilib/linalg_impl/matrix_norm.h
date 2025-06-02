@@ -13,7 +13,7 @@
 namespace Sci {
 namespace Linalg {
 
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 // Matrix norm of a general rectangular matrix:
 //
@@ -33,7 +33,7 @@ template <class T,
         (std::is_same_v<std::remove_cv_t<T>, double> ||
          std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) &&std::is_integral_v<IndexType>)
 inline double
-matrix_norm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Accessor> a,
+matrix_norm(Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> a,
             char norm)
 {
     Expects(norm == 'M' || norm == 'm' || norm == '1' || norm == 'O' || norm == 'o' ||
@@ -44,7 +44,7 @@ matrix_norm(stdex::mdspan<T, stdex::extents<IndexType, nrows, ncols>, Layout, Ac
     BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
@@ -69,7 +69,7 @@ template <class T,
         (std::is_same_v<std::remove_cv_t<T>, double> ||
          std::is_same_v<std::remove_cv_t<T>, std::complex<double>>) &&std::is_integral_v<IndexType>)
 inline double
-matrix_norm(const Sci::MDArray<T, stdex::extents<IndexType, nrows, ncols>, Layout, Container>& a,
+matrix_norm(const Sci::MDArray<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Container>& a,
             char norm)
 {
     return matrix_norm(a.to_mdspan(), norm);

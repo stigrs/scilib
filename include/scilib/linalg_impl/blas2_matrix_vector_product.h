@@ -17,7 +17,7 @@
 namespace Sci {
 namespace Linalg {
 
-namespace stdex = std::experimental;
+namespace Mdspan = std::experimental;
 
 template <class T_a,
           class IndexType_a,
@@ -38,9 +38,9 @@ template <class T_a,
     requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_a> &&
              std::is_integral_v<IndexType_x> && std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-    stdex::mdspan<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+    Mdspan::mdspan<T_a, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    Mdspan::mdspan<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+    Mdspan::mdspan<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     std::experimental::linalg::matrix_vector_product(a, x, y);
 }
@@ -61,9 +61,9 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_x>&&
                  std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-    stdex::mdspan<double, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<double, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+    Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    Mdspan::mdspan<double, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+    Mdspan::mdspan<double, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -78,7 +78,7 @@ inline void matrix_vector_product(
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout_a, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout_a, Mdspan::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
     }
@@ -102,10 +102,10 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_x>&&
                  std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<const double, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a>
+    Mdspan::mdspan<const double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a>
         a,
-    stdex::mdspan<const double, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<double, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+    Mdspan::mdspan<const double, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+    Mdspan::mdspan<double, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -120,7 +120,7 @@ inline void matrix_vector_product(
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout_a, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout_a, Mdspan::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
     }
@@ -144,12 +144,12 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_x>&&
                  std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<std::complex<double>,
-                  stdex::extents<IndexType_a, nrows_a, ncols_a>,
+    Mdspan::mdspan<std::complex<double>,
+                  Mdspan::extents<IndexType_a, nrows_a, ncols_a>,
                   Layout_a,
                   Accessor_a> a,
-    stdex::mdspan<std::complex<double>, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-    stdex::mdspan<std::complex<double>, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+    Mdspan::mdspan<std::complex<double>, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+    Mdspan::mdspan<std::complex<double>, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -164,7 +164,7 @@ inline void matrix_vector_product(
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout_a, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout_a, Mdspan::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
     }
@@ -188,14 +188,14 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_x>&&
                  std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    stdex::mdspan<const std::complex<double>,
-                  stdex::extents<IndexType_a, nrows_a, ncols_a>,
+    Mdspan::mdspan<const std::complex<double>,
+                  Mdspan::extents<IndexType_a, nrows_a, ncols_a>,
                   Layout_a,
                   Accessor_a> a,
-    stdex::
-        mdspan<const std::complex<double>, stdex::extents<IndexType_x, ext_x>, Layout_x, Accessor_x>
+    Mdspan::
+        mdspan<const std::complex<double>, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x>
             x,
-    stdex::mdspan<std::complex<double>, stdex::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+    Mdspan::mdspan<std::complex<double>, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     static_assert(x.static_extent(0) == a.static_extent(1));
 
@@ -210,7 +210,7 @@ inline void matrix_vector_product(
     auto matrix_layout = CblasRowMajor;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout_a, stdex::layout_left>) {
+    if constexpr (std::is_same_v<Layout_a, Mdspan::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
     }
@@ -237,10 +237,10 @@ template <class T_a,
     requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_a> &&
              std::is_integral_v<IndexType_x> && std::is_integral_v<IndexType_y>)
 inline void matrix_vector_product(
-    const Sci::MDArray<T_a, stdex::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>&
+    const Sci::MDArray<T_a, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>&
         a,
-    const Sci::MDArray<T_x, stdex::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-    Sci::MDArray<T_y, stdex::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
+    const Sci::MDArray<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+    Sci::MDArray<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     Expects(y.size() == gsl::narrow_cast<std::size_t>(a.extent(0)));
     matrix_vector_product(a.to_mdspan(), x.to_mdspan(), y.to_mdspan());
