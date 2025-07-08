@@ -4,10 +4,10 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <experimental/linalg>
+//#include <scilib/macros.h>
 #include <gtest/gtest.h>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 #include <vector>
 
 TEST(TestLinAlg, TestAdd)
@@ -89,7 +89,7 @@ TEST(TestLinalg, TestNorm2Row)
     Sci::Matrix<double> ma = {{1, 2, 3}, 
                               {4, 5, 6}};
     // clang-format on
-    auto ans = std::experimental::linalg::vector_norm2(Sci::row(ma.to_mdspan(), 0));
+    auto ans = Kokkos::Experimental::linalg::vector_two_norm(Sci::row(ma.to_mdspan(), 0));
     EXPECT_NEAR(ans * ans, 14.0, 1.0e-12);
 }
 

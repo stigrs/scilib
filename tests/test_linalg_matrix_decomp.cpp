@@ -29,7 +29,7 @@ TEST(TestLinalg, TestCholeskyRowMajor)
 
 TEST(TestLinalg, TestCholeskyColMajor)
 {
-    Sci::Matrix<double, Mdspan::layout_left> A = {
+    Sci::Matrix<double, Kokkos::layout_left> A = {
         {4.0, 12.0, -16.0}, {12.0, 37.0, -43.0}, {-16.0, -43.0, 98}};
 
     auto L = A;
@@ -122,12 +122,12 @@ TEST(TestLinalg, TestQRColMajor)
     };
     // clang-format on
 
-    using extents_type = typename Matrix<double, Mdspan::layout_left>::extents_type;
+    using extents_type = typename Matrix<double, Kokkos::layout_left>::extents_type;
 
-    Matrix<double, Mdspan::layout_left> ans(extents_type(3, 3), data);
-    Matrix<double, Mdspan::layout_left> a(extents_type(3, 3), data);
-    Matrix<double, Mdspan::layout_left> q(a.extent(0), a.extent(1));
-    Matrix<double, Mdspan::layout_left> r(a.extent(0), a.extent(1));
+    Matrix<double, Kokkos::layout_left> ans(extents_type(3, 3), data);
+    Matrix<double, Kokkos::layout_left> a(extents_type(3, 3), data);
+    Matrix<double, Kokkos::layout_left> q(a.extent(0), a.extent(1));
+    Matrix<double, Kokkos::layout_left> r(a.extent(0), a.extent(1));
 
     qr(a, q, r);
     auto res = q * r;
@@ -200,17 +200,17 @@ TEST(TestLinalg, TestSVDColMajor)
     int ldu = m;
     int ldvt = n;
 
-    using extents_type = typename Matrix<double, Mdspan::layout_left>::extents_type;
+    using extents_type = typename Matrix<double, Kokkos::layout_left>::extents_type;
 
-    Matrix<double, Mdspan::layout_left> ans(extents_type(m, n), data);
-    Matrix<double, Mdspan::layout_left> a(extents_type(m, n), data);
-    Vector<double, Mdspan::layout_left> s(std::min(m, n));
-    Matrix<double, Mdspan::layout_left> u(m, ldu);
-    Matrix<double, Mdspan::layout_left> vt(n, ldvt);
+    Matrix<double, Kokkos::layout_left> ans(extents_type(m, n), data);
+    Matrix<double, Kokkos::layout_left> a(extents_type(m, n), data);
+    Vector<double, Kokkos::layout_left> s(std::min(m, n));
+    Matrix<double, Kokkos::layout_left> u(m, ldu);
+    Matrix<double, Kokkos::layout_left> vt(n, ldvt);
 
     svd(a, s, u, vt);
 
-    Matrix<double, Mdspan::layout_left> sigma(a.extents());
+    Matrix<double, Kokkos::layout_left> sigma(a.extents());
     auto sigma_diag = diag(sigma.to_mdspan());
     copy_n(s.to_mdspan(), std::min(m, n), sigma_diag);
 

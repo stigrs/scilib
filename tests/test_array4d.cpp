@@ -74,7 +74,7 @@ TEST(TestMDArray, TestCopyArrayRowMajorColMajor)
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
     Sci::Array4D<int> a(extents_type(2, 2, 2, 2), data);
-    Sci::Array4D<int, Mdspan::layout_left> b(a.to_mdspan());
+    Sci::Array4D<int, Kokkos::layout_left> b(a.to_mdspan());
 
     for (index_type i = 0; i < a.extent(0); ++i) {
         for (index_type j = 0; j < a.extent(1); ++j) {
@@ -89,12 +89,12 @@ TEST(TestMDArray, TestCopyArrayRowMajorColMajor)
 
 TEST(TestMDArray, TestCopyArrayColMajorRowMajor)
 {
-    using extents_type = Sci::Array4D<int, Mdspan::layout_left>::extents_type;
+    using extents_type = Sci::Array4D<int, Kokkos::layout_left>::extents_type;
     using index_type = Sci::Array4D<int>::index_type;
 
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
-    Sci::Array4D<int, Mdspan::layout_left> a(extents_type(2, 2, 2, 2), data);
+    Sci::Array4D<int, Kokkos::layout_left> a(extents_type(2, 2, 2, 2), data);
     Sci::Array4D<int> b(a.to_mdspan());
 
     for (index_type i = 0; i < b.extent(0); ++i) {
@@ -110,12 +110,12 @@ TEST(TestMDArray, TestCopyArrayColMajorRowMajor)
 
 TEST(TestMDArray, TestCopyArrayColMajorRowMajor2)
 {
-    using extents_type = Sci::Array4D<int, Mdspan::layout_left>::extents_type;
+    using extents_type = Sci::Array4D<int, Kokkos::layout_left>::extents_type;
     using index_type = Sci::Array4D<int>::index_type;
 
     std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
-    Sci::Array4D<int, Mdspan::layout_left> a(extents_type(2, 2, 2, 2), data);
+    Sci::Array4D<int, Kokkos::layout_left> a(extents_type(2, 2, 2, 2), data);
     Sci::Array4D<int> b(2, 2, 2, 2);
 
     Sci::copy(a.to_mdspan(), b.to_mdspan());

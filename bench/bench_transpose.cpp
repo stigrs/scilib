@@ -37,7 +37,7 @@ void benchmark(int n, int m)
     Sci::Matrix<double> m2(n, m);
     m2 = 1.0;
     t1 = std::chrono::high_resolution_clock::now();
-    auto mt = std::experimental::linalg::transposed(m2.to_mdspan());
+    auto mt = Kokkos::Experimental::linalg::transposed(m2.to_mdspan());
     t2 = std::chrono::high_resolution_clock::now();
     (void) mt;
     Timer t_sci = t2 - t1;

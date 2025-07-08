@@ -12,7 +12,6 @@
 namespace Sci {
 namespace Linalg {
 
-namespace Mdspan = std::experimental;
 
 template <class T_scalar,
           class T_x,
@@ -28,8 +27,8 @@ template <class T_scalar,
     requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
              std::is_integral_v<IndexType_y>)
 inline void axpy(const T_scalar& scalar,
-                 Mdspan::mdspan<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-                 Mdspan::mdspan<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+                 Kokkos::mdspan<T_x, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                 Kokkos::mdspan<T_y, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     Expects(x.extent(0) == y.extent(0));
 
@@ -55,8 +54,8 @@ template <class T_scalar,
              std::is_integral_v<IndexType_y>)
 inline void
 axpy(const T_scalar& scalar,
-     const Sci::MDArray<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-     Sci::MDArray<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
+     const Sci::MDArray<T_x, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+     Sci::MDArray<T_y, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     axpy(scalar, x.to_mdspan(), y.to_mdspan());
 }

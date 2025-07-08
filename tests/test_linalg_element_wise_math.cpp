@@ -11,8 +11,8 @@
 
 TEST(TestLinalg, TestElementWisePow)
 {
-    Sci::Vector<double> ans(Mdspan::dextents<Sci::index, 1>(4), {1, 4, 9, 16});
-    Sci::Vector<double> v(Mdspan::dextents<Sci::index, 1>(4), {1, 2, 3, -4});
+    Sci::Vector<double> ans(Kokkos::dextents<Sci::index, 1>(4), {1, 4, 9, 16});
+    Sci::Vector<double> v(Kokkos::dextents<Sci::index, 1>(4), {1, 2, 3, -4});
 
     auto res = Sci::Linalg::pow(v, 2.0);
     for (std::size_t i = 0; i < ans.size(); ++i) {

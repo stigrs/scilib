@@ -14,14 +14,13 @@
 namespace Sci {
 namespace Integrate {
 
-namespace Mdspan = std::experimental;
 
 // Integrate function values over a non-uniform grid using the
 // trapezoidal rule.
 template <class T_scalar, class T_x, std::size_t ext, class Layout, class Accessor>
 inline auto trapz(T_scalar xlo,
                   T_scalar xup,
-                  Mdspan::mdspan<T_x, Mdspan::extents<index, ext>, Layout, Accessor> x)
+                  Kokkos::mdspan<T_x, Kokkos::extents<index, ext>, Layout, Accessor> x)
 {
     using index_type = index;
     using value_type = std::remove_cv_t<T_x>;
@@ -37,7 +36,7 @@ inline auto trapz(T_scalar xlo,
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
 inline auto
-trapz(T xlo, T xup, const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+trapz(T xlo, T xup, const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
     return trapz(xlo, xup, x.to_mdspan());
 }

@@ -14,9 +14,9 @@ namespace Linalg {
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T vector_abs_sum(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T vector_abs_sum(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return std::experimental::linalg::vector_abs_sum(x.to_mdspan());
+    return Kokkos::Experimental::linalg::vector_abs_sum(x.to_mdspan());
 }
 
 } // namespace Linalg

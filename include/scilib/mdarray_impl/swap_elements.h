@@ -13,7 +13,6 @@
 
 namespace Sci {
 
-namespace Mdspan = std::experimental;
 
 template <class T_x,
           class Extent_x,
@@ -24,8 +23,8 @@ template <class T_x,
           class Layout_y,
           class Accessor_y>
     requires(!std::is_const_v<T_y>)
-inline void swap_elements(Mdspan::mdspan<T_x, Extent_x, Layout_x, Accessor_x> x,
-                          Mdspan::mdspan<T_y, Extent_y, Layout_y, Accessor_y> y)
+inline void swap_elements(Kokkos::mdspan<T_x, Extent_x, Layout_x, Accessor_x> x,
+                          Kokkos::mdspan<T_y, Extent_y, Layout_y, Accessor_y> y)
 {
     using IndexType_x = typename Extent_x::index_type;
     using IndexType_y = typename Extent_y::index_type;

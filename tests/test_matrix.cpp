@@ -276,7 +276,7 @@ TEST(TestMatrix, TestDiag)
 TEST(TestMatrix, TestColMajor)
 {
     std::vector<int> ans = {1, 4, 2, 5, 3, 6};
-    Sci::Matrix<int, Mdspan::layout_left> m = {{1, 2, 3}, {4, 5, 6}};
+    Sci::Matrix<int, Kokkos::layout_left> m = {{1, 2, 3}, {4, 5, 6}};
 
     int it = 0;
     for (Sci::index j = 0; j < m.extent(1); ++j) {
@@ -327,8 +327,8 @@ TEST(TestMatrix, TestColIterator)
 
 TEST(TestMatrix, TestDiagIterator)
 {
-    Sci::Vector<int, Mdspan::layout_left> ans = {1, 5, 9};
-    Sci::Matrix<int, Mdspan::layout_left> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Sci::Vector<int, Kokkos::layout_left> ans = {1, 5, 9};
+    Sci::Matrix<int, Kokkos::layout_left> m = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
     auto d = Sci::diag(m);
 
@@ -377,7 +377,7 @@ TEST(TestMatrix, TestStaticMatrixMdspan)
 TEST(TestMatrix, TestCopyRowMajorColMajor)
 {
     Sci::Matrix<int> a = {{1, 2, 3}, {4, 5, 6}};
-    Sci::Matrix<int, Mdspan::layout_left> b(a.to_mdspan());
+    Sci::Matrix<int, Kokkos::layout_left> b(a.to_mdspan());
 
     for (Sci::index j = 0; j < a.extent(1); ++j) {
         for (Sci::index i = 0; i < a.extent(0); ++i) {

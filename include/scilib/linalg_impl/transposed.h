@@ -20,11 +20,11 @@ template <class T,
           class Layout,
           class Container>
     requires(std::is_integral_v<IndexType>)
-inline Sci::MDArray<T, Mdspan::extents<IndexType, ncols, nrows>, Layout, Container>
-transposed(const Sci::MDArray<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Container>& a)
+inline Sci::MDArray<T, Kokkos::extents<IndexType, ncols, nrows>, Layout, Container>
+transposed(const Sci::MDArray<T, Kokkos::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
-    return Sci::MDArray<T, Mdspan::extents<IndexType, ncols, nrows>, Layout, Container>(
-        std::experimental::linalg::transposed(a.to_mdspan()));
+    return Sci::MDArray<T, Kokkos::extents<IndexType, ncols, nrows>, Layout, Container>(
+        Kokkos::Experimental::linalg::transposed(a.to_mdspan()));
 }
 
 } // namespace Linalg

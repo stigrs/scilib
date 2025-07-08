@@ -19,7 +19,6 @@
 
 namespace Sci {
 
-namespace Mdspan = std::experimental;
 
 //--------------------------------------------------------------------------------------------------
 // Utility functions for making mdspans and mdarrays:
@@ -28,17 +27,17 @@ template <class T,
           class Extents,
           class Layout,
           class Container,
-          class Accessor = Mdspan::default_accessor<T>>
-constexpr Mdspan::mdspan<T, Extents, Layout, Accessor>
+          class Accessor = Kokkos::default_accessor<T>>
+constexpr Kokkos::mdspan<T, Extents, Layout, Accessor>
 make_mdspan(MDArray<T, Extents, Layout, Container>& m,
-            const Accessor& a = Mdspan::default_accessor<T>())
+            const Accessor& a = Kokkos::default_accessor<T>())
 {
-    return Mdspan::mdspan<T, Extents, Layout>(m.container_data(), m.mapping(), a);
+    return Kokkos::mdspan<T, Extents, Layout>(m.container_data(), m.mapping(), a);
 }
 
 template <class T, class Extents, class Layout, class Container = std::vector<T>, class Accessor>
 constexpr MDArray<T, Extents, Layout, Container>
-make_mdarray(Mdspan::mdspan<T, Extents, Layout, Accessor> m)
+make_mdarray(Kokkos::mdspan<T, Extents, Layout, Accessor> m)
 {
     return MDArray<T, Extents, Layout, Container>(m);
 }
@@ -100,7 +99,7 @@ operator+(const MDArray<T, Extents, Layout, Container>& a,
 {
     if constexpr (Extents::rank() <= 1) {
         MDArray<T, Extents, Layout, Container> res(a.extents());
-        std::experimental::linalg::add(a.to_mdspan(), b.to_mdspan(), res.to_mdspan());
+        Kokkos::Experimental::linalg::add(a.to_mdspan(), b.to_mdspan(), res.to_mdspan());
         return res;
     }
     else {
@@ -142,7 +141,7 @@ operator*(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
     value_type scaling_factor = scalar;
 
     return MDArray<T, Extents, Layout, Container>(
-        std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
+        Kokkos::Experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -153,7 +152,7 @@ operator*(const T& scalar, const MDArray<T, Extents, Layout, Container>& v)
     value_type scaling_factor = scalar;
 
     return MDArray<T, Extents, Layout, Container>(
-        std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
+        Kokkos::Experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -164,7 +163,7 @@ operator/(const MDArray<T, Extents, Layout, Container>& v, const T& scalar)
     value_type scaling_factor = value_type{1} / scalar;
 
     return MDArray<T, Extents, Layout, Container>(
-        std::experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
+        Kokkos::Experimental::linalg::scaled(scaling_factor, v.to_mdspan()));
 }
 
 template <class T, class Extents, class Layout, class Container>
@@ -197,7 +196,7 @@ constexpr Vector<T, Layout> operator*(const Matrix<T, Layout>& a, const Vector<T
 // Apply operations:
 
 template <class T, class Extents, class Layout, class Accessor, class Callable>
-constexpr void apply(Mdspan::mdspan<T, Extents, Layout, Accessor> v, Callable&& f)
+constexpr void apply(Kokkos::mdspan<T, Extents, Layout, Accessor> v, Callable&& f)
 {
     using index_type = typename Extents::index_type;
     auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
@@ -220,8 +219,8 @@ template <class T_x,
           class Layout_y,
           class Accessor_y,
           class Callable>
-constexpr void apply(Mdspan::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
-                     Mdspan::mdspan<T_y, Extents_y, Layout_y, Accessor_y> y,
+constexpr void apply(Kokkos::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
+                     Kokkos::mdspan<T_y, Extents_y, Layout_y, Accessor_y> y,
                      Callable&& f)
 {
     using IndexType_x = typename Extents_x::index_type;
@@ -252,7 +251,7 @@ constexpr void apply(Mdspan::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
 inline void print(std::ostream& ostrm,
-                  Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> v)
+                  Kokkos::mdspan<T, Kokkos::extents<IndexType, ext>, Layout, Accessor> v)
 {
     using index_type = IndexType;
 
@@ -270,7 +269,7 @@ template <class T, class IndexType, std::size_t ext, class Layout, class Contain
     requires(std::is_integral_v<IndexType>)
 inline std::ostream&
 operator<<(std::ostream& ostrm,
-           const MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& v)
+           const MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& v)
 {
     using index_type = IndexType;
 
@@ -312,7 +311,7 @@ template <class T,
           class Accessor>
     requires(std::is_integral_v<IndexType>)
 inline void print(std::ostream& ostrm,
-                  Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> m)
+                  Kokkos::mdspan<T, Kokkos::extents<IndexType, nrows, ncols>, Layout, Accessor> m)
 {
     using index_type = IndexType;
 
@@ -341,7 +340,7 @@ template <class T,
     requires(std::is_integral_v<IndexType>)
 inline std::ostream&
 operator<<(std::ostream& ostrm,
-           const MDArray<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Container>& m)
+           const MDArray<T, Kokkos::extents<IndexType, nrows, ncols>, Layout, Container>& m)
 {
     using index_type = IndexType;
 
@@ -380,7 +379,7 @@ inline std::istream& operator>>(std::istream& istrm, Matrix<T, Layout>& m)
         istrm >> tmp[i];
     }
     istrm >> ch; // }
-    auto mtmp = Matrix<T, Mdspan::layout_right>(extents_type(nr, nc), tmp);
+    auto mtmp = Matrix<T, Kokkos::layout_right>(extents_type(nr, nc), tmp);
     m = mtmp.to_mdspan();
     return istrm;
 }

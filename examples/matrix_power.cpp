@@ -6,7 +6,7 @@ int main()
     using namespace Sci;
     using namespace Sci::Linalg;
 
-    Matrix<double, Mdspan::layout_left> M = {{0.0, -1.0}, {1.0, 0.0}};
+    Matrix<double, Kokkos::layout_left> M = {{0.0, -1.0}, {1.0, 0.0}};
     std::cout << "M = \n" << M << "\n\n";
 
     auto res = matrix_power(M, 0);

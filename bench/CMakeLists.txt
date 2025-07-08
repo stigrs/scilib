@@ -5,7 +5,7 @@ include_directories(${BLAS_INCLUDE_DIRS})
 include_directories(${LAPACKE_INCLUDE_DIRS})
 link_directories(${BLAS_LIBRARY_DIRS})
 
-if(NOT TARGET std::mdspan)
+if(NOT TARGET mdspan::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
@@ -46,7 +46,7 @@ foreach(program ${PROGRAMS})
 	    ${program} 
         PRIVATE
         scilib::scilib
-        std::mdspan
+        mdspan::mdspan
         std::linalg
         range-v3
         Microsoft.GSL::GSL

@@ -24,7 +24,7 @@ template <class T,
           class Layout,
           class Accessor>
     requires(std::is_same_v<std::remove_cv_t<T>, double>&& std::is_integral_v<IndexType>)
-auto expm(Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
+auto expm(Kokkos::mdspan<T, Kokkos::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
 {
     // Algorithm: Matlab expm1 (demo directory).
     //
@@ -42,7 +42,7 @@ auto expm(Mdspan::mdspan<T, Mdspan::extents<IndexType, nrows, ncols>, Layout, Ac
     int e = gsl::narrow_cast<int>(std::log2(matrix_norm(a, 'I')));
     int s = std::max(0, e + 1);
 
-    Matrix<value_type, Layout> A = std::experimental::linalg::scaled(1.0 / std::pow(2.0, s), a);
+    Matrix<value_type, Layout> A = Kokkos::Experimental::linalg::scaled(1.0 / std::pow(2.0, s), a);
     Matrix<value_type, Layout> X = A;
 
     value_type c = 0.5;

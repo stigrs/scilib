@@ -18,13 +18,12 @@
 namespace Sci {
 namespace Linalg {
 
-namespace Mdspan = std::experimental;
 
 // Cholesky factorization.
 template <class IndexType, std::size_t nrows, std::size_t ncols, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
 inline void
-cholesky(Mdspan::mdspan<double, Mdspan::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
+cholesky(Kokkos::mdspan<double, Kokkos::extents<IndexType, nrows, ncols>, Layout, Accessor> a)
 {
     Expects(a.extent(0) == a.extent(1));
 
@@ -32,7 +31,7 @@ cholesky(Mdspan::mdspan<double, Mdspan::extents<IndexType, nrows, ncols>, Layout
     const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
 
     auto matrix_layout = LAPACK_ROW_MAJOR;
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
     }
     to_lower_triangular(a);
@@ -51,7 +50,7 @@ cholesky(Mdspan::mdspan<double, Mdspan::extents<IndexType, nrows, ncols>, Layout
 template <class IndexType, std::size_t nrows, std::size_t ncols, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
 inline void
-cholesky(Sci::MDArray<double, Mdspan::extents<IndexType, nrows, ncols>, Layout, Container>& a)
+cholesky(Sci::MDArray<double, Kokkos::extents<IndexType, nrows, ncols>, Layout, Container>& a)
 {
     cholesky(a.to_mdspan());
 }
@@ -67,8 +66,8 @@ template <class IndexType_a,
           class Accessor_ipiv>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_ipiv>)
 inline void
-lu(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows, ncols>, Layout, Accessor_a> a,
-   Mdspan::mdspan<BLAS_INT, Mdspan::extents<IndexType_ipiv, ext_ipiv>, Layout, Accessor_ipiv> ipiv)
+lu(Kokkos::mdspan<double, Kokkos::extents<IndexType_a, nrows, ncols>, Layout, Accessor_a> a,
+   Kokkos::mdspan<BLAS_INT, Kokkos::extents<IndexType_ipiv, ext_ipiv>, Layout, Accessor_ipiv> ipiv)
 {
     const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
@@ -78,7 +77,7 @@ lu(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows, ncols>, Layout, Ac
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
@@ -104,8 +103,8 @@ template <class IndexType_a,
           class Container_ipiv>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_ipiv>)
 inline void
-lu(Sci::MDArray<double, Mdspan::extents<IndexType_a, nrows, ncols>, Layout, Container_a>& a,
-   Sci::MDArray<BLAS_INT, Mdspan::extents<IndexType_ipiv, ext_ipiv>, Layout, Container_ipiv>& ipiv)
+lu(Sci::MDArray<double, Kokkos::extents<IndexType_a, nrows, ncols>, Layout, Container_a>& a,
+   Sci::MDArray<BLAS_INT, Kokkos::extents<IndexType_ipiv, ext_ipiv>, Layout, Container_ipiv>& ipiv)
 {
     lu(a.to_mdspan(), ipiv.to_mdspan());
 }
@@ -127,9 +126,9 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_q>&&
                  std::is_integral_v<IndexType_r>)
 inline void
-qr(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
-   Mdspan::mdspan<double, Mdspan::extents<IndexType_q, nrows_q, ncols_q>, Layout, Accessor_q> q,
-   Mdspan::mdspan<double, Mdspan::extents<IndexType_r, nrows_r, ncols_r>, Layout, Accessor_r> r)
+qr(Kokkos::mdspan<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+   Kokkos::mdspan<double, Kokkos::extents<IndexType_q, nrows_q, ncols_q>, Layout, Accessor_q> q,
+   Kokkos::mdspan<double, Kokkos::extents<IndexType_r, nrows_r, ncols_r>, Layout, Accessor_r> r)
 {
     Expects(q.extent(0) == a.extent(0) && q.extent(1) == a.extent(1));
     Expects(r.extent(0) == a.extent(0) && r.extent(1) == a.extent(1));
@@ -140,7 +139,7 @@ qr(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
@@ -163,8 +162,8 @@ qr(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout
 
     // Compute R:
 
-    matrix_product(std::experimental::linalg::transposed(q), a, r);
-    std::experimental::linalg::transposed(q);
+    matrix_product(Kokkos::Experimental::linalg::transposed(q), a, r);
+    Kokkos::Experimental::linalg::transposed(q);
 }
 
 template <class IndexType_a,
@@ -183,9 +182,9 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_q>&&
                  std::is_integral_v<IndexType_r>)
 inline void
-qr(Sci::MDArray<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
-   Sci::MDArray<double, Mdspan::extents<IndexType_q, nrows_q, ncols_q>, Layout, Container_q>& q,
-   Sci::MDArray<double, Mdspan::extents<IndexType_r, nrows_r, ncols_r>, Layout, Container_r>& r)
+qr(Sci::MDArray<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+   Sci::MDArray<double, Kokkos::extents<IndexType_q, nrows_q, ncols_q>, Layout, Container_q>& q,
+   Sci::MDArray<double, Kokkos::extents<IndexType_r, nrows_r, ncols_r>, Layout, Container_r>& r)
 {
     qr(a.to_mdspan(), q.to_mdspan(), r.to_mdspan());
 }
@@ -210,10 +209,10 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_s>&&
                  std::is_integral_v<IndexType_u>&& std::is_integral_v<IndexType_vt>)
 inline void
-svd(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_s, ext_s>, Layout, Accessor_s> s,
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_u, nrows_u, ncols_u>, Layout, Accessor_u> u,
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_vt, nrows_vt, ncols_vt>, Layout, Accessor_vt> vt)
+svd(Kokkos::mdspan<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_s, ext_s>, Layout, Accessor_s> s,
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_u, nrows_u, ncols_u>, Layout, Accessor_u> u,
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_vt, nrows_vt, ncols_vt>, Layout, Accessor_vt> vt)
 {
     const BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
     const BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
@@ -229,7 +228,7 @@ svd(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layou
     auto matrix_layout = LAPACK_ROW_MAJOR;
     BLAS_INT lda = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
     }
@@ -263,10 +262,10 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_s>&&
                  std::is_integral_v<IndexType_u>&& std::is_integral_v<IndexType_vt>)
 inline void
-svd(Sci::MDArray<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
-    Sci::MDArray<double, Mdspan::extents<IndexType_s, ext_s>, Layout, Container_s>& s,
-    Sci::MDArray<double, Mdspan::extents<IndexType_u, nrows_u, ncols_u>, Layout, Container_u>& u,
-    Sci::MDArray<double, Mdspan::extents<IndexType_vt, nrows_vt, ncols_vt>, Layout, Container_vt>&
+svd(Sci::MDArray<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+    Sci::MDArray<double, Kokkos::extents<IndexType_s, ext_s>, Layout, Container_s>& s,
+    Sci::MDArray<double, Kokkos::extents<IndexType_u, nrows_u, ncols_u>, Layout, Container_u>& u,
+    Sci::MDArray<double, Kokkos::extents<IndexType_vt, nrows_vt, ncols_vt>, Layout, Container_vt>&
         vt)
 {
     svd(a.to_mdspan(), s.to_mdspan(), u.to_mdspan(), vt.to_mdspan());

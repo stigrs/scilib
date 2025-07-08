@@ -13,9 +13,9 @@
 TEST(TestLinalg, TestMatrixVectorProduct)
 {
     std::vector<int> va = {1, -1, 2, 0, -3, 1};
-    Sci::Matrix<int> a(Mdspan::dextents<Sci::index, 2>(2, 3), va);
-    Sci::Vector<int> x(Mdspan::dextents<Sci::index, 1>(3), {2, 1, 0});
-    Sci::Vector<int> y(Mdspan::dextents<Sci::index, 1>(2), {1, -3});
+    Sci::Matrix<int> a(Kokkos::dextents<Sci::index, 2>(2, 3), va);
+    Sci::Vector<int> x(Kokkos::dextents<Sci::index, 1>(3), {2, 1, 0});
+    Sci::Vector<int> y(Kokkos::dextents<Sci::index, 1>(2), {1, -3});
     EXPECT_EQ((a * x), y);
 }
 
@@ -28,9 +28,9 @@ TEST(TestLinalg, TestMatrixVectorProductRowMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Sci::Matrix<double> a(Mdspan::dextents<Sci::index, 2>(2, 3), a_data);
-    Sci::Vector<double> x(Mdspan::dextents<Sci::index, 1>(x_data.size()), x_data);
-    Sci::Vector<double> y(Mdspan::dextents<Sci::index, 1>(y_data.size()), y_data);
+    Sci::Matrix<double> a(Kokkos::dextents<Sci::index, 2>(2, 3), a_data);
+    Sci::Vector<double> x(Kokkos::dextents<Sci::index, 1>(x_data.size()), x_data);
+    Sci::Vector<double> y(Kokkos::dextents<Sci::index, 1>(y_data.size()), y_data);
     Sci::Vector<double> res(y.size());
 
     Sci::Linalg::matrix_vector_product(a, x, res);
@@ -47,10 +47,10 @@ TEST(TestLinalg, TestMatrixVectorProductColMajor)
     std::vector<double> x_data{2.0, 1.0, 0.0};
     std::vector<double> y_data{1.0, -3.0};
     // clang-format on
-    Sci::Matrix<double, Mdspan::layout_left> a(Mdspan::dextents<Sci::index, 2>(2, 3), a_data);
-    Sci::Vector<double, Mdspan::layout_left> x(Mdspan::dextents<Sci::index, 1>(x_data.size()),
+    Sci::Matrix<double, Kokkos::layout_left> a(Kokkos::dextents<Sci::index, 2>(2, 3), a_data);
+    Sci::Vector<double, Kokkos::layout_left> x(Kokkos::dextents<Sci::index, 1>(x_data.size()),
                                               x_data);
-    Sci::Vector<double, Mdspan::layout_left> y(Mdspan::dextents<Sci::index, 1>(y_data.size()),
+    Sci::Vector<double, Kokkos::layout_left> y(Kokkos::dextents<Sci::index, 1>(y_data.size()),
                                               y_data);
     EXPECT_EQ((a * x), y);
 }
@@ -70,9 +70,9 @@ TEST(TestLinalg, TestComplexMatrixVectorProduct)
         {-15.0, 87.0}, {-15.0, 139.0}
     };
     // clang-format on
-    Sci::Matrix<std::complex<double>> A(Mdspan::dextents<Sci::index, 2>(2, 2), A_data);
-    Sci::Vector<std::complex<double>> x(Mdspan::dextents<Sci::index, 1>(x_data.size()), x_data);
-    Sci::Vector<std::complex<double>> z(Mdspan::dextents<Sci::index, 1>(z_data.size()), z_data);
+    Sci::Matrix<std::complex<double>> A(Kokkos::dextents<Sci::index, 2>(2, 2), A_data);
+    Sci::Vector<std::complex<double>> x(Kokkos::dextents<Sci::index, 1>(x_data.size()), x_data);
+    Sci::Vector<std::complex<double>> z(Kokkos::dextents<Sci::index, 1>(z_data.size()), z_data);
 
     EXPECT_EQ((A * x), z);
 }

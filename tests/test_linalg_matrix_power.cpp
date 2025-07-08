@@ -103,14 +103,14 @@ TEST(TestLinalg, TestMatrixPowerColMajor)
         0.0, -1.0, 
         1.0,  0.0};
     // clang-format on
-    using extents_type = typename Matrix<double, Mdspan::layout_left>::extents_type;
+    using extents_type = typename Matrix<double, Kokkos::layout_left>::extents_type;
 
-    Matrix<double, Mdspan::layout_left> ans1(extents_type(2, 2), ans1_data);
-    Matrix<double, Mdspan::layout_left> ans2(extents_type(2, 2), ans2_data);
-    Matrix<double, Mdspan::layout_left> ans3(extents_type(2, 2), ans3_data);
-    Matrix<double, Mdspan::layout_left> ans4(extents_type(2, 2), ans4_data);
+    Matrix<double, Kokkos::layout_left> ans1(extents_type(2, 2), ans1_data);
+    Matrix<double, Kokkos::layout_left> ans2(extents_type(2, 2), ans2_data);
+    Matrix<double, Kokkos::layout_left> ans3(extents_type(2, 2), ans3_data);
+    Matrix<double, Kokkos::layout_left> ans4(extents_type(2, 2), ans4_data);
 
-    Matrix<double, Mdspan::layout_left> M(extents_type(2, 2), M_data);
+    Matrix<double, Kokkos::layout_left> M(extents_type(2, 2), M_data);
 
     auto res = matrix_power(M, 0);
     for (Sci::index j = 0; j < res.extent(1); ++j) {

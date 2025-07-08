@@ -15,7 +15,6 @@
 namespace Sci {
 namespace Linalg {
 
-namespace Mdspan = std::experimental;
 
 template <class T_a,
           class IndexType_a,
@@ -38,11 +37,11 @@ template <class T_a,
     requires(!std::is_const_v<T_c> && std::is_integral_v<IndexType_a> &&
              std::is_integral_v<IndexType_b> && std::is_integral_v<IndexType_c>)
 inline void matrix_product(
-    Mdspan::mdspan<T_a, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
-    Mdspan::mdspan<T_b, Mdspan::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
-    Mdspan::mdspan<T_c, Mdspan::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
+    Kokkos::mdspan<T_a, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Accessor_a> a,
+    Kokkos::mdspan<T_b, Kokkos::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Accessor_b> b,
+    Kokkos::mdspan<T_c, Kokkos::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Accessor_c> c)
 {
-    std::experimental::linalg::matrix_product(a, b, c);
+    Kokkos::Experimental::linalg::matrix_product(a, b, c);
 }
 
 template <class IndexType_a,
@@ -61,9 +60,9 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
                  std::is_integral_v<IndexType_c>)
 inline void matrix_product(
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b,
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_c, nrows_c, ncols_c>, Layout, Accessor_c> c)
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b,
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_c, nrows_c, ncols_c>, Layout, Accessor_c> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -77,7 +76,7 @@ inline void matrix_product(
     BLAS_INT ldb = n;
     BLAS_INT ldc = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
         ldb = k;
@@ -103,11 +102,11 @@ template <class IndexType_a,
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
                  std::is_integral_v<IndexType_c>)
 inline void matrix_product(
-    Mdspan::mdspan<const double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a>
+    Kokkos::mdspan<const double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a>
         a,
-    Mdspan::mdspan<const double, Mdspan::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b>
+    Kokkos::mdspan<const double, Kokkos::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b>
         b,
-    Mdspan::mdspan<double, Mdspan::extents<IndexType_c, nrows_c, ncols_c>, Layout, Accessor_c> c)
+    Kokkos::mdspan<double, Kokkos::extents<IndexType_c, nrows_c, ncols_c>, Layout, Accessor_c> c)
 {
     constexpr double alpha = 1.0;
     constexpr double beta = 0.0;
@@ -121,7 +120,7 @@ inline void matrix_product(
     BLAS_INT ldb = n;
     BLAS_INT ldc = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
         ldb = k;
@@ -146,16 +145,16 @@ template <class IndexType_a,
           class Accessor_c>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
                  std::is_integral_v<IndexType_c>)
-inline void matrix_product(Mdspan::mdspan<std::complex<double>,
-                                         Mdspan::extents<IndexType_a, nrows_a, ncols_a>,
+inline void matrix_product(Kokkos::mdspan<std::complex<double>,
+                                         Kokkos::extents<IndexType_a, nrows_a, ncols_a>,
                                          Layout,
                                          Accessor_a> a,
-                           Mdspan::mdspan<std::complex<double>,
-                                         Mdspan::extents<IndexType_b, nrows_b, ncols_b>,
+                           Kokkos::mdspan<std::complex<double>,
+                                         Kokkos::extents<IndexType_b, nrows_b, ncols_b>,
                                          Layout,
                                          Accessor_b> b,
-                           Mdspan::mdspan<std::complex<double>,
-                                         Mdspan::extents<IndexType_c, nrows_c, ncols_c>,
+                           Kokkos::mdspan<std::complex<double>,
+                                         Kokkos::extents<IndexType_c, nrows_c, ncols_c>,
                                          Layout,
                                          Accessor_c> c)
 {
@@ -171,7 +170,7 @@ inline void matrix_product(Mdspan::mdspan<std::complex<double>,
     BLAS_INT ldb = n;
     BLAS_INT ldc = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
         ldb = k;
@@ -196,16 +195,16 @@ template <class IndexType_a,
           class Accessor_c>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>&&
                  std::is_integral_v<IndexType_c>)
-inline void matrix_product(Mdspan::mdspan<const std::complex<double>,
-                                         Mdspan::extents<IndexType_a, nrows_a, ncols_a>,
+inline void matrix_product(Kokkos::mdspan<const std::complex<double>,
+                                         Kokkos::extents<IndexType_a, nrows_a, ncols_a>,
                                          Layout,
                                          Accessor_a> a,
-                           Mdspan::mdspan<const std::complex<double>,
-                                         Mdspan::extents<IndexType_b, nrows_b, ncols_b>,
+                           Kokkos::mdspan<const std::complex<double>,
+                                         Kokkos::extents<IndexType_b, nrows_b, ncols_b>,
                                          Layout,
                                          Accessor_b> b,
-                           Mdspan::mdspan<std::complex<double>,
-                                         Mdspan::extents<IndexType_c, nrows_c, ncols_c>,
+                           Kokkos::mdspan<std::complex<double>,
+                                         Kokkos::extents<IndexType_c, nrows_c, ncols_c>,
                                          Layout,
                                          Accessor_c> c)
 {
@@ -221,7 +220,7 @@ inline void matrix_product(Mdspan::mdspan<const std::complex<double>,
     BLAS_INT ldb = n;
     BLAS_INT ldc = n;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = CblasColMajor;
         lda = m;
         ldb = k;
@@ -252,11 +251,11 @@ template <class T_a,
     requires(!std::is_const_v<T_c> && std::is_integral_v<IndexType_a> &&
              std::is_integral_v<IndexType_b> && std::is_integral_v<IndexType_c>)
 inline void matrix_product(
-    const Sci::MDArray<T_a, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>&
+    const Sci::MDArray<T_a, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout_a, Container_a>&
         a,
-    const Sci::MDArray<T_b, Mdspan::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Container_b>&
+    const Sci::MDArray<T_b, Kokkos::extents<IndexType_b, nrows_b, ncols_b>, Layout_b, Container_b>&
         b,
-    Sci::MDArray<T_c, Mdspan::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Container_c>& c)
+    Sci::MDArray<T_c, Kokkos::extents<IndexType_c, nrows_c, ncols_c>, Layout_c, Container_c>& c)
 {
     matrix_product(a.to_mdspan(), b.to_mdspan(), c.to_mdspan());
 }

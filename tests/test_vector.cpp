@@ -35,7 +35,7 @@ TEST(TestVector, TestSize)
 TEST(TestVector, TestAlloc)
 {
     const std::size_t sz = 5;
-    Sci::Vector<int> w(Mdspan::extents<int, sz>{sz}, std::allocator<int>());
+    Sci::Vector<int> w(Kokkos::extents<int, sz>{sz}, std::allocator<int>());
     EXPECT_EQ(w.size(), sz);
 }
 
@@ -89,7 +89,7 @@ TEST(TestVector, TestCopySpan)
 TEST(TestVector, TestCopyVector)
 {
     std::array<int, 5> v{1, 1, 1, 1, 1};
-    Sci::StaticVector<int, 5> a(Mdspan::extents<Sci::index, v.size()>(), v);
+    Sci::StaticVector<int, 5> a(Kokkos::extents<Sci::index, v.size()>(), v);
 
     for (std::size_t i = 0; i < v.size(); ++i) {
         EXPECT_EQ(v[i], a[i]);
@@ -124,7 +124,7 @@ TEST(TestVector, TestSwap)
 TEST(TestVector, TestInitializer)
 {
     std::initializer_list<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(Mdspan::dextents<Sci::index, 1>(v.size()), v);
+    Sci::Vector<int> a(Kokkos::dextents<Sci::index, 1>(v.size()), v);
 
     EXPECT_EQ(v.size(), a.size());
     for (std::size_t i = 0; i < a.size(); ++i) {
@@ -210,7 +210,7 @@ TEST(TestVector, TestSort)
 TEST(TestVector, TestFirst)
 {
     std::vector<int> v = {1, 2, 3, 4, 5};
-    Sci::Vector<int> a(Mdspan::dextents<Sci::index, 1>(v.size()), v);
+    Sci::Vector<int> a(Kokkos::dextents<Sci::index, 1>(v.size()), v);
 
     auto v_slice = Sci::first(a.to_mdspan(), v.size());
     for (std::size_t i = 0; i < v_slice.size(); ++i) {

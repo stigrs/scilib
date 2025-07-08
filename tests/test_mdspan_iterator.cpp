@@ -4,7 +4,7 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <experimental/mdspan>
+#include <mdspan/mdspan.hpp>
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
 

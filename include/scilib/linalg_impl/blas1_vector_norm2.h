@@ -14,9 +14,9 @@ namespace Linalg {
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T vector_norm2(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T vector_norm2(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
-    return std::experimental::linalg::vector_norm2(x.to_mdspan());
+    return Kokkos::Experimental::linalg::vector_two_norm(x.to_mdspan());
 }
 
 } // namespace Linalg

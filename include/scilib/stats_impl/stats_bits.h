@@ -15,12 +15,11 @@
 
 namespace Sci {
 namespace Stats {
-namespace Mdspan = std::experimental;
 
 // Arithmetic mean.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto mean(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto mean(Kokkos::mdspan<T, Kokkos::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using value_type = std::remove_cv_t<T>;
     value_type result = Sci::Linalg::sum(x) / static_cast<value_type>(x.extent(0));
@@ -29,7 +28,7 @@ inline auto mean(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Acce
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T mean(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T mean(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
     return mean(x.to_mdspan());
 }
@@ -37,7 +36,7 @@ inline T mean(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Con
 // Median.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto median(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto median(Kokkos::mdspan<T, Kokkos::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
@@ -56,7 +55,7 @@ inline auto median(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Ac
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T median(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T median(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
     return median(x.to_mdspan());
 }
@@ -64,7 +63,7 @@ inline T median(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, C
 // Variance.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto var(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto var(Kokkos::mdspan<T, Kokkos::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
@@ -82,7 +81,7 @@ inline auto var(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Acces
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T var(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T var(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
     return var(x.to_mdspan());
 }
@@ -90,14 +89,14 @@ inline T var(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Cont
 // Standard deviation.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto stddev(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto stddev(Kokkos::mdspan<T, Kokkos::extents<IndexType, ext>, Layout, Accessor> x)
 {
     return std::sqrt(var(x));
 }
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T stddev(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T stddev(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
     return stddev(x.to_mdspan());
 }
@@ -105,7 +104,7 @@ inline T stddev(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, C
 // Root-mean-square deviation.
 template <class T, class IndexType, std::size_t ext, class Layout, class Accessor>
     requires(std::is_integral_v<IndexType>)
-inline auto rms(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Accessor> x)
+inline auto rms(Kokkos::mdspan<T, Kokkos::extents<IndexType, ext>, Layout, Accessor> x)
 {
     using index_type = IndexType;
     using value_type = std::remove_cv_t<T>;
@@ -119,7 +118,7 @@ inline auto rms(Mdspan::mdspan<T, Mdspan::extents<IndexType, ext>, Layout, Acces
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
-inline T rms(const Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& x)
+inline T rms(const Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& x)
 {
     return rms(x.to_mdspan());
 }
@@ -135,8 +134,8 @@ template <class T,
           class Layout_y,
           class Accessor_y>
     requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
-inline auto cov(Mdspan::mdspan<T, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
-                Mdspan::mdspan<T, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
+inline auto cov(Kokkos::mdspan<T, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+                Kokkos::mdspan<T, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y)
 {
     Expects(x.extent(0) == y.extent(0));
 
@@ -165,8 +164,8 @@ template <class T,
           class Layout_y,
           class Container_y>
     requires(std::is_integral_v<IndexType_x>&& std::is_integral_v<IndexType_y>)
-inline T cov(const Sci::MDArray<T, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-             const Sci::MDArray<T, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
+inline T cov(const Sci::MDArray<T, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+             const Sci::MDArray<T, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y)
 {
     return cov(x.to_mdspan(), y.to_mdspan());
 }

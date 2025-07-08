@@ -30,11 +30,11 @@ template <class T_x,
     requires(!std::is_const_v<T_z> && std::is_integral_v<IndexType_x> &&
              std::is_integral_v<IndexType_y> && std::is_integral_v<IndexType_z>)
 inline void
-add(const Sci::MDArray<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
-    const Sci::MDArray<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
-    Sci::MDArray<T_z, Mdspan::extents<IndexType_z, ext_z>, Layout_z, Container_z>& z)
+add(const Sci::MDArray<T_x, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+    const Sci::MDArray<T_y, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
+    Sci::MDArray<T_z, Kokkos::extents<IndexType_z, ext_z>, Layout_z, Container_z>& z)
 {
-    std::experimental::linalg::add(x.to_mdspan(), y.to_mdspan(), z.to_mdspan());
+    Kokkos::Experimental::linalg::add(x.to_mdspan(), y.to_mdspan(), z.to_mdspan());
 }
 
 template <class T_x,
@@ -59,12 +59,12 @@ template <class T_x,
              std::is_integral_v<IndexType_y> && std::is_integral_v<IndexType_z>)
 inline void
 add(const Sci::
-        MDArray<T_x, Mdspan::extents<IndexType_x, numrows_x, numcols_x>, Layout_x, Container_x>& x,
+        MDArray<T_x, Kokkos::extents<IndexType_x, numrows_x, numcols_x>, Layout_x, Container_x>& x,
     const Sci::
-        MDArray<T_y, Mdspan::extents<IndexType_y, numrows_y, numcols_y>, Layout_y, Container_y>& y,
-    Sci::MDArray<T_z, Mdspan::extents<IndexType_z, numrows_z, numcols_z>, Layout_z, Container_z>& z)
+        MDArray<T_y, Kokkos::extents<IndexType_y, numrows_y, numcols_y>, Layout_y, Container_y>& y,
+    Sci::MDArray<T_z, Kokkos::extents<IndexType_z, numrows_z, numcols_z>, Layout_z, Container_z>& z)
 {
-    std::experimental::linalg::add(x.to_mdspan(), y.to_mdspan(), z.to_mdspan());
+    Kokkos::Experimental::linalg::add(x.to_mdspan(), y.to_mdspan(), z.to_mdspan());
 }
 
 } // namespace Linalg

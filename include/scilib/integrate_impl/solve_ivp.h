@@ -20,9 +20,9 @@ namespace __Detail {
 // Compute error norm.
 template <class IndexType, std::size_t ext, class Layout, class Container>
 double
-error_norm(const Sci::MDArray<double, Mdspan::extents<IndexType, ext>, Layout, Container>& y,
-           const Sci::MDArray<double, Mdspan::extents<IndexType, ext>, Layout, Container>& ynew,
-           const Sci::MDArray<double, Mdspan::extents<IndexType, ext>, Layout, Container>& err_vec,
+error_norm(const Sci::MDArray<double, Kokkos::extents<IndexType, ext>, Layout, Container>& y,
+           const Sci::MDArray<double, Kokkos::extents<IndexType, ext>, Layout, Container>& ynew,
+           const Sci::MDArray<double, Kokkos::extents<IndexType, ext>, Layout, Container>& err_vec,
            double atol,
            double rtol)
 {
@@ -47,7 +47,7 @@ template <class F, class IndexType, std::size_t ext, class Layout, class Contain
 void dormand_prince(F f,
                     double& x,
                     double xf,
-                    Sci::MDArray<double, Mdspan::extents<IndexType, ext>, Layout, Container>& y,
+                    Sci::MDArray<double, Kokkos::extents<IndexType, ext>, Layout, Container>& y,
                     double atol,
                     double rtol)
 {
@@ -172,7 +172,7 @@ template <class F, class IndexType, std::size_t ext, class Layout, class Contain
 inline void solve_ivp(F f,
                       double& x,
                       double xf,
-                      Sci::MDArray<double, Mdspan::extents<IndexType, ext>, Layout, Container>& y,
+                      Sci::MDArray<double, Kokkos::extents<IndexType, ext>, Layout, Container>& y,
                       double atol = 1.0e-7,
                       double rtol = 1.0e-7)
 {

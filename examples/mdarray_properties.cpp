@@ -56,6 +56,6 @@ int main()
     // This should not compile:
     // m2_view(0, 0) = 1;
 
-    Sci::StaticMatrix<double, 2, 3> sv(Mdspan::extents<Sci::index, 2, 3>(), 2.0);
+    Sci::StaticMatrix<double, 2, 3> sv(Kokkos::extents<Sci::index, 2, 3>(), 2.0);
     std::cout << "sv = \n" << sv << '\n';
 }

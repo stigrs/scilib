@@ -20,7 +20,6 @@
 
 
 namespace Sci {
-namespace Mdspan = std::experimental;
 
 namespace __Detail {
 
@@ -143,8 +142,8 @@ public:
     using container_type = Container;
     using mapping_type = typename layout_type::template mapping<extents_type>;
     using element_type = ElementType;
-    using mdspan_type = Mdspan::mdspan<element_type, extents_type, layout_type>;
-    using const_mdspan_type = Mdspan::mdspan<const element_type, extents_type, layout_type>;
+    using mdspan_type = Kokkos::mdspan<element_type, extents_type, layout_type>;
+    using const_mdspan_type = Kokkos::mdspan<const element_type, extents_type, layout_type>;
     using value_type = std::remove_cv_t<element_type>;
     using index_type = typename extents_type::index_type;
     using size_type = typename extents_type::size_type;
@@ -254,15 +253,15 @@ public:
 
     constexpr MDArray(
         __Detail::MDArray_initializer<element_type, extents_type::rank()>
-            init) requires((!std::is_same_v<layout_type, Mdspan::layout_stride>) &&std::
+            init) requires((!std::is_same_v<layout_type, Kokkos::layout_stride>) &&std::
                                is_same_v<container_type, std::vector<element_type>>)
         : map(extents_type(__Detail::derive_extents<extents_type::rank()>(init)))
     {
         ctr.reserve(map.required_span_size());
         __Detail::insert_flat(init, ctr);
 
-        if constexpr (std::is_same_v<layout_type, Mdspan::layout_left>) { // need to transpose data
-            MDArray<element_type, extents_type, Mdspan::layout_right, container_type> tmp(extents(),
+        if constexpr (std::is_same_v<layout_type, Kokkos::layout_left>) { // need to transpose data
+            MDArray<element_type, extents_type, Kokkos::layout_right, container_type> tmp(extents(),
                                                                                          ctr);
             (*this) = tmp.to_mdspan();
         }
@@ -280,7 +279,7 @@ public:
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == gsl::narrow_cast<size_type>(MDSPAN_IMPL_STANDARD_NAMESPACE::dynamic_extent) ||
+            Expects(static_extent(r) == gsl::narrow_cast<size_type>(Kokkos::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
         auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
@@ -302,12 +301,12 @@ public:
                  (std::is_constructible_v<container_type, std::size_t> ||
                   __Detail::Container_is_array_v<container_type>) )
     constexpr MDArray(
-        const Mdspan::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other)
+        const Kokkos::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other)
         : map(extents_type(other.extents())),
           ctr(__Detail::Container_is_array<container_type>::construct(map))
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == gsl::narrow_cast<size_type>(MDSPAN_IMPL_STANDARD_NAMESPACE::dynamic_extent) ||
+            Expects(static_extent(r) == gsl::narrow_cast<size_type>(Kokkos::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
         auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
@@ -403,7 +402,7 @@ public:
         : map(extents_type(other.extents())), ctr(map.required_span_size(), a)
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == gsl::narrow_cast<size_type>(MDSPAN_IMPL_STANDARD_NAMESPACE::dynamic_extent) ||
+            Expects(static_extent(r) == gsl::narrow_cast<size_type>(Kokkos::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
         auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
@@ -428,12 +427,12 @@ public:
                      std::is_constructible_v<value_type, typename Accessor::reference>&&
                          std::is_constructible_v<container_type, std::size_t, Alloc>)
     constexpr MDArray(
-        const Mdspan::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other,
+        const Kokkos::mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, Accessor>& other,
         const Alloc& a)
         : map(extents_type(other.extents())), ctr(map.required_span_size(), a)
     {
         for (rank_type r = 0; r < other.rank(); ++r) {
-            Expects(static_extent(r) == gsl::narrow_cast<size_type>(MDSPAN_IMPL_STANDARD_NAMESPACE::dynamic_extent) ||
+            Expects(static_extent(r) == gsl::narrow_cast<size_type>(Kokkos::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
         auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
@@ -631,35 +630,35 @@ public:
               class OtherAccessorType>
         requires(std::is_assignable_v<
                  mdspan_type,
-                 Mdspan::mdspan<OtherElementType, OtherExtents, OtherLayoutType, OtherAccessorType>>)
+                 Kokkos::mdspan<OtherElementType, OtherExtents, OtherLayoutType, OtherAccessorType>>)
     constexpr
-    operator Mdspan::mdspan<OtherElementType, OtherElementType, OtherLayoutType, OtherAccessorType>()
+    operator Kokkos::mdspan<OtherElementType, OtherElementType, OtherLayoutType, OtherAccessorType>()
     {
         Expects(container_size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
         return mdspan_type(container_data(), map);
     }
 
-    template <class OtherAccessorType = Mdspan::default_accessor<element_type>>
+    template <class OtherAccessorType = Kokkos::default_accessor<element_type>>
         requires(std::is_assignable_v<
                  mdspan_type,
-                 Mdspan::mdspan<element_type, extents_type, layout_type, OtherAccessorType>>)
-    constexpr Mdspan::mdspan<element_type, extents_type, layout_type, OtherAccessorType>
-    to_mdspan(const OtherAccessorType& a = Mdspan::default_accessor<element_type>())
+                 Kokkos::mdspan<element_type, extents_type, layout_type, OtherAccessorType>>)
+    constexpr Kokkos::mdspan<element_type, extents_type, layout_type, OtherAccessorType>
+    to_mdspan(const OtherAccessorType& a = Kokkos::default_accessor<element_type>())
     {
         Expects(container_size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
-        return Mdspan::mdspan<element_type, extents_type, layout_type, OtherAccessorType>(
+        return Kokkos::mdspan<element_type, extents_type, layout_type, OtherAccessorType>(
             container_data(), map, a);
     }
 
-    template <class OtherAccessorType = Mdspan::default_accessor<const element_type>>
+    template <class OtherAccessorType = Kokkos::default_accessor<const element_type>>
         requires(std::is_assignable_v<
                  const_mdspan_type,
-                 Mdspan::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>>)
-    constexpr Mdspan::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>
-    to_mdspan(const OtherAccessorType& a = Mdspan::default_accessor<const element_type>()) const
+                 Kokkos::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>>)
+    constexpr Kokkos::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>
+    to_mdspan(const OtherAccessorType& a = Kokkos::default_accessor<const element_type>()) const
     {
         Expects(container_size() >= gsl::narrow_cast<size_type>(map.required_span_size()));
-        return Mdspan::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>(
+        return Kokkos::mdspan<const element_type, extents_type, layout_type, OtherAccessorType>(
             container_data(), map, a);
     }
 
@@ -806,10 +805,10 @@ private:
 };
 
 template <class IndexType, std::size_t... Extents, class Container>
-MDArray(const Mdspan::extents<IndexType, Extents...>&, const Container&)
+MDArray(const Kokkos::extents<IndexType, Extents...>&, const Container&)
     -> MDArray<typename Container::value_type,
-               Mdspan::extents<IndexType, Extents...>,
-               Mdspan::layout_right,
+               Kokkos::extents<IndexType, Extents...>,
+               Kokkos::layout_right,
                Container>;
 
 template <class Mapping, class Container>
@@ -819,10 +818,10 @@ MDArray(const Mapping&, const Container&) -> MDArray<typename Container::value_t
                                                      Container>;
 
 template <class IndexType, std::size_t... Extents, class Container>
-MDArray(const Mdspan::extents<IndexType, Extents...>&, Container&&)
+MDArray(const Kokkos::extents<IndexType, Extents...>&, Container&&)
     -> MDArray<typename Container::value_type,
-               Mdspan::extents<IndexType, Extents...>,
-               Mdspan::layout_right,
+               Kokkos::extents<IndexType, Extents...>,
+               Kokkos::layout_right,
                Container>;
 
 template <class Mapping, class Container>
@@ -832,14 +831,14 @@ MDArray(const Mapping&, Container&&) -> MDArray<typename Container::value_type,
                                                 Container>;
 
 template <class ElementType, class Extents, class Layout, class Accessor>
-MDArray(const Mdspan::mdspan<ElementType, Extents, Layout, Accessor>&)
+MDArray(const Kokkos::mdspan<ElementType, Extents, Layout, Accessor>&)
     -> MDArray<std::remove_cv_t<ElementType>, Extents, Layout>;
 
 template <class IndexType, std::size_t... Extents, class Container, class Alloc>
-MDArray(const Mdspan::extents<IndexType, Extents...>&, const Container&, const Alloc&)
+MDArray(const Kokkos::extents<IndexType, Extents...>&, const Container&, const Alloc&)
     -> MDArray<typename Container::value_type,
-               Mdspan::extents<IndexType, Extents...>,
-               Mdspan::layout_right,
+               Kokkos::extents<IndexType, Extents...>,
+               Kokkos::layout_right,
                Container>;
 
 template <class Mapping, class Container, class Alloc>
@@ -849,10 +848,10 @@ MDArray(const Mapping&, const Container&, const Alloc&) -> MDArray<typename Cont
                                                                    Container>;
 
 template <class IndexType, std::size_t... Extents, class Container, class Alloc>
-MDArray(const Mdspan::extents<IndexType, Extents...>&, Container&&, const Alloc&)
+MDArray(const Kokkos::extents<IndexType, Extents...>&, Container&&, const Alloc&)
     -> MDArray<typename Container::value_type,
-               Mdspan::extents<IndexType, Extents...>,
-               Mdspan::layout_right,
+               Kokkos::extents<IndexType, Extents...>,
+               Kokkos::layout_right,
                Container>;
 
 template <class Mapping, class Container, class Alloc>
@@ -862,7 +861,7 @@ MDArray(const Mapping&, Container&&, const Alloc&) -> MDArray<typename Container
                                                               Container>;
 
 template <class ElementType, class Extents, class Layout, class Accessor, class Alloc>
-MDArray(const Mdspan::mdspan<ElementType, Extents, Layout, Accessor>&, const Alloc&)
+MDArray(const Kokkos::mdspan<ElementType, Extents, Layout, Accessor>&, const Alloc&)
     -> MDArray<std::remove_cv_t<ElementType>, Extents, Layout>;
 
 } // namespace Sci

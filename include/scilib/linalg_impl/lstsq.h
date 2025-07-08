@@ -27,8 +27,8 @@ template <class IndexType_a,
           class Accessor_b>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
 inline void
-lstsq(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
-      Mdspan::mdspan<double, Mdspan::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b)
+lstsq(Kokkos::mdspan<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Accessor_a> a,
+      Kokkos::mdspan<double, Kokkos::extents<IndexType_b, nrows_b, ncols_b>, Layout, Accessor_b> b)
 {
     BLAS_INT m = gsl::narrow_cast<BLAS_INT>(a.extent(0));
     BLAS_INT n = gsl::narrow_cast<BLAS_INT>(a.extent(1));
@@ -42,7 +42,7 @@ lstsq(Mdspan::mdspan<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Lay
     BLAS_INT lda = n;
     BLAS_INT ldb = nrhs;
 
-    if constexpr (std::is_same_v<Layout, Mdspan::layout_left>) {
+    if constexpr (std::is_same_v<Layout, Kokkos::layout_left>) {
         matrix_layout = LAPACK_COL_MAJOR;
         lda = m;
         ldb = n;
@@ -65,8 +65,8 @@ template <class IndexType_a,
           class Container_b>
     requires(std::is_integral_v<IndexType_a>&& std::is_integral_v<IndexType_b>)
 inline void
-lstsq(Sci::MDArray<double, Mdspan::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
-      Sci::MDArray<double, Mdspan::extents<IndexType_b, nrows_b, ncols_b>, Layout, Container_b>& b)
+lstsq(Sci::MDArray<double, Kokkos::extents<IndexType_a, nrows_a, ncols_a>, Layout, Container_a>& a,
+      Sci::MDArray<double, Kokkos::extents<IndexType_b, nrows_b, ncols_b>, Layout, Container_b>& b)
 {
     lstsq(a.to_mdspan(), b.to_mdspan());
 }

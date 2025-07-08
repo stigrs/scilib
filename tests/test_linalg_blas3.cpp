@@ -65,12 +65,12 @@ TEST(TestLinalg, TestMatrixMatrixProductDoubleColMajor)
     std::vector<double> rr = { 58,  139, 
                                64, 154};
     // clang-format on
-    using extents_type = Sci::Matrix<double, Mdspan::layout_left>::extents_type;
+    using extents_type = Sci::Matrix<double, Kokkos::layout_left>::extents_type;
 
-    Sci::Matrix<double, Mdspan::layout_left> ma(extents_type(2, 3), aa);
-    Sci::Matrix<double, Mdspan::layout_left> mb(extents_type(3, 2), bb);
-    Sci::Matrix<double, Mdspan::layout_left> ans(extents_type(2, 2), rr);
-    Sci::Matrix<double, Mdspan::layout_left> res(2, 2);
+    Sci::Matrix<double, Kokkos::layout_left> ma(extents_type(2, 3), aa);
+    Sci::Matrix<double, Kokkos::layout_left> mb(extents_type(3, 2), bb);
+    Sci::Matrix<double, Kokkos::layout_left> ans(extents_type(2, 2), rr);
+    Sci::Matrix<double, Kokkos::layout_left> res(2, 2);
 
     Sci::Linalg::matrix_product(ma, mb, res);
 
@@ -87,7 +87,7 @@ TEST(TestLinalg, TestMatrixMatrixProductComplex)
     std::vector<std::complex<double>> rr = {{44.0, 2.0}, {64.0, 6.0}, 
                                             {100.0, -6.0}, {152.0, -2.0}};
     // clang-format on
-    using extents_type = typename Sci::Matrix<double, Mdspan::layout_left>::extents_type;
+    using extents_type = typename Sci::Matrix<double, Kokkos::layout_left>::extents_type;
 
     Sci::Matrix<std::complex<double>> ma(extents_type(2, 2), aa);
     Sci::Matrix<std::complex<double>> mb(extents_type(2, 2), bb);

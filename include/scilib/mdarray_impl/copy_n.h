@@ -12,7 +12,6 @@
 
 namespace Sci {
 
-namespace Mdspan = std::experimental;
 
 template <class T_x,
           class IndexType_x,
@@ -26,9 +25,9 @@ template <class T_x,
           class Accessor_y>
     requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
              std::is_integral_v<IndexType_y>)
-inline void copy_n(Mdspan::mdspan<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
+inline void copy_n(Kokkos::mdspan<T_x, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Accessor_x> x,
                    std::size_t count,
-                   Mdspan::mdspan<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y,
+                   Kokkos::mdspan<T_y, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Accessor_y> y,
                    std::size_t offset = 0)
 {
     Expects(count <= gsl::narrow_cast<std::size_t>(x.extent(0)));
@@ -52,9 +51,9 @@ template <class T_x,
           class Container_y>
     requires(!std::is_const_v<T_y> && std::is_integral_v<IndexType_x> &&
              std::is_integral_v<IndexType_y>)
-inline void copy_n(const MDArray<T_x, Mdspan::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
+inline void copy_n(const MDArray<T_x, Kokkos::extents<IndexType_x, ext_x>, Layout_x, Container_x>& x,
                    std::size_t count,
-                   MDArray<T_y, Mdspan::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
+                   MDArray<T_y, Kokkos::extents<IndexType_y, ext_y>, Layout_y, Container_y>& y,
                    std::size_t offset = 0)
 {
     copy_n(x.to_mdspan(), count, y.to_mdspan(), offset);

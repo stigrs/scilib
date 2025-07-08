@@ -8,12 +8,10 @@
 #define SCILIB_MDARRAY_SUPPORT_H
 
 #include <array>
-#include <experimental/mdspan>
+#include <mdspan/mdspan.hpp>
 #include <gsl/gsl>
 #include <initializer_list>
 
-
-namespace Mdspan = MDSPAN_IMPL_STANDARD_NAMESPACE;
 
 namespace Sci {
 namespace __Detail {
@@ -26,7 +24,7 @@ struct Is_extents : std::false_type {
 };
 
 template <class IndexType, std::size_t... SizeTypes>
-struct Is_extents<Mdspan::extents<IndexType, SizeTypes...>> : std::true_type {
+struct Is_extents<Kokkos::extents<IndexType, SizeTypes...>> : std::true_type {
 };
 
 template <class E>
@@ -36,7 +34,7 @@ static constexpr bool Is_extents_v = Is_extents<E>::value;
 // mdspan returns m.extents() by reference, create a copy:
 
 template <class T, class Extents, class Layout, class Accessor>
-inline Extents extents(Mdspan::mdspan<T, Extents, Layout, Accessor> m)
+inline Extents extents(Kokkos::mdspan<T, Extents, Layout, Accessor> m)
 {
     // mdspan returns m.extents() by reference, need to make a copy
     using index_type = typename Extents::index_type;

@@ -77,11 +77,11 @@ TEST(TestLinalg, TestLstsqColMajor)
         -6.28, -3.42,  3.46,  0.41,  0.00
     };
     // clang-format on
-    using extents_type = typename Matrix<double, Mdspan::layout_left>::extents_type;
+    using extents_type = typename Matrix<double, Kokkos::layout_left>::extents_type;
 
-    Matrix<double, Mdspan::layout_left> xans(extents_type(5, 3), xans_data);
-    Matrix<double, Mdspan::layout_left> a(extents_type(4, 5), a_data);
-    Matrix<double, Mdspan::layout_left> b(extents_type(5, 3), b_data);
+    Matrix<double, Kokkos::layout_left> xans(extents_type(5, 3), xans_data);
+    Matrix<double, Kokkos::layout_left> a(extents_type(4, 5), a_data);
+    Matrix<double, Kokkos::layout_left> b(extents_type(5, 3), b_data);
 
     lstsq(a, b);
 

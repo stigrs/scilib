@@ -20,7 +20,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-if(NOT TARGET std::mdspan)
+if(NOT TARGET mdspan::mdspan)
     find_package(mdspan REQUIRED)
 endif()
 
@@ -50,7 +50,7 @@ function(add_scilib_test name)
         ${name} 
         PRIVATE
         std::linalg
-        std::mdspan
+        mdspan::mdspan
         scilib::scilib
         Microsoft.GSL::GSL
         range-v3
@@ -71,11 +71,11 @@ set(PROGRAMS
     test_vector
     test_matrix
     test_mdspan_iterator
-    #test_array3d
-    #test_array4d
-    # test_integrate
-    # test_linalg_aux
-    # test_linalg_blas1
+    test_array3d
+    test_array4d
+    test_integrate
+    test_linalg_aux
+    test_linalg_blas1
     # test_linalg_blas2
     # test_linalg_blas3
     # test_linalg_eigenvalue

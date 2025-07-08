@@ -17,7 +17,7 @@ inline Sci::MDArray<T, Extents, Layout, Container>
 scaled(ScalingFactorType scaling_factor, const Sci::MDArray<T, Extents, Layout, Container>& a)
 {
     return Sci::MDArray<T, Extents, Layout, Container>(
-        std::experimental::linalg::scaled(scaling_factor, a.to_mdspan()));
+        Kokkos::Experimental::linalg::scaled(scaling_factor, a.to_mdspan()));
 }
 
 } // namespace Linalg

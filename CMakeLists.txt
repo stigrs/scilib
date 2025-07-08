@@ -118,32 +118,34 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ################################################################################
 
 # mdspan is required.
-message(STATUS "Fetch mdspan from Github")
-include(FetchContent)
-FetchContent_Declare(
-    mdspan
-    GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-    GIT_TAG         stable
-)
-FetchContent_MakeAvailable(mdspan)
+message(STATUS "Find mdspan")
+find_package(mdspan REQUIRED)
+#include(FetchContent)
+#FetchContent_Declare(
+#    mdspan
+#    GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
+#    GIT_TAG         stable
+#)
+#FetchContent_MakeAvailable(mdspan)
 
-if(NOT TARGET std::mdspan)
-    find_package(mdspan REQUIRED)
-endif()
+#if(NOT TARGET std::mdspan)
+#    find_package(mdspan REQUIRED)
+#endif()
 
 # stdBLAS is required.
-message(STATUS "Fetch stdBLAS from Github")
-include(FetchContent)
-FetchContent_Declare(
-    linalg
-    GIT_REPOSITORY  https://github.com/stigrs/stdBLAS.git
-    GIT_TAG         main
-)
-FetchContent_MakeAvailable(linalg)
-
-if(NOT TARGET std::linalg)
-    find_package(linalg REQUIRED)
-endif()
+message(STATUS "Find stdBLAS")
+find_package(linalg REQUIRED)
+#include(FetchContent)
+#FetchContent_Declare(
+#    linalg
+#    GIT_REPOSITORY  https://github.com/stigrs/stdBLAS.git
+#    GIT_TAG         main
+#)
+#FetchContent_MakeAvailable(linalg)
+#
+#if(NOT TARGET std::linalg)
+#    find_package(linalg REQUIRED)
+#endif()
 
 # GSL is required.
 message(STATUS "Fetch GSL from Github")
@@ -208,7 +210,7 @@ endif()
 add_library(scilib INTERFACE)
 add_library(scilib::scilib ALIAS scilib)
 
-target_link_libraries(scilib INTERFACE std::mdspan std::linalg Microsoft.GSL::GSL range-v3-meta range-v3-concepts range-v3)
+target_link_libraries(scilib INTERFACE mdspan::mdspan std::linalg Microsoft.GSL::GSL range-v3-meta range-v3-concepts range-v3)
 
 target_include_directories(scilib INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -217,7 +219,8 @@ target_include_directories(scilib INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-install(TARGETS scilib mdspan linalg GSL range-v3-meta range-v3-concepts range-v3
+#install(TARGETS scilib mdspan linalg GSL range-v3-meta range-v3-concepts range-v3
+install(TARGETS scilib GSL range-v3-meta range-v3-concepts range-v3
     EXPORT scilibTargets
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
 )
@@ -254,21 +257,22 @@ if(Scilib_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-if(Scilib_BUILD_BENCH)
-    find_package(Eigen3 3.4 QUIET)
-    if (NOT TARGET Eigen3::Eigen)
-        message(STATUS "No installed Eigen found, fetching from GitLab")
-        include(FetchContent)
-        FetchContent_Declare(
-            eigen
-            GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-            GIT_TAG        master
-        )
-        FetchContent_MakeAvailable(eigen)
-    endif()
-    add_subdirectory(bench)
-endif()
-
-if(Scilib_BUILD_EXAMPLES) 
-    add_subdirectory(examples)
-endif()
+#if(Scilib_BUILD_BENCH)
+#    find_package(Eigen3 3.4 QUIET)
+#    if (NOT TARGET Eigen3::Eigen)
+#        message(STATUS "No installed Eigen found, fetching from GitLab")
+#        include(FetchContent)
+#        FetchContent_Declare(
+#            eigen
+#            GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+#            GIT_TAG        master
+#        )
+#        FetchContent_MakeAvailable(eigen)
+#    endif()
+#    add_subdirectory(bench)
+#endif()
+#
+#if(Scilib_BUILD_EXAMPLES) 
+#    add_subdirectory(examples)
+#endif()
+#

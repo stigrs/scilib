@@ -25,8 +25,8 @@ TEST(TestMatrix, TestTransposed)
         4, 8
     };
     // clang-format on
-    Sci::Matrix<int> a(Mdspan::dextents<Sci::index, 2>(2, 4), data);
-    Sci::Matrix<int> ans(Mdspan::dextents<Sci::index, 2>(4, 2), t_data);
+    Sci::Matrix<int> a(Kokkos::dextents<Sci::index, 2>(2, 4), data);
+    Sci::Matrix<int> ans(Kokkos::dextents<Sci::index, 2>(4, 2), t_data);
     auto at = Sci::Linalg::transposed(a);
 
     for (Sci::index i = 0; i < at.extent(0); ++i) {
@@ -50,8 +50,8 @@ TEST(TestMatrix, TestTransposedColMajor)
         4, 8
     };
     // clang-format on
-    Sci::Matrix<int, Mdspan::layout_left> a(Mdspan::dextents<Sci::index, 2>(4, 2), data);
-    Sci::Matrix<int, Mdspan::layout_left> ans(Mdspan::dextents<Sci::index, 2>(2, 4), t_data);
+    Sci::Matrix<int, Kokkos::layout_left> a(Kokkos::dextents<Sci::index, 2>(4, 2), data);
+    Sci::Matrix<int, Kokkos::layout_left> ans(Kokkos::dextents<Sci::index, 2>(2, 4), t_data);
     auto at = Sci::Linalg::transposed(a);
 
     for (Sci::index j = 0; j < at.extent(1); ++j) {
@@ -75,8 +75,8 @@ TEST(TestMatrix, TestTransposedStatic)
         4, 8
     };
     // clang-format on
-    Sci::StaticMatrix<int, 2, 4> a(Mdspan::extents<Sci::index, 2, 4>(), data);
-    Sci::StaticMatrix<int, 4, 2> ans(Mdspan::extents<Sci::index, 4, 2>(), t_data);
+    Sci::StaticMatrix<int, 2, 4> a(Kokkos::extents<Sci::index, 2, 4>(), data);
+    Sci::StaticMatrix<int, 4, 2> ans(Kokkos::extents<Sci::index, 4, 2>(), t_data);
     auto at = Sci::Linalg::transposed(a);
 
     for (Sci::index i = 0; i < at.extent(0); ++i) {

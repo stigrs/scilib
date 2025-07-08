@@ -4,12 +4,14 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+
 #include <array>
 #include <gtest/gtest.h>
 #include <limits>
+//#include <scilib/macros.h>
+#include <scilib/mdarray.h>
 #include <scilib/constants.h>
 #include <scilib/integrate.h>
-#include <scilib/mdarray.h>
 #include <vector>
 
 Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
@@ -91,7 +93,7 @@ TEST(TestIntegrate, TestDormandPrince)
     Matrix<double> ans(extents_type(10, 3), ans_data);
 
     std::vector<double> y0 = {10.0, 1.0, 1.0};
-    Vector<double> y(Mdspan::dextents<Sci::index, 1>(y0.size()), y0);
+    Vector<double> y(Kokkos::dextents<Sci::index, 1>(y0.size()), y0);
 
     double t0 = 0.0;
     double tf = 0.1;

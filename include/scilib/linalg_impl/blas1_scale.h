@@ -12,14 +12,13 @@
 namespace Sci {
 namespace Linalg {
 
-namespace Mdspan = std::experimental;
 
 template <class T, class IndexType, std::size_t ext, class Layout, class Container>
     requires(std::is_integral_v<IndexType>)
 inline void scale(const T& scalar,
-                  Sci::MDArray<T, Mdspan::extents<IndexType, ext>, Layout, Container>& m)
+                  Sci::MDArray<T, Kokkos::extents<IndexType, ext>, Layout, Container>& m)
 {
-    std::experimental::linalg::scale(scalar, m.to_mdspan());
+    Kokkos::Experimental::linalg::scale(scalar, m.to_mdspan());
 }
 
 template <class T,
@@ -31,9 +30,9 @@ template <class T,
     requires(std::is_integral_v<IndexType>)
 inline void
 scale(const T& scalar,
-      Sci::MDArray<T, Mdspan::extents<IndexType, numrows, numcols>, Layout, Container>& m)
+      Sci::MDArray<T, Kokkos::extents<IndexType, numrows, numcols>, Layout, Container>& m)
 {
-    std::experimental::linalg::scale(scalar, m.to_mdspan());
+    Kokkos::Experimental::linalg::scale(scalar, m.to_mdspan());
 }
 
 } // namespace Linalg
