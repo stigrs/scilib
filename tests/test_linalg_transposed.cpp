@@ -6,8 +6,8 @@
 
 #include <array>
 #include <gtest/gtest.h>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 #include <vector>
 
 

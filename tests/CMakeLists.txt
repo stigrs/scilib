@@ -76,21 +76,21 @@ set(PROGRAMS
     test_integrate
     test_linalg_aux
     test_linalg_blas1
-    # test_linalg_blas2
-    # test_linalg_blas3
-    # test_linalg_eigenvalue
-    # test_linalg_element_wise_math
-    # test_linalg_expm
-    # test_linalg_solve
-    # test_linalg_lstsq
-    # test_linalg_matrix_decomp
-    # test_linalg_matrix_det
-    # test_linalg_matrix_inv
-    # test_linalg_matrix_norm
-    # test_linalg_matrix_power
-    # test_linalg_trace
-    # test_linalg_transposed
-    # test_stats
+    test_linalg_blas2
+    test_linalg_blas3
+    test_linalg_eigenvalue
+    test_linalg_element_wise_math
+    test_linalg_expm
+    test_linalg_solve
+    test_linalg_lstsq
+    test_linalg_matrix_decomp
+    test_linalg_matrix_det
+    test_linalg_matrix_inv
+    test_linalg_matrix_norm
+    test_linalg_matrix_power
+    test_linalg_trace
+    test_linalg_transposed
+    test_stats
 )
 
 foreach(program ${PROGRAMS})
