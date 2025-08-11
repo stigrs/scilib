@@ -257,22 +257,22 @@ if(Scilib_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-#if(Scilib_BUILD_BENCH)
-#    find_package(Eigen3 3.4 QUIET)
-#    if (NOT TARGET Eigen3::Eigen)
-#        message(STATUS "No installed Eigen found, fetching from GitLab")
-#        include(FetchContent)
-#        FetchContent_Declare(
-#            eigen
-#            GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-#            GIT_TAG        master
-#        )
-#        FetchContent_MakeAvailable(eigen)
-#    endif()
-#    add_subdirectory(bench)
-#endif()
-#
-#if(Scilib_BUILD_EXAMPLES) 
-#    add_subdirectory(examples)
-#endif()
-#
+if(Scilib_BUILD_BENCH)
+    find_package(Eigen3 3.4 QUIET)
+    if (NOT TARGET Eigen3::Eigen)
+        message(STATUS "No installed Eigen found, fetching from GitLab")
+        include(FetchContent)
+        FetchContent_Declare(
+            eigen
+            GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+            GIT_TAG        master
+        )
+        FetchContent_MakeAvailable(eigen)
+    endif()
+    add_subdirectory(bench)
+endif()
+
+if(Scilib_BUILD_EXAMPLES) 
+    add_subdirectory(examples)
+endif()
+

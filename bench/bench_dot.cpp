@@ -13,8 +13,8 @@
 #include <chrono>
 #include <iostream>
 #include <numeric>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 #include <valarray>
 
 using Timer = std::chrono::duration<double, std::micro>;

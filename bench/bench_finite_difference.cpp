@@ -14,8 +14,8 @@
 #include <chrono>
 #include <cmath>
 #include <iostream>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 
 typedef std::chrono::duration<double, std::milli> Timer;
 

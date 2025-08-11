@@ -8,8 +8,8 @@
 #include <mkl.h>
 
 #include <iostream>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 
 void benchmark(BLAS_INT m, BLAS_INT n)
 {

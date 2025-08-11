@@ -13,8 +13,8 @@
 #include <Eigen/Dense>
 #include <chrono>
 #include <iostream>
-#include <scilib/linalg.h>
 #include <scilib/mdarray.h>
+#include <scilib/linalg.h>
 
 using Timer = std::chrono::duration<double, std::milli>;
 
