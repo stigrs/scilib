@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - name: Clone stdBLAS
-      uses: stigrs/clone-github-action@main
+      uses: stigrs/stdBLAS@main
       with:
         owner: 'stigrs'
         repository: 'stdBLAS'
