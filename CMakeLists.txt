@@ -117,63 +117,42 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ################################################################################
 
-# mdspan is required.
-message(STATUS "Find mdspan")
-find_package(mdspan REQUIRED)
-#include(FetchContent)
-#FetchContent_Declare(
-#    mdspan
-#    GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
-#    GIT_TAG         stable
-#)
-#FetchContent_MakeAvailable(mdspan)
+include(FetchContent)
 
-#if(NOT TARGET std::mdspan)
-#    find_package(mdspan REQUIRED)
-#endif()
+# mdspan is required.
+message(STATUS "Find mdspan, fetch from Github if needed")
+FetchContent_Declare(
+    mdspan
+    GIT_REPOSITORY  https://github.com/kokkos/mdspan.git
+    GIT_TAG         stable
+)
 
 # stdBLAS is required.
-message(STATUS "Find stdBLAS")
-find_package(linalg REQUIRED)
-#include(FetchContent)
-#FetchContent_Declare(
-#    linalg
-#    GIT_REPOSITORY  https://github.com/stigrs/stdBLAS.git
-#    GIT_TAG         main
-#)
-#FetchContent_MakeAvailable(linalg)
-#
-#if(NOT TARGET std::linalg)
-#    find_package(linalg REQUIRED)
-#endif()
+message(STATUS "Find stdBLAS, fetch from Github if needed")
+FetchContent_Declare(
+    linalg
+    GIT_REPOSITORY  https://github.com/stigrs/stdBLAS.git
+    GIT_TAG         main
+    FIND_PACKAGE_ARGS 
+)
 
 # GSL is required.
-message(STATUS "Fetch GSL from Github")
-include(FetchContent)
+message(STATUS "Find GSL, fetch from from Github if needed")
 FetchContent_Declare(
     GSL
     GIT_REPOSITORY  https://github.com/microsoft/GSL.git
     GIT_TAG         v4.0.0
 )
-FetchContent_MakeAvailable(GSL)
-
-if(NOT TARGET Microsoft.GSL::GSL)
-    find_package(Microsoft.GSL CONFIG)
-endif()
 
 # ranges-v3 is required.
-message(STATUS "Fetch range-v3 from Github")
-include(FetchContent)
+message(STATUS "Find range-v3, fetch from Github if needed")
 FetchContent_Declare(
     range-v3
     GIT_REPOSITORY  https://github.com/ericniebler/range-v3.git
     GIT_TAG         master
 )
-FetchContent_MakeAvailable(range-v3)
 
-if(NOT TARGET range-v3)
-    find_package(range-v3 CONFIG)
-endif()
+FetchContent_MakeAvailable(mdspan linalg GSL range-v3)
 
 # BLAS and LAPACKE are required.
 if(DEFINED ENV{MKLROOT})
@@ -219,7 +198,6 @@ target_include_directories(scilib INTERFACE
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-#install(TARGETS scilib mdspan linalg GSL range-v3-meta range-v3-concepts range-v3
 install(TARGETS scilib GSL range-v3-meta range-v3-concepts range-v3
     EXPORT scilibTargets
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}    
@@ -261,7 +239,6 @@ if(Scilib_BUILD_BENCH)
     find_package(Eigen3 3.4 QUIET)
     if (NOT TARGET Eigen3::Eigen)
         message(STATUS "No installed Eigen found, fetching from GitLab")
-        include(FetchContent)
         FetchContent_Declare(
             eigen
             GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
