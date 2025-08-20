@@ -18,6 +18,20 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+    - name: Clone stdBLAS
+      uses: stigrs/clone-github-action@main
+      with:
+        owner: 'stigrs'
+        repository: 'stdBLAS'
+
+    - name: Build stdBLAS
+      run: |
+        cd stdBLAS
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build . --config Release --target install
+    
     - uses: actions/checkout@v3
 
     - name: Prepare
