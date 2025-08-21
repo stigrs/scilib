@@ -25,7 +25,9 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        cmake --build . --config Release --target install
+        cmake --build . --config Release
+        cmake --install . --prefix ${{github.workspace}}
+        cd ${{github.workspace}}
     
     - uses: actions/checkout@v3
 
