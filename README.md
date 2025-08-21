@@ -41,7 +41,6 @@ Please see their websites for details regarding licensing terms.
 |:--------------|----------------:|
 | GCC           | 12, 13, 14      |
 | Clang         | 18              |
-| Intel         | 2025            |
 
 ### Obtaining the Source Code
 
