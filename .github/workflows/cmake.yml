@@ -33,7 +33,12 @@ jobs:
     - name: Prepare
       # Install necessary software
       run: |
-        sudo apt install gfortran libopenblas-dev liblapacke-dev libopenblas64-dev liblapacke64-dev
+        wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL | sudo gpg --dearmor --output /usr/share/keyrings/intel-oneapi-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/intel-oneapi-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/intel-oneapi.list
+        sudo apt update 
+        sudo apt install intel-oneapi-mkl
+        source /opt/intel/oneapi/setvars.sh
+        #sudo apt install gfortran libopenblas-dev liblapacke-dev libopenblas64-dev liblapacke64-dev
       
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DScilib_BUILD_BENCH=OFF
