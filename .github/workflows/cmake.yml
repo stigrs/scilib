@@ -38,6 +38,7 @@ jobs:
         echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
         sudo apt-get update
         sudo apt-get install intel-oneapi-mkl-devel-2025.2 
+        ls /opt/intel/oneapi/mkl/2025.2/lib
       
     - name: Configure CMake
       run: |
@@ -45,11 +46,15 @@ jobs:
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DScilib_BUILD_BENCH=OFF
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: |
+        source /opt/intel/oneapi/setvars.sh intel64
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+      run: |
+        source /opt/intel/oneapi/setvars.sh intel64
+        ctest -C ${{env.BUILD_TYPE}} --output-on-failure
       
 #  build-macos:
 #    runs-on: macos-latest
