@@ -39,17 +39,15 @@ Please see their websites for details regarding licensing terms.
 
 | Compiler      | Versions Tested |
 |:--------------|----------------:|
-| GCC           | 9, 10           |
-| Clang         | 10, 11, 12      |
-| Visual Studio | VS2019, VS2022  |
-| XCode         | 13.0            |
-| Intel         | 2022            |
+| GCC           | 12, 13, 14      |
+| Clang         | 18              |
+| Intel         | 2025            |
 
 ### Obtaining the Source Code
 
 The source code can be obtained from
 
-        git clone git@github.com:stigrs/scilib.git
+        git clone https://github.com/stigrs/scilib.git
 
 ### Building the Software
 
@@ -65,7 +63,7 @@ into a directory called `scilib`.
 2. Configure CMake to use the compiler of your choice (you can see a list by
    running `cmake --help`):
 
-        cmake -G "Visual Studio 17 2022" ..
+        cmake ..
 
 3. Build the software (in this case in the Release configuration):
 
