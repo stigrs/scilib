@@ -33,7 +33,7 @@ jobs:
     - name: Prepare
       # Install necessary software
       run: |
-        sudo apt-get install gfortran libopenblas64-dev liblapacke64-dev
+        sudo apt install gfortran libopenblas-dev liblapacke-dev libopenblas64-dev liblapacke64-dev
         find /usr cblas.h | grep cblas.h 
         find /usr lapacke.h | grep lapacke.h
         find /usr libopenblas64.so grep libopenblas64.so
