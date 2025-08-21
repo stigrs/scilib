@@ -38,13 +38,12 @@ jobs:
         echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
         sudo apt update 
         sudo apt install intel-oneapi-base-toolkit
-        #wget https://registrationcenter-download.intel.com/akdlm/IRC_NAS/47c7d946-fca1-441a-b0df-b094e3f045ea/intel-onemkl-2025.2.0.629_offline.sh
-        #sudo sh ./intel-onemkl-2025.2.0.629_offline.sh
-        source /opt/intel/oneapi/setvars.sh
         #sudo apt install gfortran libopenblas-dev liblapacke-dev libopenblas64-dev liblapacke64-dev
       
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DScilib_BUILD_BENCH=OFF
+      run: |
+        source /opt/intel/oneapi/setvars.sh
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} -DScilib_BUILD_BENCH=OFF
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
