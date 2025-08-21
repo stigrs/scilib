@@ -26,8 +26,7 @@ jobs:
         cd build
         cmake .. -DLINALG_ENABLE_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} 
         cmake --build . --config ${{env.BUILD_TYPE}}
-        cmake --install . --prefix ${{github.workspace}}
-        cd ${{github.workspace}}
+        sudo cmake --install . 
     
     - uses: actions/checkout@v3
 
