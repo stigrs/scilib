@@ -33,10 +33,8 @@ jobs:
     - name: Prepare
       # Install necessary software
       run: |
-        wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL | sudo gpg --dearmor --output /usr/share/keyrings/intel-oneapi-keyring.gpg
-        echo "deb [signed-by=/usr/share/keyrings/intel-oneapi-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/intel-oneapi.list
-        sudo apt update 
-        sudo apt install intel-oneapi-mkl
+        wget https://registrationcenter-download.intel.com/akdlm/IRC_NAS/47c7d946-fca1-441a-b0df-b094e3f045ea/intel-onemkl-2025.2.0.629_offline.sh
+        sudo sh ./intel-onemkl-2025.2.0.629_offline.sh
         source /opt/intel/oneapi/setvars.sh
         #sudo apt install gfortran libopenblas-dev liblapacke-dev libopenblas64-dev liblapacke64-dev
       
