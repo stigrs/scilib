@@ -23,9 +23,8 @@ jobs:
         git clone https://github.com/stigrs/stdBLAS.git
         cd stdBLAS
         mkdir build
-        cd build
-        cmake ..
-        cmake --build . --config Release
+        cmake -DLINALG_ENABLE_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} ..
+        cmake --build . --config ${{env.BUILD_TYPE}}
         cmake --install . --prefix ${{github.workspace}}
         cd ${{github.workspace}}
     
