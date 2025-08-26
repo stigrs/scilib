@@ -11,7 +11,14 @@
 #include <cstddef>
 #include <type_traits>
 #include <utility>
+
+#if _MSC_VER
+#pragma warning(disable : 4702)
+#endif // _MSC_VER
 #include <experimental/__p2630_bits/submdspan.hpp>
+#if _MSC_VER
+#pragma warning(default : 4702)
+#endif // _MSC_VER
 
 
 namespace Sci {

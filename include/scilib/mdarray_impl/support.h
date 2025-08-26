@@ -7,10 +7,18 @@
 #ifndef SCILIB_MDARRAY_SUPPORT_H
 #define SCILIB_MDARRAY_SUPPORT_H
 
-#include <array>
+
+#if _MSC_VER
+#pragma warning(disable : 4702)
+#endif // _MSC_VER
 #include <mdspan/mdspan.hpp>
+#if _MSC_VER
+#pragma warning(default : 4702)
+#endif // _MSC_VER
+
 #include <gsl/gsl>
 #include <initializer_list>
+#include <array>
 
 
 namespace Sci {
