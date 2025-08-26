@@ -16,8 +16,16 @@
 #include "mdarray_impl/support.h"
 #include <array>
 #include <cstddef>
+
+#if _MSC_VER
+#pragma warning(disable : 4834)
+#endif // _MSC_VER
 #include <mdspan/mdspan.hpp>
 #include <experimental/__p2630_bits/submdspan.hpp>
+#if _MSC_VER
+#pragma warning(default : 4834)
+#endif // _MSC_VER
+
 #include <gsl/gsl>
 #include <utility>
 #include <valarray>
