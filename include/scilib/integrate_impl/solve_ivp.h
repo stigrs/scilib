@@ -156,7 +156,7 @@ void dormand_prince(F f,
             }
         }
         if (iter > max_iter) {
-            std::runtime_error("dormand_prince failed to converge");
+            throw std::runtime_error("dormand_prince failed to converge");
         }
     }
 }
