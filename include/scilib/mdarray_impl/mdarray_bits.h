@@ -738,13 +738,17 @@ public:
 
         auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
         {
-#if __cpp_multidimensional_subscript
+#if _MSC_VER
+#pragma warning(disable : 4834)
+#if MDSPAN_USE_BRACKET_OPERATOR
             std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)],
                                       m[static_cast<index_type>(std::move(indices))...]);
 #else
             std::forward<Callable>(f)(ctr[map(static_cast<index_type>(std::move(indices))...)],
                                       m(static_cast<index_type>(std::move(indices))...));
 #endif
+#pragma warning(default : 4834)
+#endif // _MSC_VER
         };
         for_each_in_extents(apply_fn, extents(), layout_type{});
 

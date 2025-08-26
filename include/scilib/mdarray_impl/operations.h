@@ -205,11 +205,15 @@ constexpr void apply(Kokkos::mdspan<T, Extents, Layout, Accessor> v, Callable&& 
     using index_type = typename Extents::index_type;
     auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
     {
-#if __cpp_multidimensional_subscript
+#if _MSC_VER
+#pragma warning(disable : 4834)
+#if MDSPAN_USE_BRACKET_OPERATOR
         std::forward<Callable>(f)(v[static_cast<index_type>(std::move(indices))...]);
 #else
         std::forward<Callable>(f)(v(static_cast<index_type>(std::move(indices))...));
 #endif
+#pragma warning(default : 4834)
+#endif // _MSC_VER
     };
     for_each_in_extents(apply_fn, v);
 }
@@ -238,13 +242,17 @@ constexpr void apply(Kokkos::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
     }
     auto apply_fn = [&]<class... IndexTypes>(IndexTypes... indices)
     {
-#if __cpp_multidimensional_subscript
+#if _MSC_VER
+#pragma warning(disable : 4834)
+#if MDSPAN_USE_BRACKET_OPERATOR
         std::forward<Callable>(f)(x[static_cast<index_type>(std::move(indices))...],
                                   y[static_cast<index_type>(std::move(indices))...]);
 #else
         std::forward<Callable>(f)(x(static_cast<index_type>(std::move(indices))...),
                                   y(static_cast<index_type>(std::move(indices))...));
 #endif
+#pragma warning(default : 4834)
+#endif // _MSC_VER
     };
     for_each_in_extents(apply_fn, x);
 }
