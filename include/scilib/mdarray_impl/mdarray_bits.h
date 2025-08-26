@@ -309,6 +309,7 @@ public:
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(Kokkos::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
+#if _MSC_VER
 #pragma warning(disable : 4834)
         auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
         {
@@ -321,6 +322,7 @@ public:
 #endif
         };
 #pragma warning(default : 4834)
+#endif // _MSC_VER
         for_each_in_extents(copy_fn, other);
     }
 

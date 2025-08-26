@@ -58,7 +58,9 @@ constexpr bool operator==(const MDArray<T, Extents, Layout, Container>& a,
 
     auto is_equal = [&]<class... IndexTypes>(IndexTypes... indices)
     {
-#if __cpp_multidimensional_subscript
+#if _MSC_VER
+#pragma warning(disable : 4834)
+#if MDSPAN_USE_BRACKET_OPERATOR
         if (a[static_cast<index_type>(std::move(indices))...] !=
             b[static_cast<index_type>(std::move(indices))...]) {
             result = false;
@@ -69,6 +71,8 @@ constexpr bool operator==(const MDArray<T, Extents, Layout, Container>& a,
             result = false;
         }
 #endif
+#pragma warning(default : 4834)
+#endif // _MSC_VER
     };
     for_each_in_extents(is_equal, a.extents(), Layout{});
     return result;
