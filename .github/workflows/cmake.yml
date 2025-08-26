@@ -80,7 +80,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-2022, windows-2019]
+        os: [windows-2022]
 
     env:
       MKL_DIR: "D:/a/"
@@ -95,7 +95,7 @@ jobs:
         cd build
         cmake .. -DLINALG_ENABLE_TESTS=OFF -DLINALG_ENABLE_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} 
         cmake --build . --config ${{env.BUILD_TYPE}}
-        sudo cmake --install . 
+        cmake --install . 
     
     - uses: actions/checkout@v3
 
