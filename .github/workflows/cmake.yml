@@ -75,32 +75,42 @@ jobs:
 #      working-directory: ${{github.workspace}}/build
 #      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
 #      
-#  build-windows:
-#    runs-on: ${{matrix.os}}
-#
-#    strategy:
-#      matrix:
-#        os: [windows-2022, windows-2019]
-#
-#    env:
-#      MKL_DIR: "D:/a/"
-#      MKLROOT: "D:/a/intelmkl.static.win-x64.2023.2.0.49496/lib/native"
-#
-#    steps:
-#    - uses: actions/checkout@v3
-#
-#    - name: Prepare
-#      # Install necessary software
-#      shell: pwsh
-#      run: nuget install intelmkl.static.win-x64 -Version 2023.2.0.49496 -o ${{env.MKL_DIR}}
-#      
-#    - name: Configure CMake
-#      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DScilib_BUILD_BENCH=OFF
-#
-#    - name: Build
-#      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-#
-#    - name: Test
-#      working-directory: ${{github.workspace}}/build
-#      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
-#      
+  build-windows:
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      matrix:
+        os: [windows-2022, windows-2019]
+
+    env:
+      MKL_DIR: "D:/a/"
+      MKLROOT: "D:/a/intelmkl.static.win-x64.2023.2.0.49496/lib/native"
+
+    steps:
+    - name: Build stdBLAS
+      run: |
+        git clone https://github.com/stigrs/stdBLAS.git
+        cd stdBLAS
+        mkdir build
+        cd build
+        cmake .. -DLINALG_ENABLE_TESTS=OFF -DLINALG_ENABLE_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=${{matrix.compiler}} 
+        cmake --build . --config ${{env.BUILD_TYPE}}
+        sudo cmake --install . 
+    
+    - uses: actions/checkout@v3
+
+    - name: Prepare
+      # Install necessary software
+      shell: pwsh
+      run: nuget install intelmkl.static.win-x64 -Version 2023.2.0.49496 -o ${{env.MKL_DIR}}
+      
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DScilib_BUILD_BENCH=OFF
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+      
