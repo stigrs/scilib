@@ -60,6 +60,7 @@ constexpr bool operator==(const MDArray<T, Extents, Layout, Container>& a,
     {
 #if _MSC_VER
 #pragma warning(disable : 4834)
+#endif // _MSC_VER
 #if MDSPAN_USE_BRACKET_OPERATOR
         if (a[static_cast<index_type>(std::move(indices))...] !=
             b[static_cast<index_type>(std::move(indices))...]) {
@@ -71,6 +72,7 @@ constexpr bool operator==(const MDArray<T, Extents, Layout, Container>& a,
             result = false;
         }
 #endif
+#if _MSC_VER
 #pragma warning(default : 4834)
 #endif // _MSC_VER
     };
@@ -207,11 +209,13 @@ constexpr void apply(Kokkos::mdspan<T, Extents, Layout, Accessor> v, Callable&& 
     {
 #if _MSC_VER
 #pragma warning(disable : 4834)
+#endif // _MSC_VER
 #if MDSPAN_USE_BRACKET_OPERATOR
         std::forward<Callable>(f)(v[static_cast<index_type>(std::move(indices))...]);
 #else
         std::forward<Callable>(f)(v(static_cast<index_type>(std::move(indices))...));
 #endif
+#if _MSC_VER
 #pragma warning(default : 4834)
 #endif // _MSC_VER
     };
@@ -244,6 +248,7 @@ constexpr void apply(Kokkos::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
     {
 #if _MSC_VER
 #pragma warning(disable : 4834)
+#endif // _MSC_VER
 #if MDSPAN_USE_BRACKET_OPERATOR
         std::forward<Callable>(f)(x[static_cast<index_type>(std::move(indices))...],
                                   y[static_cast<index_type>(std::move(indices))...]);
@@ -251,6 +256,7 @@ constexpr void apply(Kokkos::mdspan<T_x, Extents_x, Layout_x, Accessor_x> x,
         std::forward<Callable>(f)(x(static_cast<index_type>(std::move(indices))...),
                                   y(static_cast<index_type>(std::move(indices))...));
 #endif
+#if _MSC_VER
 #pragma warning(default : 4834)
 #endif // _MSC_VER
     };
