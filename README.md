@@ -1,5 +1,5 @@
 # Scilib 
-[![CMake](https://github.com/stigrs/scilib/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/cmake.yml) [![codecov](https://codecov.io/gh/stigrs/scilib/branch/main/graph/badge.svg?token=IBOP66BJ5C)](https://codecov.io/gh/stigrs/scilib)[![CodeQL](https://github.com/stigrs/scilib/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/codeql-analysis.yml)
+[![CMake](https://github.com/stigrs/scilib/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/stigrs/scilib/actions/workflows/cmake.yml) 
 
 Scilib provides a C++ library for linear algebra and scientific computing.
 BLAS and LAPACK are used for fast numerical performance. Currently, OpenBLAS
@@ -33,7 +33,7 @@ Please see their websites for details regarding licensing terms.
 ### Requirements
 
 * [CMake](https://cmake.org) 3.13
-* [OpenBLAS](https://www.openblas.net/) (Intel MKL is recommended)
+* [Intel MKL](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html) 
 
 ### Supported Compilers
 
@@ -41,6 +41,7 @@ Please see their websites for details regarding licensing terms.
 |:--------------|----------------:|
 | GCC           | 12, 13, 14      |
 | Clang         | 18              |
+| Visual Studio | 2022            |
 
 ### Obtaining the Source Code
 
