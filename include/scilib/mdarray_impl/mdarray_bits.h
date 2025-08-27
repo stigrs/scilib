@@ -309,9 +309,9 @@ public:
             Expects(static_extent(r) == gsl::narrow_cast<size_type>(Kokkos::dynamic_extent) ||
                     static_extent(r) == gsl::narrow_cast<size_type>(other.extent(r)));
         }
-//#if _MSC_VER
-//#pragma warning(disable : 4834)
-//#endif // _MSC_VER
+#if _MSC_VER
+#pragma warning(disable : 4834)
+#endif // _MSC_VER
         auto copy_fn = [&]<class... OtherIndexTypes>(OtherIndexTypes... indices)
         {
 #if MDSPAN_USE_BRACKET_OPERATOR
@@ -322,9 +322,9 @@ public:
                 other(static_cast<index_type>(std::move(indices))...);
 #endif
         };
-//#if _MSC_VER
-//#pragma warning(default : 4834)
-//#endif // _MSC_VER
+#if _MSC_VER
+#pragma warning(default : 4834)
+#endif // _MSC_VER
         for_each_in_extents(copy_fn, other);
     }
 
