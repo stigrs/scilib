@@ -1,6 +1,15 @@
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
 #include <iostream>
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 int main()
 {

@@ -4,10 +4,19 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
 #include <iostream>
 #include <scilib/mdarray.h>
 #include <sstream>
 #include <string>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 int main()
 {

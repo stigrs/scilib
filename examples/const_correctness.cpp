@@ -1,5 +1,14 @@
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
 #include <iostream>
 #include <scilib/mdarray.h>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 void beast(const Sci::Matrix<int>& a)
 {

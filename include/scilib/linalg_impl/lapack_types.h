@@ -13,13 +13,13 @@
 #define MKL_Complex8 std::complex<float>
 #define MKL_Complex16 std::complex<double>
 #include <mkl.h>
-#define BLAS_INT MKL_INT
+using BLAS_INT = MKL_INT;
 #else
 #include <cblas.h>
 #ifdef blasint
-#define BLAS_INT blasint
+using BLAS_INT = blasint;
 #else
-#define BLAS_INT int
+using BLAS_INT = int;
 #endif
 #define lapack_complex_float std::complex<float>
 #define lapack_complex_double std::complex<double>

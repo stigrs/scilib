@@ -4,10 +4,19 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <gtest/gtest.h>
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
 #include <initializer_list>
-#include <scilib/mdarray.h>
 #include <vector>
+#include <gtest/gtest.h>
+#include <scilib/mdarray.h>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 TEST(TestMDArray, TestSizeStaticVector)
 {

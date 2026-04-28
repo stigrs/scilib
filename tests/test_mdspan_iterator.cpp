@@ -4,9 +4,19 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
-#include <mdspan/mdspan.hpp>
 #include <gtest/gtest.h>
+
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
+#include <mdspan/mdspan.hpp>
 #include <scilib/mdarray.h>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 TEST(TestMDSpanIterator, IteratorDefaultInit)
 {

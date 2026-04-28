@@ -4,11 +4,19 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
 #include <utility>
 #include <vector>
 
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 template <class Container, class Extents>
 Sci::Array4D<int> make_array4d(const Container& ctr, const Extents& exts)

@@ -4,10 +4,19 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
+#include <vector>
 #include <gtest/gtest.h>
 #include <scilib/mdarray.h>
 #include <scilib/statistics.h>
-#include <vector>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 TEST(TestStats, TestMean)
 {

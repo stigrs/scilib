@@ -4,18 +4,22 @@
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable : 5054 4305)
-#include <Eigen/Core>
-#pragma warning(pop)
-#else
-#include <Eigen/Core>
+#pragma warning(disable : 4190)
+#pragma warning(disable : 4305)
+#pragma warning(disable : 5054)
 #endif
 
 #include <chrono>
 #include <cmath>
 #include <iostream>
+
+#include <Eigen/Core>
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 typedef std::chrono::duration<double, std::milli> Timer;
 

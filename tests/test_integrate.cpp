@@ -4,15 +4,22 @@
 // LICENSE.txt or http://www.opensource.org/licenses/mit-license.php for terms
 // and conditions.
 
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
 
 #include <array>
 #include <gtest/gtest.h>
 #include <limits>
-//#include <scilib/macros.h>
 #include <scilib/mdarray.h>
 #include <scilib/constants.h>
 #include <scilib/integrate.h>
 #include <vector>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 Sci::Vector<double> lorentz(double, const Sci::Vector<double>& y)
 {

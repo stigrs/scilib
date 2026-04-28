@@ -6,15 +6,20 @@
 
 #ifdef _MSC_VER
 #pragma warning(push)
+#pragma warning(disable : 4190)
 #pragma warning(disable : 4305)
 #pragma warning(disable : 5054)
 #endif
 
-#include <Eigen/Dense>
 #include <chrono>
 #include <iostream>
+#include <Eigen/Dense>
 #include <scilib/mdarray.h>
 #include <scilib/linalg.h>
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 using Timer = std::chrono::duration<double, std::milli>;
 
@@ -71,7 +76,3 @@ int main()
     m = 5000;
     benchmark(n, m);
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif

@@ -1,7 +1,16 @@
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4190)
+#endif
+
 #include <iomanip>
 #include <iostream>
 #include <scilib/integrate.h>
 #include <scilib/mdarray.h>
+
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 Sci::Vector<double> lorentz(double /* t */, const Sci::Vector<double>& y)
 {
